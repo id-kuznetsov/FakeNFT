@@ -39,13 +39,15 @@
 		3FC8C39129D2453B0081F015 /* ExamplePutRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FC8C39029D2453B0081F015 /* ExamplePutRequest.swift */; };
 		3FC8C39329D246BA0081F015 /* DateFormatters+Presets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FC8C39229D246BA0081F015 /* DateFormatters+Presets.swift */; };
 		558E39E72C68CE0A00FB86AC /* NftService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 558E39E62C68CE0900FB86AC /* NftService.swift */; };
-		9113EC222D5F6BB1006E8AD9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9113EC162D5F6BB1006E8AD9 /* Assets.xcassets */; };
-		9113EC232D5F6BB1006E8AD9 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9113EC182D5F6BB1006E8AD9 /* LaunchScreen.storyboard */; };
-		9113EC242D5F6BB1006E8AD9 /* LaunchScreen.strings in Resources */ = {isa = PBXBuildFile; fileRef = 9113EC1A2D5F6BB1006E8AD9 /* LaunchScreen.strings */; };
-		9113EC252D5F6BB1006E8AD9 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 9113EC1C2D5F6BB1006E8AD9 /* Localizable.strings */; };
-		9113EC262D5F6BB1006E8AD9 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9113EC1E2D5F6BB1006E8AD9 /* Main.storyboard */; };
-		9113EC272D5F6BB1006E8AD9 /* Main.strings in Resources */ = {isa = PBXBuildFile; fileRef = 9113EC202D5F6BB1006E8AD9 /* Main.strings */; };
-		91B7DA692D5F9C79001AB3E0 /* Strings+Generated.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91B7DA682D5F9C79001AB3E0 /* Strings+Generated.swift */; };
+		5CD04EE02D5FE74C0013C751 /* AlertPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CD04EDD2D5FE74C0013C751 /* AlertPresenter.swift */; };
+		5CD04EE12D5FE74C0013C751 /* SortOption.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CD04EDE2D5FE74C0013C751 /* SortOption.swift */; };
+		5CD04EEF2D5FE7510013C751 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5CD04EE22D5FE7510013C751 /* Assets.xcassets */; };
+		5CD04EF02D5FE7510013C751 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5CD04EE42D5FE7510013C751 /* LaunchScreen.storyboard */; };
+		5CD04EF12D5FE7510013C751 /* LaunchScreen.strings in Resources */ = {isa = PBXBuildFile; fileRef = 5CD04EE62D5FE7510013C751 /* LaunchScreen.strings */; };
+		5CD04EF22D5FE7510013C751 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 5CD04EE82D5FE7510013C751 /* Localizable.strings */; };
+		5CD04EF32D5FE7510013C751 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5CD04EEA2D5FE7510013C751 /* Main.storyboard */; };
+		5CD04EF42D5FE7510013C751 /* Main.strings in Resources */ = {isa = PBXBuildFile; fileRef = 5CD04EEC2D5FE7510013C751 /* Main.strings */; };
+		5CD04EF52D5FE7510013C751 /* Strings+Generated.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CD04EED2D5FE7510013C751 /* Strings+Generated.swift */; };
 		E19CD5AB2A98B56600CA39A5 /* NftImageCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E19CD5AA2A98B56600CA39A5 /* NftImageCollectionViewCell.swift */; };
 		E1A1B9DA2AA01CE400C3AFBC /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1A1B9D92AA01CE400C3AFBC /* TabBarController.swift */; };
 /* End PBXBuildFile section */
@@ -102,13 +104,15 @@
 		3FC8C39029D2453B0081F015 /* ExamplePutRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExamplePutRequest.swift; sourceTree = "<group>"; };
 		3FC8C39229D246BA0081F015 /* DateFormatters+Presets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DateFormatters+Presets.swift"; sourceTree = "<group>"; };
 		558E39E62C68CE0900FB86AC /* NftService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NftService.swift; sourceTree = "<group>"; };
-		9113EC162D5F6BB1006E8AD9 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		9113EC172D5F6BB1006E8AD9 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
-		9113EC192D5F6BB1006E8AD9 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
-		9113EC1B2D5F6BB1006E8AD9 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Localizable.strings; sourceTree = "<group>"; };
-		9113EC1D2D5F6BB1006E8AD9 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
-		9113EC1F2D5F6BB1006E8AD9 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Main.strings; sourceTree = "<group>"; };
-		91B7DA682D5F9C79001AB3E0 /* Strings+Generated.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Strings+Generated.swift"; sourceTree = "<group>"; };
+		5CD04EDD2D5FE74C0013C751 /* AlertPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertPresenter.swift; sourceTree = "<group>"; };
+		5CD04EDE2D5FE74C0013C751 /* SortOption.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SortOption.swift; sourceTree = "<group>"; };
+		5CD04EE22D5FE7510013C751 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		5CD04EE32D5FE7510013C751 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		5CD04EE52D5FE7510013C751 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
+		5CD04EE72D5FE7510013C751 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Localizable.strings; sourceTree = "<group>"; };
+		5CD04EE92D5FE7510013C751 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		5CD04EEB2D5FE7510013C751 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Main.strings; sourceTree = "<group>"; };
+		5CD04EED2D5FE7510013C751 /* Strings+Generated.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Strings+Generated.swift"; sourceTree = "<group>"; };
 		E19CD5AA2A98B56600CA39A5 /* NftImageCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NftImageCollectionViewCell.swift; sourceTree = "<group>"; };
 		E1A1B9D92AA01CE400C3AFBC /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -225,9 +229,10 @@
 		3F68069529CBBAF100B4F915 /* FakeNFT */ = {
 			isa = PBXGroup;
 			children = (
+				5CD04EDF2D5FE74C0013C751 /* Helpers */,
 				3F68069629CBBAF100B4F915 /* AppDelegate.swift */,
 				3F68069829CBBAF100B4F915 /* SceneDelegate.swift */,
-				9113EC212D5F6BB1006E8AD9 /* Resources */,
+				5CD04EEE2D5FE7510013C751 /* Resources */,
 				3F478ECD29DB473000F6D39E /* DesignSystem */,
 				3F6806CE29CBBD1B00B4F915 /* Foundation */,
 				3F6806C929CBBCAF00B4F915 /* Models */,
@@ -334,16 +339,25 @@
 			path = Requests;
 			sourceTree = "<group>";
 		};
-		9113EC212D5F6BB1006E8AD9 /* Resources */ = {
+		5CD04EDF2D5FE74C0013C751 /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
-				9113EC162D5F6BB1006E8AD9 /* Assets.xcassets */,
-				9113EC182D5F6BB1006E8AD9 /* LaunchScreen.storyboard */,
-				9113EC1A2D5F6BB1006E8AD9 /* LaunchScreen.strings */,
-				9113EC1C2D5F6BB1006E8AD9 /* Localizable.strings */,
-				9113EC1E2D5F6BB1006E8AD9 /* Main.storyboard */,
-				9113EC202D5F6BB1006E8AD9 /* Main.strings */,
-				91B7DA682D5F9C79001AB3E0 /* Strings+Generated.swift */,
+				5CD04EDD2D5FE74C0013C751 /* AlertPresenter.swift */,
+				5CD04EDE2D5FE74C0013C751 /* SortOption.swift */,
+			);
+			path = Helpers;
+			sourceTree = "<group>";
+		};
+		5CD04EEE2D5FE7510013C751 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				5CD04EE22D5FE7510013C751 /* Assets.xcassets */,
+				5CD04EE42D5FE7510013C751 /* LaunchScreen.storyboard */,
+				5CD04EE62D5FE7510013C751 /* LaunchScreen.strings */,
+				5CD04EE82D5FE7510013C751 /* Localizable.strings */,
+				5CD04EEA2D5FE7510013C751 /* Main.storyboard */,
+				5CD04EEC2D5FE7510013C751 /* Main.strings */,
+				5CD04EED2D5FE7510013C751 /* Strings+Generated.swift */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -479,12 +493,12 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9113EC222D5F6BB1006E8AD9 /* Assets.xcassets in Resources */,
-				9113EC232D5F6BB1006E8AD9 /* LaunchScreen.storyboard in Resources */,
-				9113EC242D5F6BB1006E8AD9 /* LaunchScreen.strings in Resources */,
-				9113EC252D5F6BB1006E8AD9 /* Localizable.strings in Resources */,
-				9113EC262D5F6BB1006E8AD9 /* Main.storyboard in Resources */,
-				9113EC272D5F6BB1006E8AD9 /* Main.strings in Resources */,
+				5CD04EEF2D5FE7510013C751 /* Assets.xcassets in Resources */,
+				5CD04EF02D5FE7510013C751 /* LaunchScreen.storyboard in Resources */,
+				5CD04EF12D5FE7510013C751 /* LaunchScreen.strings in Resources */,
+				5CD04EF22D5FE7510013C751 /* Localizable.strings in Resources */,
+				5CD04EF32D5FE7510013C751 /* Main.storyboard in Resources */,
+				5CD04EF42D5FE7510013C751 /* Main.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -539,6 +553,8 @@
 				3FC8C39329D246BA0081F015 /* DateFormatters+Presets.swift in Sources */,
 				0CFCB7422A78013E0009A829 /* Nft.swift in Sources */,
 				0CF2C2DD2A783CE600FDC837 /* ErrorView.swift in Sources */,
+				5CD04EE02D5FE74C0013C751 /* AlertPresenter.swift in Sources */,
+				5CD04EE12D5FE74C0013C751 /* SortOption.swift in Sources */,
 				0C79EE682A76DE0900EE90EA /* NftDetailPresenter.swift in Sources */,
 				91B7DA692D5F9C79001AB3E0 /* Strings+Generated.swift in Sources */,
 				3F68069B29CBBAF100B4F915 /* ProductDetailsTableViewController.swift in Sources */,
@@ -557,6 +573,7 @@
 				0C79EE612A76DCD600EE90EA /* NftByIdRequest.swift in Sources */,
 				E19CD5AB2A98B56600CA39A5 /* NftImageCollectionViewCell.swift in Sources */,
 				0CF2C2E12A784C7000FDC837 /* LinePageControl.swift in Sources */,
+				5CD04EF52D5FE7510013C751 /* Strings+Generated.swift in Sources */,
 				3F6806D329CBBE9600B4F915 /* NetworkRequest.swift in Sources */,
 				0CFCB7492A7808900009A829 /* TestCatalogController.swift in Sources */,
 				3F6806D129CBBE6B00B4F915 /* NetworkClient.swift in Sources */,
@@ -597,42 +614,42 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
-		9113EC182D5F6BB1006E8AD9 /* LaunchScreen.storyboard */ = {
+		5CD04EE42D5FE7510013C751 /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
-				9113EC172D5F6BB1006E8AD9 /* Base */,
+				5CD04EE32D5FE7510013C751 /* Base */,
 			);
 			name = LaunchScreen.storyboard;
 			sourceTree = "<group>";
 		};
-		9113EC1A2D5F6BB1006E8AD9 /* LaunchScreen.strings */ = {
+		5CD04EE62D5FE7510013C751 /* LaunchScreen.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
-				9113EC192D5F6BB1006E8AD9 /* ru */,
+				5CD04EE52D5FE7510013C751 /* ru */,
 			);
 			name = LaunchScreen.strings;
 			sourceTree = "<group>";
 		};
-		9113EC1C2D5F6BB1006E8AD9 /* Localizable.strings */ = {
+		5CD04EE82D5FE7510013C751 /* Localizable.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
-				9113EC1B2D5F6BB1006E8AD9 /* ru */,
+				5CD04EE72D5FE7510013C751 /* ru */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";
 		};
-		9113EC1E2D5F6BB1006E8AD9 /* Main.storyboard */ = {
+		5CD04EEA2D5FE7510013C751 /* Main.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
-				9113EC1D2D5F6BB1006E8AD9 /* Base */,
+				5CD04EE92D5FE7510013C751 /* Base */,
 			);
 			name = Main.storyboard;
 			sourceTree = "<group>";
 		};
-		9113EC202D5F6BB1006E8AD9 /* Main.strings */ = {
+		5CD04EEC2D5FE7510013C751 /* Main.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
-				9113EC1F2D5F6BB1006E8AD9 /* ru */,
+				5CD04EEB2D5FE7510013C751 /* ru */,
 			);
 			name = Main.strings;
 			sourceTree = "<group>";
