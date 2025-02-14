@@ -3,6 +3,8 @@
 "Error.unknown" = "Произошла неизвестная ошибка";
 "Error.repeat" = "Повторить";
 "Error.title" = "Ошибка";
+"Button.cancel" = "Отмена";
+"Button.close" = "Закрыть";
 
 "Tab.profile" = "Профиль";
 
@@ -13,3 +15,10 @@
 "Tab.statistic" = "Статистика";
 
 "Cart.button.toPay" = "К Оплате";
+
+"Sort.title" = "Сортировка";
+"SortOption.nftCount" = "По количеству NFT";
+"SortOption.price" = "По цене";
+"SortOption.rating" = "По рейтингу";
+"SortOption.title" = "По названию";
+"SortOption.name" = "По имени";
