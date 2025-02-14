@@ -507,7 +507,6 @@
 /* Begin PBXShellScriptBuildPhase section */
 		5CD04B772D5E98510013C751 /* Run Swiftgen Script  */ = {
 			isa = PBXShellScriptBuildPhase;
-			alwaysOutOfDate = 1;
 			buildActionMask = 2147483647;
 			files = (
 			);
@@ -519,10 +518,11 @@
 			outputFileListPaths = (
 			);
 			outputPaths = (
+				"${SRCROOT}/FakeNFT/Resources/Strings+Generated.swift",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "export PATH=\"/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin\"\n\nif which swiftgen >/dev/null; then\n    swiftgen\nelse\n    echo \"warning: SwiftGen not installed. Install it via Homebrew\"\nfi\n";
+			shellScript = "export PATH=\"/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin\"\n\nOUTPUT_DIR=\"$PROJECT_DIR/FakeNFT/Resources\"\nOUTPUT_FILE=\"${OUTPUT_DIR}/Strings+Generated.swift\"\n\nif which swiftgen >/dev/null; then\n    echo \"SwiftGen is installed, generating files...\"\n    swiftgen\nelse\n    echo \"warning: SwiftGen not installed. Install it via Homebrew\"\nfi\n\n# Проверяем, создался ли файл\nif [ ! -f \"$OUTPUT_FILE\" ]; then\n    echo \"error: SwiftGen failed to generate $OUTPUT_FILE\"\n    exit 1\nfi\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
