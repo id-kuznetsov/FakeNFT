@@ -3,7 +3,7 @@
 ##   SwiftGen will parse all `.strings` files found in that folder.
 strings:
   inputs:
-    FakeNFT/Resources/ru.lproj/Localizable.strings
+    - FakeNFT/Resources/ru.lproj/Localizable.strings
   outputs:
     - templateName: structured-swift5
-      output: Generated/Strings+Generated.swift
+      output: FakeNFT/Resources/Strings+Generated.swift

@@ -92,4 +92,4 @@ iOSInjectionProject/
 .DS_Store
 
 # SwiftGen generated files
-Generated/
+FakeNFT/Resources/Strings+Generated.swift
