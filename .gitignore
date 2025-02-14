@@ -5,9 +5,6 @@
 ## User settings
 xcuserdata/
 
-# SwiftGen generated files
-FakeNFT/Resources/Strings+Generated.swift
-
 ## compatibility with Xcode 8 and earlier (ignoring not required starting Xcode 9)
 *.xcscmblueprint
 *.xccheckout
@@ -93,3 +90,6 @@ fastlane/test_output
 iOSInjectionProject/
 
 .DS_Store
+
+# SwiftGen generated files
+FakeNFT/Resources/Strings+Generated.swift
