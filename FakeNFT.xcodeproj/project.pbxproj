@@ -498,7 +498,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "if which swiftgen >/dev/null; then\n    swiftgen\nelse\n    echo \"warning: SwiftGen not installed. Install it via Homebrew or CocoaPods.\"\nfi\n";
+			shellScript = "if which swiftgen >/dev/null; then\n    swiftgen\nelse\n    echo \"warning: SwiftGen not installed. Install it via Homebrew\"\nfi\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
