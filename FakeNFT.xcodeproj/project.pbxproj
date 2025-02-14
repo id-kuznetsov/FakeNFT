@@ -102,7 +102,7 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		5CD04C1D2D5E9B250013C751 /* Resources */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Resources; sourceTree = "<group>"; };
+		9113EC0F2D5F6B68006E8AD9 /* Resources */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Resources; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -220,7 +220,7 @@
 			children = (
 				3F68069629CBBAF100B4F915 /* AppDelegate.swift */,
 				3F68069829CBBAF100B4F915 /* SceneDelegate.swift */,
-				5CD04C1D2D5E9B250013C751 /* Resources */,
+				9113EC0F2D5F6B68006E8AD9 /* Resources */,
 				3F478ECD29DB473000F6D39E /* DesignSystem */,
 				3F6806CE29CBBD1B00B4F915 /* Foundation */,
 				3F6806C929CBBCAF00B4F915 /* Models */,
@@ -361,7 +361,7 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
-				5CD04C1D2D5E9B250013C751 /* Resources */,
+				9113EC0F2D5F6B68006E8AD9 /* Resources */,
 			);
 			name = FakeNFT;
 			packageProductDependencies = (
