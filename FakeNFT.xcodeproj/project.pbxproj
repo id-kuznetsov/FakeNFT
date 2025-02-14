@@ -518,11 +518,11 @@
 			outputFileListPaths = (
 			);
 			outputPaths = (
-				"$(DERIVED_FILE_DIR)/FakeNFT/Resources/Strings+Generated.swift",
+				"Generated/Strings+Generated.swift",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "if which swiftgen >/dev/null; then\n    swiftgen\nelse\n    echo \"warning: SwiftGen not installed. Install it via Homebrew\"\nfi\n";
+			shellScript = "export PATH=\"/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin\"\nmkdir -p \"$(SRCROOT)/Generated\"\nif which swiftgen >/dev/null; then\n    swiftgen\nelse\n    echo \"warning: SwiftGen not installed. Install it via Homebrew\"\nfi\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 

@@ -6,6 +6,4 @@ strings:
     FakeNFT/Resources/ru.lproj/Localizable.strings
   outputs:
     - templateName: structured-swift5
-      output: FakeNFT/Resources/Strings+Generated.swift
-
-
+      output: Generated/Strings+Generated.swift
