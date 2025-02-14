@@ -9,6 +9,7 @@ final class TabBarController: UITabBarController {
         super.init(nibName: nil, bundle: nil)
     }
     
+    @available(*, unavailable)
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -52,6 +53,10 @@ final class TabBarController: UITabBarController {
         setViewControllers([profileVC, catalogVC, cartVC, statisticsVC], animated: false)
         self.selectedIndex = 1
         
+        tabBarAppearance()
+    }
+    
+    private func tabBarAppearance() {
         tabBar.tintColor = .blue
         tabBar.unselectedItemTintColor = .black
         tabBar.backgroundColor = .systemBackground
