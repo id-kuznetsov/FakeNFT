@@ -1,0 +1,12 @@
+
+/* Class = "UITabBarItem"; title = "Корзина"; ObjectID = "4N1-bS-JmX"; */
+"UITabBarItem.title.cart" = "Корзина";
+
+/* Class = "UITabBarItem"; title = "Профиль"; ObjectID = "Bq6-vk-Wno"; */
+"UITabBarItem.title.profile" = "Профиль";
+
+/* Class = "UITabBarItem"; title = "Каталог"; ObjectID = "X74-Ak-ux8"; */
+"UITabBarItem.title.catalog" = "Каталог";
+
+/* Class = "UILabel"; text = "Статистика"; ObjectID = "YLD-QU-GF5"; */
+"UITabBarItem.title.statistic" = "Статистика";
