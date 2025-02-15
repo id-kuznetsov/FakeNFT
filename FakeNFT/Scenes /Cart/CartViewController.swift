@@ -33,13 +33,33 @@ final class CartViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .ypWhite
+        setupUI()
     }
     
     // MARK: - Actions
     
+    @objc
+    private func didTapFilterButton() {
+        print("didTapFilterButton")
+        // TODO: handle filter button tap
+    }
     // MARK: - Private Methods
     
+    private func setupUI() {
+        setupNavigationBar()
+        view.backgroundColor = .ypWhite
+    }
+    
+    private func setupNavigationBar() {
+        let rightBarButtonItem = UIBarButtonItem(
+            image: .icFilter,
+            style: .done,
+            target: self,
+            action: #selector(didTapFilterButton)
+        )
+        navigationItem.rightBarButtonItem = rightBarButtonItem
+        navigationItem.rightBarButtonItem?.tintColor = .ypBlack
+    }
     // MARK: Constraints
    
 }
