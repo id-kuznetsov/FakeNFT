@@ -45,7 +45,7 @@ final class TabBarController: UITabBarController {
         
         let statisticsVC = UINavigationController(rootViewController: StatisticsViewController(servicesAssembly: servicesAssembly))
         statisticsVC.tabBarItem = UITabBarItem(
-            title: NSLocalizedString("Tab.statistics", comment: ""),
+            title: NSLocalizedString("Tab.statistic", comment: ""),
             image: UIImage(systemName: "chart.bar"),
             selectedImage: UIImage(systemName: "chart.bar.fill")
         )
