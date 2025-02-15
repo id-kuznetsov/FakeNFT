@@ -45,11 +45,13 @@
 		5CD04EF02D5FE7510013C751 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5CD04EE42D5FE7510013C751 /* LaunchScreen.storyboard */; };
 		5CD04EF12D5FE7510013C751 /* LaunchScreen.strings in Resources */ = {isa = PBXBuildFile; fileRef = 5CD04EE62D5FE7510013C751 /* LaunchScreen.strings */; };
 		5CD04EF22D5FE7510013C751 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 5CD04EE82D5FE7510013C751 /* Localizable.strings */; };
-		5CD04EF32D5FE7510013C751 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5CD04EEA2D5FE7510013C751 /* Main.storyboard */; };
-		5CD04EF42D5FE7510013C751 /* Main.strings in Resources */ = {isa = PBXBuildFile; fileRef = 5CD04EEC2D5FE7510013C751 /* Main.strings */; };
 		5CD04EF52D5FE7510013C751 /* Strings+Generated.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CD04EED2D5FE7510013C751 /* Strings+Generated.swift */; };
 		E19CD5AB2A98B56600CA39A5 /* NftImageCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E19CD5AA2A98B56600CA39A5 /* NftImageCollectionViewCell.swift */; };
 		E1A1B9DA2AA01CE400C3AFBC /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1A1B9D92AA01CE400C3AFBC /* TabBarController.swift */; };
+		F75651292D5EA5B8009B646C /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F75651282D5EA5B8009B646C /* ProfileViewController.swift */; };
+		F756512B2D5EA5F2009B646C /* CatalogViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F756512A2D5EA5F2009B646C /* CatalogViewController.swift */; };
+		F756512D2D5EA623009B646C /* CartViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F756512C2D5EA623009B646C /* CartViewController.swift */; };
+		F756512F2D5EA652009B646C /* StatisticsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F756512E2D5EA652009B646C /* StatisticsViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -110,11 +112,14 @@
 		5CD04EE32D5FE7510013C751 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		5CD04EE52D5FE7510013C751 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
 		5CD04EE72D5FE7510013C751 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Localizable.strings; sourceTree = "<group>"; };
-		5CD04EE92D5FE7510013C751 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
-		5CD04EEB2D5FE7510013C751 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Main.strings; sourceTree = "<group>"; };
 		5CD04EED2D5FE7510013C751 /* Strings+Generated.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Strings+Generated.swift"; sourceTree = "<group>"; };
 		E19CD5AA2A98B56600CA39A5 /* NftImageCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NftImageCollectionViewCell.swift; sourceTree = "<group>"; };
 		E1A1B9D92AA01CE400C3AFBC /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
+		E1CD40D92A96BE7D00BE7FE8 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
+		F75651282D5EA5B8009B646C /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
+		F756512A2D5EA5F2009B646C /* CatalogViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatalogViewController.swift; sourceTree = "<group>"; };
+		F756512C2D5EA623009B646C /* CartViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CartViewController.swift; sourceTree = "<group>"; };
+		F756512E2D5EA652009B646C /* StatisticsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -186,6 +191,7 @@
 			isa = PBXGroup;
 			children = (
 				0CFCB7482A7808900009A829 /* TestCatalogController.swift */,
+				F756512A2D5EA5F2009B646C /* CatalogViewController.swift */,
 			);
 			path = Catalog;
 			sourceTree = "<group>";
@@ -273,6 +279,9 @@
 		3F6806C729CBBC5B00B4F915 /* Scenes  */ = {
 			isa = PBXGroup;
 			children = (
+				F73AD88F2D5EC2C600E4C498 /* Statistics */,
+				F73AD88E2D5EC2B700E4C498 /* Cart */,
+				F73AD88D2D5EC29C00E4C498 /* Profile */,
 				E1A1B9D82AA01C9700C3AFBC /* TabBarController */,
 				0CF2C2D92A783C1600FDC837 /* Common */,
 				0CFCB7472A7808870009A829 /* Catalog */,
@@ -355,8 +364,6 @@
 				5CD04EE42D5FE7510013C751 /* LaunchScreen.storyboard */,
 				5CD04EE62D5FE7510013C751 /* LaunchScreen.strings */,
 				5CD04EE82D5FE7510013C751 /* Localizable.strings */,
-				5CD04EEA2D5FE7510013C751 /* Main.storyboard */,
-				5CD04EEC2D5FE7510013C751 /* Main.strings */,
 				5CD04EED2D5FE7510013C751 /* Strings+Generated.swift */,
 			);
 			path = Resources;
@@ -377,6 +384,30 @@
 				E1A1B9D92AA01CE400C3AFBC /* TabBarController.swift */,
 			);
 			path = TabBarController;
+			sourceTree = "<group>";
+		};
+		F73AD88D2D5EC29C00E4C498 /* Profile */ = {
+			isa = PBXGroup;
+			children = (
+				F75651282D5EA5B8009B646C /* ProfileViewController.swift */,
+			);
+			path = Profile;
+			sourceTree = "<group>";
+		};
+		F73AD88E2D5EC2B700E4C498 /* Cart */ = {
+			isa = PBXGroup;
+			children = (
+				F756512C2D5EA623009B646C /* CartViewController.swift */,
+			);
+			path = Cart;
+			sourceTree = "<group>";
+		};
+		F73AD88F2D5EC2C600E4C498 /* Statistics */ = {
+			isa = PBXGroup;
+			children = (
+				F756512E2D5EA652009B646C /* StatisticsViewController.swift */,
+			);
+			path = Statistics;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -497,8 +528,6 @@
 				5CD04EF02D5FE7510013C751 /* LaunchScreen.storyboard in Resources */,
 				5CD04EF12D5FE7510013C751 /* LaunchScreen.strings in Resources */,
 				5CD04EF22D5FE7510013C751 /* Localizable.strings in Resources */,
-				5CD04EF32D5FE7510013C751 /* Main.storyboard in Resources */,
-				5CD04EF42D5FE7510013C751 /* Main.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -550,14 +579,16 @@
 				E1A1B9DA2AA01CE400C3AFBC /* TabBarController.swift in Sources */,
 				3F478ED129DB476500F6D39E /* Fonts.swift in Sources */,
 				0C79EE6A2A76DE1000EE90EA /* NftDetailAssembly.swift in Sources */,
+				F756512F2D5EA652009B646C /* StatisticsViewController.swift in Sources */,
+				F75651292D5EA5B8009B646C /* ProfileViewController.swift in Sources */,
 				3FC8C39329D246BA0081F015 /* DateFormatters+Presets.swift in Sources */,
 				0CFCB7422A78013E0009A829 /* Nft.swift in Sources */,
 				0CF2C2DD2A783CE600FDC837 /* ErrorView.swift in Sources */,
 				5CD04EE02D5FE74C0013C751 /* AlertPresenter.swift in Sources */,
 				5CD04EE12D5FE74C0013C751 /* SortOption.swift in Sources */,
 				0C79EE682A76DE0900EE90EA /* NftDetailPresenter.swift in Sources */,
-				91B7DA692D5F9C79001AB3E0 /* Strings+Generated.swift in Sources */,
 				3F68069B29CBBAF100B4F915 /* ProductDetailsTableViewController.swift in Sources */,
+				F756512B2D5EA5F2009B646C /* CatalogViewController.swift in Sources */,
 				0CFCB7402A78002A0009A829 /* ExamplePutService.swift in Sources */,
 				3F6806D529CBBEC700B4F915 /* NetworkTask.swift in Sources */,
 				0CF2C2DB2A783C1B00FDC837 /* LoadingView.swift in Sources */,
@@ -576,6 +607,7 @@
 				5CD04EF52D5FE7510013C751 /* Strings+Generated.swift in Sources */,
 				3F6806D329CBBE9600B4F915 /* NetworkRequest.swift in Sources */,
 				0CFCB7492A7808900009A829 /* TestCatalogController.swift in Sources */,
+				F756512D2D5EA623009B646C /* CartViewController.swift in Sources */,
 				3F6806D129CBBE6B00B4F915 /* NetworkClient.swift in Sources */,
 				0CFCB7442A7802440009A829 /* NftDetailInput.swift in Sources */,
 				0C79EE632A76DD1900EE90EA /* RequestConstants.swift in Sources */,
@@ -617,6 +649,7 @@
 		5CD04EE42D5FE7510013C751 /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
+				E1CD40D92A96BE7D00BE7FE8 /* ru */,
 				5CD04EE32D5FE7510013C751 /* Base */,
 			);
 			name = LaunchScreen.storyboard;
@@ -636,22 +669,6 @@
 				5CD04EE72D5FE7510013C751 /* ru */,
 			);
 			name = Localizable.strings;
-			sourceTree = "<group>";
-		};
-		5CD04EEA2D5FE7510013C751 /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				5CD04EE92D5FE7510013C751 /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
-		5CD04EEC2D5FE7510013C751 /* Main.strings */ = {
-			isa = PBXVariantGroup;
-			children = (
-				5CD04EEB2D5FE7510013C751 /* ru */,
-			);
-			name = Main.strings;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
@@ -789,7 +806,6 @@
 				INFOPLIST_FILE = FakeNFT/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
@@ -818,7 +834,6 @@
 				INFOPLIST_FILE = FakeNFT/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
