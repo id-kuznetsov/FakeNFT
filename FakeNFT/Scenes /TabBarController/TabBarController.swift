@@ -52,7 +52,7 @@ final class TabBarController: UITabBarController {
         )
         
         setViewControllers([profileVC, catalogVC, cartViewController, statisticsVC], animated: false)
-        self.selectedIndex = 1
+        self.selectedIndex = 2
         
         tabBarAppearance()
     }

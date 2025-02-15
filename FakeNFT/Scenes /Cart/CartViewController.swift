@@ -21,7 +21,7 @@ final class CartViewController: UIViewController {
         tableView.register(CartTableViewCell.self)
         tableView.separatorStyle = .none
         tableView.backgroundColor = .ypWhite
-        tableView.rowHeight = 140 // TODO: вынести в константы
+        tableView.rowHeight = Constants.tableViewRowHeight
         tableView.dataSource = self
         tableView.delegate = self
         return tableView
@@ -36,7 +36,6 @@ final class CartViewController: UIViewController {
     private lazy var totalNFTCountInOrderLabel: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 15, weight: .regular)
-        label.text = "3 NFT" // TODO: получить из viewModel
         label.textColor = .ypBlack
         label.textAlignment = .left
         return label
@@ -46,6 +45,7 @@ final class CartViewController: UIViewController {
         let label = UILabel()
         label.font = .systemFont(ofSize: 17, weight: .bold)
         label.text = "5,34 ETH" // TODO: получить из viewModel
+        label.setContentHuggingPriority(.required, for: .horizontal)
         label.textColor = .ypGreenUniversal
         label.textAlignment = .left
         return label
@@ -105,6 +105,7 @@ final class CartViewController: UIViewController {
         view.addSubviews([tableView, paymentView, totalNFTCountInOrderLabel, totalCostLabel, paymentButton])
         setupConstraints()
         setTableViewInsets()
+        setupPaymentViewLabels()
     }
     
     private func setupNavigationBar() {
@@ -119,9 +120,13 @@ final class CartViewController: UIViewController {
     }
     
     private func setTableViewInsets() {
-        tableView.contentInset.top = 20
-        tableView.verticalScrollIndicatorInsets.top = 20
-        tableView.setContentOffset(CGPoint(x: 0, y: -20), animated: false)
+        tableView.contentInset.top = Constants.tableViewTopInset
+        tableView.verticalScrollIndicatorInsets.top = Constants.tableViewTopInset
+        tableView.setContentOffset(CGPoint(x: 0, y: -Constants.tableViewTopInset), animated: false)
+    }
+    
+    private func setupPaymentViewLabels() {
+        totalNFTCountInOrderLabel.text = "\(viewModel.getItemsCount()) NFT"
     }
     
     // MARK: Constraints
@@ -148,31 +153,30 @@ final class CartViewController: UIViewController {
         [paymentView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
          paymentView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
          paymentView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-         paymentView.heightAnchor.constraint(equalToConstant: 76)
+         paymentView.heightAnchor.constraint(equalToConstant: Constants.paymentViewHeight)
         ]
     }
     
     private func totalNFTCountLabelConstraints() -> [NSLayoutConstraint] {
-        [totalNFTCountInOrderLabel.topAnchor.constraint(equalTo: paymentView.topAnchor, constant: 16),
-         totalNFTCountInOrderLabel.leadingAnchor.constraint(equalTo: paymentView.leadingAnchor, constant: 16),
-         totalNFTCountInOrderLabel.trailingAnchor.constraint(equalTo: paymentView.trailingAnchor, constant: -16)
+        [totalNFTCountInOrderLabel.topAnchor.constraint(equalTo: paymentView.topAnchor, constant: Constants.totalNFTCountLabelTopInset),
+         totalNFTCountInOrderLabel.leadingAnchor.constraint(equalTo: paymentView.leadingAnchor, constant: Constants.totalNFTCountLabelHorizontalInset),
+         totalNFTCountInOrderLabel.trailingAnchor.constraint(equalTo: paymentView.trailingAnchor, constant: -Constants.totalNFTCountLabelHorizontalInset)
         ]
     }
     
     private func totalCostLabelConstraints() -> [NSLayoutConstraint] {
-        [totalCostLabel.bottomAnchor.constraint(equalTo: paymentView.bottomAnchor, constant: -16),
-         totalCostLabel.leadingAnchor.constraint(equalTo: paymentView.leadingAnchor, constant: 16)
+        [totalCostLabel.bottomAnchor.constraint(equalTo: paymentView.bottomAnchor, constant: Constants.totalCostLabelBottomInset),
+         totalCostLabel.leadingAnchor.constraint(equalTo: paymentView.leadingAnchor, constant: Constants.totalCostLabelLeadingInset)
         ]
     }
     
     private func paymentButtonConstraints() -> [NSLayoutConstraint] {
-        [paymentButton.bottomAnchor.constraint(equalTo: paymentView.bottomAnchor, constant: -16),
-         paymentButton.trailingAnchor.constraint(equalTo: paymentView.trailingAnchor, constant: -16),
-         paymentButton.leadingAnchor.constraint(equalTo: totalCostLabel.trailingAnchor, constant: 24),
-         paymentButton.heightAnchor.constraint(equalToConstant: 44)
+        [paymentButton.bottomAnchor.constraint(equalTo: paymentView.bottomAnchor, constant: Constants.paymentButtonBottomInset),
+         paymentButton.trailingAnchor.constraint(equalTo: paymentView.trailingAnchor, constant: Constants.paymentButtonTrailingInset),
+         paymentButton.leadingAnchor.constraint(equalTo: totalCostLabel.trailingAnchor, constant: Constants.paymentButtonLeadingInset),
+         paymentButton.heightAnchor.constraint(equalToConstant: Constants.paymentButtonHeight)
         ]
     }
-    
 }
 
 // MARK: - Extensions
@@ -185,10 +189,28 @@ extension CartViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell: CartTableViewCell = tableView.dequeueReusableCell()
         cell.selectionStyle = .none
+        let orderCard = viewModel.getItem(at: indexPath.row)
+        cell.setupCell(with: orderCard)
         return cell
     }
 }
 
 extension CartViewController: UITableViewDelegate {
     
+}
+
+private extension CartViewController {
+    struct Constants {
+        static let tableViewRowHeight: CGFloat = 140
+        static let paymentViewHeight: CGFloat = 76
+        static let paymentButtonHeight: CGFloat = 44
+        static let tableViewTopInset: CGFloat = 20
+        static let totalNFTCountLabelTopInset: CGFloat = 16
+        static let totalCostLabelBottomInset: CGFloat = -16
+        static let paymentButtonBottomInset: CGFloat = -16
+        static let paymentButtonLeadingInset: CGFloat = 24
+        static let totalNFTCountLabelHorizontalInset: CGFloat = 16
+        static let totalCostLabelLeadingInset: CGFloat = 16
+        static let paymentButtonTrailingInset: CGFloat = -16
+    }
 }
