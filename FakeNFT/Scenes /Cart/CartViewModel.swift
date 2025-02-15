@@ -8,9 +8,13 @@
 import Foundation
 
 protocol CartViewModelProtocol {
-    
+    func getItemsCount() -> Int
 }
 
 final class CartViewModel: CartViewModelProtocol {
+    func getItemsCount() -> Int {
+        7 // TODO: get from request
+    }
+    
     
 }
