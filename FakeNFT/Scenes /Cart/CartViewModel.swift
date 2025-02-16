@@ -10,23 +10,52 @@ import Foundation
 protocol CartViewModelProtocol {
     func getItemsCount() -> Int
     func getItem(at index: Int) -> OrderCard
+    func loadData()
 }
 
 final class CartViewModel: CartViewModelProtocol {
-    func getItemsCount() -> Int {
-        1 // TODO: get from request
-    }
     
-    func getItem(at index: Int) -> OrderCard {
-        // TODO: get from request ❌
-        let url = URL(string: "https://code.s3.yandex.net/Mobile/iOS/NFT/Beige/Ellsa/1.png")! // force for test
-        return OrderCard(
+    // MARK: - Private Properties
+    
+    private let servicesAssembly: ServicesAssembly
+    private var nftsInCart: [OrderCard] = [
+        OrderCard(
             name: "Mock Name",
             rating: 5,
             price: 1.78,
-            imageURL: url
+            imageURL: URL(string: "https://code.s3.yandex.net/Mobile/iOS/NFT/Beige/Ellsa/1.png")! // force for test
         )
+    ]
+    
+    // MARK: - Initialisers
+    
+    init(servicesAssembly: ServicesAssembly) {
+        self.servicesAssembly = servicesAssembly
+        loadData()
     }
     
+    // MARK: - Public Methods
     
+    func getItemsCount() -> Int {
+        nftsInCart.count
+    }
+    
+    func getItem(at index: Int) -> OrderCard {
+        nftsInCart[index]
+    }
+    
+    func loadData() {
+        servicesAssembly.orderService.getOrder(completion: { result in
+            switch result {
+            case .success(let order):
+                print("Заказ получен: \(order)")
+                let nftsInOrder = order.nfts
+            case .failure(let error):
+                print("Ошибка: \(error)")
+            }
+        })
+    }
+    
+
+
 }

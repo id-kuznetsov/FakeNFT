@@ -14,7 +14,6 @@ final class CartViewController: UIViewController {
     // MARK: - Private Properties
     
     private let viewModel: CartViewModelProtocol
-    private let servicesAssembly: ServicesAssembly
     
     private lazy var tableView: UITableView = {
         let tableView = UITableView()
@@ -65,8 +64,7 @@ final class CartViewController: UIViewController {
     
     // MARK: - Initialisers
     
-    init(viewModel: CartViewModelProtocol,servicesAssembly: ServicesAssembly) {
-        self.servicesAssembly = servicesAssembly
+    init(viewModel: CartViewModelProtocol) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }

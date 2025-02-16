@@ -62,6 +62,7 @@ final class CartTableViewCell: UITableViewCell, ReuseIdentifying {
     }
     
     override func prepareForReuse() {
+        nftImageView.kf.cancelDownloadTask()
         nftImageView.image = nil
     }
     

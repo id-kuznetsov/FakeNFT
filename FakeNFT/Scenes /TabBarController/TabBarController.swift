@@ -36,8 +36,8 @@ final class TabBarController: UITabBarController {
             selectedImage: UIImage(systemName: "square.stack.3d.up.fill")
         )
         
-        let cartViewModel = CartViewModel()
-        let cartViewController = UINavigationController(rootViewController: CartViewController(viewModel: cartViewModel, servicesAssembly: servicesAssembly))
+        let cartViewModel = CartViewModel(servicesAssembly: servicesAssembly)
+        let cartViewController = UINavigationController(rootViewController: CartViewController(viewModel: cartViewModel))
         cartViewController.tabBarItem = UITabBarItem(
             title: L10n.Tab.cart,
             image: .icCart,
