@@ -140,7 +140,7 @@ final class CartViewController: UIViewController {
     
     private func updatePaymentViewLabels() {
         totalNFTCountInOrderLabel.text = "\(viewModel.itemsCount) NFT"
-        totalCostLabel.text = "\(viewModel.getTotalCost()) ETH"
+        totalCostLabel.text = "\(String(format: "%.2f", viewModel.getTotalCost())) ETH"
     }
     
     private func setLoadingState(isLoading: Bool) {
