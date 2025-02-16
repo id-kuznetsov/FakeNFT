@@ -9,11 +9,9 @@ import UIKit
 
 final class CartViewController: UIViewController {
     
-    // MARK: - Public Properties
-    
     // MARK: - Private Properties
     
-    private let viewModel: CartViewModelProtocol
+    private var viewModel: CartViewModelProtocol
     
     private lazy var tableView: UITableView = {
         let tableView = UITableView()
@@ -43,7 +41,6 @@ final class CartViewController: UIViewController {
     private lazy var totalCostLabel: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 17, weight: .bold)
-        label.text = "5,34 ETH" // TODO: получить из viewModel
         label.setContentHuggingPriority(.required, for: .horizontal)
         label.textColor = .ypGreenUniversal
         label.textAlignment = .left
@@ -62,11 +59,21 @@ final class CartViewController: UIViewController {
         return button
     }()
     
+    private lazy var activityIndicator: UIActivityIndicatorView = {
+        let activityIndicator = UIActivityIndicatorView(style: .medium)
+        activityIndicator.color = .ypBlack
+        activityIndicator.hidesWhenStopped = true
+        return activityIndicator
+    }()
+    
     // MARK: - Initialisers
     
     init(viewModel: CartViewModelProtocol) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
+        setLoadingState(isLoading: true)
+        setupBindings()
+        viewModel.loadData()
     }
     
     @available(*, unavailable)
@@ -96,15 +103,22 @@ final class CartViewController: UIViewController {
     
     // MARK: - Private Methods
     
+    private func setupBindings() {
+        viewModel.onItemsUpdate = { [weak self] in
+            self?.tableView.reloadData()
+            self?.updatePaymentViewLabels()
+            self?.setLoadingState(isLoading: false)
+        }
+    }
+    
     private func setupUI() {
         setupNavigationBar()
         view.backgroundColor = .ypWhite
         
-        view.addSubviews([tableView, paymentView, totalNFTCountInOrderLabel, totalCostLabel, paymentButton])
+        view.addSubviews([tableView, paymentView, totalNFTCountInOrderLabel, totalCostLabel, paymentButton, activityIndicator])
         setupConstraints()
         setTableViewInsets()
-        setupPaymentViewLabels()
-        setupTotalCostLabel()
+        updatePaymentViewLabels()
     }
     
     private func setupNavigationBar() {
@@ -124,12 +138,20 @@ final class CartViewController: UIViewController {
         tableView.setContentOffset(CGPoint(x: 0, y: -Constants.tableViewTopInset), animated: false)
     }
     
-    private func setupPaymentViewLabels() {
-        totalNFTCountInOrderLabel.text = "\(viewModel.getItemsCount()) NFT"
+    private func updatePaymentViewLabels() {
+        totalNFTCountInOrderLabel.text = "\(viewModel.itemsCount) NFT"
+        totalCostLabel.text = "\(viewModel.getTotalCost()) ETH"
     }
     
-    private func setupTotalCostLabel() {
-        totalCostLabel.text = "\(viewModel.getTotalCost()) ETH"
+    private func setLoadingState(isLoading: Bool) {
+        isLoading ? activityIndicator.startAnimating() : activityIndicator.stopAnimating()
+        
+        paymentView.isHidden = isLoading
+        paymentButton.isHidden = isLoading
+        totalCostLabel.isHidden = isLoading
+        totalNFTCountInOrderLabel.isHidden = isLoading
+        
+        navigationController?.navigationBar.isHidden = isLoading
     }
     
     // MARK: Constraints
@@ -142,6 +164,7 @@ final class CartViewController: UIViewController {
             totalCostLabelConstraints() +
             paymentButtonConstraints()
         )
+        activityIndicator.constraintCenters(to: view)
     }
     
     private func tableViewConstraints() -> [NSLayoutConstraint] {
@@ -186,7 +209,7 @@ final class CartViewController: UIViewController {
 
 extension CartViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        viewModel.getItemsCount()
+        viewModel.itemsCount
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -198,9 +221,7 @@ extension CartViewController: UITableViewDataSource {
     }
 }
 
-extension CartViewController: UITableViewDelegate {
-    
-}
+extension CartViewController: UITableViewDelegate {}
 
 private extension CartViewController {
     struct Constants {

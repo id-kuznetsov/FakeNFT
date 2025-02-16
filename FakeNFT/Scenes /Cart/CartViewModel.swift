@@ -7,60 +7,82 @@
 
 import Foundation
 
-protocol CartViewModelProtocol {
-    func getItemsCount() -> Int
-    func getItem(at index: Int) -> OrderCard
-    func getTotalCost() -> Double
-    func loadData()
-}
-
 final class CartViewModel: CartViewModelProtocol {
+    
+    // MARK: - Public Properties
+    
+    var onItemsUpdate: (() -> Void)?
+    var itemsCount: Int {
+        nftsInCart.count
+    }
     
     // MARK: - Private Properties
     
     private let servicesAssembly: ServicesAssembly
-    private var nftsInCart: [OrderCard] = [
-        OrderCard(
-            name: "Mock Name",
-            rating: 5,
-            price: 1.78,
-            imageURL: URL(string: "https://code.s3.yandex.net/Mobile/iOS/NFT/Beige/Ellsa/1.png")! // force for test
-        )
-    ]
+    private var nftsInCart: [OrderCard] = []
     
     // MARK: - Initialisers
     
     init(servicesAssembly: ServicesAssembly) {
         self.servicesAssembly = servicesAssembly
-        loadData()
     }
     
     // MARK: - Public Methods
-    
-    func getItemsCount() -> Int {
-        nftsInCart.count
-    }
     
     func getItem(at index: Int) -> OrderCard {
         nftsInCart[index]
     }
     
     func getTotalCost() -> Double {
-        nftsInCart.reduce(0, { $0 + $1.price})        
+        nftsInCart.reduce(0, { $0 + $1.price})
     }
     
     func loadData() {
-        servicesAssembly.orderService.getOrder(completion: { result in
+        servicesAssembly.orderService.getOrder(completion: { [weak self] result in
             switch result {
             case .success(let order):
-                print("Заказ получен: \(order)")
-                let nftsInOrder = order.nfts
+                self?.loadNFTs(by: order.nfts)
+                
             case .failure(let error):
-                print("Ошибка: \(error)")
+                print("Error: \(error) in \(#function) \(#file)")
             }
         })
     }
     
+    // MARK: - Private Methods
     
-    
+    private func loadNFTs(by ids: [String]) {
+        let group = DispatchGroup()
+        var loadedNFTs: [OrderCard] = []
+        
+        for id in ids {
+            group.enter()
+            servicesAssembly.nftService.loadNft(id: id) { result in
+                DispatchQueue.main.async {
+                    switch result {
+                    case .success(let nft):
+                        guard let url = nft.images.first else {
+                            print("Unable to get image URL in \(#function) \(#file)")                    
+                            return
+                        }
+                        let orderCard = OrderCard(
+                            name: nft.name,
+                            rating: nft.rating,
+                            price: nft.price,
+                            imageURL: url
+                        )
+                        loadedNFTs.append(orderCard)
+                    case .failure(let error):
+                        print("Ошибка загрузки NFT: \(error.localizedDescription) \(#function) \(#file)")
+                    }
+                    group.leave()
+                }
+            }
+        }
+        
+        group.notify(queue: .main) { [weak self] in
+            self?.nftsInCart = loadedNFTs
+            self?.onItemsUpdate?()
+        }
+    }
 }

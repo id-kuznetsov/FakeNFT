@@ -77,7 +77,7 @@ final class CartTableViewCell: UITableViewCell, ReuseIdentifying {
     
     func setupCell(with orderCard: OrderCard) {
         setupCellUI()
-
+        nftImageView.kf.indicatorType = .activity
         nftImageView.kf.setImage(with: orderCard.imageURL
         ){ [weak self] result in
             guard let self else { return }
