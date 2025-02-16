@@ -10,6 +10,7 @@ import Foundation
 protocol CartViewModelProtocol {
     func getItemsCount() -> Int
     func getItem(at index: Int) -> OrderCard
+    func getTotalCost() -> Double
     func loadData()
 }
 
@@ -44,6 +45,10 @@ final class CartViewModel: CartViewModelProtocol {
         nftsInCart[index]
     }
     
+    func getTotalCost() -> Double {
+        nftsInCart.reduce(0, { $0 + $1.price})        
+    }
+    
     func loadData() {
         servicesAssembly.orderService.getOrder(completion: { result in
             switch result {
@@ -56,6 +61,6 @@ final class CartViewModel: CartViewModelProtocol {
         })
     }
     
-
-
+    
+    
 }

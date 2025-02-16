@@ -104,6 +104,7 @@ final class CartViewController: UIViewController {
         setupConstraints()
         setTableViewInsets()
         setupPaymentViewLabels()
+        setupTotalCostLabel()
     }
     
     private func setupNavigationBar() {
@@ -125,6 +126,10 @@ final class CartViewController: UIViewController {
     
     private func setupPaymentViewLabels() {
         totalNFTCountInOrderLabel.text = "\(viewModel.getItemsCount()) NFT"
+    }
+    
+    private func setupTotalCostLabel() {
+        totalCostLabel.text = "\(viewModel.getTotalCost()) ETH"
     }
     
     // MARK: Constraints
