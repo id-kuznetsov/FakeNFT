@@ -13,6 +13,16 @@ final class CartViewController: UIViewController {
     
     private var viewModel: CartViewModelProtocol
     
+    private lazy var rightBarButtonItem: UIBarButtonItem = {
+        let barButtonItem = UIBarButtonItem(
+        image: .icFilter,
+        style: .done,
+        target: self,
+        action: #selector(didTapSortButton)
+        )
+        return barButtonItem
+    }()
+        
     private lazy var tableView: UITableView = {
         let tableView = UITableView()
         tableView.register(CartTableViewCell.self)
@@ -91,9 +101,9 @@ final class CartViewController: UIViewController {
     // MARK: - Actions
     
     @objc
-    private func didTapFilterButton() {
-        print("didTapFilterButton")
-        // TODO: handle filter button tap
+    private func didTapSortButton() {
+        print("didTapSortButton")
+        // TODO: handle sort button tap
     }
     
     @objc
@@ -108,11 +118,11 @@ final class CartViewController: UIViewController {
             self?.tableView.reloadData()
             self?.updatePaymentViewLabels()
             self?.setLoadingState(isLoading: false)
+            self?.setupNavigationBar()
         }
     }
     
     private func setupUI() {
-        setupNavigationBar()
         view.backgroundColor = .ypWhite
         
         view.addSubviews([tableView, paymentView, totalNFTCountInOrderLabel, totalCostLabel, paymentButton, activityIndicator])
@@ -122,12 +132,6 @@ final class CartViewController: UIViewController {
     }
     
     private func setupNavigationBar() {
-        let rightBarButtonItem = UIBarButtonItem(
-            image: .icFilter,
-            style: .done,
-            target: self,
-            action: #selector(didTapFilterButton)
-        )
         navigationItem.rightBarButtonItem = rightBarButtonItem
         navigationItem.rightBarButtonItem?.tintColor = .ypBlack
     }
@@ -151,7 +155,6 @@ final class CartViewController: UIViewController {
         totalCostLabel.isHidden = isLoading
         totalNFTCountInOrderLabel.isHidden = isLoading
         
-        navigationController?.navigationBar.isHidden = isLoading
     }
     
     // MARK: Constraints

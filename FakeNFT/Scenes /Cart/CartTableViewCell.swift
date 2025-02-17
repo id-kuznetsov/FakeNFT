@@ -96,6 +96,7 @@ final class CartTableViewCell: UITableViewCell, ReuseIdentifying {
     // MARK: - Private Methods
     
     private func setupCellUI() {
+        contentView.backgroundColor = .ypWhite
         contentView.addSubviews([nftImageView, nameLabel, descriptionPriceLabel, priceLabel, removeFromCartButton])
         setupConstraints()
     }
