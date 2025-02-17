@@ -19,4 +19,19 @@ final class StatisticsViewModel {
         UserStatistics(avatar: UIImage(named: "mock6"), name: "Lea", rating: 23),
         UserStatistics(avatar: UIImage(named: "mock7"), name: "Eric", rating: 19)
     ]
+    
+    var onUsersUpdated: (() -> Void)?
+    
+    // MARK: - Sorting
+    func sortUsers(by option: SortOption) {
+        switch option {
+        case .name:
+            users.sort { $0.name < $1.name }
+        case .rating:
+            users.sort { $0.rating > $1.rating }
+        default:
+            break
+        }
+        onUsersUpdated?()
+    }
 }

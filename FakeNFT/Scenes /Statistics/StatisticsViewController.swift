@@ -55,6 +55,7 @@ final class StatisticsViewController: UIViewController {
         navigationController?.setNavigationBarHidden(true, animated: false)
         
         setupUI()
+        setupBindings()
     }
     
     // MARK: - UI Setup
@@ -92,9 +93,24 @@ final class StatisticsViewController: UIViewController {
         navItem.rightBarButtonItems = [spacer, filterBarButton]
     }
     
+    private func setupBindings() {
+        viewModel.onUsersUpdated = { [weak self] in
+            DispatchQueue.main.async {
+                self?.tableView.reloadData()
+            }
+        }
+    }
+    
     // MARK: - Actions
     @objc private func filterButtonTapped() {
-        // TO DO: Add a call to AlertPresenter with sorting options by name and by rating.
+        AlertPresenter.presentSortAlert(
+            on: self,
+            sortOptions: [.name, .rating],
+            preferredStyle: .actionSheet
+        ) {
+            [weak self] selectedOption in
+            self?.viewModel.sortUsers(by: selectedOption)
+        }
     }
 }
 
@@ -111,7 +127,7 @@ extension StatisticsViewController: UITableViewDataSource {
         cellForRowAt indexPath: IndexPath
     ) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(
-            withIdentifier: StatisticsCell.identifier, 
+            withIdentifier: StatisticsCell.identifier,
             for: indexPath
         ) as? StatisticsCell else {
             return UITableViewCell()
