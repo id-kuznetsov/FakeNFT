@@ -11,11 +11,11 @@ final class StatisticsViewController: UIViewController {
     
     // MARK: - Dependencies
     private let servicesAssembly: ServicesAssembly
+    private let mockUser = "Alex"
     
     // MARK: - UI Elements
     private lazy var customNavBar: UINavigationBar = {
         let navBar = UINavigationBar()
-        navBar.translatesAutoresizingMaskIntoConstraints = false
         navBar.barTintColor = .ypWhite
         navBar.shadowImage = UIImage()
         return navBar
@@ -27,6 +27,15 @@ final class StatisticsViewController: UIViewController {
         button.tintColor = .ypBlack
         button.addTarget(self, action: #selector(filterButtonTapped), for: .touchUpInside)
         return button
+    }()
+    
+    private lazy var tableView: UITableView = {
+        let tableView = UITableView()
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "MockCell")
+        tableView.dataSource = self
+        tableView.delegate = self
+        tableView.separatorStyle = .none
+        return tableView
     }()
     
     // MARK: - Init
@@ -52,12 +61,20 @@ final class StatisticsViewController: UIViewController {
     private func setupUI() {
         view.backgroundColor = .systemBackground
         
-        view.addSubview(customNavBar)
+        [customNavBar, tableView].forEach { element in
+            view.addSubview(element)
+            element.translatesAutoresizingMaskIntoConstraints = false
+        }
         
         NSLayoutConstraint.activate([
             customNavBar.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             customNavBar.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            customNavBar.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+            customNavBar.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            
+            tableView.topAnchor.constraint(equalTo: customNavBar.bottomAnchor, constant: 20),
+            tableView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
+            tableView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16),
+            tableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
         ])
         
         configureCustomNavBar()
@@ -78,5 +95,36 @@ final class StatisticsViewController: UIViewController {
     // MARK: - Actions
     @objc private func filterButtonTapped() {
         // TO DO: Add a call to AlertPresenter with sorting options by name and by rating.
+    }
+}
+
+extension StatisticsViewController: UITableViewDataSource {
+    func tableView(
+        _ tableView: UITableView,
+        numberOfRowsInSection section: Int
+    ) -> Int {
+        1
+    }
+    
+    func tableView(
+        _ tableView: UITableView,
+        cellForRowAt indexPath: IndexPath
+    ) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "MockCell", for: indexPath)
+        
+        cell.textLabel?.text = "Mock cell, user: \(mockUser)"
+        cell.textLabel?.textAlignment = .center
+        cell.backgroundColor = .ypLightGrey
+        
+        return cell
+    }
+}
+
+extension StatisticsViewController: UITableViewDelegate {
+    func tableView(
+        _ tableView: UITableView,
+        heightForRowAt indexPath: IndexPath
+    ) -> CGFloat {
+        80
     }
 }
