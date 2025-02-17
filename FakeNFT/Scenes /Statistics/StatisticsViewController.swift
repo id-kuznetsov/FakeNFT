@@ -11,7 +11,7 @@ final class StatisticsViewController: UIViewController {
     
     // MARK: - Dependencies
     private let servicesAssembly: ServicesAssembly
-    private let mockUser = "Alex"
+    private let viewModel = StatisticsViewModel()
     
     // MARK: - UI Elements
     private lazy var customNavBar: UINavigationBar = {
@@ -31,7 +31,7 @@ final class StatisticsViewController: UIViewController {
     
     private lazy var tableView: UITableView = {
         let tableView = UITableView()
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "MockCell")
+        tableView.register(StatisticsCell.self, forCellReuseIdentifier: StatisticsCell.identifier)
         tableView.dataSource = self
         tableView.delegate = self
         tableView.separatorStyle = .none
@@ -103,18 +103,23 @@ extension StatisticsViewController: UITableViewDataSource {
         _ tableView: UITableView,
         numberOfRowsInSection section: Int
     ) -> Int {
-        1
+        viewModel.users.count
     }
     
     func tableView(
         _ tableView: UITableView,
         cellForRowAt indexPath: IndexPath
     ) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "MockCell", for: indexPath)
+        guard let cell = tableView.dequeueReusableCell(
+            withIdentifier: StatisticsCell.identifier, 
+            for: indexPath
+        ) as? StatisticsCell else {
+            return UITableViewCell()
+        }
         
-        cell.textLabel?.text = "Mock cell, user: \(mockUser)"
-        cell.textLabel?.textAlignment = .center
-        cell.backgroundColor = .ypLightGrey
+        let user = viewModel.users[indexPath.row]
+        cell.configure(with: user, index: indexPath.row)
+        cell.selectionStyle = .none
         
         return cell
     }
@@ -125,6 +130,6 @@ extension StatisticsViewController: UITableViewDelegate {
         _ tableView: UITableView,
         heightForRowAt indexPath: IndexPath
     ) -> CGFloat {
-        80
+        88
     }
 }
