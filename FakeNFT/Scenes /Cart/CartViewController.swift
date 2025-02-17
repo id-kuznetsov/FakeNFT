@@ -15,14 +15,14 @@ final class CartViewController: UIViewController {
     
     private lazy var rightBarButtonItem: UIBarButtonItem = {
         let barButtonItem = UIBarButtonItem(
-        image: .icFilter,
-        style: .done,
-        target: self,
-        action: #selector(didTapSortButton)
+            image: .icFilter,
+            style: .done,
+            target: self,
+            action: #selector(didTapSortButton)
         )
         return barButtonItem
     }()
-        
+    
     private lazy var tableView: UITableView = {
         let tableView = UITableView()
         tableView.register(CartTableViewCell.self)
@@ -102,8 +102,21 @@ final class CartViewController: UIViewController {
     
     @objc
     private func didTapSortButton() {
-        print("didTapSortButton")
-        // TODO: handle sort button tap
+        AlertPresenter.presentSortAlert(
+            on: self,
+            sortOptions: [.price, .rating, .name]
+        ) { [weak self] selectedSortOption in
+            switch selectedSortOption {
+            case .price:
+                self?.viewModel.sortItems(by: .price)
+            case .rating:
+                self?.viewModel.sortItems(by: .rating)
+            case .name:
+                self?.viewModel.sortItems(by: .name)
+            default:
+                break
+            }
+        }
     }
     
     @objc

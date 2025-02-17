@@ -14,4 +14,5 @@ protocol CartViewModelProtocol {
     func getItem(at index: Int) -> OrderCard
     func getTotalCost() -> Double
     func loadData()
+    func sortItems(by sortOption: SortOption)
 }

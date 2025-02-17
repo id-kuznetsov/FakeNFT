@@ -20,6 +20,7 @@ final class CartViewModel: CartViewModelProtocol {
     
     private let servicesAssembly: ServicesAssembly
     private var nftsInCart: [OrderCard] = []
+    private let sortStorage = SortStateStorage.shared
     
     // MARK: - Initialisers
     
@@ -49,6 +50,21 @@ final class CartViewModel: CartViewModelProtocol {
         })
     }
     
+    func sortItems(by sortOption: SortOption) {
+        sortStorage.sortOptionInCart = sortOption.title
+        switch sortOption {
+        case .name:
+            nftsInCart.sort { $0.name < $1.name }
+        case .price:
+            nftsInCart.sort { $0.price < $1.price }
+        case .rating:
+            nftsInCart.sort { $0.rating > $1.rating }
+        default:
+            break
+        }
+        onItemsUpdate?()
+    }
+    
     // MARK: - Private Methods
     
     private func loadNFTs(by ids: [String]) {
@@ -62,7 +78,7 @@ final class CartViewModel: CartViewModelProtocol {
                     switch result {
                     case .success(let nft):
                         guard let url = nft.images.first else {
-                            print("Unable to get image URL in \(#function) \(#file)")                    
+                            print("Unable to get image URL in \(#function) \(#file)")
                             return
                         }
                         let orderCard = OrderCard(
@@ -83,6 +99,15 @@ final class CartViewModel: CartViewModelProtocol {
         group.notify(queue: .main) { [weak self] in
             self?.nftsInCart = loadedNFTs
             self?.onItemsUpdate?()
+            self?.applyLastSortOption()
         }
+    }
+    
+    private func applyLastSortOption() {
+        guard let lastSortOptionTitle = sortStorage.sortOptionInCart,
+              let lastSortOption = SortOption.allCases.first (where: { $0.title == lastSortOptionTitle }) else {
+            return
+        }
+        sortItems(by: lastSortOption)
     }
 }
