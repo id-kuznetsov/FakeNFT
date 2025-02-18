@@ -15,7 +15,7 @@ final class CartViewController: UIViewController {
     
     private lazy var rightBarButtonItem: UIBarButtonItem = {
         let barButtonItem = UIBarButtonItem(
-            image: .icFilter,
+            image: .icSort,
             style: .done,
             target: self,
             action: #selector(didTapSortButton)
