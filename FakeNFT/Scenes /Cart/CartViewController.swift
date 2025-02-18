@@ -121,7 +121,11 @@ final class CartViewController: UIViewController {
     
     @objc
     private func didTapPaymentButton() {
-        // TODO: handle payment button tap
+        let paymentViewModel = PaymentViewModel()
+        let paymentViewController = PaymentViewController(viewModel: paymentViewModel)
+        let paymentNavigationController = UINavigationController(rootViewController: paymentViewController)
+        paymentNavigationController.modalPresentationStyle = .fullScreen
+        self.navigationController?.pushViewController(paymentViewController, animated: true)
     }
     
     // MARK: - Private Methods
