@@ -78,7 +78,6 @@ final class CartViewModel: CartViewModelProtocol {
                         print("Ошибка загрузки NFT: \(error.localizedDescription) \(#function) \(#file)")
                         // TODO: в cart-3 передать ошибку через алерт
                     }
-                    group.leave()
                 }
             }
         }
