@@ -10,8 +10,7 @@ import UIKit
 final class StatisticsViewController: UIViewController {
     
     // MARK: - Dependencies
-    private let servicesAssembly: ServicesAssembly
-    private let viewModel = StatisticsViewModel()
+    private let viewModel: StatisticsViewModel
     
     // MARK: - UI Elements
     private lazy var customNavBar: UINavigationBar = {
@@ -39,8 +38,8 @@ final class StatisticsViewController: UIViewController {
     }()
     
     // MARK: - Init
-    init(servicesAssembly: ServicesAssembly) {
-        self.servicesAssembly = servicesAssembly
+    init(viewModel: StatisticsViewModel) {
+        self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -56,6 +55,7 @@ final class StatisticsViewController: UIViewController {
         
         setupUI()
         setupBindings()
+        viewModel.fetchNextPage()
     }
     
     // MARK: - UI Setup
@@ -126,6 +126,10 @@ extension StatisticsViewController: UITableViewDataSource {
         _ tableView: UITableView,
         cellForRowAt indexPath: IndexPath
     ) -> UITableViewCell {
+        guard indexPath.row < viewModel.users.count else {
+            return UITableViewCell()
+        }
+        
         guard let cell = tableView.dequeueReusableCell(
             withIdentifier: StatisticsCell.identifier,
             for: indexPath
@@ -148,4 +152,15 @@ extension StatisticsViewController: UITableViewDelegate {
     ) -> CGFloat {
         88
     }
+    
+    func tableView(
+        _ tableView: UITableView,
+        willDisplay cell: UITableViewCell,
+        forRowAt indexPath: IndexPath) {
+            let lastIndex = viewModel.users.count - 1
+            
+            if indexPath.row == lastIndex {
+                viewModel.fetchNextPage()
+            }
+        }
 }

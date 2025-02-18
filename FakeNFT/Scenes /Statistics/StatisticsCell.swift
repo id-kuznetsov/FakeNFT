@@ -92,10 +92,20 @@ final class StatisticsCell: UITableViewCell {
     }
     
     // MARK: - UI Setup
-    func configure(with user: UserStatistics, index: Int) {
+    func configure(with user: User, index: Int) {
         indexLabel.text = "\(index + 1)"
-        avatarImageView.image = user.avatar ?? UIImage(named: "ic.person.crop.circle.fill")
+        avatarImageView.image = UIImage(named: "ic.person.crop.circle.fill")
         nameLabel.text = user.name
         ratingLabel.text = "\(user.rating)"
+        
+        if let url = URL(string: user.avatar) {
+            URLSession.shared.dataTask(with: url) { data, _, _ in
+                if let data = data {
+                    DispatchQueue.main.async {
+                        self.avatarImageView.image = UIImage(data: data)
+                    }
+                }
+            }.resume()
+        }
     }
 }

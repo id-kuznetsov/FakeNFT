@@ -43,7 +43,8 @@ final class TabBarController: UITabBarController {
             selectedImage: UIImage(systemName: "bag.fill")
         )
         
-        let statisticsVC = UINavigationController(rootViewController: StatisticsViewController(servicesAssembly: servicesAssembly))
+        let statisticsViewModel = StatisticsViewModel(servicesAssembly: servicesAssembly)
+        let statisticsVC = UINavigationController(rootViewController: StatisticsViewController(viewModel: statisticsViewModel))
         statisticsVC.tabBarItem = UITabBarItem(
             title: NSLocalizedString("Tab.statistic", comment: ""),
             image: UIImage(systemName: "chart.bar"),
