@@ -109,7 +109,9 @@ final class StatisticsViewController: UIViewController {
             preferredStyle: .actionSheet
         ) {
             [weak self] selectedOption in
-            self?.viewModel.sortUsers(by: selectedOption)
+            guard let self = self else { return }
+            
+            self.viewModel.sortUsers(by: selectedOption)
         }
     }
 }

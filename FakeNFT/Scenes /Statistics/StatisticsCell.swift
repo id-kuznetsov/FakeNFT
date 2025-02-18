@@ -98,7 +98,7 @@ final class StatisticsCell: UITableViewCell {
         nameLabel.text = user.name
         ratingLabel.text = "\(user.rating)"
         
-        if let url = URL(string: user.avatar) {
+        if let url = URL(string: user.avatar ?? "") {
             URLSession.shared.dataTask(with: url) { data, _, _ in
                 if let data = data {
                     DispatchQueue.main.async {

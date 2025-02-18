@@ -10,11 +10,12 @@ import UIKit
 final class StatisticsViewModel {
     
     private let servicesAssembly: ServicesAssembly
+    private var currentSortOption: SortOption = .name
     
     // MARK: - Properties
     private(set) var users: [User] = []
     private var currentPage = 0
-    private let pageSize = 10
+    private let pageSize = 15
     private var isLoading = false
     private var allUsersLoaded = false
     
@@ -40,6 +41,7 @@ final class StatisticsViewModel {
                     self.allUsersLoaded = true
                 } else {
                     self.users.append(contentsOf: newUsers)
+                    self.sortUsers()
                     self.currentPage += 1
                     self.onUsersUpdated?()
                 }
@@ -50,12 +52,19 @@ final class StatisticsViewModel {
     }
     
     // MARK: - Sorting
-    func sortUsers(by option: SortOption) {
-        switch option {
+    func sortUsers(by option: SortOption? = nil) {
+        if let option = option {
+            currentSortOption = option
+        }
+        
+        switch currentSortOption {
         case .name:
-            users.sort { $0.name < $1.name }
+            users.sort {
+                $0.name.trimmingCharacters(in: .whitespacesAndNewlines).lowercased() <
+                $1.name.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
+            }
         case .rating:
-            users.sort { $0.rating > $1.rating }
+            users.sort { (Int($0.rating) ?? 0 > Int($1.rating) ?? 0) }
         default:
             break
         }
