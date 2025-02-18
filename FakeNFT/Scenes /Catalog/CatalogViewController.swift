@@ -8,11 +8,10 @@
 import UIKit
 
 final class CatalogViewController: UIViewController {
+    private let viewModel: CatalogViewModelProtocol
 
-    private let servicesAssembly: ServicesAssembly
-
-    init(servicesAssembly: ServicesAssembly) {
-        self.servicesAssembly = servicesAssembly
+    init(viewModel: CatalogViewModelProtocol) {
+        self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
     

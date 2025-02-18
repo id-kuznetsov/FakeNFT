@@ -28,12 +28,14 @@ final class TabBarController: UITabBarController {
             image: UIImage(systemName: "person.circle"),
             selectedImage: UIImage(systemName: "person.circle.fill")
         )
-        
-        let catalogVC = UINavigationController(rootViewController: CatalogViewController(servicesAssembly: servicesAssembly))
-        catalogVC.tabBarItem = UITabBarItem(
-            title: NSLocalizedString("Tab.catalog", comment: ""),
-            image: UIImage(systemName: "square.stack.3d.up"),
-            selectedImage: UIImage(systemName: "square.stack.3d.up.fill")
+
+        let catalogViewModel = CatalogViewModel(dataProvider: CatalogDataProvider())
+        let catalogViewController = CatalogViewController(viewModel: catalogViewModel)
+        let catalogNavigationController = UINavigationController(rootViewController: catalogViewController)
+        catalogNavigationController.tabBarItem = UITabBarItem(
+            title: L10n.Tab.catalog,
+            image: UIImage(systemName: "rectangle.stack.fill"),
+            tag: 1
         )
         
         let cartVC = UINavigationController(rootViewController: CartViewController(servicesAssembly: servicesAssembly))
@@ -50,7 +52,7 @@ final class TabBarController: UITabBarController {
             selectedImage: UIImage(systemName: "chart.bar.fill")
         )
         
-        setViewControllers([profileVC, catalogVC, cartVC, statisticsVC], animated: false)
+        setViewControllers([profileVC, catalogNavigationController, cartVC, statisticsVC], animated: false)
         self.selectedIndex = 1
         
         tabBarAppearance()

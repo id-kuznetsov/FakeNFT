@@ -9,7 +9,7 @@ import Foundation
 import Combine
 
 protocol CatalogViewModelProtocol {
-    func numberOfRowsInSection() -> Int
+    func numberOfRows() -> Int
     func getCategory(at indexPath: IndexPath) -> CollectionUI
 }
 
@@ -25,8 +25,10 @@ final class CatalogViewModel {
             self.collections = collections
         }
     }
+}
 
-    func numberOfRowsInSection() -> Int {
+extension CatalogViewModel: CatalogViewModelProtocol {
+    func numberOfRows() -> Int {
         collections.count
     }
 
