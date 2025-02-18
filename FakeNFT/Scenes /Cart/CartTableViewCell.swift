@@ -9,7 +9,7 @@ import UIKit
 import Kingfisher
 
 final class CartTableViewCell: UITableViewCell, ReuseIdentifying {
-
+    
     // MARK: - Private Properties
     
     private lazy var nftImageView: UIImageView = {
@@ -25,6 +25,12 @@ final class CartTableViewCell: UITableViewCell, ReuseIdentifying {
         label.font = .systemFont(ofSize: 17, weight: .bold)
         label.textColor = .ypBlack
         return label
+    }()
+    
+    private lazy var ratingImageView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.contentMode = .scaleAspectFit
+        return imageView
     }()
     
     private lazy var descriptionPriceLabel: UILabel = {
@@ -54,6 +60,7 @@ final class CartTableViewCell: UITableViewCell, ReuseIdentifying {
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
+        setupCellUI()
     }
     
     @available(*, unavailable)
@@ -64,6 +71,9 @@ final class CartTableViewCell: UITableViewCell, ReuseIdentifying {
     override func prepareForReuse() {
         nftImageView.kf.cancelDownloadTask()
         nftImageView.image = nil
+        ratingImageView.image = nil
+        nameLabel.text = nil
+        priceLabel.text = nil
     }
     
     // MARK: - Actions
@@ -76,7 +86,6 @@ final class CartTableViewCell: UITableViewCell, ReuseIdentifying {
     // MARK: - Public Methods
     
     func setupCell(with orderCard: OrderCard) {
-        setupCellUI()
         nftImageView.kf.indicatorType = .activity
         nftImageView.kf.setImage(with: orderCard.imageURL
         ){ [weak self] result in
@@ -89,6 +98,7 @@ final class CartTableViewCell: UITableViewCell, ReuseIdentifying {
                 print("Failed set image in cell with error: \(error.localizedDescription)")
             }
         }
+        setRatingImageView(orderCard.rating)
         nameLabel.text = orderCard.name
         priceLabel.text = "\(orderCard.price) ETH"
     }
@@ -97,10 +107,14 @@ final class CartTableViewCell: UITableViewCell, ReuseIdentifying {
     
     private func setupCellUI() {
         contentView.backgroundColor = .ypWhite
-        contentView.addSubviews([nftImageView, nameLabel, descriptionPriceLabel, priceLabel, removeFromCartButton])
+        contentView.addSubviews([nftImageView, nameLabel, descriptionPriceLabel, priceLabel, removeFromCartButton, ratingImageView])
         setupConstraints()
     }
     
+    private func setRatingImageView(_ rating: Int) {
+        let validRating = (0...5).contains(rating) ? rating : 0
+        ratingImageView.image = UIImage(named: "ic.Rating\(validRating)")
+    }
     // MARK: Constraints
     
     private func setupConstraints() {
@@ -109,42 +123,56 @@ final class CartTableViewCell: UITableViewCell, ReuseIdentifying {
             nameLabelConstraints() +
             descriptionPriceLabelConstraints() +
             priceLabelConstraints() +
-            removeFromCartButtonConstraints()
+            removeFromCartButtonConstraints() +
+            ratingImageViewConstraints()
         )
     }
     
     private func imageConstraints() -> [NSLayoutConstraint] {
-        [nftImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
-         nftImageView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 16),
-         nftImageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -16),
-         nftImageView.heightAnchor.constraint(equalToConstant: 108),
-         nftImageView.widthAnchor.constraint(equalToConstant: 108)
+        [
+            nftImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
+            nftImageView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 16),
+            nftImageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -16),
+            nftImageView.heightAnchor.constraint(equalToConstant: 108),
+            nftImageView.widthAnchor.constraint(equalToConstant: 108)
         ]
     }
     
     private func nameLabelConstraints() -> [NSLayoutConstraint] {
-        [nameLabel.leadingAnchor.constraint(equalTo: nftImageView.trailingAnchor, constant: 20),
-         nameLabel.topAnchor.constraint(equalTo: nftImageView.topAnchor, constant: 8)
+        [
+            nameLabel.leadingAnchor.constraint(equalTo: nftImageView.trailingAnchor, constant: 20),
+            nameLabel.topAnchor.constraint(equalTo: nftImageView.topAnchor, constant: 8)
+        ]
+    }
+    
+    private func ratingImageViewConstraints() -> [NSLayoutConstraint] {
+        [
+            ratingImageView.topAnchor.constraint(equalTo: nameLabel.bottomAnchor, constant: 4),
+            ratingImageView.leadingAnchor.constraint(equalTo: nameLabel.leadingAnchor),
+            ratingImageView.heightAnchor.constraint(equalToConstant: 12)
         ]
     }
     
     private func descriptionPriceLabelConstraints() -> [NSLayoutConstraint] {
-        [descriptionPriceLabel.leadingAnchor.constraint(equalTo: nameLabel.leadingAnchor),
-         descriptionPriceLabel.topAnchor.constraint(equalTo: nameLabel.bottomAnchor, constant: 28)
+        [
+            descriptionPriceLabel.leadingAnchor.constraint(equalTo: nameLabel.leadingAnchor),
+            descriptionPriceLabel.topAnchor.constraint(equalTo: nameLabel.bottomAnchor, constant: 28)
         ]
     }
     
     private func priceLabelConstraints() -> [NSLayoutConstraint] {
-        [priceLabel.leadingAnchor.constraint(equalTo: nameLabel.leadingAnchor),
-         priceLabel.topAnchor.constraint(equalTo: descriptionPriceLabel.bottomAnchor, constant: 2)
+        [
+            priceLabel.leadingAnchor.constraint(equalTo: nameLabel.leadingAnchor),
+            priceLabel.topAnchor.constraint(equalTo: descriptionPriceLabel.bottomAnchor, constant: 2)
         ]
     }
     
     private func removeFromCartButtonConstraints() -> [NSLayoutConstraint] {
-        [removeFromCartButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
-         removeFromCartButton.centerYAnchor.constraint(equalTo: nftImageView.centerYAnchor),
-         removeFromCartButton.heightAnchor.constraint(equalToConstant: 40),
-         removeFromCartButton.widthAnchor.constraint(equalToConstant: 40)
+        [
+            removeFromCartButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
+            removeFromCartButton.centerYAnchor.constraint(equalTo: nftImageView.centerYAnchor),
+            removeFromCartButton.heightAnchor.constraint(equalToConstant: 40),
+            removeFromCartButton.widthAnchor.constraint(equalToConstant: 40)
         ]
     }
 }

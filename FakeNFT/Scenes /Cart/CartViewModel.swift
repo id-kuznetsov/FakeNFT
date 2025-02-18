@@ -59,6 +59,8 @@ final class CartViewModel: CartViewModelProtocol {
             group.enter()
             servicesAssembly.nftService.loadNft(id: id) { result in
                 DispatchQueue.main.async {
+                    defer { group.leave() }
+                    
                     switch result {
                     case .success(let nft):
                         guard let url = nft.images.first else {
@@ -74,6 +76,7 @@ final class CartViewModel: CartViewModelProtocol {
                         loadedNFTs.append(orderCard)
                     case .failure(let error):
                         print("Ошибка загрузки NFT: \(error.localizedDescription) \(#function) \(#file)")
+                        // TODO: в cart-3 передать ошибку через алерт
                     }
                     group.leave()
                 }

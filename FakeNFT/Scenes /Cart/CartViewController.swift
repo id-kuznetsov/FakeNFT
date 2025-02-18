@@ -15,14 +15,14 @@ final class CartViewController: UIViewController {
     
     private lazy var rightBarButtonItem: UIBarButtonItem = {
         let barButtonItem = UIBarButtonItem(
-        image: .icFilter,
-        style: .done,
-        target: self,
-        action: #selector(didTapSortButton)
+            image: .icFilter,
+            style: .done,
+            target: self,
+            action: #selector(didTapSortButton)
         )
         return barButtonItem
     }()
-        
+    
     private lazy var tableView: UITableView = {
         let tableView = UITableView()
         tableView.register(CartTableViewCell.self)
@@ -171,39 +171,44 @@ final class CartViewController: UIViewController {
     }
     
     private func tableViewConstraints() -> [NSLayoutConstraint] {
-        [tableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-         tableView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
-         tableView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
-         tableView.bottomAnchor.constraint(equalTo: paymentView.topAnchor)
+        [
+            tableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            tableView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            tableView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+            tableView.bottomAnchor.constraint(equalTo: paymentView.topAnchor)
         ]
     }
     
     private func paymentViewConstraints() -> [NSLayoutConstraint] {
-        [paymentView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
-         paymentView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-         paymentView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-         paymentView.heightAnchor.constraint(equalToConstant: Constants.paymentViewHeight)
+        [
+            paymentView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            paymentView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            paymentView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            paymentView.heightAnchor.constraint(equalToConstant: Constants.paymentViewHeight)
         ]
     }
     
     private func totalNFTCountLabelConstraints() -> [NSLayoutConstraint] {
-        [totalNFTCountInOrderLabel.topAnchor.constraint(equalTo: paymentView.topAnchor, constant: Constants.totalNFTCountLabelTopInset),
-         totalNFTCountInOrderLabel.leadingAnchor.constraint(equalTo: paymentView.leadingAnchor, constant: Constants.totalNFTCountLabelHorizontalInset),
-         totalNFTCountInOrderLabel.trailingAnchor.constraint(equalTo: paymentView.trailingAnchor, constant: -Constants.totalNFTCountLabelHorizontalInset)
+        [
+            totalNFTCountInOrderLabel.topAnchor.constraint(equalTo: paymentView.topAnchor, constant: Constants.totalNFTCountLabelTopInset),
+            totalNFTCountInOrderLabel.leadingAnchor.constraint(equalTo: paymentView.leadingAnchor, constant: Constants.totalNFTCountLabelHorizontalInset),
+            totalNFTCountInOrderLabel.trailingAnchor.constraint(equalTo: paymentView.trailingAnchor, constant: -Constants.totalNFTCountLabelHorizontalInset)
         ]
     }
     
     private func totalCostLabelConstraints() -> [NSLayoutConstraint] {
-        [totalCostLabel.bottomAnchor.constraint(equalTo: paymentView.bottomAnchor, constant: Constants.totalCostLabelBottomInset),
-         totalCostLabel.leadingAnchor.constraint(equalTo: paymentView.leadingAnchor, constant: Constants.totalCostLabelLeadingInset)
+        [
+            totalCostLabel.bottomAnchor.constraint(equalTo: paymentView.bottomAnchor, constant: Constants.totalCostLabelBottomInset),
+            totalCostLabel.leadingAnchor.constraint(equalTo: paymentView.leadingAnchor, constant: Constants.totalCostLabelLeadingInset)
         ]
     }
     
     private func paymentButtonConstraints() -> [NSLayoutConstraint] {
-        [paymentButton.bottomAnchor.constraint(equalTo: paymentView.bottomAnchor, constant: Constants.paymentButtonBottomInset),
-         paymentButton.trailingAnchor.constraint(equalTo: paymentView.trailingAnchor, constant: Constants.paymentButtonTrailingInset),
-         paymentButton.leadingAnchor.constraint(equalTo: totalCostLabel.trailingAnchor, constant: Constants.paymentButtonLeadingInset),
-         paymentButton.heightAnchor.constraint(equalToConstant: Constants.paymentButtonHeight)
+        [
+            paymentButton.bottomAnchor.constraint(equalTo: paymentView.bottomAnchor, constant: Constants.paymentButtonBottomInset),
+            paymentButton.trailingAnchor.constraint(equalTo: paymentView.trailingAnchor, constant: Constants.paymentButtonTrailingInset),
+            paymentButton.leadingAnchor.constraint(equalTo: totalCostLabel.trailingAnchor, constant: Constants.paymentButtonLeadingInset),
+            paymentButton.heightAnchor.constraint(equalToConstant: Constants.paymentButtonHeight)
         ]
     }
 }
