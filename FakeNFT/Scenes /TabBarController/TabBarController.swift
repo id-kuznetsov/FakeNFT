@@ -36,7 +36,10 @@ final class TabBarController: UITabBarController {
             selectedImage: UIImage(systemName: "square.stack.3d.up.fill")
         )
         
-        let cartViewModel = CartViewModel(servicesAssembly: servicesAssembly)
+        let cartViewModel = CartViewModel(
+            orderService: servicesAssembly.orderService,
+            nftService: servicesAssembly.nftService
+            )
         let cartViewController = UINavigationController(rootViewController: CartViewController(viewModel: cartViewModel))
         cartViewController.tabBarItem = UITabBarItem(
             title: L10n.Tab.cart,

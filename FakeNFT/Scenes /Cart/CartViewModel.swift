@@ -18,14 +18,16 @@ final class CartViewModel: CartViewModelProtocol {
     
     // MARK: - Private Properties
     
-    private let servicesAssembly: ServicesAssembly
+    private let orderService: OrderService
+    private let nftService: NftService
     private var nftsInCart: [OrderCard] = []
     private let sortStorage = SortStateStorage.shared
     
     // MARK: - Initialisers
     
-    init(servicesAssembly: ServicesAssembly) {
-        self.servicesAssembly = servicesAssembly
+    init(orderService: OrderService, nftService: NftService ) {
+        self.orderService = orderService
+        self.nftService = nftService
     }
     
     // MARK: - Public Methods
@@ -39,7 +41,7 @@ final class CartViewModel: CartViewModelProtocol {
     }
     
     func loadData() {
-        servicesAssembly.orderService.getOrder(completion: { [weak self] result in
+        orderService.getOrder(completion: { [weak self] result in
             switch result {
             case .success(let order):
                 self?.loadNFTs(by: order.nfts)
@@ -73,7 +75,7 @@ final class CartViewModel: CartViewModelProtocol {
         
         for id in ids {
             group.enter()
-            servicesAssembly.nftService.loadNft(id: id) { result in
+            nftService.loadNft(id: id) { result in
                 DispatchQueue.main.async {
                     defer { group.leave() }
                     

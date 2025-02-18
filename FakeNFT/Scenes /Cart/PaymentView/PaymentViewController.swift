@@ -29,8 +29,7 @@ final class PaymentViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .ypBlueUniversal
-        self.tabBarController?.tabBar.isHidden = true
+        setupUI()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -38,6 +37,32 @@ final class PaymentViewController: UIViewController {
         self.tabBarController?.tabBar.isHidden = false
     }
     
+    // MARK: - Actions
+    
+    @objc
+    private func didTapBackButton() {
+        navigationController?.popViewController(animated: true)
+    }
+    
     // MARK: - Private Methods
     
+    func setupUI() {
+        self.tabBarController?.tabBar.isHidden = true
+        view.backgroundColor = .ypWhite
+        
+        view.addSubviews([])
+        
+        setupNavigationBar()
+    }
+    
+    private func setupNavigationBar() {
+        title = L10n.Payment.title
+        navigationItem.leftBarButtonItem = UIBarButtonItem(
+            image: UIImage(systemName: "chevron.backward"),
+            style: .plain,
+            target: self,
+            action: #selector(didTapBackButton)
+        )
+        navigationItem.leftBarButtonItem?.tintColor = .ypBlack
+    }
 }
