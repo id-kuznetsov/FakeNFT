@@ -36,6 +36,8 @@ final class CartViewController: UIViewController {
     
     private lazy var paymentView: UIView = {
         let view = UIView()
+        view.layer.cornerRadius = 16
+        view.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
         view.backgroundColor = .ypLightGrey
         return view
     }()
