@@ -20,20 +20,22 @@ final class StatisticsViewModel {
     private var allUsersLoaded = false
     
     var onUsersUpdated: (() -> Void)?
+    var onLoadingStateChanged: ((Bool) -> Void)?
     
     init(servicesAssembly: ServicesAssembly) {
         self.servicesAssembly = servicesAssembly
-        fetchNextPage()
     }
     
     func fetchNextPage() {
         guard !isLoading, !allUsersLoaded else { return }
         
         isLoading = true
+        onLoadingStateChanged?(true)
         
         servicesAssembly.userService.fetchUsers(page: currentPage, size: pageSize) { [weak self] result in
             guard let self = self else { return }
             self.isLoading = false
+            self.onLoadingStateChanged?(false)
             
             switch result {
             case .success(let newUsers):

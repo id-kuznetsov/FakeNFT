@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import ProgressHUD
 
 final class StatisticsViewController: UIViewController {
     
@@ -99,6 +100,22 @@ final class StatisticsViewController: UIViewController {
                 self?.tableView.reloadData()
             }
         }
+        viewModel.onLoadingStateChanged = { [weak self] isLoading in
+            DispatchQueue.main.async {
+                isLoading ? self?.showLoadingIndicator() : self?.hideLoadingIndicator()
+            }
+        }
+    }
+    
+    private func showLoadingIndicator() {
+        self.view.isUserInteractionEnabled = false
+        ProgressHUD.colorAnimation = .ypBlack
+        ProgressHUD.show()
+    }
+    
+    private func hideLoadingIndicator() {
+        self.view.isUserInteractionEnabled = true
+        ProgressHUD.dismiss()
     }
     
     // MARK: - Actions

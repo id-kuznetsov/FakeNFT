@@ -32,6 +32,10 @@ final class StatisticsCell: UITableViewCell {
         let label = UILabel()
         label.font = .systemFont(ofSize: 22, weight: .bold)
         label.textColor = .ypBlack
+        label.numberOfLines = 1
+        label.lineBreakMode = .byTruncatingTail
+        label.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
+        label.setContentHuggingPriority(.defaultLow, for: .horizontal)
         return label
     }()
     
@@ -39,6 +43,8 @@ final class StatisticsCell: UITableViewCell {
         let label = UILabel()
         label.font = .systemFont(ofSize: 22, weight: .bold)
         label.textColor = .ypBlack
+        label.setContentCompressionResistancePriority(.required, for: .horizontal)
+        label.setContentHuggingPriority(.required, for: .horizontal)
         return label
     }()
     
@@ -80,6 +86,7 @@ final class StatisticsCell: UITableViewCell {
             
             nameLabel.leadingAnchor.constraint(equalTo: avatarImageView.trailingAnchor, constant: 8),
             nameLabel.centerYAnchor.constraint(equalTo: containerView.centerYAnchor),
+            nameLabel.trailingAnchor.constraint(lessThanOrEqualTo: ratingLabel.leadingAnchor, constant: -16),
             
             ratingLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -16),
             ratingLabel.centerYAnchor.constraint(equalTo: containerView.centerYAnchor)
