@@ -9,10 +9,10 @@ import UIKit
 
 final class StatisticsCell: UITableViewCell {
     
-    // MARK: - Properties
+    // MARK: - Static properties
     static let identifier = "StatisticsCell"
     
-    // MARK: - UI Elements
+    // MARK: - Private properties
     private let indexLabel: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 15, weight: .regular)
@@ -55,7 +55,7 @@ final class StatisticsCell: UITableViewCell {
         return view
     }()
     
-    // MARK: - Init
+    // MARK: - Initializers
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
@@ -98,7 +98,7 @@ final class StatisticsCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    // MARK: - UI Setup
+    // MARK: - Public methods
     func configure(with user: User, index: Int) {
         indexLabel.text = "\(index + 1)"
         avatarImageView.image = UIImage(named: "ic.person.crop.circle.fill")

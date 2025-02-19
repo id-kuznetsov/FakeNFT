@@ -10,10 +10,9 @@ import ProgressHUD
 
 final class StatisticsViewController: UIViewController {
     
-    // MARK: - Dependencies
+    // MARK: - Private properties
     private let viewModel: StatisticsViewModel
     
-    // MARK: - UI Elements
     private lazy var customNavBar: UINavigationBar = {
         let navBar = UINavigationBar()
         navBar.barTintColor = .ypWhite
@@ -38,7 +37,7 @@ final class StatisticsViewController: UIViewController {
         return tableView
     }()
     
-    // MARK: - Init
+    // MARK: - Initializers
     init(viewModel: StatisticsViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
@@ -59,7 +58,7 @@ final class StatisticsViewController: UIViewController {
         viewModel.fetchNextPage()
     }
     
-    // MARK: - UI Setup
+    // MARK: - Private methods
     private func setupUI() {
         view.backgroundColor = .systemBackground
         
@@ -133,6 +132,7 @@ final class StatisticsViewController: UIViewController {
     }
 }
 
+// MARK: UITableViewDataSource
 extension StatisticsViewController: UITableViewDataSource {
     func tableView(
         _ tableView: UITableView,
@@ -164,6 +164,7 @@ extension StatisticsViewController: UITableViewDataSource {
     }
 }
 
+// MARK: UITableViewDelegate
 extension StatisticsViewController: UITableViewDelegate {
     func tableView(
         _ tableView: UITableView,

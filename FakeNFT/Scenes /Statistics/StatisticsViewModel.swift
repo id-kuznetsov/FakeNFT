@@ -9,30 +9,41 @@ import UIKit
 
 final class StatisticsViewModel {
     
+    // MARK: - Private properties
+    private var userDefaultsStorage: StatisticsUserDefaultsStorageProtocol
+    private let cacheStorage: StatisticsCacheStorageProtocol
     private let servicesAssembly: ServicesAssembly
-    private var currentSortOption: SortOption = .name
-    
-    // MARK: - Properties
     private(set) var users: [User] = []
-    private var currentPage = 0
     private let pageSize = 15
     private var isLoading = false
     private var allUsersLoaded = false
+    private var isCachedDataLoaded = false
     
     var onUsersUpdated: (() -> Void)?
     var onLoadingStateChanged: ((Bool) -> Void)?
     
+    // MARK: - Initializers
     init(servicesAssembly: ServicesAssembly) {
         self.servicesAssembly = servicesAssembly
+        userDefaultsStorage = StatisticsUserDefaultsStorage()
+        cacheStorage = StatisticsCacheStorage()
+        
+        loadUsersFromCache()
     }
     
+    // MARK: Public methods
     func fetchNextPage() {
         guard !isLoading, !allUsersLoaded else { return }
+        
+        if isCachedDataLoaded {
+            isCachedDataLoaded = false
+            return
+        }
         
         isLoading = true
         onLoadingStateChanged?(true)
         
-        servicesAssembly.userService.fetchUsers(page: currentPage, size: pageSize) { [weak self] result in
+        servicesAssembly.userService.fetchUsers(page: getCurrentPage(), size: pageSize) { [weak self] result in
             guard let self = self else { return }
             self.isLoading = false
             self.onLoadingStateChanged?(false)
@@ -44,7 +55,8 @@ final class StatisticsViewModel {
                 } else {
                     self.users.append(contentsOf: newUsers)
                     self.sortUsers()
-                    self.currentPage += 1
+                    self.incrementCurrentPage()
+                    self.saveUsersToCache()
                     self.onUsersUpdated?()
                 }
             case .failure(let error):
@@ -53,17 +65,16 @@ final class StatisticsViewModel {
         }
     }
     
-    // MARK: - Sorting
     func sortUsers(by option: SortOption? = nil) {
         if let option = option {
-            currentSortOption = option
+            saveSelectedSortOption(option)
         }
         
-        switch currentSortOption {
+        switch getSelectedSortOption() {
         case .name:
             users.sort {
                 $0.name.trimmingCharacters(in: .whitespacesAndNewlines).lowercased() <
-                $1.name.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
+                    $1.name.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
             }
         case .rating:
             users.sort { (Int($0.rating) ?? 0 > Int($1.rating) ?? 0) }
@@ -71,5 +82,35 @@ final class StatisticsViewModel {
             break
         }
         onUsersUpdated?()
+    }
+    
+    // MARK: Private methods
+    private func loadUsersFromCache() {
+        users = cacheStorage.loadUsersFromCache()
+        if !users.isEmpty {
+            isCachedDataLoaded = true
+            sortUsers(by: getSelectedSortOption())
+            onUsersUpdated?()
+        }
+    }
+    
+    private func saveUsersToCache() {
+        cacheStorage.saveUsersToCache(users)
+    }
+    
+    private func getCurrentPage() -> Int {
+        return userDefaultsStorage.currentPage
+    }
+    
+    private func incrementCurrentPage() {
+        userDefaultsStorage.currentPage += 1
+    }
+    
+    private func getSelectedSortOption() -> SortOption {
+        return userDefaultsStorage.selectedUsersSortOption
+    }
+    
+    private func saveSelectedSortOption(_ option: SortOption) {
+        userDefaultsStorage.selectedUsersSortOption = option
     }
 }
