@@ -27,10 +27,9 @@ final class CartTableViewCell: UITableViewCell, ReuseIdentifying {
         return label
     }()
     
-    private lazy var ratingImageView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.contentMode = .scaleAspectFit
-        return imageView
+    private lazy var ratingStackView: RatingStackView = {
+        let ratingStackView = RatingStackView()
+        return ratingStackView
     }()
     
     private lazy var descriptionPriceLabel: UILabel = {
@@ -71,7 +70,6 @@ final class CartTableViewCell: UITableViewCell, ReuseIdentifying {
     override func prepareForReuse() {
         nftImageView.kf.cancelDownloadTask()
         nftImageView.image = nil
-        ratingImageView.image = nil
         nameLabel.text = nil
         priceLabel.text = nil
     }
@@ -98,7 +96,7 @@ final class CartTableViewCell: UITableViewCell, ReuseIdentifying {
                 print("Failed set image in cell with error: \(error.localizedDescription)")
             }
         }
-        setRatingImageView(orderCard.rating)
+        ratingStackView.setRating(orderCard.rating)
         nameLabel.text = orderCard.name
         priceLabel.text = "\(orderCard.price) ETH"
     }
@@ -107,14 +105,10 @@ final class CartTableViewCell: UITableViewCell, ReuseIdentifying {
     
     private func setupCellUI() {
         contentView.backgroundColor = .ypWhite
-        contentView.addSubviews([nftImageView, nameLabel, descriptionPriceLabel, priceLabel, removeFromCartButton, ratingImageView])
+        contentView.addSubviews([nftImageView, nameLabel, descriptionPriceLabel, priceLabel, removeFromCartButton, ratingStackView])
         setupConstraints()
     }
     
-    private func setRatingImageView(_ rating: Int) {
-        let validRating = (0...5).contains(rating) ? rating : 0
-        ratingImageView.image = UIImage(named: "ic.Rating\(validRating)")
-    }
     // MARK: Constraints
     
     private func setupConstraints() {
@@ -147,9 +141,10 @@ final class CartTableViewCell: UITableViewCell, ReuseIdentifying {
     
     private func ratingImageViewConstraints() -> [NSLayoutConstraint] {
         [
-            ratingImageView.topAnchor.constraint(equalTo: nameLabel.bottomAnchor, constant: 4),
-            ratingImageView.leadingAnchor.constraint(equalTo: nameLabel.leadingAnchor),
-            ratingImageView.heightAnchor.constraint(equalToConstant: 12)
+            ratingStackView.topAnchor.constraint(equalTo: nameLabel.bottomAnchor, constant: 4),
+            ratingStackView.leadingAnchor.constraint(equalTo: nameLabel.leadingAnchor),
+            ratingStackView.heightAnchor.constraint(equalToConstant: 12),
+            ratingStackView.widthAnchor.constraint(equalToConstant: 68)
         ]
     }
     

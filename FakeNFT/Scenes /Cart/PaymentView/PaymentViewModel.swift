@@ -21,11 +21,17 @@ final class PaymentViewModel: PaymentViewModelProtocol {
     private var currencyCards: [CurrencyCard] = []
     
     var paymentMethodCount: Int {
-        currencyCards.count
+//        currencyCards.count
+        8
     }
     
     func getItem(at index: Int) -> CurrencyCard {
-        currencyCards[index]
+//        currencyCards[index]
+        CurrencyCard(
+            name: "Bitcoin",
+            shortName: "BTC",
+            imageURL: URL(string:"https://code.s3.yandex.net/Mobile/iOS/Currencies/Bitcoin_(BTC).png")! // TODO: for test
+        )
     }
     
     func loadData() {

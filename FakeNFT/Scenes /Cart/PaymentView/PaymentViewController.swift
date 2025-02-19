@@ -17,6 +17,7 @@ final class PaymentViewController: UIViewController {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        collectionView.register(PaymentCollectionViewCell.self)
         collectionView.backgroundColor = .ypWhite
         collectionView.delegate = self
         collectionView.dataSource = self
@@ -113,7 +114,7 @@ final class PaymentViewController: UIViewController {
         self.tabBarController?.tabBar.isHidden = true
         view.backgroundColor = .ypWhite
         
-        view.addSubviews([paymentView, payButton, userAgreementLabel, agreementLinkButton])
+        view.addSubviews([collectionView, paymentView, payButton, userAgreementLabel, agreementLinkButton])
         
         setupNavigationBar()
         setupConstraints()
@@ -132,7 +133,7 @@ final class PaymentViewController: UIViewController {
     
     private func setupConstraints() {
         NSLayoutConstraint.activate(
-//            collectionViewConstraints()
+            collectionViewConstraints() +
             paymentViewConstraints() +
             payButtonConstraints() +
             userAgreementLabelConstraint() +
@@ -142,9 +143,9 @@ final class PaymentViewController: UIViewController {
     
     private func collectionViewConstraints() -> [NSLayoutConstraint] {
         [
-            collectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
-            collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            collectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: Constants.topInset),
+            collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: Constants.leftInset),
+            collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -Constants.rightInset),
             collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ]
     }
@@ -195,15 +196,49 @@ extension PaymentViewController: UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let item = UICollectionViewCell()
+        let item: PaymentCollectionViewCell = collectionView.dequeueReusableCell(indexPath: indexPath)
+        let card = viewModel.getItem(at: indexPath.item)
+        item.configureCell(card: card)
         return item
+    }
+}
+
+// MARK: UICollectionViewDelegate
+
+extension PaymentViewController: UICollectionViewDelegate {
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        // TODO: selection
+    }
+}
+
+// MARK: UICollectionViewDelegateFlowLayout
+
+extension PaymentViewController: UICollectionViewDelegateFlowLayout {
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        let totalWidth = view.frame.width - Constants.leftInset - Constants.rightInset - Constants.cellSpacing * (CGFloat(Constants.cellCountForRow) - 1)
+        let cellWidth = totalWidth / CGFloat(Constants.cellCountForRow)
+        return CGSize(width: cellWidth, height: Constants.cellHeight)
     }
     
     
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
+        return Constants.cellSpacing
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+        return Constants.cellSpacing
+    }
 }
 
-extension PaymentViewController: UICollectionViewDelegate {}
+// MARK: Constants
 
-extension PaymentViewController: UICollectionViewDelegateFlowLayout {
-    
+private extension PaymentViewController {
+    struct Constants {
+        static let cellCountForRow = 2
+        static let cellSpacing: CGFloat = 7
+        static let cellHeight: CGFloat = 46
+        static let leftInset: CGFloat = 16
+        static let rightInset: CGFloat = 16
+        static let topInset: CGFloat = 20
+    }
 }
