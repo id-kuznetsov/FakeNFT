@@ -36,11 +36,12 @@ final class TabBarController: UITabBarController {
             selectedImage: UIImage(systemName: "square.stack.3d.up.fill")
         )
         
-        let cartVC = UINavigationController(rootViewController: CartViewController(servicesAssembly: servicesAssembly))
-        cartVC.tabBarItem = UITabBarItem(
-            title: NSLocalizedString("Tab.cart", comment: ""),
-            image: UIImage(systemName: "bag"),
-            selectedImage: UIImage(systemName: "bag.fill")
+        let cartViewModel = CartViewModel(servicesAssembly: servicesAssembly)
+        let cartViewController = UINavigationController(rootViewController: CartViewController(viewModel: cartViewModel))
+        cartViewController.tabBarItem = UITabBarItem(
+            title: L10n.Tab.cart,
+            image: .icCart,
+            selectedImage: .icCartFill
         )
         
         let statisticsVC = UINavigationController(rootViewController: StatisticsViewController(servicesAssembly: servicesAssembly))
@@ -50,15 +51,15 @@ final class TabBarController: UITabBarController {
             selectedImage: UIImage(systemName: "chart.bar.fill")
         )
         
-        setViewControllers([profileVC, catalogVC, cartVC, statisticsVC], animated: false)
-        self.selectedIndex = 1
+        setViewControllers([profileVC, catalogVC, cartViewController, statisticsVC], animated: false)
+        self.selectedIndex = 2
         
         tabBarAppearance()
     }
     
     private func tabBarAppearance() {
-        tabBar.tintColor = .blue
-        tabBar.unselectedItemTintColor = .black
-        tabBar.backgroundColor = .systemBackground
+        tabBar.tintColor = .ypBlueUniversal
+        tabBar.unselectedItemTintColor = .ypBlack
+        tabBar.backgroundColor = .ypWhite
     }
 }

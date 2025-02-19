@@ -14,7 +14,8 @@
 
 "Tab.statistic" = "Статистика";
 
-"Cart.button.toPay" = "К Оплате";
+"Cart.button.toPay" = "К оплате";
+"Cart.label.price" = "Цена";
 
 "Sort.title" = "Сортировка";
 "SortOption.nftCount" = "По количеству NFT";

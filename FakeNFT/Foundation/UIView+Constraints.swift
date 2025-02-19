@@ -19,4 +19,11 @@ extension UIView {
             centerYAnchor.constraint(equalTo: view.centerYAnchor)
         ])
     }
+    
+    func addSubviews(_ subviews: [UIView]) {
+        subviews.forEach{
+            addSubview($0)
+            $0.translatesAutoresizingMaskIntoConstraints = false
+        }
+    }
 }
