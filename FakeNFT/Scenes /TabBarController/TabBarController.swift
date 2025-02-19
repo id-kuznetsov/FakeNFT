@@ -57,8 +57,8 @@ final class TabBarController: UITabBarController {
     }
     
     private func tabBarAppearance() {
-        tabBar.tintColor = .blue
-        tabBar.unselectedItemTintColor = .black
-        tabBar.backgroundColor = .systemBackground
+        tabBar.tintColor = .ypBlueUniversal
+        tabBar.unselectedItemTintColor = .ypBlack
+        tabBar.backgroundColor = .ypWhite
     }
 }
