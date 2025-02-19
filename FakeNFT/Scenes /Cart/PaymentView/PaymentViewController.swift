@@ -13,6 +13,8 @@ final class PaymentViewController: UIViewController {
     
     private var viewModel: PaymentViewModelProtocol
     
+    private var selectedCurrencyIndex: Int?
+    
     private lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
@@ -207,7 +209,14 @@ extension PaymentViewController: UICollectionViewDataSource {
 
 extension PaymentViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        // TODO: selection
+        guard let item = collectionView.cellForItem(at: indexPath) as? PaymentCollectionViewCell else { return }
+        if selectedCurrencyIndex != nil {
+            guard let prevIndex = selectedCurrencyIndex else { return }
+            guard let prevCell = collectionView.cellForItem(at: IndexPath(row: prevIndex, section: 0)) as? PaymentCollectionViewCell else { return }
+            prevCell.makeCellSelected(isSelected: false)
+        }
+        selectedCurrencyIndex = indexPath.item
+        item.makeCellSelected(isSelected: true)
     }
 }
 
