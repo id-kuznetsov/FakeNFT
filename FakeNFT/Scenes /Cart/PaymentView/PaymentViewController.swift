@@ -38,7 +38,7 @@ final class PaymentViewController: UIViewController {
     
     private lazy var userAgreementLabel: UILabel = {
         let label = UILabel()
-        label.text = "Совершая покупку, вы соглашаетесь с условиями" // TODO: local
+        label.text = L10n.Payment.Agreement.label
         label.numberOfLines = 1
         label.font = .systemFont(ofSize: 13, weight: .regular)
         label.textColor = .ypBlack
@@ -47,7 +47,7 @@ final class PaymentViewController: UIViewController {
     
     private lazy var agreementLinkButton: UIButton = {
         let button = UIButton()
-        button.setTitle("Пользовательского соглашения", for: .normal) // TODO: local
+        button.setTitle(L10n.Payment.Agreement.link, for: .normal)
         button.setTitleColor(.ypBlueUniversal, for: .normal)
         button.contentHorizontalAlignment = .leading
         button.titleLabel?.font = .systemFont(ofSize: 13, weight: .regular)
@@ -86,6 +86,11 @@ final class PaymentViewController: UIViewController {
         setupUI()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.tabBarController?.tabBar.isHidden = true
+    }
+    
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         self.tabBarController?.tabBar.isHidden = false
@@ -113,7 +118,6 @@ final class PaymentViewController: UIViewController {
     // MARK: - Private Methods
     
     func setupUI() {
-        self.tabBarController?.tabBar.isHidden = true
         view.backgroundColor = .ypWhite
         
         view.addSubviews([collectionView, paymentView, payButton, userAgreementLabel, agreementLinkButton])
@@ -125,7 +129,7 @@ final class PaymentViewController: UIViewController {
     private func setupNavigationBar() {
         title = L10n.Payment.title
         navigationItem.leftBarButtonItem = UIBarButtonItem(
-            image: UIImage(systemName: "chevron.backward"),
+            image: .chevronLeft,
             style: .plain,
             target: self,
             action: #selector(didTapBackButton)
@@ -211,8 +215,8 @@ extension PaymentViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         guard let item = collectionView.cellForItem(at: indexPath) as? PaymentCollectionViewCell else { return }
         if selectedCurrencyIndex != nil {
-            guard let prevIndex = selectedCurrencyIndex else { return }
-            guard let prevCell = collectionView.cellForItem(at: IndexPath(row: prevIndex, section: 0)) as? PaymentCollectionViewCell else { return }
+            guard let prevIndex = selectedCurrencyIndex,
+                  let prevCell = collectionView.cellForItem(at: IndexPath(row: prevIndex, section: 0)) as? PaymentCollectionViewCell else { return }
             prevCell.makeCellSelected(isSelected: false)
         }
         selectedCurrencyIndex = indexPath.item
