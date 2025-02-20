@@ -18,7 +18,11 @@ final class ServicesAssembly {
         )
     }
 
-    var catalogDataProvider: CollectionsServiceImpl {
+    var collectionsService: CollectionsSevice {
         CollectionsServiceImpl()
+    }
+
+    var nftsService: NftsService {
+        NftsServiceImpl()
     }
 }

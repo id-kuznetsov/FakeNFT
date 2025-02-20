@@ -24,7 +24,7 @@ final class CollectionsViewModel: CollectionsViewModelProtocol {
     init(servicesAssembly: ServicesAssembly) {
         self.collections = []
         self.servicesAssembly = servicesAssembly
-        servicesAssembly.catalogDataProvider.loadCollections { collections in
+        servicesAssembly.collectionsService.loadCollections { collections in
             self.collections = collections
         }
     }
