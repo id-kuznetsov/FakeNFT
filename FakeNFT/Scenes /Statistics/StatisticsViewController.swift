@@ -11,7 +11,7 @@ import ProgressHUD
 final class StatisticsViewController: UIViewController {
     
     // MARK: - Private properties
-    private let viewModel: StatisticsViewModel
+    private var viewModel: StatisticsViewModelProtocol
     
     private lazy var customNavBar: UINavigationBar = {
         let navBar = UINavigationBar()
@@ -38,7 +38,7 @@ final class StatisticsViewController: UIViewController {
     }()
     
     // MARK: - Initializers
-    init(viewModel: StatisticsViewModel) {
+    init(viewModel: StatisticsViewModelProtocol) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }

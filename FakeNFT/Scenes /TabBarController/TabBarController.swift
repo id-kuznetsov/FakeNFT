@@ -43,7 +43,11 @@ final class TabBarController: UITabBarController {
             selectedImage: UIImage(systemName: "bag.fill")
         )
         
-        let statisticsViewModel = StatisticsViewModel(servicesAssembly: servicesAssembly)
+        let statisticsViewModel = StatisticsViewModel(
+            userService: servicesAssembly.userService,
+            userDefaultsStorage: StatisticsUserDefaultsStorage(),
+            cacheStorage: StatisticsCacheStorage()
+        )
         let statisticsVC = UINavigationController(rootViewController: StatisticsViewController(viewModel: statisticsViewModel))
         statisticsVC.tabBarItem = UITabBarItem(
             title: L10n.Tab.statistic,

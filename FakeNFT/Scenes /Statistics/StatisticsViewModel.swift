@@ -7,12 +7,22 @@
 
 import UIKit
 
-final class StatisticsViewModel {
+protocol StatisticsViewModelProtocol {
+    var users: [User] { get }
+    var onUsersUpdated: (() -> Void)? { get set }
+    var onLoadingStateChanged: ((Bool) -> Void)? { get set }
+    
+    func fetchNextPage()
+    func sortUsers(by option: SortOption?)
+    func clearAllStatisticsData()
+}
+
+final class StatisticsViewModel: StatisticsViewModelProtocol {
     
     // MARK: - Private properties
     private var userDefaultsStorage: StatisticsUserDefaultsStorageProtocol
     private let cacheStorage: StatisticsCacheStorageProtocol
-    private let servicesAssembly: ServicesAssembly
+    private let userService: UserService
     private(set) var users: [User] = []
     private let pageSize = 15
     private var isLoading = false
@@ -23,10 +33,14 @@ final class StatisticsViewModel {
     var onLoadingStateChanged: ((Bool) -> Void)?
     
     // MARK: - Initializers
-    init(servicesAssembly: ServicesAssembly) {
-        self.servicesAssembly = servicesAssembly
-        userDefaultsStorage = StatisticsUserDefaultsStorage()
-        cacheStorage = StatisticsCacheStorage()
+    init(
+        userService: UserService,
+        userDefaultsStorage: StatisticsUserDefaultsStorageProtocol,
+        cacheStorage: StatisticsCacheStorageProtocol
+    ) {
+        self.userService = userService
+        self.userDefaultsStorage = userDefaultsStorage
+        self.cacheStorage = cacheStorage
         
         loadUsersFromCache()
     }
@@ -43,7 +57,7 @@ final class StatisticsViewModel {
         isLoading = true
         onLoadingStateChanged?(true)
         
-        servicesAssembly.userService.fetchUsers(page: getCurrentPage(), size: pageSize) { [weak self] result in
+        userService.fetchUsers(page: getCurrentPage(), size: pageSize) { [weak self] result in
             guard let self = self else { return }
             self.isLoading = false
             self.onLoadingStateChanged?(false)
