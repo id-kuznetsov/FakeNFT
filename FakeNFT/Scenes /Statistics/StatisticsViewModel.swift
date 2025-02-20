@@ -84,6 +84,16 @@ final class StatisticsViewModel {
         onUsersUpdated?()
     }
     
+    // Calling this method on logout (when the authorization functionality will be implemented)
+    func clearAllStatisticsData() {
+        cacheStorage.clearStatisticsCache()
+        userDefaultsStorage.clearStatisticsUserDefaults()
+        users.removeAll()
+        allUsersLoaded = false
+        isCachedDataLoaded = false
+        onUsersUpdated?()
+    }
+    
     // MARK: Private methods
     private func loadUsersFromCache() {
         users = cacheStorage.loadUsersFromCache()

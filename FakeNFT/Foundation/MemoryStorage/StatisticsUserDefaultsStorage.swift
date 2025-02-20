@@ -10,6 +10,7 @@ import Foundation
 protocol StatisticsUserDefaultsStorageProtocol {
     var currentPage: Int { get set }
     var selectedUsersSortOption: SortOption { get set }
+    func clearStatisticsUserDefaults()
 }
 
 final class StatisticsUserDefaultsStorage: StatisticsUserDefaultsStorageProtocol {
@@ -35,6 +36,11 @@ final class StatisticsUserDefaultsStorage: StatisticsUserDefaultsStorageProtocol
         set {
             storage.set(newValue.title, forKey: Keys.sortOptionInStatistics.rawValue)
         }
+    }
+    
+    func clearStatisticsUserDefaults() {
+        storage.removeObject(forKey: Keys.currentPage.rawValue)
+        storage.removeObject(forKey: Keys.sortOptionInStatistics.rawValue)
     }
     
     private enum Keys: String {

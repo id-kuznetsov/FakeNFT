@@ -10,6 +10,7 @@ import Foundation
 protocol StatisticsCacheStorageProtocol {
     func saveUsersToCache(_ users: [User])
     func loadUsersFromCache() -> [User]
+    func clearStatisticsCache()
 }
 
 final class StatisticsCacheStorage: StatisticsCacheStorageProtocol {
@@ -35,6 +36,15 @@ final class StatisticsCacheStorage: StatisticsCacheStorageProtocol {
         } catch {
             print("Кэш пустой: \(error.localizedDescription)")
             return []
+        }
+    }
+    
+    func clearStatisticsCache() {
+        let fileURL = getCacheFileURL()
+        do {
+            try FileManager.default.removeItem(at: fileURL)
+        } catch {
+            print("Ошибка при очистке кэша: \(error.localizedDescription)")
         }
     }
     
