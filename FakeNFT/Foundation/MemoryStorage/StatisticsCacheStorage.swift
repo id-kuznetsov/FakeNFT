@@ -9,7 +9,7 @@ import Foundation
 
 protocol StatisticsCacheStorageProtocol {
     func saveUsersToCache(_ users: [User])
-    func loadUsersFromCache() -> [User]
+    func loadUsersFromCache() -> [User]?
     func clearStatisticsCache()
 }
 
@@ -18,7 +18,8 @@ final class StatisticsCacheStorage: StatisticsCacheStorageProtocol {
     private let cacheFileName = "usersCache.json"
     
     func saveUsersToCache(_ users: [User]) {
-        let fileURL = getCacheFileURL()
+        guard let fileURL = getCacheFileURL(caller: "[saveUsersToCache]") else { return }
+        
         do {
             let data = try JSONEncoder().encode(users)
             try data.write(to: fileURL, options: .atomic)
@@ -27,20 +28,22 @@ final class StatisticsCacheStorage: StatisticsCacheStorageProtocol {
         }
     }
     
-    func loadUsersFromCache() -> [User] {
-        let fileURL = getCacheFileURL()
+    func loadUsersFromCache() -> [User]? {
+        guard let fileURL = getCacheFileURL(caller: "[loadUsersFromCache]") else { return nil }
+        
         do {
             let data = try Data(contentsOf: fileURL)
             let cachedUsers = try JSONDecoder().decode([User].self, from: data)
             return cachedUsers
         } catch {
             print("Кэш пустой: \(error.localizedDescription)")
-            return []
+            return nil
         }
     }
     
     func clearStatisticsCache() {
-        let fileURL = getCacheFileURL()
+        guard let fileURL = getCacheFileURL(caller: "[clearStatisticsCache]") else { return }
+        
         do {
             try FileManager.default.removeItem(at: fileURL)
         } catch {
@@ -48,8 +51,14 @@ final class StatisticsCacheStorage: StatisticsCacheStorageProtocol {
         }
     }
     
-    private func getCacheFileURL() -> URL {
-        let cachesDirectory = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first!
+    private func getCacheFileURL(caller: String) -> URL? {
+        guard let cachesDirectory = FileManager.default.urls(
+            for: .cachesDirectory, 
+            in: .userDomainMask
+        ).first else {
+            print("[StatisticsCacheStorage] - \(caller): Не удалось получить URL для кэша")
+            return nil
+        }
         return cachesDirectory.appendingPathComponent(cacheFileName)
     }
 }

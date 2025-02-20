@@ -13,14 +13,14 @@ final class StatisticsCell: UITableViewCell {
     static let identifier = "StatisticsCell"
     
     // MARK: - Private properties
-    private let indexLabel: UILabel = {
+    private lazy var indexLabel: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 15, weight: .regular)
         label.textColor = .ypBlack
         return label
     }()
     
-    private let avatarImageView: UIImageView = {
+    private lazy var avatarImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleToFill
         imageView.layer.cornerRadius = 14
@@ -28,7 +28,7 @@ final class StatisticsCell: UITableViewCell {
         return imageView
     }()
     
-    private let nameLabel: UILabel = {
+    private lazy var nameLabel: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 22, weight: .bold)
         label.textColor = .ypBlack
@@ -39,7 +39,7 @@ final class StatisticsCell: UITableViewCell {
         return label
     }()
     
-    private let ratingLabel: UILabel = {
+    private lazy var ratingLabel: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 22, weight: .bold)
         label.textColor = .ypBlack
@@ -48,7 +48,7 @@ final class StatisticsCell: UITableViewCell {
         return label
     }()
     
-    private let containerView: UIView = {
+    private lazy var containerView: UIView = {
         let view = UIView()
         view.backgroundColor = .ypLightGrey
         view.layer.cornerRadius = 12
@@ -59,6 +59,15 @@ final class StatisticsCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
+        setupUI()
+    }
+    
+    @available(*, unavailable)
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    private func setupUI() {
         [indexLabel, containerView].forEach { element in
             contentView.addSubview(element)
             element.translatesAutoresizingMaskIntoConstraints = false
@@ -93,26 +102,18 @@ final class StatisticsCell: UITableViewCell {
         ])
     }
     
-    @available(*, unavailable)
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
     // MARK: - Public methods
     func configure(with user: User, index: Int) {
         indexLabel.text = "\(index + 1)"
-        avatarImageView.image = UIImage(named: "ic.person.crop.circle.fill")
         nameLabel.text = user.name
         ratingLabel.text = "\(user.rating)"
         
-        if let url = URL(string: user.avatar ?? "") {
-            URLSession.shared.dataTask(with: url) { data, _, _ in
-                if let data = data {
-                    DispatchQueue.main.async {
-                        self.avatarImageView.image = UIImage(data: data)
-                    }
-                }
-            }.resume()
+        let placeholderImage = UIImage(named: "ic.person.crop.circle.fill")
+        
+        if let avatarURLString = user.avatar, let url = URL(string: avatarURLString) {
+            avatarImageView.kf.setImage(with: url, placeholder: placeholderImage)
+        } else {
+            avatarImageView.image = placeholderImage
         }
     }
 }

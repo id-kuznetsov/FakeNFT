@@ -96,7 +96,7 @@ final class StatisticsViewModel {
     
     // MARK: Private methods
     private func loadUsersFromCache() {
-        users = cacheStorage.loadUsersFromCache()
+        users = cacheStorage.loadUsersFromCache() ?? []
         if !users.isEmpty {
             isCachedDataLoaded = true
             sortUsers(by: getSelectedSortOption())
