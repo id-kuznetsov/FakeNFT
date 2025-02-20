@@ -17,4 +17,8 @@ final class ServicesAssembly {
             storage: nftStorage
         )
     }
+
+    var catalogDataProvider: CatalogDataProvider {
+        CatalogDataProvider()
+    }
 }

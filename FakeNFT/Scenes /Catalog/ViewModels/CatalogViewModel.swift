@@ -19,12 +19,12 @@ final class CatalogViewModel: CatalogViewModelProtocol {
     @Published var collections: [CollectionUI]
     var collectionsPublisher: Published<[CollectionUI]>.Publisher { $collections }
 
-    private var dataProvider: CatalogDataProviderProtocol
+    private let servicesAssembly: ServicesAssembly
 
-    init(dataProvider: CatalogDataProviderProtocol) {
+    init(servicesAssembly: ServicesAssembly) {
         self.collections = []
-        self.dataProvider = dataProvider
-        dataProvider.getCollections { collections in
+        self.servicesAssembly = servicesAssembly
+        servicesAssembly.catalogDataProvider.getCollections { collections in
             self.collections = collections
         }
     }
