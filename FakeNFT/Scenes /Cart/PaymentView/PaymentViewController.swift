@@ -106,7 +106,8 @@ final class PaymentViewController: UIViewController {
     @objc
     private func didTapAgreementButton() {
         // TODO: handle tap pay button
-        print("agreement")
+        let agreementVC = AgreementWebViewController()
+        navigationController?.pushViewController(agreementVC, animated: true)
     }
     
     @objc
