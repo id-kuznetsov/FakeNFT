@@ -9,12 +9,15 @@ import Foundation
 import Combine
 
 protocol CatalogViewModelProtocol {
+    var collections: [CollectionUI] { get set }
+    var collectionsPublisher: Published<[CollectionUI]>.Publisher { get }
     func numberOfRows() -> Int
-    func getCategory(at indexPath: IndexPath) -> CollectionUI
+    func getCollection(at indexPath: IndexPath) -> CollectionUI
 }
 
-final class CatalogViewModel {
+final class CatalogViewModel: CatalogViewModelProtocol {
     @Published var collections: [CollectionUI]
+    var collectionsPublisher: Published<[CollectionUI]>.Publisher { $collections }
 
     private var dataProvider: CatalogDataProviderProtocol
 
@@ -25,14 +28,12 @@ final class CatalogViewModel {
             self.collections = collections
         }
     }
-}
 
-extension CatalogViewModel: CatalogViewModelProtocol {
     func numberOfRows() -> Int {
         collections.count
     }
 
-    func getCategory(at indexPath: IndexPath) -> CollectionUI {
+    func getCollection(at indexPath: IndexPath) -> CollectionUI {
         collections[indexPath.row]
     }
 }

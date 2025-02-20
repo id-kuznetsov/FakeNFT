@@ -28,34 +28,64 @@ private extension CollectionUI {
         [
             CollectionUI(
                 name: "Foo",
-                cover: URL(string: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Felis_catus-cat_on_snow.jpg/2560px-Felis_catus-cat_on_snow.jpg")!,
+                cover: URL(string: "https://code.s3.yandex.net/Mobile/iOS/NFT/Обложки_коллекций/Brown.png"),
                 nfts: ["id1", "id2", "id3"],
                 id: "id1"
             ),
             CollectionUI(
-                name: "Foo",
-                cover: URL(string: "https://code.s3.yandex.net/Mobile/iOS/NFT/Обложки_коллекций/Brown.png")!,
+                name: "Baz",
+                cover: URL(string: "https://domain.tld/Gray.png"),
                 nfts: ["id1", "id2"],
-                id: "id1"
+                id: "id2"
             ),
             CollectionUI(
-                name: "Foo",
-                cover: URL(string: "https://code.s3.yandex.net/Mobile/iOS/NFT/Обложки_коллекций/White.png")!,
+                name: "Bar",
+                cover: URL(string: "https://code.s3.yandex.net/Mobile/iOS/NFT/Обложки_коллекций/Pink.png"),
                 nfts: ["id1", "id2", "id3", "id4", "id5", "id6", "id7", "id8", "id9", "id10"],
-                id: "id1"
+                id: "id3"
             ),
             CollectionUI(
-                name: "Foo",
-                cover: URL(string: "https://code.s3.yandex.net/Mobile/iOS/NFT/Обложки_коллекций/Pink.png")!,
+                name: "Quux",
+                cover: URL(string: "https://code.s3.yandex.net/Mobile/iOS/NFT/Обложки_коллекций/Blue.png"),
                 nfts: ["id1"],
-                id: "id1"
+                id: "id4"
+            ),
+            CollectionUI(
+                name: "Quuux",
+                cover: URL(string: "https://code.s3.yandex.net/Mobile/iOS/NFT/Обложки_коллекций/Pink.png"),
+                nfts: ["id1", "id2", "id3", "id4", "id5", "id6", "id7", "id8", "id9", "id10", "id11"],
+                id: "id5"
             ),
             CollectionUI(
                 name: "Foo",
-                cover: URL(string: "https://code.s3.yandex.net/Mobile/iOS/NFT/Обложки_коллекций/Blue.png")!,
-                nfts: ["id1", "id2", "id3", "id4", "id5", "id6", "id7", "id8", "id9", "id10", "id11", "id12", "id13", "id14", "id15"],
-                id: "id1"
+                cover: URL(string: "https://code.s3.yandex.net/Mobile/iOS/NFT/Обложки_коллекций/Brown.png"),
+                nfts: ["id1", "id2", "id3"],
+                id: "id6"
             ),
+            CollectionUI(
+                name: "Baz",
+                cover: URL(string: "https://code.s3.yandex.net/Mobile/iOS/NFT/Обложки_коллекций/White.png"),
+                nfts: ["id1", "id2"],
+                id: "id7"
+            ),
+            CollectionUI(
+                name: "Bar",
+                cover: URL(string: "https://code.s3.yandex.net/Mobile/iOS/NFT/Обложки_коллекций/Pink.png"),
+                nfts: ["id1", "id2", "id3", "id4", "id5", "id6", "id7", "id8", "id9", "id10"],
+                id: "id8"
+            ),
+            CollectionUI(
+                name: "Quuuuuux",
+                cover: URL(string: "https://code.s3.yandex.net/Mobile/iOS/NFT/Обложки_коллекций/Pink.png"),
+                nfts: ["id1"],
+                id: "id9"
+            ),
+            CollectionUI(
+                name: "Quuux",
+                cover: URL(string: "https://code.s3.yandex.net/Mobile/iOS/NFT/Обложки_коллекций/Pink.png"),
+                nfts: ["id1", "id2", "id3", "id4", "id5", "id6", "id7", "id8"],
+                id: "id10"
+            )
         ]
     }
 }

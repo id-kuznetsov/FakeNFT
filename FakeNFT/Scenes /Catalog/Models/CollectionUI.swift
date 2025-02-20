@@ -9,7 +9,7 @@ import Foundation
 
 struct CollectionUI: Decodable {
     let name: String
-    let cover: URL
+    let cover: URL?
     let nfts: [String]
     let id: String
 }
