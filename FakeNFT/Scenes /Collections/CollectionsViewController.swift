@@ -1,22 +1,22 @@
 //
-//  CatalogViewController.swift
+//  CollectionsViewController.swift
 //  FakeNFT
 //
-//  Created by Aleksei Frolov on 13.02.2025.
+//  Created by Nikolai Eremenko on 18.02.2025.
 //
 
 import UIKit
 import Combine
 
-final class CatalogViewController: UIViewController {
-    private let viewModel: CatalogViewModelProtocol
+final class CollectionsViewController: UIViewController {
+    private let viewModel: CollectionsViewModelProtocol
     private var subscribers = Set<AnyCancellable>()
 
     // MARK: - UI Components
     private lazy var tableView: UITableView = {
         let view = UITableView()
         view.backgroundColor = .ypWhite
-        view.register(CatalogTableViewCell.self)
+        view.register(CollectionsTableViewCell.self)
         view.separatorStyle = .none
         view.rowHeight = 180
         view.delegate = self
@@ -26,7 +26,7 @@ final class CatalogViewController: UIViewController {
     }()
 
     // MARK: - Init
-    init(viewModel: CatalogViewModelProtocol) {
+    init(viewModel: CollectionsViewModelProtocol) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
@@ -95,13 +95,13 @@ final class CatalogViewController: UIViewController {
 }
 
 // MARK: - UITableViewDataSource
-extension CatalogViewController: UITableViewDataSource {
+extension CollectionsViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         viewModel.collections.count
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell: CatalogTableViewCell = tableView.dequeueReusableCell()
+        let cell: CollectionsTableViewCell = tableView.dequeueReusableCell()
         let collectionUI = viewModel.getCollection(at: indexPath)
 
         cell.selectionStyle = .none
@@ -112,7 +112,7 @@ extension CatalogViewController: UITableViewDataSource {
 }
 
 // MARK: - UITableViewDelegate
-extension CatalogViewController: UITableViewDelegate {
+extension CollectionsViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let collectionUI = viewModel.getCollection(at: indexPath)
         print(collectionUI)

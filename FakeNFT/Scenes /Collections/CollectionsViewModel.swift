@@ -1,5 +1,5 @@
 //
-//  CatalogViewModel.swift
+//  CollectionsViewModel.swift
 //  FakeNFT
 //
 //  Created by Nikolai Eremenko on 18.02.2025.
@@ -8,14 +8,14 @@
 import Foundation
 import Combine
 
-protocol CatalogViewModelProtocol {
+protocol CollectionsViewModelProtocol {
     var collections: [CollectionUI] { get set }
     var collectionsPublisher: Published<[CollectionUI]>.Publisher { get }
     func numberOfRows() -> Int
     func getCollection(at indexPath: IndexPath) -> CollectionUI
 }
 
-final class CatalogViewModel: CatalogViewModelProtocol {
+final class CollectionsViewModel: CollectionsViewModelProtocol {
     @Published var collections: [CollectionUI]
     var collectionsPublisher: Published<[CollectionUI]>.Publisher { $collections }
 
@@ -24,7 +24,7 @@ final class CatalogViewModel: CatalogViewModelProtocol {
     init(servicesAssembly: ServicesAssembly) {
         self.collections = []
         self.servicesAssembly = servicesAssembly
-        servicesAssembly.catalogDataProvider.getCollections { collections in
+        servicesAssembly.catalogDataProvider.loadCollections { collections in
             self.collections = collections
         }
     }

@@ -1,5 +1,5 @@
 //
-//  CatalogTableViewCell.swift
+//  CollectionsTableViewCell.swift
 //  FakeNFT
 //
 //  Created by Nikolai Eremenko on 19.02.2025.
@@ -8,7 +8,7 @@
 import UIKit
 import Kingfisher
 
-final class CatalogTableViewCell: UITableViewCell, ReuseIdentifying {
+final class CollectionsTableViewCell: UITableViewCell, ReuseIdentifying {
 
     // MARK: - UI Components
     private lazy var coverImageView: UIImageView = {
@@ -50,6 +50,7 @@ final class CatalogTableViewCell: UITableViewCell, ReuseIdentifying {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
 
+        contentView.backgroundColor = .ypWhite
         contentView.addSubview(coverImageView)
         contentView.addSubview(shimmerImageView)
         contentView.addSubview(nameAndCountLabel)

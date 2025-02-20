@@ -31,8 +31,8 @@ final class TabBarController: UITabBarController {
             selectedImage: UIImage(systemName: "person.circle.fill")
         )
 
-        let catalogViewModel = CatalogViewModel(servicesAssembly: servicesAssembly)
-        let catalogViewController = CatalogViewController(viewModel: catalogViewModel)
+        let catalogViewModel = CollectionsViewModel(servicesAssembly: servicesAssembly)
+        let catalogViewController = CollectionsViewController(viewModel: catalogViewModel)
         let catalogNavigationController = UINavigationController(rootViewController: catalogViewController)
         catalogNavigationController.tabBarItem = UITabBarItem(
             title: L10n.Tab.catalog,

@@ -18,7 +18,7 @@ final class ServicesAssembly {
         )
     }
 
-    var catalogDataProvider: CatalogDataProvider {
-        CatalogDataProvider()
+    var catalogDataProvider: CollectionsServiceImpl {
+        CollectionsServiceImpl()
     }
 }

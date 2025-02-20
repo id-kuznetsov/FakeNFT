@@ -1,5 +1,5 @@
 //
-//  CatalogDataProvider.swift
+//  CollectionsSevice.swift
 //  FakeNFT
 //
 //  Created by Nikolai Eremenko on 17.02.2025.
@@ -7,15 +7,15 @@
 
 import Foundation
 
-protocol CatalogDataProviderProtocol {
-    func getCollections(completion: @escaping ([CollectionUI]) -> Void)
+protocol CollectionsSevice {
+    func loadCollections(completion: @escaping ([CollectionUI]) -> Void)
 }
 
-final class CatalogDataProvider {}
+final class CollectionsServiceImpl {}
 
-// MARK: - CatalogDataProviderProtocol
-extension CatalogDataProvider: CatalogDataProviderProtocol {
-    func getCollections(completion: @escaping ([CollectionUI]) -> Void) {
+// MARK: - CollectionsSevice
+extension CollectionsServiceImpl: CollectionsSevice {
+    func loadCollections(completion: @escaping ([CollectionUI]) -> Void) {
         DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
             completion(CollectionUI.mock)
         }
