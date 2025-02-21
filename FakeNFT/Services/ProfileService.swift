@@ -3,17 +3,19 @@ import Foundation
 typealias ProfileCompletion = (Result<Profile, Error>) -> Void
 
 protocol ProfileService {
-    func fetchProfile(id: String, _ completion: @escaping ProfileCompletion)
+    func fetchProfile(_ completion: @escaping ProfileCompletion)
 }
 
 final class ProfileServiceImpl: ProfileService {
     private let networkClient: NetworkClient
+    private let tokenStorage: TokenStorage
     
-    init(networkClient: NetworkClient) {
+    init(networkClient: NetworkClient, tokenStorage: TokenStorage) {
         self.networkClient = networkClient
+        self.tokenStorage = tokenStorage
     }
     
-    func fetchProfile(id: String, _ completion: @escaping ProfileCompletion) {
+    func fetchProfile(_ completion: @escaping ProfileCompletion) {
         let nfts = [
             "b3907b86-37c4-4e15-95bc-7f8147a9a660",
             "d6a02bd1-1255-46cd-815b-656174c1d9c0",
@@ -29,19 +31,19 @@ final class ProfileServiceImpl: ProfileService {
             "b2f44171-7dcd-46d7-a6d3-e2109aacf520"
         ]
         
+        guard let token = try? tokenStorage.retrieveToken() else {
+            fatalError()
+        }
+        
         let fakeProfile = Profile(name: "Студентус Практикумс",
                                   avatar: "https://photo.bank/1.png",
-                                  description: "param1Value",
+                                  description: "Дизайнер из Казани, люблю цифровое искусство и бейглы. В моей коллекции уже 100 NFT, и еще больше — на моём сайте",
                                   website: "https://yandex.ru",
                                   nfts: nfts,
                                   likes: likes,
-                                  id: ProfileConstants.id
+                                  id: token
         )
         
         completion(.success(fakeProfile))
     }
-}
-
-enum ProfileConstants {
-    static let id = "1"
 }

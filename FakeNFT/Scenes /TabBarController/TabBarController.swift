@@ -22,7 +22,8 @@ final class TabBarController: UITabBarController {
     }
     
     private func configure() {
-        let profileVC = UINavigationController(rootViewController: ProfileViewController())
+        let profileAssembly = ProfileAssembly(profileService: servicesAssembly.profileService)
+        let profileVC = UINavigationController(rootViewController: profileAssembly.build())
         profileVC.tabBarItem = UITabBarItem(
             title: NSLocalizedString("Tab.profile", comment: ""),
             image: UIImage(systemName: "person.circle"),

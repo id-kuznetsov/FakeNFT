@@ -1,6 +1,6 @@
 import UIKit
 
-final class ProfileViewController: UIViewController {
+final class ProfileViewController: UIViewController, ErrorView {
     
     // MARK: - Section
     
@@ -40,6 +40,8 @@ final class ProfileViewController: UIViewController {
     
     // MARK: - Private Properties
     
+    private let viewModel: ProfileViewModel
+    
     private lazy var activityIndicatorView: UIActivityIndicatorView = {
         let indicator = UIActivityIndicatorView()
         indicator.hidesWhenStopped = true
@@ -67,7 +69,7 @@ final class ProfileViewController: UIViewController {
     private lazy var linkButton: UIButton = {
         let button = UIButton()
         button.titleLabel?.font = .caption1
-        button.titleLabel?.textColor = .ypBlueUniversal
+        button.setTitleColor(.ypBlueUniversal, for: .normal)
         button.addTarget(self, action: #selector(linkButtonDidTap), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
@@ -105,7 +107,8 @@ final class ProfileViewController: UIViewController {
     
     // MARK: - Init
 
-    init() {
+    init(viewModel: ProfileViewModel) {
+        self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -126,11 +129,7 @@ final class ProfileViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         startLoading()
-        
-        DispatchQueue.main.asyncAfter(deadline: .now() + 3) { [weak self] in
-            self?.stopLoading()
-            self?.applySnapshot(myNftsNumber: 10, favouritesNumber: 10)
-        }
+        viewModel.fetchProfile()
     }
     
     // MARK: - Private Methods
@@ -165,7 +164,23 @@ final class ProfileViewController: UIViewController {
     }
     
     private func setupDataBinding() {
+        viewModel.profile.bind { [weak self] profile in
+            guard let profile else { return }
+            self?.stopLoading()
+            if let url = URL(string: profile.avatar) {
+                self?.profileCardView.setAvatarImage(url: url)
+            }
+            self?.profileCardView.setNameText(profile.name)
+            self?.profileCardView.setDescriptionText(profile.description)
+            self?.linkButton.setTitle(profile.website, for: .normal)
+            self?.applySnapshot(myNftsNumber: profile.nfts.count,
+                                favouritesNumber: profile.likes.count)
+        }
         
+        viewModel.errorModel.bind { [weak self] errorModel in
+            guard let errorModel else { return }
+            self?.showError(errorModel)
+        }
     }
     
     private func startLoading() {

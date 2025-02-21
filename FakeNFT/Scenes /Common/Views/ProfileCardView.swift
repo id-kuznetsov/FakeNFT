@@ -42,7 +42,6 @@ final class ProfileCardView: UIView {
         return stackView
     }()
     
-    
     private lazy var descriptionLabel: UILabel = {
         let label = UILabel()
         label.font = .caption2
@@ -103,6 +102,7 @@ final class ProfileCardView: UIView {
             descriptionLabel.topAnchor.constraint(equalTo: stackView.bottomAnchor, constant: 20),
             descriptionLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: leadingInset),
             descriptionLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: trailingInset),
+            descriptionLabel.bottomAnchor.constraint(equalTo: bottomAnchor)
         ])
     }
 }
