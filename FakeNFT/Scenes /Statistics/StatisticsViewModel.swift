@@ -27,7 +27,6 @@ final class StatisticsViewModel: StatisticsViewModelProtocol {
     private let pageSize = 15
     private var isLoading = false
     private var allUsersLoaded = false
-    private var isCachedDataLoaded = false
     
     var onUsersUpdated: (() -> Void)?
     var onLoadingStateChanged: ((Bool) -> Void)?
@@ -42,17 +41,13 @@ final class StatisticsViewModel: StatisticsViewModelProtocol {
         self.userDefaultsStorage = userDefaultsStorage
         self.cacheStorage = cacheStorage
         
+        resetPageIfNeeded()
         loadUsersFromCache()
     }
     
     // MARK: Public methods
     func fetchNextPage() {
         guard !isLoading, !allUsersLoaded else { return }
-        
-        if isCachedDataLoaded {
-            isCachedDataLoaded = false
-            return
-        }
         
         isLoading = true
         onLoadingStateChanged?(true)
@@ -104,17 +99,30 @@ final class StatisticsViewModel: StatisticsViewModelProtocol {
         userDefaultsStorage.clearStatisticsUserDefaults()
         users.removeAll()
         allUsersLoaded = false
-        isCachedDataLoaded = false
         onUsersUpdated?()
     }
     
     // MARK: Private methods
     private func loadUsersFromCache() {
-        users = cacheStorage.loadUsersFromCache() ?? []
-        if !users.isEmpty {
-            isCachedDataLoaded = true
+        if let cachedUsers = cacheStorage.loadUsersFromCache(), !cachedUsers.isEmpty {
+            users = cachedUsers
+            allUsersLoaded = false
             sortUsers(by: getSelectedSortOption())
             onUsersUpdated?()
+        } else {
+            userDefaultsStorage.currentPage = 0
+            allUsersLoaded = false
+            isLoading = false
+            
+            fetchNextPage()
+        }
+    }
+    
+    private func resetPageIfNeeded() {
+        let previousSize = userDefaultsStorage.previousPageSize
+        if previousSize != pageSize {
+            userDefaultsStorage.currentPage = 0
+            userDefaultsStorage.previousPageSize = pageSize
         }
     }
     

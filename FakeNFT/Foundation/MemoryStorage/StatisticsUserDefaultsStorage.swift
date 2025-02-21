@@ -9,6 +9,7 @@ import Foundation
 
 protocol StatisticsUserDefaultsStorageProtocol {
     var currentPage: Int { get set }
+    var previousPageSize: Int { get set }
     var selectedUsersSortOption: SortOption { get set }
     func clearStatisticsUserDefaults()
 }
@@ -23,6 +24,15 @@ final class StatisticsUserDefaultsStorage: StatisticsUserDefaultsStorageProtocol
         }
         set {
             storage.set(newValue, forKey: Keys.currentPage.rawValue)
+        }
+    }
+    
+    var previousPageSize: Int {
+        get {
+            return storage.integer(forKey: Keys.previousPageSize.rawValue)
+        }
+        set {
+            storage.set(newValue, forKey: Keys.previousPageSize.rawValue)
         }
     }
     
@@ -46,5 +56,6 @@ final class StatisticsUserDefaultsStorage: StatisticsUserDefaultsStorageProtocol
     private enum Keys: String {
         case sortOptionInStatistics
         case currentPage
+        case previousPageSize
     }
 }
