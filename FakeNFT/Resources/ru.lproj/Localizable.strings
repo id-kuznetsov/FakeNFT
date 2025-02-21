@@ -22,3 +22,7 @@
 "SortOption.rating" = "По рейтингу";
 "SortOption.title" = "По названию";
 "SortOption.name" = "По имени";
+
+"Profile.myNftsRoute" = "Мои NFT";
+"Profile.favouritesNftsRoute" = "Избранные NFT";
+"Profile.aboutRoute" = "О разработчике";

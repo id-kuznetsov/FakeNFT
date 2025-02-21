@@ -1,8 +1,7 @@
 import Foundation
 
 protocol ProfileViewModel {
-    var profile: Profile { get }
-    var isLoading: Bool { get }
+    var profile: Profile? { get }
     
     func fetchProfile()
 }
