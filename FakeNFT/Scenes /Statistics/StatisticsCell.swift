@@ -83,7 +83,7 @@ final class StatisticsCell: UITableViewCell {
             indexLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
             
             containerView.leadingAnchor.constraint(equalTo: indexLabel.trailingAnchor, constant: 16),
-            containerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            containerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -3),
             containerView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 4),
             containerView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -4),
             containerView.heightAnchor.constraint(equalToConstant: 80),
