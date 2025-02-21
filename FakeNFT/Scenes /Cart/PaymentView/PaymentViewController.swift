@@ -15,6 +15,17 @@ final class PaymentViewController: UIViewController {
     
     private var selectedCurrencyIndex: Int?
     
+    private lazy var leftBarButtonItem: UIBarButtonItem = {
+        let button = UIBarButtonItem(
+            image: .chevronLeft,
+            style: .plain,
+            target: self,
+            action: #selector(didTapBackButton)
+        )
+        button.tintColor = .ypBlack
+        return button
+    }()
+    
     private lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
@@ -67,11 +78,21 @@ final class PaymentViewController: UIViewController {
         return button
     }()
     
+    private lazy var activityIndicator: UIActivityIndicatorView = {
+        let activityIndicator = UIActivityIndicatorView(style: .medium)
+        activityIndicator.color = .ypBlack
+        activityIndicator.hidesWhenStopped = true
+        return activityIndicator
+    }()
+    
     // MARK: - Initialisers
     
     init(viewModel: PaymentViewModelProtocol) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
+        setLoadingState(isLoading: true)
+        setupBindings()
+        viewModel.loadData()
     }
     
     @available(*, unavailable)
@@ -83,7 +104,9 @@ final class PaymentViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         setupUI()
+        setupNavigationBar()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -105,7 +128,6 @@ final class PaymentViewController: UIViewController {
     
     @objc
     private func didTapAgreementButton() {
-        // TODO: handle tap pay button
         let agreementVC = AgreementWebViewController()
         navigationController?.pushViewController(agreementVC, animated: true)
     }
@@ -113,29 +135,36 @@ final class PaymentViewController: UIViewController {
     @objc
     private func didTapPayButton() {
         // TODO: handle tap pay button
-        print("pay")
+       print("pay")
     }
     
     // MARK: - Private Methods
     
-    func setupUI() {
+    private func setupBindings() {
+        viewModel.onItemsUpdate = { [weak self] in
+            self?.collectionView.reloadData()
+            self?.setLoadingState(isLoading: false)
+        }
+    }
+    
+    private func setupUI() {
         view.backgroundColor = .ypWhite
+        title = L10n.Payment.title
         
-        view.addSubviews([collectionView, paymentView, payButton, userAgreementLabel, agreementLinkButton])
+        view.addSubviews([collectionView, paymentView, payButton, userAgreementLabel, agreementLinkButton, activityIndicator])
         
-        setupNavigationBar()
         setupConstraints()
     }
     
     private func setupNavigationBar() {
-        title = L10n.Payment.title
-        navigationItem.leftBarButtonItem = UIBarButtonItem(
-            image: .chevronLeft,
-            style: .plain,
-            target: self,
-            action: #selector(didTapBackButton)
-        )
-        navigationItem.leftBarButtonItem?.tintColor = .ypBlack
+        navigationItem.leftBarButtonItem = leftBarButtonItem
+    }
+    
+    private func setLoadingState(isLoading: Bool) {
+        isLoading ? activityIndicator.startAnimating() : activityIndicator.stopAnimating()
+        
+        let viewsToHide = [collectionView, paymentView, userAgreementLabel, agreementLinkButton, payButton]
+        viewsToHide.forEach { $0.isHidden = isLoading }
     }
     
     private func setupConstraints() {
@@ -146,6 +175,7 @@ final class PaymentViewController: UIViewController {
             userAgreementLabelConstraint() +
             agreementButtonConstraints()
         )
+        activityIndicator.constraintCenters(to: view)
     }
     
     private func collectionViewConstraints() -> [NSLayoutConstraint] {

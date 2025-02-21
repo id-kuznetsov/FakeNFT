@@ -8,6 +8,7 @@
 import Foundation
 
 protocol CartViewModelProtocol {
+    var orderService: OrderService { get } 
     var onItemsUpdate: (() -> Void)? { get set }
     var itemsCount: Int { get }
     

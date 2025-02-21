@@ -123,7 +123,7 @@ final class CartViewController: UIViewController {
     
     @objc
     private func didTapPaymentButton() {
-        let paymentViewModel = PaymentViewModel()
+        let paymentViewModel = PaymentViewModel(orderService: viewModel.orderService)
         let paymentViewController = PaymentViewController(viewModel: paymentViewModel)
         let paymentNavigationController = UINavigationController(rootViewController: paymentViewController)
         paymentNavigationController.modalPresentationStyle = .fullScreen
@@ -173,7 +173,6 @@ final class CartViewController: UIViewController {
         paymentButton.isHidden = isLoading
         totalCostLabel.isHidden = isLoading
         totalNFTCountInOrderLabel.isHidden = isLoading
-        
     }
     
     // MARK: Constraints

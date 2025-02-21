@@ -11,6 +11,7 @@ final class CartViewModel: CartViewModelProtocol {
     
     // MARK: - Public Properties
     
+    let orderService: OrderService
     var onItemsUpdate: (() -> Void)?
     var itemsCount: Int {
         nftsInCart.count
@@ -18,7 +19,6 @@ final class CartViewModel: CartViewModelProtocol {
     
     // MARK: - Private Properties
     
-    private let orderService: OrderService
     private let nftService: NftService
     private var nftsInCart: [OrderCard] = []
     private let sortStorage = SortStateStorage.shared

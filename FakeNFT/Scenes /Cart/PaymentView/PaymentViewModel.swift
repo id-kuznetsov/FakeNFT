@@ -7,36 +7,51 @@
 
 import Foundation
 
-protocol PaymentViewModelProtocol {
-    var onItemsUpdate: (() -> Void)? { get set }
-    var paymentMethodCount: Int { get }
-    
-    func getItem(at index: Int) -> CurrencyCard
-    func loadData()
-}
-
 final class PaymentViewModel: PaymentViewModelProtocol {
+    
+    // MARK: - Public Properties
+    
     var onItemsUpdate: (() -> Void)?
     
-    private var currencyCards: [CurrencyCard] = []
-    
     var paymentMethodCount: Int {
-//        currencyCards.count
-        8
+        currencyCards.count
     }
     
+    // MARK: - Private Properties
+    
+    private let orderService: OrderService
+    private var currencyCards: [CurrencyCard] = []
+    
+    // MARK: - Initialisers
+    
+    init(orderService: OrderService) {
+        self.orderService = orderService
+    }
+    
+    // MARK: - Public Methods
+    
     func getItem(at index: Int) -> CurrencyCard {
-//        currencyCards[index]
-        CurrencyCard(
-            name: "Bitcoin",
-            shortName: "BTC",
-            imageURL: URL(string:"https://code.s3.yandex.net/Mobile/iOS/Currencies/Bitcoin_(BTC).png")! // TODO: for test
-        )
+        currencyCards[index]
     }
     
     func loadData() {
-        // TODO: load data
+        orderService.getCurrencies { [weak self] result in
+            switch result {
+            case .success(let currencies):
+                self?.currencyCards = currencies.map { currency in
+                    CurrencyCard(
+                        name: currency.title,
+                        shortName: currency.name,
+                        imageURL: currency.image
+                    )
+                }
+                self?.onItemsUpdate?()
+            case .failure(let error):
+                print("Error: \(error) in \(#function) \(#file)")
+                // TODO: в cart-3 передать ошибку через алерт
+            }
+        }
     }
-    
-    
 }
+
+
