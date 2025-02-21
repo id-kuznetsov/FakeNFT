@@ -37,6 +37,8 @@ final class ProfileServiceImpl: ProfileService {
                                   likes: likes,
                                   id: ProfileConstants.id
         )
+        
+        completion(.success(fakeProfile))
     }
 }
 
