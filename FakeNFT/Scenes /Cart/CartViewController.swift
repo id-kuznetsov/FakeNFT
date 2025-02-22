@@ -108,16 +108,7 @@ final class CartViewController: UIViewController {
             on: self,
             sortOptions: [.price, .rating, .name]
         ) { [weak self] selectedSortOption in
-            switch selectedSortOption {
-            case .price:
-                self?.viewModel.sortItems(by: .price)
-            case .rating:
-                self?.viewModel.sortItems(by: .rating)
-            case .name:
-                self?.viewModel.sortItems(by: .name)
-            default:
-                break
-            }
+            self?.viewModel.sortItems(by: selectedSortOption)
         }
     }
     
@@ -144,7 +135,16 @@ final class CartViewController: UIViewController {
     private func setupUI() {
         view.backgroundColor = .ypWhite
         
-        view.addSubviews([tableView, paymentView, totalNFTCountInOrderLabel, totalCostLabel, paymentButton, activityIndicator])
+        view.addSubviews(
+            [
+                tableView,
+                paymentView,
+                totalNFTCountInOrderLabel,
+                totalCostLabel,
+                paymentButton,
+                activityIndicator
+            ]
+        )
         setupConstraints()
         setTableViewInsets()
         updatePaymentViewLabels()
