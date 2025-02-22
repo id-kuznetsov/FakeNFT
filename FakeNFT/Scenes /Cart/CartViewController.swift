@@ -15,7 +15,7 @@ final class CartViewController: UIViewController {
     
     private lazy var rightBarButtonItem: UIBarButtonItem = {
         let barButtonItem = UIBarButtonItem(
-            image: .icFilter,
+            image: .icSort,
             style: .done,
             target: self,
             action: #selector(didTapSortButton)
@@ -104,13 +104,21 @@ final class CartViewController: UIViewController {
     
     @objc
     private func didTapSortButton() {
-        print("didTapSortButton")
-        // TODO: handle sort button tap
+        AlertPresenter.presentSortAlert(
+            on: self,
+            sortOptions: [.price, .rating, .name]
+        ) { [weak self] selectedSortOption in
+            self?.viewModel.sortItems(by: selectedSortOption)
+        }
     }
     
     @objc
     private func didTapPaymentButton() {
-        // TODO: handle payment button tap
+        let paymentViewModel = PaymentViewModel(orderService: viewModel.orderService)
+        let paymentViewController = PaymentViewController(viewModel: paymentViewModel)
+        let paymentNavigationController = UINavigationController(rootViewController: paymentViewController)
+        paymentNavigationController.modalPresentationStyle = .fullScreen
+        self.navigationController?.pushViewController(paymentViewController, animated: true)
     }
     
     // MARK: - Private Methods
@@ -127,7 +135,16 @@ final class CartViewController: UIViewController {
     private func setupUI() {
         view.backgroundColor = .ypWhite
         
-        view.addSubviews([tableView, paymentView, totalNFTCountInOrderLabel, totalCostLabel, paymentButton, activityIndicator])
+        view.addSubviews(
+            [
+                tableView,
+                paymentView,
+                totalNFTCountInOrderLabel,
+                totalCostLabel,
+                paymentButton,
+                activityIndicator
+            ]
+        )
         setupConstraints()
         setTableViewInsets()
         updatePaymentViewLabels()
@@ -156,7 +173,6 @@ final class CartViewController: UIViewController {
         paymentButton.isHidden = isLoading
         totalCostLabel.isHidden = isLoading
         totalNFTCountInOrderLabel.isHidden = isLoading
-        
     }
     
     // MARK: Constraints

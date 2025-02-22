@@ -16,6 +16,11 @@
 
 "Cart.button.toPay" = "К оплате";
 "Cart.label.price" = "Цена";
+"Payment.title" = "Выберите способ оплаты";
+"Payment.button.pay" = "Оплатить";
+"Payment.agreement.label" = "Совершая покупку, вы соглашаетесь с условиями";
+"Payment.agreement.link" = "Пользовательского соглашения";
+
 
 "Sort.title" = "Сортировка";
 "SortOption.nftCount" = "По количеству NFT";

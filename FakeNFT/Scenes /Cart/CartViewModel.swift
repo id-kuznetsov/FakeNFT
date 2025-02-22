@@ -11,6 +11,7 @@ final class CartViewModel: CartViewModelProtocol {
     
     // MARK: - Public Properties
     
+    let orderService: OrderService
     var onItemsUpdate: (() -> Void)?
     var itemsCount: Int {
         nftsInCart.count
@@ -18,13 +19,15 @@ final class CartViewModel: CartViewModelProtocol {
     
     // MARK: - Private Properties
     
-    private let servicesAssembly: ServicesAssembly
+    private let nftService: NftService
     private var nftsInCart: [OrderCard] = []
+    private let sortStorage = SortStateStorage.shared
     
     // MARK: - Initialisers
     
-    init(servicesAssembly: ServicesAssembly) {
-        self.servicesAssembly = servicesAssembly
+    init(orderService: OrderService, nftService: NftService ) {
+        self.orderService = orderService
+        self.nftService = nftService
     }
     
     // MARK: - Public Methods
@@ -38,7 +41,7 @@ final class CartViewModel: CartViewModelProtocol {
     }
     
     func loadData() {
-        servicesAssembly.orderService.getOrder(completion: { [weak self] result in
+        orderService.getOrder(completion: { [weak self] result in
             switch result {
             case .success(let order):
                 self?.loadNFTs(by: order.nfts)
@@ -49,6 +52,21 @@ final class CartViewModel: CartViewModelProtocol {
         })
     }
     
+    func sortItems(by sortOption: SortOption) {
+        sortStorage.sortOptionInCart = sortOption.title
+        switch sortOption {
+        case .name:
+            nftsInCart.sort { $0.name < $1.name }
+        case .price:
+            nftsInCart.sort { $0.price < $1.price }
+        case .rating:
+            nftsInCart.sort { $0.rating > $1.rating }
+        default:
+            break
+        }
+        onItemsUpdate?()
+    }
+    
     // MARK: - Private Methods
     
     private func loadNFTs(by ids: [String]) {
@@ -57,14 +75,14 @@ final class CartViewModel: CartViewModelProtocol {
         
         for id in ids {
             group.enter()
-            servicesAssembly.nftService.loadNft(id: id) { result in
+            nftService.loadNft(id: id) { result in
                 DispatchQueue.main.async {
                     defer { group.leave() }
                     
                     switch result {
                     case .success(let nft):
                         guard let url = nft.images.first else {
-                            print("Unable to get image URL in \(#function) \(#file)")                    
+                            print("Unable to get image URL in \(#function) \(#file)")
                             return
                         }
                         let orderCard = OrderCard(
@@ -85,6 +103,15 @@ final class CartViewModel: CartViewModelProtocol {
         group.notify(queue: .main) { [weak self] in
             self?.nftsInCart = loadedNFTs
             self?.onItemsUpdate?()
+            self?.applyLastSortOption()
         }
+    }
+    
+    private func applyLastSortOption() {
+        guard let lastSortOptionTitle = sortStorage.sortOptionInCart,
+              let lastSortOption = SortOption.allCases.first (where: { $0.title == lastSortOptionTitle }) else {
+            return
+        }
+        sortItems(by: lastSortOption)
     }
 }
