@@ -8,18 +8,18 @@
 
 ## Модуль 1:
 #### Profile Screen
-- Модель Profile (est: 30 мин; fact: x часов)
-- Протокол ProfileViewModel (est: 2 часа; fact: x часов)
-- ProfileCardView (AvatarImageView + UserNameLabel + DescriptionLabel) (est: 1 часа; fact: x часов)
-- ProfilerService (protocol) (est: 2 часа; fact: x часов)
-- ProfileServiceImpl (mock data) (est: 1 часа; fact: x часов)
-- Верстка ProfileViewController (ProfileCardView + LinkButton + RoutingTableView + EditBarButtonItem) (est: 3 часа; fact: x часов)
-- ProfileViewModelImpl (est: 3 часа; fact: x часов)
-- Observable<T> (обертка для биндинга данных) (est: 10 мин; fact: x часов)
-- Биндинг данных (est: 30 мин; fact: x часов)
-- ProfileRequest (est: 30 мин; fact: x часов)
-- ProfileServiceImpl (данные с бэка) (est: 1 час; fact: x часов)
-- WebViewViewController (переход с ячейки "О разработчике" + переход по линку на сайт пользователя) (est: 2 часа; fact: x часов)
+- Модель Profile (est: 30 мин; fact: 5 мин)
+- Протокол ProfileViewModel (est: 2 часа; fact: 1 час)
+- ProfileCardView (AvatarImageView + UserNameLabel + DescriptionLabel) (est: 1 часа; fact: 1 час 30 мин)
+- ProfilerService (protocol) (est: 2 часа; fact: 30 мин)
+- ProfileServiceImpl (mock data) (est: 1 часа; fact: 20 мин)
+- Верстка ProfileViewController (ProfileCardView + LinkButton + RoutingTableView + EditBarButtonItem) (est: 3 часа; fact: 2 часа)
+- ProfileViewModelImpl (est: 3 часа; fact: 1 час)
+- Observable<T> (обертка для биндинга данных) (est: 10 мин; fact: 10 мин)
+- Биндинг данных (est: 30 мин; fact: 30 мин)
+- ProfileRequest (est: 30 мин; fact: 30 мин)
+- ProfileServiceImpl (данные с бэка) (est: 1 час; fact: 40 мин)
+- WebViewViewController (переход с ячейки "О разработчике" + переход по линку на сайт пользователя) (est: 2 часа; fact: 1 час)
 
 ## Модуль 2:
 #### ProfileEditing Screen
