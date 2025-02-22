@@ -9,10 +9,11 @@ import UIKit
 import Combine
 
 final class CollectionsViewController: UIViewController {
+    // MARK: - Properties
     private let viewModel: CollectionsViewModelProtocol
     private var subscribers = Set<AnyCancellable>()
 
-    // MARK: - UI Components
+    // MARK: - UI
     private lazy var tableView: UITableView = {
         let view = UITableView()
         view.backgroundColor = .ypWhite
@@ -75,6 +76,17 @@ final class CollectionsViewController: UIViewController {
         navigationItem.rightBarButtonItem = filterButton
     }
 
+    private func presentCollectionViewController(for collection: CollectionUI) {
+        let viewModel = CollectionViewModel(
+            servicesAssembly: viewModel.servicesAssembly,
+            collection: collection
+        )
+        let viewController = CollectionViewController(viewModel: viewModel)
+        viewController.hidesBottomBarWhenPushed = true
+
+        navigationController?.pushViewController(viewController, animated: true)
+    }
+
     // MARK: - Actions
     @objc
     private func presentFilterActionSheet() {
@@ -115,6 +127,6 @@ extension CollectionsViewController: UITableViewDataSource {
 extension CollectionsViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let collectionUI = viewModel.getCollection(at: indexPath)
-        print(collectionUI)
+        presentCollectionViewController(for: collectionUI)
     }
 }

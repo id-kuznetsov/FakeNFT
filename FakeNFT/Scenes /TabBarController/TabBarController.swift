@@ -33,7 +33,7 @@ final class TabBarController: UITabBarController {
 
         let catalogViewModel = CollectionsViewModel(servicesAssembly: servicesAssembly)
         let catalogViewController = CollectionsViewController(viewModel: catalogViewModel)
-        let catalogNavigationController = UINavigationController(rootViewController: catalogViewController)
+        let catalogNavigationController = CustomNavigationController(rootViewController: catalogViewController)
         catalogNavigationController.tabBarItem = UITabBarItem(
             title: L10n.Tab.catalog,
             image: .catalogTab,

@@ -9,17 +9,18 @@ import Foundation
 import Combine
 
 protocol CollectionsViewModelProtocol {
-    var collections: [CollectionUI] { get set }
+    var servicesAssembly: ServicesAssembly { get }
+    var collections: [CollectionUI] { get }
     var collectionsPublisher: Published<[CollectionUI]>.Publisher { get }
     func numberOfRows() -> Int
     func getCollection(at indexPath: IndexPath) -> CollectionUI
 }
 
 final class CollectionsViewModel: CollectionsViewModelProtocol {
+    let servicesAssembly: ServicesAssembly
+
     @Published var collections: [CollectionUI]
     var collectionsPublisher: Published<[CollectionUI]>.Publisher { $collections }
-
-    private let servicesAssembly: ServicesAssembly
 
     init(servicesAssembly: ServicesAssembly) {
         self.collections = []
