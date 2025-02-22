@@ -58,7 +58,6 @@
 		5CDAEBAB2D65394C001BFC28 /* PaymentCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CDAEBAA2D65394C001BFC28 /* PaymentCollectionViewCell.swift */; };
 		5CDAEBAD2D665D5C001BFC28 /* RatingStackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CDAEBAC2D665D5C001BFC28 /* RatingStackView.swift */; };
 		5CDC768C2D67E55C00EAA1F0 /* AgreementWebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CDC768B2D67E55C00EAA1F0 /* AgreementWebViewController.swift */; };
-		5CDC775E2D67F15D00EAA1F0 /* AgreementWebViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CDC775D2D67F15D00EAA1F0 /* AgreementWebViewModel.swift */; };
 		5CDC77602D6893B100EAA1F0 /* CurrenciesRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CDC775F2D6893B100EAA1F0 /* CurrenciesRequest.swift */; };
 		5CDC77622D68946D00EAA1F0 /* Currency.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CDC77612D68946D00EAA1F0 /* Currency.swift */; };
 		5CDC77642D69221100EAA1F0 /* PaymentViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CDC77632D69221100EAA1F0 /* PaymentViewModelProtocol.swift */; };
@@ -143,7 +142,6 @@
 		5CDAEBAA2D65394C001BFC28 /* PaymentCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentCollectionViewCell.swift; sourceTree = "<group>"; };
 		5CDAEBAC2D665D5C001BFC28 /* RatingStackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RatingStackView.swift; sourceTree = "<group>"; };
 		5CDC768B2D67E55C00EAA1F0 /* AgreementWebViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgreementWebViewController.swift; sourceTree = "<group>"; };
-		5CDC775D2D67F15D00EAA1F0 /* AgreementWebViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgreementWebViewModel.swift; sourceTree = "<group>"; };
 		5CDC775F2D6893B100EAA1F0 /* CurrenciesRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrenciesRequest.swift; sourceTree = "<group>"; };
 		5CDC77612D68946D00EAA1F0 /* Currency.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Currency.swift; sourceTree = "<group>"; };
 		5CDC77632D69221100EAA1F0 /* PaymentViewModelProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentViewModelProtocol.swift; sourceTree = "<group>"; };
@@ -428,7 +426,6 @@
 			isa = PBXGroup;
 			children = (
 				5CDC768B2D67E55C00EAA1F0 /* AgreementWebViewController.swift */,
-				5CDC775D2D67F15D00EAA1F0 /* AgreementWebViewModel.swift */,
 			);
 			path = AgreementWebView;
 			sourceTree = "<group>";
@@ -658,7 +655,6 @@
 				5CDAEB052D60EFDA001BFC28 /* CartTableViewCell.swift in Sources */,
 				5CDAEBA12D63E329001BFC28 /* CurrencyCard.swift in Sources */,
 				5CDAEB962D61F0E6001BFC28 /* OrderService.swift in Sources */,
-				5CDC775E2D67F15D00EAA1F0 /* AgreementWebViewModel.swift in Sources */,
 				0CF2C2DD2A783CE600FDC837 /* ErrorView.swift in Sources */,
 				5CD04EE02D5FE74C0013C751 /* AlertPresenter.swift in Sources */,
 				5CD04EE12D5FE74C0013C751 /* SortOption.swift in Sources */,
