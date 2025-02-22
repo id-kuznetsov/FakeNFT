@@ -39,7 +39,6 @@ final class ProfileViewModelImpl: ProfileViewModel {
     }
     
     func pushAboutDeveloperScreen() {
-        guard let profile = profile.value else { return }
         coordinator.webViewScene(url: URL(string: "https://practicum.yandex.ru")!)
     }
     

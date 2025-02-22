@@ -28,18 +28,19 @@ final class ProfileCoordinatorImpl: ProfileCoordinator {
     func myNftsScene(nfts: [String]) {
         let vc = UIViewController()
         vc.view.backgroundColor = .ypWhite
+        vc.hidesBottomBarWhenPushed = true
         navigationController.pushViewController(vc, animated: true)
     }
     
     func favouritesScene(likes: [String]) {
         let vc = UIViewController()
         vc.view.backgroundColor = .ypWhite
+        vc.hidesBottomBarWhenPushed = true
         navigationController.pushViewController(vc, animated: true)
     }
     
     func webViewScene(url: URL) {
-        let vc = UIViewController()
-        vc.view.backgroundColor = .ypWhite
-        navigationController.pushViewController(vc, animated: true)
+        let webViewViewController = WebViewViewController(url: url)
+        navigationController.pushViewController(webViewViewController, animated: true)
     }
 }
