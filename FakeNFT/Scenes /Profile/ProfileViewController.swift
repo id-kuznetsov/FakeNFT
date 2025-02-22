@@ -100,6 +100,7 @@ final class ProfileViewController: UIViewController, ErrorView {
             }
             cell.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: tableView.bounds.width)
             cell.selectionStyle = .none
+            cell.backgroundColor = .ypWhite
             cell.setAccessoryView(with: .ypBlack)
             return cell
         }
