@@ -130,7 +130,7 @@ final class ProfileViewController: UIViewController, ErrorView {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         startLoading()
-        viewModel.fetchProfile()
+        viewModel.viewWillAppear()
     }
     
     // MARK: - Private Methods
@@ -210,11 +210,11 @@ final class ProfileViewController: UIViewController, ErrorView {
     // MARK: - Actions
     
     @objc private func editButtonDidTap() { 
-        viewModel.presentProfileEditingScreen()
+        viewModel.editButtonDidTap()
     }
     
     @objc private func linkButtonDidTap() {
-        viewModel.pushUserWebsiteScreen()
+        viewModel.linkButtonDidTap()
     }
 }
 
@@ -231,11 +231,11 @@ extension ProfileViewController: UITableViewDelegate {
         }
         switch routingItem {
         case .myNft(_):
-            viewModel.pushMyNftsScreen()
+            viewModel.myNftsCellDidSelect()
         case .favourites(_):
-            viewModel.pushFavouritesScreen()
+            viewModel.favouritesCellDidSelect()
         case .about:
-            viewModel.pushAboutDeveloperScreen()
+            viewModel.aboutDeveloperCellDidSelect()
         }
     }
 }

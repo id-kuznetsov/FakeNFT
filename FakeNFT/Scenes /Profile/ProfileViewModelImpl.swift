@@ -12,7 +12,7 @@ final class ProfileViewModelImpl: ProfileViewModel {
         self.coordinator = coordinator
     }
     
-    func fetchProfile() {
+    func viewWillAppear() {
         profileService.fetchProfile { [weak self] result in
             switch result {
             case .success(let profile):
@@ -23,26 +23,26 @@ final class ProfileViewModelImpl: ProfileViewModel {
         }
     }
     
-    func presentProfileEditingScreen() {
+    func editButtonDidTap() {
         guard let profile = profile.value else { return }
         coordinator.profileEditingScene(profile: profile)
     }
     
-    func pushMyNftsScreen() {
+    func myNftsCellDidSelect() {
         guard let profile = profile.value else { return }
         coordinator.myNftsScene(nfts: profile.nfts)
     }
     
-    func pushFavouritesScreen() {
+    func favouritesCellDidSelect() {
         guard let profile = profile.value else { return }
         coordinator.favouritesScene(likes: profile.likes)
     }
     
-    func pushAboutDeveloperScreen() {
+    func aboutDeveloperCellDidSelect() {
         coordinator.webViewScene(url: DeveloperConstants.url)
     }
     
-    func pushUserWebsiteScreen() {
+    func linkButtonDidTap() {
         guard let website = profile.value?.website,
               let url = URL(string: website) else { return }
         coordinator.webViewScene(url: url)
@@ -59,7 +59,7 @@ final class ProfileViewModelImpl: ProfileViewModel {
         
         let actionText = L10n.Error.repeat
         return ErrorModel(message: message, actionText: actionText) { [weak self] in
-            self?.fetchProfile()
+            self?.viewWillAppear()
         }
     }
 }
