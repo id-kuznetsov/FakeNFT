@@ -18,7 +18,7 @@ final class ServicesAssembly {
         )
     }
 
-    var collectionsService: CollectionsSevice {
+    var collectionsService: CollectionsService {
         CollectionsServiceImpl()
     }
 

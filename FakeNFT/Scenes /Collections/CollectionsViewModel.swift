@@ -9,7 +9,7 @@ import Foundation
 import Combine
 
 protocol CollectionsViewModelProtocol {
-    var servicesAssembly: ServicesAssembly { get }
+    var nftsService: NftsService { get }
     var collections: [CollectionUI] { get }
     var collectionsPublisher: Published<[CollectionUI]>.Publisher { get }
     func numberOfRows() -> Int
@@ -17,15 +17,22 @@ protocol CollectionsViewModelProtocol {
 }
 
 final class CollectionsViewModel: CollectionsViewModelProtocol {
-    let servicesAssembly: ServicesAssembly
+
+    let nftsService: NftsService
+    private let collectionsService: CollectionsService
 
     @Published var collections: [CollectionUI]
     var collectionsPublisher: Published<[CollectionUI]>.Publisher { $collections }
 
-    init(servicesAssembly: ServicesAssembly) {
+    init(
+        collectionsService: CollectionsService,
+        nftsService: NftsService
+    ) {
         self.collections = []
-        self.servicesAssembly = servicesAssembly
-        servicesAssembly.collectionsService.loadCollections { collections in
+        self.collectionsService = collectionsService
+        self.nftsService = nftsService
+
+        collectionsService.loadCollections { collections in
             self.collections = collections
         }
     }

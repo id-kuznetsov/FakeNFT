@@ -22,17 +22,17 @@ final class CollectionViewModel: CollectionViewModelProtocol {
     @Published var nfts: [NftUI]
     var nftsPublisher: Published<[NftUI]>.Publisher { $nfts }
 
-    private let servicesAssembly: ServicesAssembly
+    private let nftsService: NftsService
 
     init(
-        servicesAssembly: ServicesAssembly,
+        nftsService: NftsService,
         collection: CollectionUI
     ) {
-        self.servicesAssembly = servicesAssembly
+        self.nftsService = nftsService
         self.collection = collection
         self.nfts = []
 
-        servicesAssembly.nftsService.loadNfts { nfts in
+        nftsService.loadNfts { nfts in
             self.nfts = nfts
         }
     }

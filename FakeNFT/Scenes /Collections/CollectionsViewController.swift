@@ -78,7 +78,7 @@ final class CollectionsViewController: UIViewController {
 
     private func presentCollectionViewController(for collection: CollectionUI) {
         let viewModel = CollectionViewModel(
-            servicesAssembly: viewModel.servicesAssembly,
+            nftsService: viewModel.nftsService,
             collection: collection
         )
         let viewController = CollectionViewController(viewModel: viewModel)

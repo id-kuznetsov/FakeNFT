@@ -1,5 +1,5 @@
 //
-//  CollectionsSevice.swift
+//  CollectionsService.swift
 //  FakeNFT
 //
 //  Created by Nikolai Eremenko on 17.02.2025.
@@ -7,14 +7,14 @@
 
 import Foundation
 
-protocol CollectionsSevice {
+protocol CollectionsService {
     func loadCollections(completion: @escaping ([CollectionUI]) -> Void)
 }
 
 final class CollectionsServiceImpl {}
 
-// MARK: - CollectionsSevice
-extension CollectionsServiceImpl: CollectionsSevice {
+// MARK: - CollectionsService
+extension CollectionsServiceImpl: CollectionsService {
     func loadCollections(completion: @escaping ([CollectionUI]) -> Void) {
         DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
             completion(CollectionUI.mock)

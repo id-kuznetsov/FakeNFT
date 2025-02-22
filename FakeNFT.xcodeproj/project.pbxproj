@@ -44,7 +44,7 @@
 		5CD04EEF2D5FE7510013C751 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5CD04EE22D5FE7510013C751 /* Assets.xcassets */; };
 		5CD04EF22D5FE7510013C751 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 5CD04EE82D5FE7510013C751 /* Localizable.strings */; };
 		5CD04EF52D5FE7510013C751 /* Strings+Generated.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CD04EED2D5FE7510013C751 /* Strings+Generated.swift */; };
-		913D882E2D637B08001304A3 /* CollectionsSevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 913D882D2D637B08001304A3 /* CollectionsSevice.swift */; };
+		913D882E2D637B08001304A3 /* CollectionsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 913D882D2D637B08001304A3 /* CollectionsService.swift */; };
 		913D88302D637DEB001304A3 /* CollectionUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 913D882F2D637DEB001304A3 /* CollectionUI.swift */; };
 		913D88352D644D3C001304A3 /* CollectionsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 913D88342D644D3C001304A3 /* CollectionsViewModel.swift */; };
 		913D88F42D6481A9001304A3 /* Icons.swift in Sources */ = {isa = PBXBuildFile; fileRef = 913D88F32D6481A9001304A3 /* Icons.swift */; };
@@ -125,7 +125,7 @@
 		5CD04EE22D5FE7510013C751 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		5CD04EE72D5FE7510013C751 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Localizable.strings; sourceTree = "<group>"; };
 		5CD04EED2D5FE7510013C751 /* Strings+Generated.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Strings+Generated.swift"; sourceTree = "<group>"; };
-		913D882D2D637B08001304A3 /* CollectionsSevice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionsSevice.swift; sourceTree = "<group>"; };
+		913D882D2D637B08001304A3 /* CollectionsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionsService.swift; sourceTree = "<group>"; };
 		913D882F2D637DEB001304A3 /* CollectionUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionUI.swift; sourceTree = "<group>"; };
 		913D88342D644D3C001304A3 /* CollectionsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionsViewModel.swift; sourceTree = "<group>"; };
 		913D88F32D6481A9001304A3 /* Icons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Icons.swift; sourceTree = "<group>"; };
@@ -304,7 +304,7 @@
 				0C79EE6B2A76DE2E00EE90EA /* ServicesAssemly.swift */,
 				558E39E62C68CE0900FB86AC /* NftService.swift */,
 				0CFCB73F2A78002A0009A829 /* ExamplePutService.swift */,
-				913D882D2D637B08001304A3 /* CollectionsSevice.swift */,
+				913D882D2D637B08001304A3 /* CollectionsService.swift */,
 				913D8B332D67142D001304A3 /* NftsService.swift */,
 			);
 			path = Services;
@@ -659,7 +659,7 @@
 				0CFCB7402A78002A0009A829 /* ExamplePutService.swift in Sources */,
 				913D8B342D67142D001304A3 /* NftsService.swift in Sources */,
 				913D88F42D6481A9001304A3 /* Icons.swift in Sources */,
-				913D882E2D637B08001304A3 /* CollectionsSevice.swift in Sources */,
+				913D882E2D637B08001304A3 /* CollectionsService.swift in Sources */,
 				3F6806D529CBBEC700B4F915 /* NetworkTask.swift in Sources */,
 				0CF2C2DB2A783C1B00FDC837 /* LoadingView.swift in Sources */,
 				558E39E72C68CE0A00FB86AC /* NftService.swift in Sources */,
