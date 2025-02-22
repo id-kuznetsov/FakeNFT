@@ -151,7 +151,16 @@ final class PaymentViewController: UIViewController {
         view.backgroundColor = .ypWhite
         title = L10n.Payment.title
         
-        view.addSubviews([collectionView, paymentView, payButton, userAgreementLabel, agreementLinkButton, activityIndicator])
+        view.addSubviews(
+            [
+                collectionView,
+                paymentView,
+                payButton,
+                userAgreementLabel,
+                agreementLinkButton,
+                activityIndicator
+            ]
+        )
         
         setupConstraints()
     }
@@ -163,7 +172,13 @@ final class PaymentViewController: UIViewController {
     private func setLoadingState(isLoading: Bool) {
         isLoading ? activityIndicator.startAnimating() : activityIndicator.stopAnimating()
         
-        let viewsToHide = [collectionView, paymentView, userAgreementLabel, agreementLinkButton, payButton]
+        let viewsToHide = [
+            collectionView,
+            paymentView,
+            userAgreementLabel,
+            agreementLinkButton,
+            payButton
+        ]
         viewsToHide.forEach { $0.isHidden = isLoading }
     }
     
