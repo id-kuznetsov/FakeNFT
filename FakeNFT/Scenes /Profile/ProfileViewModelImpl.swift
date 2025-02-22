@@ -39,12 +39,13 @@ final class ProfileViewModelImpl: ProfileViewModel {
     }
     
     func pushAboutDeveloperScreen() {
-        coordinator.webViewScene(url: URL(string: "https://practicum.yandex.ru")!)
+        coordinator.webViewScene(url: DeveloperConstants.url)
     }
     
     func pushUserWebsiteScreen() {
-        guard let profile = profile.value else { return }
-        coordinator.webViewScene(url: URL(string: profile.website)!)
+        guard let website = profile.value?.website,
+              let url = URL(string: website) else { return }
+        coordinator.webViewScene(url: url)
     }
     
     private func createErrorModel(with error: Error) -> ErrorModel {

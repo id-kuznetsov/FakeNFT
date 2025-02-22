@@ -36,6 +36,7 @@
 		188B592E2D69AD72005D960A /* ProfileCoordinatorImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 188B592D2D69AD72005D960A /* ProfileCoordinatorImpl.swift */; };
 		188B59312D69B08B005D960A /* NavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 188B59302D69B08B005D960A /* NavigationController.swift */; };
 		188B59342D69B639005D960A /* WebViewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 188B59332D69B639005D960A /* WebViewViewController.swift */; };
+		188B59362D69BEC9005D960A /* DeveloperConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 188B59352D69BEC9005D960A /* DeveloperConstants.swift */; };
 		3F478ED129DB476500F6D39E /* Fonts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F478ED029DB476500F6D39E /* Fonts.swift */; };
 		3F603CCD29DB4A53000C43D7 /* ProgressHUD in Frameworks */ = {isa = PBXBuildFile; productRef = 3F603CCC29DB4A53000C43D7 /* ProgressHUD */; };
 		3F603CD029DB4A74000C43D7 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 3F603CCF29DB4A74000C43D7 /* Kingfisher */; };
@@ -115,6 +116,7 @@
 		188B592D2D69AD72005D960A /* ProfileCoordinatorImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileCoordinatorImpl.swift; sourceTree = "<group>"; };
 		188B59302D69B08B005D960A /* NavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationController.swift; sourceTree = "<group>"; };
 		188B59332D69B639005D960A /* WebViewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewViewController.swift; sourceTree = "<group>"; };
+		188B59352D69BEC9005D960A /* DeveloperConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeveloperConstants.swift; sourceTree = "<group>"; };
 		3F478ED029DB476500F6D39E /* Fonts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Fonts.swift; sourceTree = "<group>"; };
 		3F68069329CBBAF100B4F915 /* FakeNFT.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FakeNFT.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3F68069629CBBAF100B4F915 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -260,12 +262,12 @@
 			path = NavigationController;
 			sourceTree = "<group>";
 		};
-		188B59322D69B624005D960A /* WevView */ = {
+		188B59322D69B624005D960A /* WebView */ = {
 			isa = PBXGroup;
 			children = (
 				188B59332D69B639005D960A /* WebViewViewController.swift */,
 			);
-			path = WevView;
+			path = WebView;
 			sourceTree = "<group>";
 		};
 		3F478ECD29DB473000F6D39E /* DesignSystem */ = {
@@ -345,7 +347,7 @@
 		3F6806C729CBBC5B00B4F915 /* Scenes  */ = {
 			isa = PBXGroup;
 			children = (
-				188B59322D69B624005D960A /* WevView */,
+				188B59322D69B624005D960A /* WebView */,
 				F73AD88F2D5EC2C600E4C498 /* Statistics */,
 				F73AD88E2D5EC2B700E4C498 /* Cart */,
 				F73AD88D2D5EC29C00E4C498 /* Profile */,
@@ -463,6 +465,7 @@
 				188B591C2D68FE5F005D960A /* ProfileViewModelImpl.swift */,
 				188B592B2D69A42A005D960A /* ProfileCoordinator.swift */,
 				188B592D2D69AD72005D960A /* ProfileCoordinatorImpl.swift */,
+				188B59352D69BEC9005D960A /* DeveloperConstants.swift */,
 			);
 			path = Profile;
 			sourceTree = "<group>";
@@ -695,6 +698,7 @@
 				0CFCB7492A7808900009A829 /* TestCatalogController.swift in Sources */,
 				F756512D2D5EA623009B646C /* CartViewController.swift in Sources */,
 				3F6806D129CBBE6B00B4F915 /* NetworkClient.swift in Sources */,
+				188B59362D69BEC9005D960A /* DeveloperConstants.swift in Sources */,
 				0CFCB7442A7802440009A829 /* NftDetailInput.swift in Sources */,
 				0C79EE632A76DD1900EE90EA /* RequestConstants.swift in Sources */,
 				188B590F2D68C40F005D960A /* ProfileService.swift in Sources */,
