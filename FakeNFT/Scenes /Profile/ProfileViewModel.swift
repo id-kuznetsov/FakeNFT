@@ -5,5 +5,10 @@ protocol ProfileViewModel {
     var errorModel: Observable<ErrorModel?> { get }
     
     func fetchProfile()
+    func presentProfileEditingScreen()
+    func pushMyNftsScreen()
+    func pushFavouritesScreen()
+    func pushAboutDeveloperScreen()
+    func pushUserWebsiteScreen()
 }
 

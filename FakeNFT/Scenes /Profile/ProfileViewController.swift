@@ -208,9 +208,13 @@ final class ProfileViewController: UIViewController, ErrorView {
     
     // MARK: - Actions
     
-    @objc private func editButtonDidTap() { }
+    @objc private func editButtonDidTap() { 
+        viewModel.presentProfileEditingScreen()
+    }
     
-    @objc private func linkButtonDidTap() { }
+    @objc private func linkButtonDidTap() {
+        viewModel.pushUserWebsiteScreen()
+    }
 }
 
 // MARK: - UITableViewDelegate
@@ -221,6 +225,16 @@ extension ProfileViewController: UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
+        guard let routingItem = dataSource.itemIdentifier(for: indexPath) else {
+            return
+        }
+        switch routingItem {
+        case .myNft(_):
+            viewModel.pushMyNftsScreen()
+        case .favourites(_):
+            viewModel.pushFavouritesScreen()
+        case .about:
+            viewModel.pushAboutDeveloperScreen()
+        }
     }
 }

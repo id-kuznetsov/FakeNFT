@@ -22,13 +22,15 @@ final class TabBarController: UITabBarController {
     }
     
     private func configure() {
-        let profileAssembly = ProfileAssembly(profileService: servicesAssembly.profileService)
-        let profileVC = UINavigationController(rootViewController: profileAssembly.build())
-        profileVC.tabBarItem = UITabBarItem(
+        let profileNavigationController = NavigationController()
+        profileNavigationController.tabBarItem = UITabBarItem(
             title: NSLocalizedString("Tab.profile", comment: ""),
             image: UIImage(systemName: "person.circle"),
             selectedImage: UIImage(systemName: "person.circle.fill")
         )
+        let profileCoordinator = ProfileCoordinatorImpl(navigationController: profileNavigationController,
+                                                    servicesAssembly: servicesAssembly)
+        profileCoordinator.initialScene()
         
         let catalogVC = UINavigationController(rootViewController: CatalogViewController(servicesAssembly: servicesAssembly))
         catalogVC.tabBarItem = UITabBarItem(
@@ -51,7 +53,7 @@ final class TabBarController: UITabBarController {
             selectedImage: UIImage(systemName: "chart.bar.fill")
         )
         
-        setViewControllers([profileVC, catalogVC, cartVC, statisticsVC], animated: false)
+        setViewControllers([profileNavigationController, catalogVC, cartVC, statisticsVC], animated: false)
         self.selectedIndex = 1
         
         tabBarAppearance()
