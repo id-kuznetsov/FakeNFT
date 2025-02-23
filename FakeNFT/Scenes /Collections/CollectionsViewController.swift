@@ -15,11 +15,11 @@ final class CollectionsViewController: UIViewController {
 
     // MARK: - UI
     private lazy var tableView: UITableView = {
-        let view = UITableView()
+        let view = UITableView(frame: .zero, style: .plain)
         view.backgroundColor = .ypWhite
         view.register(CollectionsTableViewCell.self)
+        view.rowHeight = LayoutConstants.CollectionsScreen.rowHeight
         view.separatorStyle = .none
-        view.rowHeight = 180
         view.delegate = self
         view.dataSource = self
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -40,10 +40,9 @@ final class CollectionsViewController: UIViewController {
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
+
         view.backgroundColor = .ypWhite
-
         view.addSubview(tableView)
-
         setupNavigationBar()
         setupConstraints()
     }
@@ -90,7 +89,12 @@ final class CollectionsViewController: UIViewController {
     // MARK: - Actions
     @objc
     private func presentFilterActionSheet() {
-        let actionSheet = UIAlertController(title: "Фильтры", message: "Выберите фильтр", preferredStyle: .actionSheet)
+        // TODO: - Add filters
+        let actionSheet = UIAlertController(
+            title: "Фильтры",
+            message: "Выберите фильтр",
+            preferredStyle: .actionSheet
+        )
         actionSheet.addAction(UIAlertAction(title: "Отмена", style: .cancel))
         present(actionSheet, animated: true)
     }
@@ -98,8 +102,11 @@ final class CollectionsViewController: UIViewController {
     // MARK: - Constraints
     private func setupConstraints() {
         NSLayoutConstraint.activate([
-            tableView.topAnchor.constraint(equalTo: view.topAnchor),
-            tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            tableView.topAnchor.constraint(
+                equalTo: view.safeAreaLayoutGuide.topAnchor,
+                constant: LayoutConstants.CollectionsScreen.tableMargin
+            ),
+            tableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
             tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
         ])

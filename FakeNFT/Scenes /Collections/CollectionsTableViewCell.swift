@@ -11,11 +11,21 @@ import Kingfisher
 final class CollectionsTableViewCell: UITableViewCell, ReuseIdentifying {
 
     // MARK: - UI Components
+    private lazy var cellVStackView: UIStackView = {
+        let view = UIStackView()
+        view.axis = .vertical
+        view.alignment = .leading
+        view.distribution = .fill
+        view.spacing = LayoutConstants.CollectionsScreen.cellSpacing
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+
     private lazy var coverImageView: UIImageView = {
         let view = UIImageView()
         view.contentMode = .scaleAspectFill
         view.clipsToBounds = true
-        view.layer.cornerRadius = 12
+        view.layer.cornerRadius = LayoutConstants.Common.cornerRadiusMedium
         view.tintColor = .systemGray
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
@@ -33,7 +43,7 @@ final class CollectionsTableViewCell: UITableViewCell, ReuseIdentifying {
     private lazy var shimmerImageView: ShimmerView = {
         let view = ShimmerView()
         view.clipsToBounds = true
-        view.layer.cornerRadius = 12
+        view.layer.cornerRadius = LayoutConstants.Common.cornerRadiusMedium
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
@@ -41,7 +51,7 @@ final class CollectionsTableViewCell: UITableViewCell, ReuseIdentifying {
     private lazy var shimmerLabelView: ShimmerView = {
         let view = ShimmerView()
         view.clipsToBounds = true
-        view.layer.cornerRadius = 10
+        view.layer.cornerRadius = LayoutConstants.Common.cornerRadiusRegular
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
@@ -51,10 +61,12 @@ final class CollectionsTableViewCell: UITableViewCell, ReuseIdentifying {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
 
         contentView.backgroundColor = .ypWhite
-        contentView.addSubview(coverImageView)
-        contentView.addSubview(shimmerImageView)
-        contentView.addSubview(nameAndCountLabel)
-        contentView.addSubview(shimmerLabelView)
+
+        contentView.addSubview(cellVStackView)
+        cellVStackView.addArrangedSubview(coverImageView)
+        coverImageView.addSubview(shimmerImageView)
+        cellVStackView.addArrangedSubview(nameAndCountLabel)
+        nameAndCountLabel.addSubview(shimmerLabelView)
 
         setupConstraints()
     }
@@ -121,24 +133,37 @@ final class CollectionsTableViewCell: UITableViewCell, ReuseIdentifying {
     // MARK: - Constraints
     private func setupConstraints() {
         NSLayoutConstraint.activate([
-            coverImageView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20),
-            coverImageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -26),
-            coverImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
-            coverImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
+            cellVStackView.topAnchor.constraint(equalTo: contentView.topAnchor),
+            cellVStackView.heightAnchor.constraint(
+                equalTo: contentView.heightAnchor,
+                constant: -LayoutConstants.CollectionsScreen.cellMargin
+            ),
+            cellVStackView.leadingAnchor.constraint(
+                equalTo: contentView.leadingAnchor,
+                constant: LayoutConstants.Common.Margin.medium
+            ),
+            cellVStackView.trailingAnchor.constraint(
+                equalTo: contentView.trailingAnchor,
+                constant: -LayoutConstants.Common.Margin.medium
+            ),
+
+            coverImageView.widthAnchor.constraint(equalTo: cellVStackView.widthAnchor),
 
             shimmerImageView.leadingAnchor.constraint(equalTo: coverImageView.leadingAnchor),
             shimmerImageView.trailingAnchor.constraint(equalTo: coverImageView.trailingAnchor),
             shimmerImageView.topAnchor.constraint(equalTo: coverImageView.topAnchor),
             shimmerImageView.bottomAnchor.constraint(equalTo: coverImageView.bottomAnchor),
 
-            nameAndCountLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
-            nameAndCountLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
-            nameAndCountLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
+            nameAndCountLabel.widthAnchor.constraint(equalTo: cellVStackView.widthAnchor, multiplier: 0.8),
 
             shimmerLabelView.leadingAnchor.constraint(equalTo: nameAndCountLabel.leadingAnchor),
-            shimmerLabelView.widthAnchor.constraint(equalTo: nameAndCountLabel.widthAnchor, multiplier: 0.5),
+            shimmerLabelView.widthAnchor.constraint(equalTo: nameAndCountLabel.widthAnchor),
             shimmerLabelView.topAnchor.constraint(equalTo: nameAndCountLabel.topAnchor),
             shimmerLabelView.bottomAnchor.constraint(equalTo: nameAndCountLabel.bottomAnchor)
         ])
+
+        coverImageView.setHeightConstraintFromPx(
+            heightPx: LayoutConstants.CollectionsScreen.coverImageHeight
+        )
     }
 }

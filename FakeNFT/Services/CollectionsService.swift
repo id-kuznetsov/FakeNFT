@@ -28,7 +28,7 @@ private extension CollectionUI {
         [
             CollectionUI(
                 createdAt: Date(),
-                name: "Foo",
+                name: "Lorem ipsum dolor sit amet, consetetur sadipscing elitr Lorem ipsum dolor sit amet",
                 cover: URL(string: "https://code.s3.yandex.net/Mobile/iOS/NFT/Обложки_коллекций/Brown.png"),
                 nfts: ["id1", "id2", "id3"],
                 description: "Lorem ipsum dolor sit amet, consetetur sadipscing elitr Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.  Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. ",

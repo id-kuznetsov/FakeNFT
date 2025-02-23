@@ -8,19 +8,13 @@
 import UIKit
 
 class CollectionHeaderView: UICollectionReusableView, ReuseIdentifying {
-    // MARK: - Constants
-    private let headerVStackSpacing: CGFloat = 16
-    private let coverImageHeight: CGFloat = 310
-    private let aboutVStackSpacing: CGFloat = 8
-    private let aboutVStackWidth: CGFloat = 341
-
     // MARK: - UI
     private lazy var headerVStackView: UIStackView = {
         let view = UIStackView()
         view.axis = .vertical
         view.alignment = .center
         view.distribution = .fill
-        view.spacing = headerVStackSpacing
+        view.spacing = LayoutConstants.Common.Margin.medium
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
@@ -29,7 +23,7 @@ class CollectionHeaderView: UICollectionReusableView, ReuseIdentifying {
         let view = UIImageView()
         view.contentMode = .redraw
         view.clipsToBounds = true
-        view.layer.cornerRadius = 12
+        view.layer.cornerRadius = LayoutConstants.Common.cornerRadiusMedium
         view.tintColor = .systemGray
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
@@ -40,7 +34,7 @@ class CollectionHeaderView: UICollectionReusableView, ReuseIdentifying {
         view.axis = .vertical
         view.alignment = .leading
         view.distribution = .fill
-        view.spacing = aboutVStackSpacing
+        view.spacing = LayoutConstants.Common.Margin.small
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
@@ -75,7 +69,7 @@ class CollectionHeaderView: UICollectionReusableView, ReuseIdentifying {
         view.font = .caption2
         view.textColor = .ypBlack
         view.textAlignment = .left
-        view.text = "Автор коллекции: "
+        view.text = L10n.Collection.author
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
@@ -84,6 +78,7 @@ class CollectionHeaderView: UICollectionReusableView, ReuseIdentifying {
         let view = UIButton()
         view.setTitleColor(.ypBlueUniversal, for: .normal)
         view.titleLabel?.font = .caption1
+        // TODO: Add action
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
@@ -134,20 +129,6 @@ class CollectionHeaderView: UICollectionReusableView, ReuseIdentifying {
         }
     }
 
-    private func calculateHeight(size: CGFloat) -> CGFloat {
-        let screenHeight = UIScreen.main.bounds.height
-        let multiplier = round((size / screenHeight) * 1000) / 1000
-        let height = multiplier * screenHeight
-        return round(height)
-    }
-
-    private func calculateWidth(size: CGFloat) -> CGFloat {
-        let screenWidth = UIScreen.main.bounds.width
-        let multiplier = round((size / screenWidth) * 1000) / 1000
-        let width = multiplier * screenWidth
-        return round(width)
-    }
-
     // MARK: - KF
     private func loadCoverImage(url: URL?) {
 
@@ -172,11 +153,14 @@ class CollectionHeaderView: UICollectionReusableView, ReuseIdentifying {
             headerVStackView.topAnchor.constraint(equalTo: topAnchor),
             headerVStackView.leadingAnchor.constraint(equalTo: leadingAnchor),
             headerVStackView.trailingAnchor.constraint(equalTo: trailingAnchor),
-            headerVStackView.bottomAnchor.constraint(equalTo: bottomAnchor),
-
-            coverImageView.heightAnchor.constraint(equalToConstant: calculateHeight(size: coverImageHeight)),
-
-            aboutVStackView.widthAnchor.constraint(equalToConstant: calculateWidth(size: aboutVStackWidth))
+            headerVStackView.bottomAnchor.constraint(equalTo: bottomAnchor)
         ])
+
+        coverImageView.setHeightConstraintFromPx(
+            heightPx: LayoutConstants.CollectionScreen.Header.coverImageHeight
+        )
+        aboutVStackView.setWidthConstraintFromPx(
+            widthPx: LayoutConstants.CollectionScreen.Header.aboutVStackWidth
+        )
     }
 }

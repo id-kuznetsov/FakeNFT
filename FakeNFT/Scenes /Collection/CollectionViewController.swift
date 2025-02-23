@@ -7,24 +7,11 @@
 
 import UIKit
 import Combine
-import Kingfisher
 
 class CollectionViewController: UIViewController {
     // MARK: - Properties
     private var subscribers = Set<AnyCancellable>()
     private let viewModel: CollectionViewModelProtocol
-    private let screenHeight = UIScreen.main.bounds.height
-    private let screenWidth = UIScreen.main.bounds.width
-    private let params = CatalogCollectionGeometricParams(
-        cellCount: 3,
-        topInset: 24,
-        bottomInset: 24,
-        leftInset: 16,
-        rightInset: 16,
-        cellSpacing: 10,
-        cellHeight: 192,
-        lineSpacing: 8
-    )
 
     // MARK: - UI
     private lazy var collectionView: UICollectionView = {
@@ -77,12 +64,6 @@ class CollectionViewController: UIViewController {
             .store(in: &subscribers)
     }
 
-    private func calculateHeight(size: CGFloat) -> CGFloat {
-        let multiplier = round((size / screenHeight) * 1000) / 1000
-        let height = multiplier * screenHeight
-        return round(height)
-    }
-
     // MARK: - Actions
     @objc
     private func presentAuthorViewController() {
@@ -107,7 +88,7 @@ class CollectionViewController: UIViewController {
 // MARK: - UICollectionViewDataSource
 extension CollectionViewController: UICollectionViewDataSource {
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return 1
+        return LayoutConstants.CollectionScreen.numberOfSections
     }
 
     func collectionView(
@@ -152,9 +133,12 @@ extension CollectionViewController: UICollectionViewDelegateFlowLayout {
         layout collectionViewLayout: UICollectionViewLayout,
         sizeForItemAt indexPath: IndexPath
     ) -> CGSize {
-        let availableSpace = collectionView.frame.width - params.paddingWidth
-        let cellWidth = availableSpace / params.cellCount
-        return CGSize(width: cellWidth, height: params.cellHeight)
+        let availableSpace = collectionView.frame.width - LayoutConstants.CollectionScreen.CollectionParams.paddingWidth
+        let cellWidth = availableSpace / LayoutConstants.CollectionScreen.CollectionParams.cellCount
+        return CGSize(
+            width: cellWidth,
+            height: LayoutConstants.CollectionScreen.CollectionParams.cellHeight
+        )
     }
 
     func collectionView(
@@ -163,10 +147,10 @@ extension CollectionViewController: UICollectionViewDelegateFlowLayout {
         insetForSectionAt section: Int
     ) -> UIEdgeInsets {
         let insets = UIEdgeInsets(
-            top: params.topInset,
-            left: params.leftInset,
-            bottom: params.bottomInset,
-            right: params.rightInset
+            top: LayoutConstants.CollectionScreen.CollectionParams.topInset,
+            left: LayoutConstants.CollectionScreen.CollectionParams.leftInset,
+            bottom: LayoutConstants.CollectionScreen.CollectionParams.bottomInset,
+            right: LayoutConstants.CollectionScreen.CollectionParams.rightInset
         )
 
         return insets
@@ -178,7 +162,7 @@ extension CollectionViewController: UICollectionViewDelegateFlowLayout {
         minimumInteritemSpacingForSectionAt section: Int
     ) -> CGFloat {
 
-        return params.cellSpacing
+        return LayoutConstants.CollectionScreen.CollectionParams.cellSpacing
     }
 
     func collectionView(
@@ -186,7 +170,7 @@ extension CollectionViewController: UICollectionViewDelegateFlowLayout {
         layout collectionViewLayout: UICollectionViewLayout,
         minimumLineSpacingForSectionAt section: Int
     ) -> CGFloat {
-        return params.lineSpacing
+        return LayoutConstants.CollectionScreen.CollectionParams.lineSpacing
     }
 
     func collectionView(

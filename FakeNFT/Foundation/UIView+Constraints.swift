@@ -19,4 +19,36 @@ extension UIView {
             centerYAnchor.constraint(equalTo: view.centerYAnchor)
         ])
     }
+
+    func setHeightConstraintFromPx(
+        heightPx: CGFloat,
+        baseWidth: CGFloat = LayoutConstants.Common.baseWidth
+    ) {
+        let scaleFactor = UIScreen.main.bounds.width / baseWidth
+        let height = heightPx * scaleFactor
+
+        self.constraints.forEach { constraint in
+            if constraint.firstAttribute == .height {
+                self.removeConstraint(constraint)
+            }
+        }
+
+        self.heightAnchor.constraint(equalToConstant: height).isActive = true
+    }
+
+    func setWidthConstraintFromPx(
+        widthPx: CGFloat,
+        baseWidth: CGFloat = LayoutConstants.Common.baseWidth
+    ) {
+        let scaleFactor = UIScreen.main.bounds.width / baseWidth
+        let width = widthPx * scaleFactor
+
+        self.constraints.forEach { constraint in
+            if constraint.firstAttribute == .width {
+                self.removeConstraint(constraint)
+            }
+        }
+
+        self.widthAnchor.constraint(equalToConstant: width).isActive = true
+    }
 }
