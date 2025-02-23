@@ -41,19 +41,6 @@ final class CollectionsTableViewCell: UITableViewCell, ReuseIdentifying {
         return view
     }()
 
-    // TODO: - Refactor Shimmer
-    private lazy var shimmerImageView: ShimmerView = {
-        let view = ShimmerView()
-        view.translatesAutoresizingMaskIntoConstraints = false
-        return view
-    }()
-
-    private lazy var shimmerLabelView: ShimmerView = {
-        let view = ShimmerView()
-        view.translatesAutoresizingMaskIntoConstraints = false
-        return view
-    }()
-
     // MARK: - Init
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -62,9 +49,7 @@ final class CollectionsTableViewCell: UITableViewCell, ReuseIdentifying {
 
         contentView.addSubview(cellVStackView)
         cellVStackView.addArrangedSubview(coverImageView)
-        coverImageView.addSubview(shimmerImageView)
         cellVStackView.addArrangedSubview(nameAndCountLabel)
-        nameAndCountLabel.addSubview(shimmerLabelView)
 
         setupConstraints()
     }
@@ -78,7 +63,6 @@ final class CollectionsTableViewCell: UITableViewCell, ReuseIdentifying {
         coverImageView.image = nil
         nameAndCountLabel.text = nil
         coverImageView.contentMode = .scaleAspectFill
-        showLoadingAnimation()
     }
 
     // MARK: - Config
@@ -93,7 +77,8 @@ final class CollectionsTableViewCell: UITableViewCell, ReuseIdentifying {
 
     // MARK: - Load Image
     private func loadCoverImage(from url: URL?, imageLoaderService: ImageLoaderService) {
-        showLoadingAnimation()
+        coverImageView.showShimmerAnimation()
+        nameAndCountLabel.showShimmerAnimation()
         imageLoaderService.loadImage(
             into: coverImageView,
             from: url,
@@ -101,7 +86,8 @@ final class CollectionsTableViewCell: UITableViewCell, ReuseIdentifying {
         ) { [weak self] result in
             guard let self else { return }
 
-            self.hideLoadingAnimation()
+            self.coverImageView.hideShimmerAnimation()
+            self.nameAndCountLabel.hideShimmerAnimation()
             switch result {
             case .success(let image):
                 self.coverImageView.image = image
@@ -113,21 +99,6 @@ final class CollectionsTableViewCell: UITableViewCell, ReuseIdentifying {
 
     private func formatCollectionName(_ name: String, _ count: Int) -> String {
         return "\(name) (\(count))"
-    }
-
-    // MARK: - Animation
-    private func showLoadingAnimation() {
-        self.shimmerImageView.isHidden = false
-        self.shimmerLabelView.isHidden = false
-    }
-
-    private func hideLoadingAnimation() {
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) { [weak self] in
-            guard let self else { return }
-
-            self.shimmerImageView.isHidden = true
-            self.shimmerLabelView.isHidden = true
-        }
     }
 
     // MARK: - Constraints
@@ -149,17 +120,7 @@ final class CollectionsTableViewCell: UITableViewCell, ReuseIdentifying {
 
             coverImageView.widthAnchor.constraint(equalTo: cellVStackView.widthAnchor),
 
-            shimmerImageView.leadingAnchor.constraint(equalTo: coverImageView.leadingAnchor),
-            shimmerImageView.trailingAnchor.constraint(equalTo: coverImageView.trailingAnchor),
-            shimmerImageView.topAnchor.constraint(equalTo: coverImageView.topAnchor),
-            shimmerImageView.bottomAnchor.constraint(equalTo: coverImageView.bottomAnchor),
-
-            nameAndCountLabel.widthAnchor.constraint(equalTo: cellVStackView.widthAnchor, multiplier: 0.8),
-
-            shimmerLabelView.leadingAnchor.constraint(equalTo: nameAndCountLabel.leadingAnchor),
-            shimmerLabelView.widthAnchor.constraint(equalTo: nameAndCountLabel.widthAnchor),
-            shimmerLabelView.topAnchor.constraint(equalTo: nameAndCountLabel.topAnchor),
-            shimmerLabelView.bottomAnchor.constraint(equalTo: nameAndCountLabel.bottomAnchor)
+            nameAndCountLabel.widthAnchor.constraint(equalTo: cellVStackView.widthAnchor, multiplier: 0.8)
         ])
 
         coverImageView.setHeightConstraintFromPx(

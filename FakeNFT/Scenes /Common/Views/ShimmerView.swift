@@ -9,6 +9,7 @@ import UIKit
 
 class ShimmerView: UIView {
     private let gradientLayer = CAGradientLayer()
+    private var isAnimating = false
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -39,6 +40,12 @@ class ShimmerView: UIView {
         gradientLayer.locations = [0, 0.1, 0.3]
 
         self.layer.addSublayer(gradientLayer)
+    }
+
+    func startShimmerAnimation() {
+        guard !isAnimating else { return }
+
+        isAnimating = true
 
         let animation = CABasicAnimation(keyPath: "locations")
         animation.duration = 1.0
@@ -46,5 +53,31 @@ class ShimmerView: UIView {
         animation.toValue = [0, 0.8, 1]
         animation.repeatCount = .infinity
         gradientLayer.add(animation, forKey: "shimmerAnimation")
+    }
+
+    func stopShimmerAnimation() {
+        guard isAnimating else { return }
+
+        isAnimating = false
+        gradientLayer.removeAnimation(forKey: "shimmerAnimation")
+    }
+}
+
+extension UIView {
+    func showShimmerAnimation() {
+        let shimmerView = ShimmerView(frame: self.bounds)
+        shimmerView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        self.addSubview(shimmerView)
+        shimmerView.startShimmerAnimation()
+    }
+
+    func hideShimmerAnimation() {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) { [weak self] in
+            guard let self else { return }
+
+            for subview in subviews where subview is ShimmerView {
+                subview.removeFromSuperview()
+            }
+        }
     }
 }

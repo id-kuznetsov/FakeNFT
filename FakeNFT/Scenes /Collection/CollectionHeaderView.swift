@@ -140,7 +140,7 @@ class CollectionHeaderView: UICollectionReusableView, ReuseIdentifying {
 
     // MARK: - Load Image
     private func loadCoverImage(from url: URL?, imageLoaderService: ImageLoaderService) {
-//        showLoadingAnimation()
+        coverImageView.showShimmerAnimation()
         imageLoaderService.loadImage(
             into: coverImageView,
             from: url,
@@ -148,7 +148,7 @@ class CollectionHeaderView: UICollectionReusableView, ReuseIdentifying {
         ) { [weak self] result in
             guard let self else { return }
 
-//            self.hideLoadingAnimation()
+            self.coverImageView.hideShimmerAnimation()
             switch result {
             case .success(let image):
                 self.coverImageView.image = image
