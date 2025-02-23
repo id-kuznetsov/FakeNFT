@@ -12,6 +12,7 @@ class NftCollectionViewCell: UICollectionViewCell, ReuseIdentifying {
         let view = UIStackView()
         view.axis = .vertical
         view.spacing = 8
+        view.backgroundColor = .cyan
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()

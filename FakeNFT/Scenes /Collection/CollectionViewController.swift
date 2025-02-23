@@ -11,12 +11,10 @@ import Kingfisher
 
 class CollectionViewController: UIViewController {
     // MARK: - Properties
-    private let viewModel: CollectionViewModelProtocol
     private var subscribers = Set<AnyCancellable>()
-
+    private let viewModel: CollectionViewModelProtocol
     private let screenHeight = UIScreen.main.bounds.height
     private let screenWidth = UIScreen.main.bounds.width
-
     private let params = CatalogCollectionGeometricParams(
         cellCount: 3,
         topInset: 24,
@@ -25,8 +23,7 @@ class CollectionViewController: UIViewController {
         rightInset: 16,
         cellSpacing: 10,
         cellHeight: 192,
-        lineSpacing: 8,
-        headerHeight: 462
+        lineSpacing: 8
     )
 
     // MARK: - UI
@@ -36,9 +33,10 @@ class CollectionViewController: UIViewController {
 
         let view = UICollectionView(frame: .zero, collectionViewLayout: layout)
         view.register(NftCollectionViewCell.self)
-        view.register(CollectionHeaderView.self,
-                      forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
-                      withReuseIdentifier: CollectionHeaderView.reuseIdentifier)
+        view.register(
+            CollectionHeaderView.self,
+            forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader
+        )
         view.contentInsetAdjustmentBehavior = .never
         view.alwaysBounceVertical = true
         view.allowsMultipleSelection = false
@@ -112,37 +110,36 @@ extension CollectionViewController: UICollectionViewDataSource {
         return 1
     }
 
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    func collectionView(
+        _ collectionView: UICollectionView,
+        numberOfItemsInSection section: Int
+    ) -> Int {
         viewModel.nfts.count
     }
     
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+    func collectionView(
+        _ collectionView: UICollectionView,
+        cellForItemAt indexPath: IndexPath
+    ) -> UICollectionViewCell {
         let cell: NftCollectionViewCell = collectionView.dequeueReusableCell(indexPath: indexPath)
         let nftUI = viewModel.nfts[indexPath.item]
 
         cell.backgroundColor = .clear
-//        cell.delegate = self
         cell.configure(
             nftUI: nftUI
         )
-
         return cell
     }
 
-    func collectionView(_ collectionView: UICollectionView,
-                        viewForSupplementaryElementOfKind kind: String,
-                        at indexPath: IndexPath) -> UICollectionReusableView {
+    func collectionView(
+        _ collectionView: UICollectionView,
+        viewForSupplementaryElementOfKind kind: String,
+        at indexPath: IndexPath
+    ) -> UICollectionReusableView {
         if kind == UICollectionView.elementKindSectionHeader {
-            if let header = collectionView.dequeueReusableSupplementaryView(
-                ofKind: kind,
-                withReuseIdentifier: CollectionHeaderView.reuseIdentifier,
-                for: indexPath
-            ) as? CollectionHeaderView {
-                header.configure(with: viewModel.collection)
-                return header
-            } else {
-                return UICollectionReusableView()
-            }
+            let header: CollectionHeaderView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, indexPath: indexPath)
+            header.configure(with: viewModel.collection)
+            return header
         }
         return UICollectionReusableView()
     }
@@ -150,18 +147,21 @@ extension CollectionViewController: UICollectionViewDataSource {
 
 // MARK: - UICollectionViewDelegateFlowLayout
 extension CollectionViewController: UICollectionViewDelegateFlowLayout {
-    func collectionView(_ collectionView: UICollectionView,
-                        layout collectionViewLayout: UICollectionViewLayout,
-                        sizeForItemAt indexPath: IndexPath) -> CGSize {
+    func collectionView(
+        _ collectionView: UICollectionView,
+        layout collectionViewLayout: UICollectionViewLayout,
+        sizeForItemAt indexPath: IndexPath
+    ) -> CGSize {
         let availableSpace = collectionView.frame.width - params.paddingWidth
         let cellWidth = availableSpace / params.cellCount
-
         return CGSize(width: cellWidth, height: params.cellHeight)
     }
 
-    func collectionView(_ collectionView: UICollectionView,
-                        layout collectionViewLayout: UICollectionViewLayout,
-                        insetForSectionAt section: Int) -> UIEdgeInsets {
+    func collectionView(
+        _ collectionView: UICollectionView,
+        layout collectionViewLayout: UICollectionViewLayout,
+        insetForSectionAt section: Int
+    ) -> UIEdgeInsets {
         let insets = UIEdgeInsets(
             top: params.topInset,
             left: params.leftInset,
@@ -181,18 +181,20 @@ extension CollectionViewController: UICollectionViewDelegateFlowLayout {
         return params.cellSpacing
     }
 
-    func collectionView(_ collectionView: UICollectionView,
-                        layout collectionViewLayout: UICollectionViewLayout,
-                        minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-
+    func collectionView(
+        _ collectionView: UICollectionView,
+        layout collectionViewLayout: UICollectionViewLayout,
+        minimumLineSpacingForSectionAt section: Int
+    ) -> CGFloat {
         return params.lineSpacing
     }
 
-    func collectionView(_ collectionView: UICollectionView,
-                        layout collectionViewLayout: UICollectionViewLayout,
-                        referenceSizeForHeaderInSection section: Int) -> CGSize {
+    func collectionView(
+        _ collectionView: UICollectionView,
+        layout collectionViewLayout: UICollectionViewLayout,
+        referenceSizeForHeaderInSection section: Int
+    ) -> CGSize {
         let headerView = CollectionHeaderView(frame: .zero)
-
         headerView.configure(with: viewModel.collection, skipImageLoading: true)
 
         return headerView.systemLayoutSizeFitting(
@@ -203,7 +205,10 @@ extension CollectionViewController: UICollectionViewDelegateFlowLayout {
         )
     }
 
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+    func collectionView(
+        _ collectionView: UICollectionView,
+        didSelectItemAt indexPath: IndexPath
+    ) {
         let nftUI = viewModel.nfts[indexPath.item]
         presentNftCardViewController(for: nftUI)
     }

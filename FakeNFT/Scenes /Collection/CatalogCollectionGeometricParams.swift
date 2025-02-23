@@ -17,7 +17,6 @@ struct CatalogCollectionGeometricParams {
     let cellHeight: CGFloat
     let paddingWidth: CGFloat
     let lineSpacing: CGFloat
-    let headerHeight: CGFloat
 
     init(
         cellCount: CGFloat,
@@ -27,8 +26,7 @@ struct CatalogCollectionGeometricParams {
         rightInset: CGFloat,
         cellSpacing: CGFloat,
         cellHeight: CGFloat,
-        lineSpacing: CGFloat,
-        headerHeight: CGFloat
+        lineSpacing: CGFloat
     ) {
         self.cellCount = cellCount
         self.topInset = topInset
@@ -38,7 +36,6 @@ struct CatalogCollectionGeometricParams {
         self.cellSpacing = cellSpacing
         self.cellHeight = cellHeight
         self.lineSpacing = lineSpacing
-        self.headerHeight = headerHeight
         self.paddingWidth = leftInset + rightInset + CGFloat(cellCount - 1) * cellSpacing
     }
 }

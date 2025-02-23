@@ -7,10 +7,8 @@
 
 import UIKit
 
-class CollectionHeaderView: UICollectionReusableView {
+class CollectionHeaderView: UICollectionReusableView, ReuseIdentifying {
     // MARK: - Constants
-    static let reuseIdentifier = "CollectionHeaderView"
-
     private let screenHeight = UIScreen.main.bounds.height
     private let screenWidth = UIScreen.main.bounds.width
 
@@ -108,8 +106,6 @@ class CollectionHeaderView: UICollectionReusableView {
     override init(frame: CGRect) {
         super.init(frame: frame)
 
-        backgroundColor = .cyan
-
         addSubview(headerVStackView)
 
         headerVStackView.addArrangedSubview(coverImageView)
@@ -129,12 +125,6 @@ class CollectionHeaderView: UICollectionReusableView {
         fatalError("init(coder:) has not been implemented")
     }
 
-//    func configure(with model: CollectionUI) {
-//        loadCoverImage(url: model.cover)
-//        nameLabel.text = model.name
-//        authorButton.setTitle(model.author, for: .normal)
-//        descriptionLabel.text = model.description
-//    }
 
     func configure(with model: CollectionUI, skipImageLoading: Bool = false) {
         nameLabel.text = model.name
