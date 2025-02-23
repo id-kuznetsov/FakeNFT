@@ -32,6 +32,7 @@ final class TabBarController: UITabBarController {
         )
 
         let catalogViewModel = CollectionsViewModel(
+            imageLoaderService: servicesAssembly.imageLoaderService,
             collectionsService: servicesAssembly.collectionsService,
             nftsService: servicesAssembly.nftsService
         )

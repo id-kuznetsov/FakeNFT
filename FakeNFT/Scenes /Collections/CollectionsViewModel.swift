@@ -9,6 +9,7 @@ import Foundation
 import Combine
 
 protocol CollectionsViewModelProtocol {
+    var imageLoaderService: ImageLoaderService { get }
     var nftsService: NftsService { get }
     var collections: [CollectionUI] { get }
     var collectionsPublisher: Published<[CollectionUI]>.Publisher { get }
@@ -17,7 +18,7 @@ protocol CollectionsViewModelProtocol {
 }
 
 final class CollectionsViewModel: CollectionsViewModelProtocol {
-
+    let imageLoaderService: ImageLoaderService
     let nftsService: NftsService
     private let collectionsService: CollectionsService
 
@@ -25,12 +26,14 @@ final class CollectionsViewModel: CollectionsViewModelProtocol {
     var collectionsPublisher: Published<[CollectionUI]>.Publisher { $collections }
 
     init(
+        imageLoaderService: ImageLoaderService,
         collectionsService: CollectionsService,
         nftsService: NftsService
     ) {
         self.collections = []
-        self.collectionsService = collectionsService
+        self.imageLoaderService = imageLoaderService
         self.nftsService = nftsService
+        self.collectionsService = collectionsService
 
         collectionsService.loadCollections { collections in
             self.collections = collections

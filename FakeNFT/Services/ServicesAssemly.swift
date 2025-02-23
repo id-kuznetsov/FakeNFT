@@ -25,4 +25,8 @@ final class ServicesAssembly {
     var nftsService: NftsService {
         NftsServiceImpl()
     }
+
+    var imageLoaderService: ImageLoaderService {
+        ImageLoaderServiceImpl()
+    }
 }

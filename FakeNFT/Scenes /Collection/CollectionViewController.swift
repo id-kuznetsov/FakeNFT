@@ -119,7 +119,11 @@ extension CollectionViewController: UICollectionViewDataSource {
     ) -> UICollectionReusableView {
         if kind == UICollectionView.elementKindSectionHeader {
             let header: CollectionHeaderView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, indexPath: indexPath)
-            header.configure(with: viewModel.collection)
+            header.configure(
+                with: viewModel.collection,
+                imageLoaderService: viewModel.imageLoaderService,
+                coverImage: viewModel.coverImage
+            )
             return header
         }
         return UICollectionReusableView()
@@ -179,7 +183,11 @@ extension CollectionViewController: UICollectionViewDelegateFlowLayout {
         referenceSizeForHeaderInSection section: Int
     ) -> CGSize {
         let headerView = CollectionHeaderView(frame: .zero)
-        headerView.configure(with: viewModel.collection, skipImageLoading: true)
+        headerView.configure(
+            with: viewModel.collection,
+            imageLoaderService: viewModel.imageLoaderService,
+            coverImage: viewModel.coverImage
+        )
 
         return headerView.systemLayoutSizeFitting(
             CGSize(width: collectionView.frame.width,

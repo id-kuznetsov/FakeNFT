@@ -35,15 +35,15 @@ private extension CollectionUI {
                 author: "Lourdes Harper",
                 id: "id1"
             ),
-//            CollectionUI(
-//                createdAt: Date(),
-//                name: "Baz",
-//                cover: URL(string: "https://domain.tld/Gray.png"),
-//                nfts: ["id1", "id2"],
-//                description: "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. ",
-//                author: "Darren Morris",
-//                id: "id2"
-//            ),
+            CollectionUI(
+                createdAt: Date(),
+                name: "Baz",
+                cover: URL(string: "https://domain.tld/Gray.png"),
+                nfts: ["id1", "id2"],
+                description: "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. ",
+                author: "Darren Morris",
+                id: "id2"
+            ),
             CollectionUI(
                 createdAt: Date(),
                 name: "Bar",

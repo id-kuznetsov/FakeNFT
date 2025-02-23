@@ -75,10 +75,12 @@ final class CollectionsViewController: UIViewController {
         navigationItem.rightBarButtonItem = filterButton
     }
 
-    private func presentCollectionViewController(for collection: CollectionUI) {
+    private func presentCollectionViewController(for collection: CollectionUI, with image: UIImage?) {
         let viewModel = CollectionViewModel(
+            imageLoaderService: viewModel.imageLoaderService,
             nftsService: viewModel.nftsService,
-            collection: collection
+            collection: collection,
+            coverImage: image
         )
         let viewController = CollectionViewController(viewModel: viewModel)
         viewController.hidesBottomBarWhenPushed = true
@@ -124,7 +126,10 @@ extension CollectionsViewController: UITableViewDataSource {
         let collectionUI = viewModel.getCollection(at: indexPath)
 
         cell.selectionStyle = .none
-        cell.configure(with: collectionUI)
+        cell.configure(
+            with: collectionUI,
+            imageLoaderService: viewModel.imageLoaderService
+        )
 
         return cell
     }
@@ -133,7 +138,10 @@ extension CollectionsViewController: UITableViewDataSource {
 // MARK: - UITableViewDelegate
 extension CollectionsViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        guard let cell = tableView.cellForRow(at: indexPath) as? CollectionsTableViewCell else { return }
+        let selectedImage = cell.getLoadedImage()
         let collectionUI = viewModel.getCollection(at: indexPath)
-        presentCollectionViewController(for: collectionUI)
+        
+        presentCollectionViewController(for: collectionUI, with: selectedImage)
     }
 }

@@ -16,4 +16,5 @@ extension UIImage {
     static var chevronLeft = UIImage.init(systemName: "chevron.left")
     static var squareAndPencil = UIImage.init(systemName: "square.and.pencil")
     static var star = UIImage.init(systemName: "star.fill")
+    static var scribble = UIImage(systemName: "scribble")
 }

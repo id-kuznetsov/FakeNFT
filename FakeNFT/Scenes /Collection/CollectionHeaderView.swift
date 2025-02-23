@@ -21,7 +21,7 @@ class CollectionHeaderView: UICollectionReusableView, ReuseIdentifying {
 
     private lazy var coverImageView: UIImageView = {
         let view = UIImageView()
-        view.contentMode = .redraw
+        view.contentMode = .scaleAspectFill
         view.clipsToBounds = true
         view.layer.cornerRadius = LayoutConstants.Common.cornerRadiusMedium
         view.tintColor = .systemGray
@@ -78,7 +78,7 @@ class CollectionHeaderView: UICollectionReusableView, ReuseIdentifying {
         let view = UIButton()
         view.setTitleColor(.ypBlueUniversal, for: .normal)
         view.titleLabel?.font = .caption1
-        // TODO: Add action
+        view.addTarget(self, action: #selector(didTapAuthorButton), for: .touchUpInside)
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
@@ -119,32 +119,49 @@ class CollectionHeaderView: UICollectionReusableView, ReuseIdentifying {
     }
 
 
-    func configure(with model: CollectionUI, skipImageLoading: Bool = false) {
+    func configure(
+        with model: CollectionUI,
+        imageLoaderService: ImageLoaderService,
+        coverImage: UIImage?
+    ) {
+        if let coverImage {
+            coverImageView.image = coverImage
+        } else {
+            loadCoverImage(
+                from: model.cover,
+                imageLoaderService: imageLoaderService
+            )
+        }
+
         nameLabel.text = model.name
         authorButton.setTitle(model.author, for: .normal)
         descriptionLabel.text = model.description
+    }
 
-        if !skipImageLoading {
-            loadCoverImage(url: model.cover)
+    // MARK: - Load Image
+    private func loadCoverImage(from url: URL?, imageLoaderService: ImageLoaderService) {
+//        showLoadingAnimation()
+        imageLoaderService.loadImage(
+            into: coverImageView,
+            from: url,
+            placeholder: .scribble
+        ) { [weak self] result in
+            guard let self else { return }
+
+//            self.hideLoadingAnimation()
+            switch result {
+            case .success(let image):
+                self.coverImageView.image = image
+            case .failure(let error):
+                print("Failed to load image: \(error.localizedDescription)")
+            }
         }
     }
 
-    // MARK: - KF
-    private func loadCoverImage(url: URL?) {
-
-        coverImageView.kf.setImage(
-            with: url,
-            placeholder: UIImage(systemName: "scribble"),
-            options: [.transition(.fade(0.3))]
-        ) { result in
-
-            if case .failure = result {
-                self.coverImageView.contentMode = .scaleAspectFit
-#if DEBUG
-                print("DEBUG: Failed to load image")
-#endif
-            }
-        }
+    // MARK: - Actions
+    @objc
+    private func didTapAuthorButton() {
+        print("Author button tapped")
     }
 
     // MARK: - Constraints
@@ -153,7 +170,9 @@ class CollectionHeaderView: UICollectionReusableView, ReuseIdentifying {
             headerVStackView.topAnchor.constraint(equalTo: topAnchor),
             headerVStackView.leadingAnchor.constraint(equalTo: leadingAnchor),
             headerVStackView.trailingAnchor.constraint(equalTo: trailingAnchor),
-            headerVStackView.bottomAnchor.constraint(equalTo: bottomAnchor)
+            headerVStackView.bottomAnchor.constraint(equalTo: bottomAnchor),
+
+            coverImageView.widthAnchor.constraint(equalTo: headerVStackView.widthAnchor),
         ])
 
         coverImageView.setHeightConstraintFromPx(

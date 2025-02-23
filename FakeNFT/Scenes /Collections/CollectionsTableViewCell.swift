@@ -6,7 +6,6 @@
 //
 
 import UIKit
-import Kingfisher
 
 final class CollectionsTableViewCell: UITableViewCell, ReuseIdentifying {
 
@@ -36,22 +35,21 @@ final class CollectionsTableViewCell: UITableViewCell, ReuseIdentifying {
         view.font = .bodyBold
         view.textColor = .ypBlack
         view.textAlignment = .left
+        view.clipsToBounds = true
+        view.layer.cornerRadius = LayoutConstants.Common.cornerRadiusRegular
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
 
+    // TODO: - Refactor Shimmer
     private lazy var shimmerImageView: ShimmerView = {
         let view = ShimmerView()
-        view.clipsToBounds = true
-        view.layer.cornerRadius = LayoutConstants.Common.cornerRadiusMedium
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
 
     private lazy var shimmerLabelView: ShimmerView = {
         let view = ShimmerView()
-        view.clipsToBounds = true
-        view.layer.cornerRadius = LayoutConstants.Common.cornerRadiusRegular
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
@@ -75,12 +73,6 @@ final class CollectionsTableViewCell: UITableViewCell, ReuseIdentifying {
         fatalError("init(coder:) has not been implemented")
     }
 
-    // MARK: - Config
-    func configure(with model: CollectionUI) {
-        loadCoverImage(url: model.cover)
-        nameAndCountLabel.text = formatCollectionName(model.name, model.nfts.count)
-    }
-
     override func prepareForReuse() {
         super.prepareForReuse()
         coverImageView.image = nil
@@ -89,24 +81,32 @@ final class CollectionsTableViewCell: UITableViewCell, ReuseIdentifying {
         showLoadingAnimation()
     }
 
-    // MARK: - KF
-    private func loadCoverImage(url: URL?) {
-        showLoadingAnimation()
+    // MARK: - Config
+    func configure(with model: CollectionUI, imageLoaderService: ImageLoaderService) {
+        loadCoverImage(from: model.cover, imageLoaderService: imageLoaderService)
+        nameAndCountLabel.text = formatCollectionName(model.name, model.nfts.count)
+    }
 
-        coverImageView.kf.setImage(
-            with: url,
-            placeholder: UIImage(systemName: "scribble"),
-            options: [.transition(.fade(0.3))]
+    func getLoadedImage() -> UIImage? {
+        return coverImageView.image
+    }
+
+    // MARK: - Load Image
+    private func loadCoverImage(from url: URL?, imageLoaderService: ImageLoaderService) {
+        showLoadingAnimation()
+        imageLoaderService.loadImage(
+            into: coverImageView,
+            from: url,
+            placeholder: .scribble
         ) { [weak self] result in
             guard let self else { return }
 
             self.hideLoadingAnimation()
-
-            if case .failure = result {
-                self.coverImageView.contentMode = .scaleAspectFit
-#if DEBUG
-                print("DEBUG: Failed to load image")
-#endif
+            switch result {
+            case .success(let image):
+                self.coverImageView.image = image
+            case .failure(let error):
+                print("Failed to load image: \(error.localizedDescription)")
             }
         }
     }
