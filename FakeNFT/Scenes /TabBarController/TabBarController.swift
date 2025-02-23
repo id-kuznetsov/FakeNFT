@@ -1,7 +1,6 @@
 import UIKit
 
 final class TabBarController: UITabBarController {
-
     private let servicesAssembly: ServicesAssembly
 
     init(servicesAssembly: ServicesAssembly) {
@@ -14,14 +13,15 @@ final class TabBarController: UITabBarController {
         fatalError("init(coder:) has not been implemented")
     }
 
+    // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        view.backgroundColor = .systemBackground
-        configure()
+        setupTabBarAppearance()
+        setupTabs()
     }
 
-    private func configure() {
+    private func setupTabs() {
         let profileVC = UINavigationController(
             rootViewController: ProfileViewController(servicesAssembly: servicesAssembly)
         )
@@ -61,13 +61,21 @@ final class TabBarController: UITabBarController {
 
         setViewControllers([profileVC, catalogNavigationController, cartVC, statisticsVC], animated: false)
         self.selectedIndex = 1
-
-        tabBarAppearance()
     }
 
-    private func tabBarAppearance() {
-        tabBar.tintColor = .ypBlueUniversal
-        tabBar.unselectedItemTintColor = .ypBlack
-        tabBar.backgroundColor = .ypWhite
+    // MARK: - Appearance
+    private func setupTabBarAppearance() {
+        let appearance = UITabBarAppearance()
+        appearance.configureWithOpaqueBackground()
+        appearance.backgroundColor = .ypWhite
+        appearance.stackedLayoutAppearance.selected.iconColor = .ypBlueUniversal
+        appearance.stackedLayoutAppearance.normal.iconColor = .ypBlack
+        appearance.shadowImage = nil
+        appearance.shadowColor = nil
+
+        tabBar.standardAppearance = appearance
+        if #available(iOS 15.0, *) {
+            tabBar.scrollEdgeAppearance = appearance
+        }
     }
 }

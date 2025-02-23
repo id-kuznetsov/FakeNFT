@@ -9,9 +9,6 @@ import UIKit
 
 class CollectionHeaderView: UICollectionReusableView, ReuseIdentifying {
     // MARK: - Constants
-    private let screenHeight = UIScreen.main.bounds.height
-    private let screenWidth = UIScreen.main.bounds.width
-
     private let headerVStackSpacing: CGFloat = 16
     private let coverImageHeight: CGFloat = 310
     private let aboutVStackSpacing: CGFloat = 8
@@ -23,6 +20,7 @@ class CollectionHeaderView: UICollectionReusableView, ReuseIdentifying {
         view.axis = .vertical
         view.alignment = .center
         view.distribution = .fill
+        view.spacing = headerVStackSpacing
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
@@ -42,6 +40,7 @@ class CollectionHeaderView: UICollectionReusableView, ReuseIdentifying {
         view.axis = .vertical
         view.alignment = .leading
         view.distribution = .fill
+        view.spacing = aboutVStackSpacing
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
@@ -49,7 +48,6 @@ class CollectionHeaderView: UICollectionReusableView, ReuseIdentifying {
     private lazy var titleVStackView: UIStackView = {
         let view = UIStackView()
         view.axis = .vertical
-        view.spacing = 0
         view.alignment = .leading
         view.distribution = .fill
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -137,12 +135,14 @@ class CollectionHeaderView: UICollectionReusableView, ReuseIdentifying {
     }
 
     private func calculateHeight(size: CGFloat) -> CGFloat {
+        let screenHeight = UIScreen.main.bounds.height
         let multiplier = round((size / screenHeight) * 1000) / 1000
         let height = multiplier * screenHeight
         return round(height)
     }
 
     private func calculateWidth(size: CGFloat) -> CGFloat {
+        let screenWidth = UIScreen.main.bounds.width
         let multiplier = round((size / screenWidth) * 1000) / 1000
         let width = multiplier * screenWidth
         return round(width)
@@ -168,9 +168,6 @@ class CollectionHeaderView: UICollectionReusableView, ReuseIdentifying {
 
     // MARK: - Constraints
     private func setupConstraints() {
-        headerVStackView.spacing = calculateHeight(size: headerVStackSpacing)
-        aboutVStackView.spacing = calculateHeight(size: aboutVStackSpacing)
-
         NSLayoutConstraint.activate([
             headerVStackView.topAnchor.constraint(equalTo: topAnchor),
             headerVStackView.leadingAnchor.constraint(equalTo: leadingAnchor),
