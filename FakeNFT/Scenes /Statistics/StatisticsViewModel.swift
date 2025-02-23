@@ -12,6 +12,7 @@ protocol StatisticsViewModelProtocol {
     var onUsersUpdated: (() -> Void)? { get set }
     var onLoadingStateChanged: ((Bool) -> Void)? { get set }
     
+    func loadInitialData()
     func fetchNextPage()
     func sortUsers(by option: SortOption?)
     func clearAllStatisticsData()
@@ -27,6 +28,7 @@ final class StatisticsViewModel: StatisticsViewModelProtocol {
     private let pageSize = 15
     private var isLoading = false
     private var allUsersLoaded = false
+    private var isInitialDataLoaded = false
     
     var onUsersUpdated: (() -> Void)?
     var onLoadingStateChanged: ((Bool) -> Void)?
@@ -40,12 +42,16 @@ final class StatisticsViewModel: StatisticsViewModelProtocol {
         self.userService = userService
         self.userDefaultsStorage = userDefaultsStorage
         self.cacheStorage = cacheStorage
-        
+    }
+    
+    // MARK: Public methods
+    func loadInitialData() {
+        guard !isInitialDataLoaded else { return }
+        isInitialDataLoaded = true
         resetPageIfNeeded()
         loadUsersFromCache()
     }
     
-    // MARK: Public methods
     func fetchNextPage() {
         guard !isLoading, !allUsersLoaded else { return }
         
@@ -112,7 +118,6 @@ final class StatisticsViewModel: StatisticsViewModelProtocol {
         } else {
             userDefaultsStorage.currentPage = 0
             allUsersLoaded = false
-            isLoading = false
             
             fetchNextPage()
         }

@@ -55,7 +55,7 @@ final class StatisticsViewController: UIViewController {
         
         setupUI()
         setupBindings()
-        viewModel.fetchNextPage()
+        viewModel.loadInitialData()
     }
     
     // MARK: - Private methods
