@@ -16,6 +16,9 @@ final class CartViewModel: CartViewModelProtocol {
     var itemsCount: Int {
         nftsInCart.count
     }
+    var isCartEmpty: Bool {
+        nftsInCart.isEmpty
+    }
     
     // MARK: - Private Properties
     

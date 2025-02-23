@@ -23,6 +23,16 @@ final class CartViewController: UIViewController {
         return barButtonItem
     }()
     
+    private lazy var emptyCartLabel: UILabel = {
+        let label = UILabel()
+        label.font = .systemFont(ofSize: 17, weight: .bold)
+        label.textColor = .ypBlack
+        label.textAlignment = .center
+        label.numberOfLines = 0
+        label.text = L10n.Cart.Label.emptyCart
+        return label
+    }()
+    
     private lazy var tableView: UITableView = {
         let tableView = UITableView()
         tableView.register(CartTableViewCell.self)
@@ -129,6 +139,7 @@ final class CartViewController: UIViewController {
             self?.updatePaymentViewLabels()
             self?.setLoadingState(isLoading: false)
             self?.setupNavigationBar()
+            self?.configureEmptyCartView(isCartEmpty: self?.viewModel.isCartEmpty ?? true)
         }
     }
     
@@ -142,7 +153,8 @@ final class CartViewController: UIViewController {
                 totalNFTCountInOrderLabel,
                 totalCostLabel,
                 paymentButton,
-                activityIndicator
+                activityIndicator,
+                emptyCartLabel
             ]
         )
         setupConstraints()
@@ -168,11 +180,21 @@ final class CartViewController: UIViewController {
     
     private func setLoadingState(isLoading: Bool) {
         isLoading ? activityIndicator.startAnimating() : activityIndicator.stopAnimating()
-        
-        paymentView.isHidden = isLoading
-        paymentButton.isHidden = isLoading
-        totalCostLabel.isHidden = isLoading
-        totalNFTCountInOrderLabel.isHidden = isLoading
+        let viewsToHide = [paymentView, paymentButton, totalCostLabel, totalNFTCountInOrderLabel, emptyCartLabel]
+        viewsToHide.forEach { $0.isHidden = isLoading }
+    }
+    
+    private func configureEmptyCartView(isCartEmpty: Bool) {
+        if isCartEmpty {
+            emptyCartLabel.isHidden = !isCartEmpty
+            paymentView.isHidden = isCartEmpty
+            paymentButton.isHidden = isCartEmpty
+            totalCostLabel.isHidden = isCartEmpty
+            totalNFTCountInOrderLabel.isHidden = isCartEmpty
+            navigationItem.rightBarButtonItem = nil
+        } else {
+            emptyCartLabel.isHidden = !isCartEmpty
+        }
     }
     
     // MARK: Constraints
@@ -186,6 +208,7 @@ final class CartViewController: UIViewController {
             paymentButtonConstraints()
         )
         activityIndicator.constraintCenters(to: view)
+        emptyCartLabel.constraintCenters(to: view)
     }
     
     private func tableViewConstraints() -> [NSLayoutConstraint] {
