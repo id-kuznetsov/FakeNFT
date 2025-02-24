@@ -43,11 +43,16 @@ final class TabBarController: UITabBarController {
             selectedImage: UIImage(systemName: "bag.fill")
         )
         
-        let statisticsVC = UINavigationController(rootViewController: StatisticsViewController(servicesAssembly: servicesAssembly))
+        let statisticsViewModel = StatisticsViewModel(
+            userService: servicesAssembly.userService,
+            userDefaultsStorage: StatisticsUserDefaultsStorage(),
+            cacheStorage: StatisticsCacheStorage()
+        )
+        let statisticsVC = UINavigationController(rootViewController: StatisticsViewController(viewModel: statisticsViewModel))
         statisticsVC.tabBarItem = UITabBarItem(
-            title: NSLocalizedString("Tab.statistic", comment: ""),
-            image: UIImage(systemName: "chart.bar"),
-            selectedImage: UIImage(systemName: "chart.bar.fill")
+            title: L10n.Tab.statistic,
+            image: UIImage(named: "ic.statistics.fill"),
+            selectedImage: nil
         )
         
         setViewControllers([profileVC, catalogVC, cartVC, statisticsVC], animated: false)
@@ -57,8 +62,8 @@ final class TabBarController: UITabBarController {
     }
     
     private func tabBarAppearance() {
-        tabBar.tintColor = .blue
-        tabBar.unselectedItemTintColor = .black
+        tabBar.tintColor = .ypBlueUniversal
+        tabBar.unselectedItemTintColor = .ypBlack
         tabBar.backgroundColor = .systemBackground
     }
 }
