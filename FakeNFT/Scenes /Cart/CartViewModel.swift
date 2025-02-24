@@ -89,6 +89,7 @@ final class CartViewModel: CartViewModelProtocol {
                             return
                         }
                         let orderCard = OrderCard(
+                            id: nft.id,
                             name: nft.name,
                             rating: nft.rating,
                             price: nft.price,

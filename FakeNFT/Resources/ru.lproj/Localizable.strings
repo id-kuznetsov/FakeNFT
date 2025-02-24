@@ -17,6 +17,10 @@
 "Cart.button.toPay" = "К оплате";
 "Cart.label.price" = "Цена";
 "Cart.label.emptyCart" = "Корзина пуста";
+"Cart.delete.conformText" = "Вы уверены, что хотите удалить объект из корзины?";
+"Cart.delete.buttonDelete" = "Удалить";
+"Cart.delete.buttonReturn" = "Вернуться";
+
 "Payment.title" = "Выберите способ оплаты";
 "Payment.button.pay" = "Оплатить";
 "Payment.agreement.label" = "Совершая покупку, вы соглашаетесь с условиями";

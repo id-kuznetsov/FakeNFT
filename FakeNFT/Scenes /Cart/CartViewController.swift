@@ -264,6 +264,7 @@ extension CartViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell: CartTableViewCell = tableView.dequeueReusableCell()
         cell.selectionStyle = .none
+        cell.delegate = self
         let orderCard = viewModel.getItem(at: indexPath.row)
         cell.setupCell(with: orderCard)
         return cell
@@ -271,6 +272,18 @@ extension CartViewController: UITableViewDataSource {
 }
 
 extension CartViewController: UITableViewDelegate {}
+
+extension CartViewController: CartTableViewCellDelegate {
+    func didTapRemoveButton(with nftId: String, image: UIImage?) {
+        guard let image else { return }
+        let viewController = DeleteViewController(image: image, viewModel: DeleteViewModel(orderService: viewModel.orderService))
+        
+        
+        viewController.modalPresentationStyle = .overFullScreen
+        present(viewController, animated: true)
+    }
+
+}
 
 private extension CartViewController {
     struct Constants {
