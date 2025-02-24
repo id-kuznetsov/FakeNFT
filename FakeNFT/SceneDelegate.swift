@@ -3,9 +3,12 @@ import UIKit
 final class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     var window: UIWindow?
     
-    let servicesAssembly = ServicesAssembly(
+    let tokenStorage = TokenKeychainStorage()
+    
+    lazy var servicesAssembly = ServicesAssembly(
         networkClient: DefaultNetworkClient(),
-        nftStorage: NftStorageImpl()
+        nftStorage: NftStorageImpl(),
+        tokenStorage: tokenStorage
     )
     
     func scene(
@@ -13,6 +16,8 @@ final class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         willConnectTo session: UISceneSession,
         options connectionOptions: UIScene.ConnectionOptions
     ) {
+        saveUserToken()
+        
         guard let scene = (scene as? UIWindowScene) else { return }
         window = UIWindow(windowScene: scene)
         
@@ -20,5 +25,14 @@ final class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         window?.rootViewController = tabBar
         window?.makeKeyAndVisible()
+    }
+    
+    func saveUserToken() {
+        let token = "1"
+        do {
+            try tokenStorage.store(token: token)
+        } catch {
+            assertionFailure(error.localizedDescription)
+        }
     }
 }
