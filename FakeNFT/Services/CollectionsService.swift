@@ -28,26 +28,8 @@ private extension CollectionUI {
         [
             CollectionUI(
                 createdAt: Date(),
-                name: "Lorem ipsum dolor sit amet, consetetur sadipscing elitr Lorem ipsum dolor sit amet",
-                cover: URL(string: "https://code.s3.yandex.net/Mobile/iOS/NFT/Обложки_коллекций/Brown.png"),
-                nfts: ["id1", "id2", "id3"],
-                description: "Lorem ipsum dolor sit amet, consetetur sadipscing elitr Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.  Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. ",
-                author: "Lourdes Harper",
-                id: "id1"
-            ),
-//            CollectionUI(
-//                createdAt: Date(),
-//                name: "Baz",
-//                cover: URL(string: "https://domain.tld/Gray.png"),
-//                nfts: ["id1", "id2"],
-//                description: "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. ",
-//                author: "Darren Morris",
-//                id: "id2"
-//            ),
-            CollectionUI(
-                createdAt: Date(),
-                name: "Bar",
-                cover: URL(string: "https://code.s3.yandex.net/Mobile/iOS/NFT/Обложки_коллекций/Pink.png"),
+                name: "Peach",
+                cover: URL(string: "https://code.s3.yandex.net/Mobile/iOS/NFT/Обложки_коллекций/Peach.png"),
                 nfts: ["id1", "id2", "id3", "id4", "id5", "id6", "id7", "id8", "id9", "id10"],
                 description: "Lorem ipsum dolor ",
                 author: "Barry Sheppard",
@@ -55,12 +37,30 @@ private extension CollectionUI {
             ),
             CollectionUI(
                 createdAt: Date(),
-                name: "Quux",
+                name: "Blue",
                 cover: URL(string: "https://code.s3.yandex.net/Mobile/iOS/NFT/Обложки_коллекций/Blue.png"),
                 nfts: ["id1"],
                 description: "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. ",
                 author: "Harold Chapman",
                 id: "id4"
+            ),
+            CollectionUI(
+                createdAt: Date(),
+                name: "Brown",
+                cover: URL(string: "https://code.s3.yandex.net/Mobile/iOS/NFT/Обложки_коллекций/Brown.png"),
+                nfts: ["id1", "id2", "id3"],
+                description: "Lorem ipsum dolor sit amet, consetetur sadipscing elitr Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.  Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. ",
+                author: "Lourdes Harper",
+                id: "id1"
+            ),
+            CollectionUI(
+                createdAt: Date(),
+                name: "Baz",
+                cover: URL(string: "https://domain.tld/Gray.png"),
+                nfts: ["id1", "id2"],
+                description: "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. ",
+                author: "Darren Morris",
+                id: "id2"
             ),
             CollectionUI(
                 createdAt: Date(),

@@ -33,11 +33,6 @@ enum LayoutConstants {
     enum CollectionScreen {
         static let numberOfSections: Int = 1
 
-        enum Header {
-            static let coverImageHeight: CGFloat = 310
-            static let aboutVStackWidth: CGFloat = 341
-        }
-
         enum CollectionParams {
             static let cellCount: CGFloat = 3
             static let topInset: CGFloat = LayoutConstants.Common.Margin.large
@@ -48,6 +43,21 @@ enum LayoutConstants {
             static let cellHeight: CGFloat = 192
             static let lineSpacing: CGFloat = LayoutConstants.Common.Margin.medium
             static let paddingWidth = leftInset + rightInset + (cellCount - 1) * cellSpacing
+        }
+
+        enum Header {
+            static let coverImageHeight: CGFloat = 310
+            static let aboutVStackWidth: CGFloat = 341
+        }
+
+        enum Cell {
+            static let imageHeight: CGFloat = 108
+            static let buttonHeight: CGFloat = 40
+            static let buttonWidth: CGFloat = 40
+            static let marginSmall: CGFloat = 4
+            static let marginRegular: CGFloat = 8
+            static let marginMedium: CGFloat = 12
+            static let marginLarge: CGFloat = 20
         }
     }
 }

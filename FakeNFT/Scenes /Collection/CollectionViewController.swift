@@ -107,7 +107,8 @@ extension CollectionViewController: UICollectionViewDataSource {
 
         cell.backgroundColor = .clear
         cell.configure(
-            nftUI: nftUI
+            nftUI: nftUI,
+            imageLoaderService: viewModel.imageLoaderService
         )
         return cell
     }

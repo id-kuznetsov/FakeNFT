@@ -27,15 +27,16 @@ class RatingButton: UIButton {
 
     private func setupView() {
         setTitleColor(.systemYellow, for: .normal)
+        titleLabel?.font = .caption2
         addTarget(self, action: #selector(didTap), for: .touchUpInside)
     }
 
     func configure(rating: Int) {
-        self.rating = min(max(rating, 0), maxStars) // Ограничение от 0 до 5
+        self.rating = min(max(rating, 0), maxStars)
     }
 
     private func updateTitle() {
-        let stars = (0..<maxStars).map { $0 < rating ? "★" : "☆" }.joined(separator: " ")
+        let stars = (0..<maxStars).map { $0 < rating ? "★" : "☆" }.joined(separator: "")
         setTitle(stars, for: .normal)
     }
 

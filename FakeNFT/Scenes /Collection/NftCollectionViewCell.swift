@@ -8,20 +8,12 @@
 import UIKit
 
 class NftCollectionViewCell: UICollectionViewCell, ReuseIdentifying {
-    private lazy var cellVStackView: UIStackView = {
-        let view = UIStackView()
-        view.axis = .vertical
-        view.spacing = 8
-        view.backgroundColor = .cyan
-        view.translatesAutoresizingMaskIntoConstraints = false
-        return view
-    }()
-
+    // MARK: - UI
     private lazy var nftImageView: UIImageView = {
         let view = UIImageView()
         view.contentMode = .scaleAspectFill
         view.clipsToBounds = true
-        view.layer.cornerRadius = 12
+        view.layer.cornerRadius = LayoutConstants.Common.cornerRadiusMedium
         view.tintColor = .systemGray
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
@@ -35,18 +27,19 @@ class NftCollectionViewCell: UICollectionViewCell, ReuseIdentifying {
         return view
     }()
 
-    private lazy var nftVStackView: UIStackView = {
+    private lazy var nftHStackView: UIStackView = {
         let view = UIStackView()
-        view.axis = .vertical
-        view.spacing = 8
+        view.axis = .horizontal
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
 
-    private lazy var nftHStackView: UIStackView = {
+    private lazy var nftVStackView: UIStackView = {
         let view = UIStackView()
-        view.axis = .horizontal
-        view.spacing = 8
+        view.axis = .vertical
+        view.alignment = .leading
+        view.distribution = .fill
+        view.spacing = LayoutConstants.CollectionScreen.Cell.marginSmall
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
@@ -59,7 +52,7 @@ class NftCollectionViewCell: UICollectionViewCell, ReuseIdentifying {
 
     private lazy var nameLabel: UILabel = {
         let view = UILabel()
-        view.font = .headline3
+        view.font = .bodyBold
         view.textColor = .ypBlack
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
@@ -67,7 +60,7 @@ class NftCollectionViewCell: UICollectionViewCell, ReuseIdentifying {
 
     private lazy var priceLabel: UILabel = {
         let view = UILabel()
-        view.font = .headline3
+        view.font = .bodyMedium
         view.textColor = .ypBlack
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
@@ -76,21 +69,23 @@ class NftCollectionViewCell: UICollectionViewCell, ReuseIdentifying {
     private lazy var cartButton: UIButton = {
         let view = UIButton(type: .custom)
         view.setImage(.icCart, for: .normal)
+        view.tintColor = .ypBlack
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
 
-
+    // MARK: - Init
     override init(frame: CGRect) {
         super.init(frame: frame)
 
         backgroundColor = .ypYellowUniversal
 
-        addSubview(cellVStackView)
-        cellVStackView.addArrangedSubview(nftImageView)//addSubview(nftImageView)
+        addSubview(nftImageView)
         nftImageView.addSubview(favoriteButton)
-        cellVStackView.addArrangedSubview(ratingButton)
-        cellVStackView.addArrangedSubview(nftHStackView)
+
+        addSubview(ratingButton)
+
+        addSubview(nftHStackView)
         nftHStackView.addArrangedSubview(nftVStackView)
         nftVStackView.addArrangedSubview(nameLabel)
         nftVStackView.addArrangedSubview(priceLabel)
@@ -104,32 +99,34 @@ class NftCollectionViewCell: UICollectionViewCell, ReuseIdentifying {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func configure(nftUI: NftUI) {
-        loadNftImage(url: nftUI.images.first)
+    // MARK: - Config
+    func configure(nftUI: NftUI, imageLoaderService: ImageLoaderService) {
+        loadNftImage(
+            from: nftUI.images.first,
+            imageLoaderService: imageLoaderService
+        )
 
         ratingButton.configure(rating: nftUI.rating)
         nameLabel.text = nftUI.name
         priceLabel.text = nftUI.formattedPrice
     }
 
-    // MARK: - KF
-    private func loadNftImage(url: URL?) {
-//        showLoadingAnimation()
+    // MARK: - Load Image
+    private func loadNftImage(from url: URL?, imageLoaderService: ImageLoaderService) {
+        nftImageView.showShimmerAnimation()
+        imageLoaderService.loadImage(
+            into: nftImageView,
+            from: url,
+            placeholder: .scribble
+        ) { [weak self] result in
+            guard let self else { return }
 
-        nftImageView.kf.setImage(
-            with: url,
-            placeholder: UIImage(systemName: "scribble"),
-            options: [.transition(.fade(0.3))]
-        ) { /*[weak self]*/ result in
-//            guard let self else { return }
-
-//            self.hideLoadingAnimation()
-
-            if case .failure = result {
-//                self.coverImageView.contentMode = .scaleAspectFit
-#if DEBUG
-                print("DEBUG: Failed to load image")
-#endif
+            self.nftImageView.hideShimmerAnimation()
+            switch result {
+            case .success(let image):
+                self.nftImageView.image = image
+            case .failure(let error):
+                print("Failed to load image: \(error.localizedDescription)")
             }
         }
     }
@@ -137,18 +134,47 @@ class NftCollectionViewCell: UICollectionViewCell, ReuseIdentifying {
     // MARK: - Constraints
     private func setupConstraints() {
         NSLayoutConstraint.activate([
-            cellVStackView.topAnchor.constraint(equalTo: topAnchor),
-            cellVStackView.bottomAnchor.constraint(equalTo: bottomAnchor),
-            cellVStackView.leadingAnchor.constraint(equalTo: leadingAnchor),
-            cellVStackView.trailingAnchor.constraint(equalTo: trailingAnchor),
-
-            nftImageView.heightAnchor.constraint(equalTo: heightAnchor, multiplier: 0.56),
+            nftImageView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            nftImageView.trailingAnchor.constraint(equalTo: trailingAnchor),
+            nftImageView.topAnchor.constraint(equalTo: topAnchor),
+            nftImageView.heightAnchor.constraint(
+                equalToConstant: LayoutConstants.CollectionScreen.Cell.imageHeight
+            ),
 
             favoriteButton.trailingAnchor.constraint(equalTo: nftImageView.trailingAnchor),
             favoriteButton.topAnchor.constraint(equalTo: nftImageView.topAnchor),
+            favoriteButton.heightAnchor.constraint(
+                equalToConstant: LayoutConstants.CollectionScreen.Cell.buttonHeight
+            ),
+            favoriteButton.widthAnchor.constraint(
+                equalToConstant: LayoutConstants.CollectionScreen.Cell.buttonWidth
+            ),
 
+            ratingButton.leadingAnchor.constraint(equalTo: leadingAnchor),
+            ratingButton.topAnchor.constraint(
+                equalTo: nftImageView.bottomAnchor,
+                constant: LayoutConstants.CollectionScreen.Cell.marginRegular
+            ),
+            ratingButton.heightAnchor.constraint(
+                equalToConstant: LayoutConstants.CollectionScreen.Cell.marginMedium
+            ),
 
+            nftHStackView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            nftHStackView.trailingAnchor.constraint(equalTo: trailingAnchor),
+            nftHStackView.topAnchor.constraint(
+                equalTo: ratingButton.bottomAnchor,
+                constant: LayoutConstants.CollectionScreen.Cell.marginSmall
+            ),
+            nftHStackView.bottomAnchor.constraint(
+                equalTo: bottomAnchor,
+                constant: -LayoutConstants.CollectionScreen.Cell.marginLarge),
+
+            cartButton.heightAnchor.constraint(
+                equalToConstant: LayoutConstants.CollectionScreen.Cell.buttonHeight
+            ),
+            cartButton.widthAnchor.constraint(
+                equalToConstant: LayoutConstants.CollectionScreen.Cell.buttonWidth
+            )
         ])
-
     }
 }

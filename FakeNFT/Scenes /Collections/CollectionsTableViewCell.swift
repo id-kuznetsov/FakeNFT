@@ -20,10 +20,11 @@ final class CollectionsTableViewCell: UITableViewCell, ReuseIdentifying {
         return view
     }()
 
-    private lazy var coverImageView: UIImageView = {
-        let view = UIImageView()
+    private lazy var coverImageView: TopAlignedImageView = {
+        let view = TopAlignedImageView()
         view.contentMode = .scaleAspectFill
         view.clipsToBounds = true
+        view.layer.masksToBounds = true
         view.layer.cornerRadius = LayoutConstants.Common.cornerRadiusMedium
         view.tintColor = .systemGray
         view.translatesAutoresizingMaskIntoConstraints = false

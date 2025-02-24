@@ -28,7 +28,7 @@ extension NftUI {
         [
             NftUI(
                 createdAt: Date(),
-                name: "Foo",
+                name: "Archie",
                 images: [
                     URL(string: "https://code.s3.yandex.net/Mobile/iOS/NFT/Beige/Finn/1.png")!,
                     URL(string: "https://code.s3.yandex.net/Mobile/iOS/NFT/Beige/Finn/2.png")!,
@@ -36,7 +36,7 @@ extension NftUI {
                 ],
                 rating: 5,
                 description: "explicari lobortis rutrum evertitur fugit convenire ligula",
-                formattedPrice: "28.27 ETH",
+                formattedPrice: "1 ETH",
                 author: URL(string: "https://unruffled_cohen.fakenfts.org/")!,
                 id: "1"
             ),
@@ -44,7 +44,7 @@ extension NftUI {
                 createdAt: Date(),
                 name: "Baz",
                 images: [
-                    URL(string: "https://code.s3.yandex.net/Mobile/iOS/NFT/Beige/Finn/1.png")!,
+                    URL(string: "https://exemple.net/1.png")!,
                     URL(string: "https://code.s3.yandex.net/Mobile/iOS/NFT/Beige/Finn/2.png")!,
                     URL(string: "https://code.s3.yandex.net/Mobile/iOS/NFT/Beige/Finn/3.png")!,
                 ],
