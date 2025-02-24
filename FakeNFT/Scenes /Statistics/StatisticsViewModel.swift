@@ -5,7 +5,7 @@
 //  Created by Aleksei Frolov on 17.02.2025.
 //
 
-import UIKit
+import Foundation
 
 protocol StatisticsViewModelProtocol {
     var users: [User] { get }

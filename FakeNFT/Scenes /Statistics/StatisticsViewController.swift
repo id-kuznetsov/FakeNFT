@@ -175,6 +175,17 @@ extension StatisticsViewController: UITableViewDelegate {
     
     func tableView(
         _ tableView: UITableView,
+        didSelectRowAt indexPath: IndexPath
+    ) {
+        let user = viewModel.users[indexPath.row]
+        let userCardVC = UserCardViewController(user: user)
+        
+        guard let navigationController = navigationController else { return }
+        navigationController.pushViewController(userCardVC, animated: true)
+    }
+    
+    func tableView(
+        _ tableView: UITableView,
         willDisplay cell: UITableViewCell,
         forRowAt indexPath: IndexPath) {
             let lastIndex = viewModel.users.count - 1
