@@ -9,7 +9,8 @@ import Foundation
 
 protocol UserCardViewModelProtocol {
     var onUserLoaded: ((User) -> Void)? { get set }
-    var user: User? { get }
+    var onLoadingStateChanged: ((Bool) -> Void)? { get set }
+    var userWebsite: String? { get }
     func loadUserData()
 }
 
@@ -18,13 +19,17 @@ final class UserCardViewModel: UserCardViewModelProtocol {
     private let userService: UserService
     private let userId: String
     
-    var onUserLoaded: ((User) -> Void)?
-    private(set) var user: User? {
+    private var user: User? {
         didSet {
             guard let user = user else { return }
             onUserLoaded?(user)
         }
     }
+    
+    var userWebsite: String? { user?.website }
+    
+    var onUserLoaded: ((User) -> Void)?
+    var onLoadingStateChanged: ((Bool) -> Void)?
     
     init(userService: UserService, userId: String) {
         self.userService = userService
@@ -36,7 +41,9 @@ final class UserCardViewModel: UserCardViewModelProtocol {
     }
     
     private func getUser() {
+        onLoadingStateChanged?(true)
         userService.fetchUser(by: userId) { [weak self] result in
+            self?.onLoadingStateChanged?(false)
             switch result {
             case .success(let user):
                 self?.user = user

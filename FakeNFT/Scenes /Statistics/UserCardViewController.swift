@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import ProgressHUD
 
 final class UserCardViewController: UIViewController {
     
@@ -57,6 +58,7 @@ final class UserCardViewController: UIViewController {
         button.layer.cornerRadius = 16
         button.layer.borderColor = UIColor.ypBlack.cgColor
         button.layer.borderWidth = 1.0
+        button.addTarget(self, action: #selector(openUserWebsite), for: .touchUpInside)
         return button
     }()
     
@@ -135,6 +137,12 @@ final class UserCardViewController: UIViewController {
                 self?.updateUI(with: user)
             }
         }
+        
+        viewModel.onLoadingStateChanged = { [weak self] isLoading in
+            DispatchQueue.main.async {
+                isLoading ? self?.showLoadingIndicator() : self?.hideLoadingIndicator()
+            }
+        }
     }
     
     private func updateUI(with user: User) {
@@ -149,6 +157,8 @@ final class UserCardViewController: UIViewController {
         } else {
             avatarImageView.image = placeholderImage
         }
+        // Hide button if user doesn't have website
+        webViewButton.isHidden = viewModel.userWebsite == nil
     }
     
     private func setupUI() {
@@ -200,6 +210,23 @@ final class UserCardViewController: UIViewController {
         navItem.leftBarButtonItem = backBarButton
         
         customNavBar.setItems([navItem], animated: false)
+    }
+    
+    private func showLoadingIndicator() {
+        view.isUserInteractionEnabled = false
+        ProgressHUD.colorAnimation = .ypBlack
+        ProgressHUD.show()
+    }
+    
+    private func hideLoadingIndicator() {
+        view.isUserInteractionEnabled = true
+        ProgressHUD.dismiss()
+    }
+    
+    @objc private func openUserWebsite() {
+        guard let urlString = viewModel.userWebsite, let url = URL(string: urlString) else { return }
+        let webVC = WebViewViewController(url: url)
+        navigationController?.pushViewController(webVC, animated: true)
     }
     
     @objc private func getUserCollection() {

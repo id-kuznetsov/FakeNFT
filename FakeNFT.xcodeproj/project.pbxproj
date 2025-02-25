@@ -54,6 +54,7 @@
 		F76A112F2D6CEA4900FCB398 /* UserCardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F76A112E2D6CEA4900FCB398 /* UserCardViewController.swift */; };
 		F76A11332D6D228200FCB398 /* UserDetailRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = F76A11322D6D228200FCB398 /* UserDetailRequest.swift */; };
 		F76A11362D6D23AD00FCB398 /* UserCardViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F76A11352D6D23AD00FCB398 /* UserCardViewModel.swift */; };
+		F76A11382D6E57CD00FCB398 /* WebViewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F76A11372D6E57CC00FCB398 /* WebViewViewController.swift */; };
 		F79A2F3E2D6679F7003C6739 /* StatisticsUserDefaultsStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = F79A2F3D2D6679F7003C6739 /* StatisticsUserDefaultsStorage.swift */; };
 		F79A2F402D668335003C6739 /* StatisticsCacheStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = F79A2F3F2D668335003C6739 /* StatisticsCacheStorage.swift */; };
 		F7C51C0E2D63BE7800CA8D85 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7C51C0D2D63BE7800CA8D85 /* User.swift */; };
@@ -132,6 +133,7 @@
 		F76A112E2D6CEA4900FCB398 /* UserCardViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserCardViewController.swift; sourceTree = "<group>"; };
 		F76A11322D6D228200FCB398 /* UserDetailRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDetailRequest.swift; sourceTree = "<group>"; };
 		F76A11352D6D23AD00FCB398 /* UserCardViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserCardViewModel.swift; sourceTree = "<group>"; };
+		F76A11372D6E57CC00FCB398 /* WebViewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewViewController.swift; sourceTree = "<group>"; };
 		F79A2F3D2D6679F7003C6739 /* StatisticsUserDefaultsStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsUserDefaultsStorage.swift; sourceTree = "<group>"; };
 		F79A2F3F2D668335003C6739 /* StatisticsCacheStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsCacheStorage.swift; sourceTree = "<group>"; };
 		F7C51C0D2D63BE7800CA8D85 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
@@ -302,6 +304,7 @@
 		3F6806C729CBBC5B00B4F915 /* Scenes  */ = {
 			isa = PBXGroup;
 			children = (
+				F76A11392D6E57D800FCB398 /* WebView */,
 				F73AD88F2D5EC2C600E4C498 /* Statistics */,
 				F73AD88E2D5EC2B700E4C498 /* Cart */,
 				F73AD88D2D5EC29C00E4C498 /* Profile */,
@@ -437,6 +440,14 @@
 				F76A11352D6D23AD00FCB398 /* UserCardViewModel.swift */,
 			);
 			path = Statistics;
+			sourceTree = "<group>";
+		};
+		F76A11392D6E57D800FCB398 /* WebView */ = {
+			isa = PBXGroup;
+			children = (
+				F76A11372D6E57CC00FCB398 /* WebViewViewController.swift */,
+			);
+			path = WebView;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -609,6 +620,7 @@
 				F73E91552D67DC570046BC3B /* CachedUsers.swift in Sources */,
 				0C79EE6A2A76DE1000EE90EA /* NftDetailAssembly.swift in Sources */,
 				F756512F2D5EA652009B646C /* StatisticsViewController.swift in Sources */,
+				F76A11382D6E57CD00FCB398 /* WebViewViewController.swift in Sources */,
 				F7C51C0E2D63BE7800CA8D85 /* User.swift in Sources */,
 				F75651292D5EA5B8009B646C /* ProfileViewController.swift in Sources */,
 				F7C51C102D63BF0500CA8D85 /* StatisticsViewModel.swift in Sources */,
