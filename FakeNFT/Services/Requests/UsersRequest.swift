@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct UserRequest: NetworkRequest {
+struct UsersRequest: NetworkRequest {
     let page: Int
     let size: Int
     

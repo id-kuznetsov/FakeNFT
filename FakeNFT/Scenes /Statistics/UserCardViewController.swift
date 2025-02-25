@@ -9,8 +9,7 @@ import UIKit
 
 final class UserCardViewController: UIViewController {
     
-    private let user: User
-    private var nftCount: Int = 0
+    private var viewModel: UserCardViewModelProtocol
     
     private lazy var customNavBar: UINavigationBar = {
         let navBar = UINavigationBar()
@@ -71,7 +70,6 @@ final class UserCardViewController: UIViewController {
     
     private lazy var nftCountLabel: UILabel = {
         let label = UILabel()
-        label.text = "(\(nftCount))"
         label.textColor = .ypBlack
         label.font = .systemFont(ofSize: 17, weight: .bold)
         return label
@@ -88,28 +86,28 @@ final class UserCardViewController: UIViewController {
         let button = UIButton()
         button.backgroundColor = .clear
         button.addTarget(self, action: #selector(getUserCollection), for: .touchUpInside)
-
+        
         let nftLabelsStackView = UIStackView(arrangedSubviews: [nftLabel, nftCountLabel])
         nftLabelsStackView.axis = .horizontal
         nftLabelsStackView.spacing = 8
         nftLabelsStackView.alignment = .center
-
+        
         let mainStackView = UIStackView(arrangedSubviews: [nftLabelsStackView, chevronImageView])
         mainStackView.axis = .horizontal
         mainStackView.spacing = 8
         mainStackView.alignment = .center
         mainStackView.distribution = .equalSpacing
-
+        
         button.addSubview(mainStackView)
         mainStackView.translatesAutoresizingMaskIntoConstraints = false
-
+        
         NSLayoutConstraint.activate([
             mainStackView.leadingAnchor.constraint(equalTo: button.leadingAnchor),
             mainStackView.trailingAnchor.constraint(equalTo: button.trailingAnchor),
             mainStackView.topAnchor.constraint(equalTo: button.topAnchor),
             mainStackView.bottomAnchor.constraint(equalTo: button.bottomAnchor)
         ])
-
+        
         return button
     }()
     
@@ -118,20 +116,39 @@ final class UserCardViewController: UIViewController {
         
         setupUI()
         configureCustomNavBar()
-        
-        nameLabel.text = "User name"
-        descriptionLabel.text = "User description"
-        avatarImageView.image = UIImage(named: "ic.person.crop.circle.fill")
+        viewModel.loadUserData()
     }
     
-    init(user: User) {
-        self.user = user
+    init(viewModel: UserCardViewModelProtocol) {
+        self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
     
     @available(*, unavailable)
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    private func setupBindings() {
+        viewModel.onUserLoaded = { [weak self] user in
+            DispatchQueue.main.async {
+                self?.updateUI(with: user)
+            }
+        }
+    }
+    
+    private func updateUI(with user: User) {
+        nameLabel.text = user.name
+        descriptionLabel.text = user.description
+        nftCountLabel.text = "(\(user.nfts?.count ?? 0))"
+        
+        let placeholderImage = UIImage(named: "ic.person.crop.circle.fill") ?? UIImage()
+        
+        if let avatarUrl = user.avatar, let url = URL(string: avatarUrl) {
+            avatarImageView.kf.setImage(with: url, placeholder: placeholderImage)
+        } else {
+            avatarImageView.image = placeholderImage
+        }
     }
     
     private func setupUI() {
@@ -172,6 +189,8 @@ final class UserCardViewController: UIViewController {
             nftButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
             nftButton.heightAnchor.constraint(equalToConstant: 40)
         ])
+        
+        setupBindings()
     }
     
     private func configureCustomNavBar() {

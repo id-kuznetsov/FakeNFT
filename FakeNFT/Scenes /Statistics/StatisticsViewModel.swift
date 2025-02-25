@@ -16,6 +16,7 @@ protocol StatisticsViewModelProtocol {
     func fetchNextPage()
     func sortUsers(by option: SortOption?)
     func clearAllStatisticsData()
+    func createUserCardViewModel(for userId: String) -> UserCardViewModelProtocol
 }
 
 final class StatisticsViewModel: StatisticsViewModelProtocol {
@@ -97,6 +98,10 @@ final class StatisticsViewModel: StatisticsViewModelProtocol {
             break
         }
         onUsersUpdated?()
+    }
+    
+    func createUserCardViewModel(for userId: String) -> UserCardViewModelProtocol {
+        return UserCardViewModel(userService: userService, userId: userId)
     }
     
     // Calling this method on logout (when the authorization functionality will be implemented)

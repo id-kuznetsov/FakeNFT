@@ -178,10 +178,10 @@ extension StatisticsViewController: UITableViewDelegate {
         didSelectRowAt indexPath: IndexPath
     ) {
         let user = viewModel.users[indexPath.row]
-        let userCardVC = UserCardViewController(user: user)
+        let userCardViewModel = viewModel.createUserCardViewModel(for: user.id)
+        let userCardVC = UserCardViewController(viewModel: userCardViewModel)
         
-        guard let navigationController = navigationController else { return }
-        navigationController.pushViewController(userCardVC, animated: true)
+        navigationController?.pushViewController(userCardVC, animated: true)
     }
     
     func tableView(
