@@ -6,7 +6,6 @@
 //
 
 import UIKit
-import ProgressHUD
 
 final class StatisticsViewController: UIViewController {
     
@@ -107,14 +106,11 @@ final class StatisticsViewController: UIViewController {
     }
     
     private func showLoadingIndicator() {
-        self.view.isUserInteractionEnabled = false
-        ProgressHUD.colorAnimation = .ypBlack
-        ProgressHUD.show()
+        UIBlockingProgressIndicator.show()
     }
     
     private func hideLoadingIndicator() {
-        self.view.isUserInteractionEnabled = true
-        ProgressHUD.dismiss()
+        UIBlockingProgressIndicator.dismiss()
     }
     
     // MARK: - Actions

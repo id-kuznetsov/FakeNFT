@@ -6,7 +6,6 @@
 //
 
 import UIKit
-import ProgressHUD
 
 final class UserCardViewController: UIViewController {
     
@@ -213,14 +212,11 @@ final class UserCardViewController: UIViewController {
     }
     
     private func showLoadingIndicator() {
-        view.isUserInteractionEnabled = false
-        ProgressHUD.colorAnimation = .ypBlack
-        ProgressHUD.show()
+        UIBlockingProgressIndicator.show()
     }
     
     private func hideLoadingIndicator() {
-        view.isUserInteractionEnabled = true
-        ProgressHUD.dismiss()
+        UIBlockingProgressIndicator.dismiss()
     }
     
     @objc private func openUserWebsite() {
