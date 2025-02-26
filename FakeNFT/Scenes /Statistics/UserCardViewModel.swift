@@ -17,6 +17,11 @@ protocol UserCardViewModelProtocol {
 
 final class UserCardViewModel: UserCardViewModelProtocol {
     
+    // MARK: - Public properties
+    var userWebsite: String? { user?.website }
+    var onUserLoaded: ((User) -> Void)?
+    var onLoadingStateChanged: ((Bool) -> Void)?
+    
     // MARK: - Private properties
     private let userService: UserService
     private let userId: String
@@ -27,12 +32,6 @@ final class UserCardViewModel: UserCardViewModelProtocol {
             onUserLoaded?(user)
         }
     }
-    
-    // MARK: - Public properties
-    var userWebsite: String? { user?.website }
-    
-    var onUserLoaded: ((User) -> Void)?
-    var onLoadingStateChanged: ((Bool) -> Void)?
     
     // MARK: - Initializers
     init(userService: UserService, userId: String) {

@@ -1,5 +1,6 @@
 "Catalog.openNft" = "Открыть Nft";
 "Error.network" = "Произошла ошибка сети";
+"Error.fetchingData" = "Не удалось получить данные";
 "Error.unknown" = "Произошла неизвестная ошибка";
 "Error.repeat" = "Повторить";
 "Error.title" = "Ошибка";

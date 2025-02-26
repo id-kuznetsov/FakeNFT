@@ -58,6 +58,28 @@ final class AlertPresenter {
         
         viewController.present(alertController, animated: true)
     }
+    
+    static func presentNetworkErrorAlert(
+        on viewController: UIViewController,
+        retryAction: @escaping () -> Void
+    ) {
+        let alertController = UIAlertController(
+            title: nil,
+            message: L10n.Error.fetchingData,
+            preferredStyle: .alert
+        )
+        
+        let retryAction = UIAlertAction(title: L10n.Error.repeat, style: .default) { _ in
+            retryAction()
+        }
+        let cancelAction = UIAlertAction(title: L10n.Button.cancel, style: .cancel)
+        
+        alertController.addAction(cancelAction)
+        alertController.addAction(retryAction)
+        alertController.preferredAction = retryAction
+        
+        viewController.present(alertController, animated: true)
+    }
 }
 
 

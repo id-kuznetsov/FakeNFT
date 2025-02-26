@@ -35,10 +35,10 @@ final class UserCardViewController: UIViewController {
         return view
     }()
     
-    private let nameLabel: UILabel = {
+    private lazy var nameLabel: UILabel = {
         let label = UILabel()
         label.textColor = .ypBlack
-        label.font = .systemFont(ofSize: 22, weight: .bold)
+        label.font = .headline3
         return label
     }()
     
@@ -46,7 +46,7 @@ final class UserCardViewController: UIViewController {
         let label = UILabel()
         label.numberOfLines = 0
         label.textColor = .ypBlack
-        label.font = .systemFont(ofSize: 13, weight: .regular)
+        label.font = .caption2
         return label
     }()
     
@@ -54,7 +54,7 @@ final class UserCardViewController: UIViewController {
         let button = UIButton()
         button.setTitle(L10n.UserCard.websiteButton, for: .normal)
         button.setTitleColor(.ypBlack, for: .normal)
-        button.titleLabel?.font = .systemFont(ofSize: 15, weight: .regular)
+        button.titleLabel?.font = .caption1
         button.layer.cornerRadius = 16
         button.layer.borderColor = UIColor.ypBlack.cgColor
         button.layer.borderWidth = 1.0
@@ -66,14 +66,14 @@ final class UserCardViewController: UIViewController {
         let label = UILabel()
         label.text = L10n.UserCard.nftCollectionLabel
         label.textColor = .ypBlack
-        label.font = .systemFont(ofSize: 17, weight: .bold)
+        label.font = .bodyBold
         return label
     }()
     
     private lazy var nftCountLabel: UILabel = {
         let label = UILabel()
         label.textColor = .ypBlack
-        label.font = .systemFont(ofSize: 17, weight: .bold)
+        label.font = .bodyBold
         return label
     }()
     
@@ -165,7 +165,7 @@ final class UserCardViewController: UIViewController {
     }
     
     private func setupUI() {
-        view.backgroundColor = .systemBackground
+        view.backgroundColor = .ypWhite
         
         [customNavBar, avatarImageView, nameLabel, descriptionLabel,
          webViewButton, nftButton].forEach { element in

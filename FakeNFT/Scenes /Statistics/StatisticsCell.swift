@@ -15,7 +15,7 @@ final class StatisticsCell: UITableViewCell {
     // MARK: - Private properties
     private lazy var indexLabel: UILabel = {
         let label = UILabel()
-        label.font = .systemFont(ofSize: 15, weight: .regular)
+        label.font = .caption1
         label.textColor = .ypBlack
         return label
     }()
@@ -30,7 +30,7 @@ final class StatisticsCell: UITableViewCell {
     
     private lazy var nameLabel: UILabel = {
         let label = UILabel()
-        label.font = .systemFont(ofSize: 22, weight: .bold)
+        label.font = .headline3
         label.textColor = .ypBlack
         label.numberOfLines = 1
         label.lineBreakMode = .byTruncatingTail
@@ -41,7 +41,7 @@ final class StatisticsCell: UITableViewCell {
     
     private lazy var ratingLabel: UILabel = {
         let label = UILabel()
-        label.font = .systemFont(ofSize: 22, weight: .bold)
+        label.font = .headline3
         label.textColor = .ypBlack
         label.setContentCompressionResistancePriority(.required, for: .horizontal)
         label.setContentHuggingPriority(.required, for: .horizontal)

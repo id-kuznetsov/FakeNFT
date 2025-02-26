@@ -103,6 +103,17 @@ final class StatisticsViewController: UIViewController {
                 isLoading ? self?.showLoadingIndicator() : self?.hideLoadingIndicator()
             }
         }
+        viewModel.onErrorOccurred = { [weak self] _ in
+            DispatchQueue.main.async {
+                self?.showNetworkErrorAlert()
+            }
+        }
+    }
+    
+    private func showNetworkErrorAlert() {
+        AlertPresenter.presentNetworkErrorAlert(on: self) { [weak self] in
+            self?.viewModel.fetchNextPage()
+        }
     }
     
     private func showLoadingIndicator() {
