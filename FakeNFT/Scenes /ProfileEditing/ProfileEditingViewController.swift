@@ -142,7 +142,7 @@ final class ProfileEditingViewController: UIViewController {
     private func applySnapshot() {
         var snapshot = Snapshot()
         snapshot.appendSections([.header, .name, .description, .website])
-        snapshot.appendItems([.avatar(nil, L10n.ProfileEditing.uploadPhoto)], toSection: .header)
+        snapshot.appendItems([.avatar(nil, L10n.ProfileEditing.changePhoto)], toSection: .header)
         snapshot.appendItems([.textFieldName(nil)], toSection: .name)
         snapshot.appendItems([.textView(nil)], toSection: .description)
         snapshot.appendItems([.textFieldWebsite(nil)], toSection: .website)

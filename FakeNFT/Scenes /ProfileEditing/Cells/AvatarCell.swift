@@ -28,10 +28,11 @@ final class AvatarCell: UITableViewCell, ReuseIdentifying {
     private lazy var actionButton: UIButton = {
         let button = UIButton()
         button.addTarget(self, action: #selector(actionButtonDidTap), for: .touchUpInside)
-        button.titleLabel?.textColor = .ypWhite
+        button.setTitleColor(.ypWhite, for: .normal)
         button.titleLabel?.font = .caption3
         button.titleLabel?.textAlignment = .center
         button.titleLabel?.numberOfLines = 2
+        button.titleLabel?.lineBreakMode = .byWordWrapping
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
@@ -78,8 +79,8 @@ final class AvatarCell: UITableViewCell, ReuseIdentifying {
             avatarImageView.heightAnchor.constraint(equalToConstant: avatarImageSize.height),
             avatarImageView.widthAnchor.constraint(equalToConstant: avatarImageSize.width),
             
-            actionButton.leadingAnchor.constraint(equalTo: avatarImageView.leadingAnchor, constant: 10),
-            actionButton.trailingAnchor.constraint(equalTo: avatarImageView.trailingAnchor, constant: -10),
+            actionButton.leadingAnchor.constraint(equalTo: avatarImageView.leadingAnchor, constant: 5),
+            actionButton.trailingAnchor.constraint(equalTo: avatarImageView.trailingAnchor, constant: -5),
             actionButton.centerYAnchor.constraint(equalTo: avatarImageView.centerYAnchor),
         ])
     }
