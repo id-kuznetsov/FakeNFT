@@ -12,7 +12,6 @@ final class WebViewViewController: UIViewController {
     private lazy var webView: WKWebView = {
         let webView = WKWebView()
         webView.backgroundColor = .clear
-        webView.translatesAutoresizingMaskIntoConstraints = false
         webView.navigationDelegate = self
         webView.addObserver(self, forKeyPath: "estimatedProgress", options: .new, context: nil)
         return webView
@@ -20,15 +19,30 @@ final class WebViewViewController: UIViewController {
     
     private lazy var progressView: UIProgressView = {
         let progressView = UIProgressView(progressViewStyle: .default)
-        progressView.translatesAutoresizingMaskIntoConstraints = false
         progressView.tintColor = .ypBlack
         return progressView
+    }()
+    
+    private lazy var customNavBar: UINavigationBar = {
+        let navBar = UINavigationBar()
+        navBar.barTintColor = .ypWhite
+        navBar.shadowImage = UIImage()
+        return navBar
+    }()
+    
+    private lazy var backButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.setImage(UIImage.chevronLeft, for: .normal)
+        button.tintColor = .ypBlack
+        button.addTarget(self, action: #selector(backButtonTapped), for: .touchUpInside)
+        return button
     }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
         setupLayout()
+        configureCustomNavBar()
     }
     
     init(url: URL) {
@@ -56,22 +70,41 @@ final class WebViewViewController: UIViewController {
     
     private func setupView() {
         view.backgroundColor = .ypWhite
-        view.addSubview(webView)
-        view.addSubview(progressView)
+        
+        [webView, progressView, customNavBar].forEach { element in
+            view.addSubview(element)
+            element.translatesAutoresizingMaskIntoConstraints = false
+        }
     }
     
     private func setupLayout() {
         NSLayoutConstraint.activate([
-            webView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            customNavBar.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            customNavBar.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            customNavBar.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            
+            webView.topAnchor.constraint(equalTo: customNavBar.bottomAnchor),
             webView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             webView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             webView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             
-            progressView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            progressView.topAnchor.constraint(equalTo: customNavBar.bottomAnchor),
             progressView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             progressView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             progressView.heightAnchor.constraint(equalToConstant: 2)
         ])
+    }
+    
+    private func configureCustomNavBar() {
+        let navItem = UINavigationItem()
+        let backBarButton = UIBarButtonItem(customView: backButton)
+        navItem.leftBarButtonItem = backBarButton
+        customNavBar.setItems([navItem], animated: false)
+    }
+    
+    // MARK: - Actions
+    @objc private func backButtonTapped() {
+        navigationController?.popViewController(animated: true)
     }
 }
 

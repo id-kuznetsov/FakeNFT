@@ -21,7 +21,7 @@ final class StatisticsViewController: UIViewController {
     
     private lazy var filterButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setImage(UIImage(named: "ic.filter"), for: .normal)
+        button.setImage(UIImage(named: "ic.sort"), for: .normal)
         button.tintColor = .ypBlack
         button.addTarget(self, action: #selector(filterButtonTapped), for: .touchUpInside)
         return button
@@ -189,6 +189,7 @@ extension StatisticsViewController: UITableViewDelegate {
         let userCardVC = UserCardViewController(viewModel: userCardViewModel)
         
         navigationController?.pushViewController(userCardVC, animated: true)
+        tabBarController?.tabBar.isHidden = true
     }
     
     func tableView(

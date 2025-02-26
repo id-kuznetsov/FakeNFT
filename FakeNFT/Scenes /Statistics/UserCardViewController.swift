@@ -21,7 +21,7 @@ final class UserCardViewController: UIViewController {
     
     private lazy var backButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setImage(UIImage(systemName: "chevron.left"), for: .normal)
+        button.setImage(UIImage.chevronLeft, for: .normal)
         button.tintColor = .ypBlack
         button.addTarget(self, action: #selector(backButtonTapped), for: .touchUpInside)
         return button
@@ -29,7 +29,7 @@ final class UserCardViewController: UIViewController {
     
     private lazy var avatarImageView: UIImageView = {
         let view = UIImageView()
-        view.layer.cornerRadius = 35
+        view.layer.cornerRadius = 34
         view.layer.masksToBounds = true
         view.clipsToBounds = true
         return view
@@ -78,7 +78,7 @@ final class UserCardViewController: UIViewController {
     }()
     
     private lazy var chevronImageView: UIImageView = {
-        let imageView = UIImageView(image: UIImage(systemName: "chevron.right"))
+        let imageView = UIImageView(image: (UIImage.chevronRight))
         imageView.tintColor = .ypBlack
         imageView.contentMode = .scaleAspectFit
         return imageView
@@ -153,7 +153,7 @@ final class UserCardViewController: UIViewController {
         descriptionLabel.text = user.description
         nftCountLabel.text = "(\(user.nfts?.count ?? 0))"
         
-        let placeholderImage = UIImage(named: "ic.person.crop.circle.fill") ?? UIImage()
+        let placeholderImage = UIImage.profileTab?.withTintColor(.ypGrayUniversal, renderingMode: .alwaysOriginal) ?? UIImage()
         
         if let avatarUrl = user.avatar, let url = URL(string: avatarUrl) {
             avatarImageView.kf.setImage(with: url, placeholder: placeholderImage)

@@ -108,7 +108,7 @@ final class StatisticsCell: UITableViewCell {
         nameLabel.text = user.name
         ratingLabel.text = "\(user.rating)"
         
-        let placeholderImage = UIImage(named: "ic.person.crop.circle.fill")
+        let placeholderImage = UIImage.profileTab?.withTintColor(.ypGrayUniversal, renderingMode: .alwaysOriginal)
         
         if let avatarURLString = user.avatar, let url = URL(string: avatarURLString) {
             avatarImageView.kf.setImage(with: url, placeholder: placeholderImage)
