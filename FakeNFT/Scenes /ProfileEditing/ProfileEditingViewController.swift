@@ -4,11 +4,24 @@ final class ProfileEditingViewController: UIViewController {
     
     // MARK: - Section
     
-    private enum Section: String, Hashable, CaseIterable {
+    private enum Section: Hashable, CaseIterable {
         case header
         case name
         case description
         case website
+        
+        var title: String {
+            switch self {
+            case .header:
+                return "none"
+            case .name:
+                return L10n.ProfileEditing.name
+            case .description:
+                return L10n.ProfileEditing.description
+            case .website:
+                return L10n.ProfileEditing.website
+            }
+        }
     }
     
     // MARK: - Item
@@ -40,6 +53,8 @@ final class ProfileEditingViewController: UIViewController {
     
     // MARK: - Private Properties
     
+    private let headerHeight: CGFloat = 60.0
+    
     private lazy var dismissButton: UIButton = {
         let button = UIButton()
         button.addTarget(self, action: #selector(dismissButtonDidTap), for: .touchUpInside)
@@ -50,8 +65,12 @@ final class ProfileEditingViewController: UIViewController {
     }()
     
     private lazy var tableView: UITableView = {
-        let tableView = UITableView()
+        let tableView = UITableView(frame: .zero, style: .grouped)
         tableView.delegate = self
+        tableView.register(
+            ProfileEditingHeaderView.self,
+            forHeaderFooterViewReuseIdentifier: ProfileEditingHeaderView.reuseIdentifier
+        )
         tableView.register(AvatarCell.self)
         tableView.register(TextFieldCell.self)
         tableView.register(TextViewCell.self)
@@ -168,6 +187,27 @@ extension ProfileEditingViewController: UITableViewDelegate {
         default:
             return item.cellHeight
         }
+    }
+    
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let section = Section.allCases[section]
+        if section == .header {
+            return nil
+        }
+        
+        let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: ProfileEditingHeaderView.reuseIdentifier)
+        guard let profileEditingHeaderView = headerView as? ProfileEditingHeaderView else {
+            return nil
+        }
+        profileEditingHeaderView.setTitle(section.title)
+        return profileEditingHeaderView
+    }
+    
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        if section == 0 {
+            return 0.0
+        }
+        return headerHeight
     }
     
     func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
