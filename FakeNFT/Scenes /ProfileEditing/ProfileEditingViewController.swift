@@ -81,7 +81,7 @@ final class ProfileEditingViewController: UIViewController {
         tableView.showsHorizontalScrollIndicator = false
         tableView.backgroundColor = .clear
         tableView.separatorColor = .clear
-        tableView.contentInset = UIEdgeInsets(top: 80, left: 0, bottom: 40, right: 0)
+        tableView.contentInset = UIEdgeInsets(top: 20, left: 0, bottom: 40, right: 0)
         tableView.translatesAutoresizingMaskIntoConstraints = false
         
         return tableView
@@ -191,22 +191,19 @@ extension ProfileEditingViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let section = Section.allCases[section]
-        if section == .header {
-            return nil
-        }
         
         let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: ProfileEditingHeaderView.reuseIdentifier)
         guard let profileEditingHeaderView = headerView as? ProfileEditingHeaderView else {
             return nil
         }
-        profileEditingHeaderView.setTitle(section.title)
+        
+        if section != .header {
+            profileEditingHeaderView.setTitle(section.title)
+        }
         return profileEditingHeaderView
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        if section == 0 {
-            return 0.0
-        }
         return headerHeight
     }
     
