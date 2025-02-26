@@ -15,16 +15,19 @@ final class ProfileEditingViewController: UIViewController {
     
     private enum Item: Hashable {
         case avatar(URL?, String)
-        case textField(String?)
+        case textFieldName(String?)
         case textView(String?)
+        case textFieldWebsite(String?)
         
         var cellHeight: CGFloat {
             switch self {
             case .avatar(_, _):
                 return 70.0
-            case .textField(_):
+            case .textFieldName(_):
                 return 44.0
             case .textView(_):
+                return 44.0
+            case .textFieldWebsite(_):
                 return 44.0
             }
         }
@@ -76,7 +79,7 @@ final class ProfileEditingViewController: UIViewController {
                 avatarCell.setupCell(url: url, actionTitle: actionTitle)
                 return avatarCell
                 
-            case .textField(let name):
+            case .textFieldName(let name):
                 let cell = tableView.dequeueReusableCell(withIdentifier: TextFieldCell.defaultReuseIdentifier)
                 guard let textFieldCell = cell as? TextFieldCell else {
                     return cell
@@ -87,6 +90,15 @@ final class ProfileEditingViewController: UIViewController {
                 
             case .textView(_):
                 return UITableViewCell()
+                
+            case .textFieldWebsite(let website):
+                let cell = tableView.dequeueReusableCell(withIdentifier: TextFieldCell.defaultReuseIdentifier)
+                guard let textFieldCell = cell as? TextFieldCell else {
+                    return cell
+                }
+                textFieldCell.delegate = self
+                textFieldCell.setupCell(text: website, placeholder: L10n.ProfileEditing.websitePlaceholder)
+                return textFieldCell
             }
         }
     }()
@@ -124,9 +136,10 @@ final class ProfileEditingViewController: UIViewController {
     
     private func applySnapshot() {
         var snapshot = Snapshot()
-        snapshot.appendSections([.header, .name])
+        snapshot.appendSections([.header, .name, .website])
         snapshot.appendItems([.avatar(nil, L10n.ProfileEditing.uploadPhoto)], toSection: .header)
-        snapshot.appendItems([.textField(nil)], toSection: .name)
+        snapshot.appendItems([.textFieldName(nil)], toSection: .name)
+        snapshot.appendItems([.textFieldWebsite(nil)], toSection: .website)
         dataSource.apply(snapshot, animatingDifferences: false)
     }
     
