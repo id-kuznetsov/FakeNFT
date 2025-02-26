@@ -41,6 +41,7 @@
 		188B59312D69B08B005D960A /* NavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 188B59302D69B08B005D960A /* NavigationController.swift */; };
 		188B59342D69B639005D960A /* WebViewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 188B59332D69B639005D960A /* WebViewViewController.swift */; };
 		188B59362D69BEC9005D960A /* DeveloperConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 188B59352D69BEC9005D960A /* DeveloperConstants.swift */; };
+		18A3C8162D6F0B4300E8ACAC /* TextViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18A3C8152D6F0B4300E8ACAC /* TextViewCell.swift */; };
 		3F478ED129DB476500F6D39E /* Fonts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F478ED029DB476500F6D39E /* Fonts.swift */; };
 		3F603CCD29DB4A53000C43D7 /* ProgressHUD in Frameworks */ = {isa = PBXBuildFile; productRef = 3F603CCC29DB4A53000C43D7 /* ProgressHUD */; };
 		3F603CD029DB4A74000C43D7 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 3F603CCF29DB4A74000C43D7 /* Kingfisher */; };
@@ -125,6 +126,7 @@
 		188B59302D69B08B005D960A /* NavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationController.swift; sourceTree = "<group>"; };
 		188B59332D69B639005D960A /* WebViewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewViewController.swift; sourceTree = "<group>"; };
 		188B59352D69BEC9005D960A /* DeveloperConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeveloperConstants.swift; sourceTree = "<group>"; };
+		18A3C8152D6F0B4300E8ACAC /* TextViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextViewCell.swift; sourceTree = "<group>"; };
 		3F478ED029DB476500F6D39E /* Fonts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Fonts.swift; sourceTree = "<group>"; };
 		3F68069329CBBAF100B4F915 /* FakeNFT.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FakeNFT.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3F68069629CBBAF100B4F915 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -261,6 +263,7 @@
 			children = (
 				18800AFF2D6CC9B0004B5BAE /* AvatarCell.swift */,
 				18800AFD2D6CC0F1004B5BAE /* TextFieldCell.swift */,
+				18A3C8152D6F0B4300E8ACAC /* TextViewCell.swift */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -716,6 +719,7 @@
 				0CFCB74E2A7817DC0009A829 /* NftStorage.swift in Sources */,
 				188B59342D69B639005D960A /* WebViewViewController.swift in Sources */,
 				3FC8C39129D2453B0081F015 /* ExamplePutRequest.swift in Sources */,
+				18A3C8162D6F0B4300E8ACAC /* TextViewCell.swift in Sources */,
 				0CFCB7462A78064B0009A829 /* NftDetailCellModel.swift in Sources */,
 				0CFCB74B2A780EA80009A829 /* UIView+Constraints.swift in Sources */,
 				3F6806D729CBC50A00B4F915 /* CellsReusingUtils.swift in Sources */,

@@ -54,6 +54,7 @@ final class ProfileEditingViewController: UIViewController {
         tableView.delegate = self
         tableView.register(AvatarCell.self)
         tableView.register(TextFieldCell.self)
+        tableView.register(TextViewCell.self)
         
         tableView.allowsSelection = false
         tableView.alwaysBounceVertical = true
@@ -88,8 +89,12 @@ final class ProfileEditingViewController: UIViewController {
                 textFieldCell.setupCell(text: name, placeholder: L10n.ProfileEditing.namePlaceholder)
                 return textFieldCell
                 
-            case .textView(_):
-                return UITableViewCell()
+            case .textView(let text):
+                let cell = tableView.dequeueReusableCell(withIdentifier: TextViewCell.defaultReuseIdentifier)
+                guard let textViewCell = cell as? TextViewCell else { return cell }
+                textViewCell.delegate = self
+                textViewCell.setupCell(text: text, placeholder: L10n.ProfileEditing.descriptionPlaceholder)
+                return textViewCell
                 
             case .textFieldWebsite(let website):
                 let cell = tableView.dequeueReusableCell(withIdentifier: TextFieldCell.defaultReuseIdentifier)
@@ -136,9 +141,10 @@ final class ProfileEditingViewController: UIViewController {
     
     private func applySnapshot() {
         var snapshot = Snapshot()
-        snapshot.appendSections([.header, .name, .website])
+        snapshot.appendSections([.header, .name, .description, .website])
         snapshot.appendItems([.avatar(nil, L10n.ProfileEditing.uploadPhoto)], toSection: .header)
         snapshot.appendItems([.textFieldName(nil)], toSection: .name)
+        snapshot.appendItems([.textView(nil)], toSection: .description)
         snapshot.appendItems([.textFieldWebsite(nil)], toSection: .website)
         dataSource.apply(snapshot, animatingDifferences: false)
     }
@@ -154,9 +160,18 @@ final class ProfileEditingViewController: UIViewController {
 
 extension ProfileEditingViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        guard let item = dataSource.itemIdentifier(for: indexPath) else {
-            return 0.0
+        guard let item = dataSource.itemIdentifier(for: indexPath) else { return 0.0 }
+        
+        switch item {
+        case .textView:
+            return UITableView.automaticDimension
+        default:
+            return item.cellHeight
         }
+    }
+    
+    func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
+        guard let item = dataSource.itemIdentifier(for: indexPath) else { return 0.0 }
         return item.cellHeight
     }
 }
@@ -169,10 +184,21 @@ extension ProfileEditingViewController: AvatarCellDelegate {
     }
 }
 
-// MARK: - AvatarCellDelegate
+// MARK: - TextFieldCellDelegate
 
 extension ProfileEditingViewController: TextFieldCellDelegate {
     func textFieldCell(_ cell: TextFieldCell, didChangeText text: String?) {
         
+    }
+}
+
+// MARK: - TextViewCellDelegate
+
+extension ProfileEditingViewController: TextViewCellDelegate {
+    func textViewCell(_ cell: TextViewCell, didChangeText text: String?) {
+        UIView.setAnimationsEnabled(false)
+        tableView.beginUpdates()
+        tableView.endUpdates()
+        UIView.setAnimationsEnabled(true)
     }
 }
