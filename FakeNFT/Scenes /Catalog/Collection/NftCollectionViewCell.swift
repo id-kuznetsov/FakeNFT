@@ -78,8 +78,6 @@ class NftCollectionViewCell: UICollectionViewCell, ReuseIdentifying {
     override init(frame: CGRect) {
         super.init(frame: frame)
 
-        backgroundColor = .ypYellowUniversal
-
         addSubview(nftImageView)
         nftImageView.addSubview(favoriteButton)
 
@@ -93,7 +91,7 @@ class NftCollectionViewCell: UICollectionViewCell, ReuseIdentifying {
 
         setupConstraints()
     }
-    
+
     required init?(coder: NSCoder) {
         super.init(coder: coder)
         fatalError("init(coder:) has not been implemented")
@@ -101,14 +99,14 @@ class NftCollectionViewCell: UICollectionViewCell, ReuseIdentifying {
 
     // MARK: - Config
     func configure(nftUI: NftUI, imageLoaderService: ImageLoaderService) {
+        ratingButton.configure(rating: nftUI.rating)
+        nameLabel.text = nftUI.name
+        priceLabel.text = nftUI.formattedPrice
+
         loadNftImage(
             from: nftUI.images.first,
             imageLoaderService: imageLoaderService
         )
-
-        ratingButton.configure(rating: nftUI.rating)
-        nameLabel.text = nftUI.name
-        priceLabel.text = nftUI.formattedPrice
     }
 
     // MARK: - Load Image

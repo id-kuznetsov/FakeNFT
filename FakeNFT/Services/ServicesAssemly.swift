@@ -29,4 +29,8 @@ final class ServicesAssembly {
     var imageLoaderService: ImageLoaderService {
         ImageLoaderServiceImpl()
     }
+
+    var userService: UserService {
+        UserServiceImpl()
+    }
 }

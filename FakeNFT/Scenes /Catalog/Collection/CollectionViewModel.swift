@@ -11,6 +11,7 @@ import Combine
 protocol CollectionViewModelProtocol {
     var collection: CollectionUI { get }
     var imageLoaderService: ImageLoaderService { get }
+    var userService: UserService { get }
     var coverImage: UIImage? { get }
     var nfts: [NftUI] { get set }
     var nftsPublisher: Published<[NftUI]>.Publisher { get }
@@ -19,26 +20,32 @@ protocol CollectionViewModelProtocol {
 }
 
 final class CollectionViewModel: CollectionViewModelProtocol {
-    var collection: CollectionUI
     let imageLoaderService: ImageLoaderService
+    let userService: UserService
+    private let nftsService: NftsService
+
+    var collection: CollectionUI
     let coverImage: UIImage?
 
     @Published var nfts: [NftUI]
     var nftsPublisher: Published<[NftUI]>.Publisher { $nfts }
 
-    private let nftsService: NftsService
+    private var collectionAuthors = [UserUI]()
 
+    // MARK: - Init
     init(
         imageLoaderService: ImageLoaderService,
         nftsService: NftsService,
         collection: CollectionUI,
-        coverImage: UIImage?
+        coverImage: UIImage?,
+        userService: UserService
     ) {
         self.imageLoaderService = imageLoaderService
         self.nftsService = nftsService
         self.collection = collection
         self.nfts = []
         self.coverImage = coverImage
+        self.userService = userService
 
         nftsService.loadNfts { nfts in
             self.nfts = nfts

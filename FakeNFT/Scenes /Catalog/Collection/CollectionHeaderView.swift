@@ -7,8 +7,26 @@
 
 import UIKit
 
+protocol CollectionHeaderViewDelegate: AnyObject {
+    func collectionHeaderViewDidTapCollection(_ headerView: CollectionHeaderView)
+    func collectionHeaderViewDidTapAuthor(_ headerView: CollectionHeaderView)
+    func collectionHeaderViewDidTapFavorite(_ headerView: CollectionHeaderView)
+    func collectionHeaderViewDidTapCart(_ headerView: CollectionHeaderView)
+}
+
 class CollectionHeaderView: UICollectionReusableView, ReuseIdentifying {
+    weak var delegate: CollectionHeaderViewDelegate?
+
     // MARK: - UI
+    lazy var authorButton: UIButton = {
+        let view = UIButton()
+        view.setTitleColor(.ypBlueUniversal, for: .normal)
+        view.titleLabel?.font = .caption1
+        view.addTarget(self, action: #selector(didTapAuthorButton), for: .touchUpInside)
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+
     private lazy var headerVStackView: UIStackView = {
         let view = UIStackView()
         view.axis = .vertical
@@ -74,15 +92,6 @@ class CollectionHeaderView: UICollectionReusableView, ReuseIdentifying {
         return view
     }()
 
-    private lazy var authorButton: UIButton = {
-        let view = UIButton()
-        view.setTitleColor(.ypBlueUniversal, for: .normal)
-        view.titleLabel?.font = .caption1
-        view.addTarget(self, action: #selector(didTapAuthorButton), for: .touchUpInside)
-        view.translatesAutoresizingMaskIntoConstraints = false
-        return view
-    }()
-
     private lazy var descriptionLabel: UILabel = {
         let view = UILabel()
         view.font = .caption2
@@ -117,7 +126,6 @@ class CollectionHeaderView: UICollectionReusableView, ReuseIdentifying {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-
 
     func configure(
         with model: CollectionUI,
@@ -161,7 +169,7 @@ class CollectionHeaderView: UICollectionReusableView, ReuseIdentifying {
     // MARK: - Actions
     @objc
     private func didTapAuthorButton() {
-        print("Author button tapped")
+        delegate?.collectionHeaderViewDidTapAuthor(self)
     }
 
     // MARK: - Constraints
@@ -172,7 +180,7 @@ class CollectionHeaderView: UICollectionReusableView, ReuseIdentifying {
             headerVStackView.trailingAnchor.constraint(equalTo: trailingAnchor),
             headerVStackView.bottomAnchor.constraint(equalTo: bottomAnchor),
 
-            coverImageView.widthAnchor.constraint(equalTo: headerVStackView.widthAnchor),
+            coverImageView.widthAnchor.constraint(equalTo: headerVStackView.widthAnchor)
         ])
 
         coverImageView.setHeightConstraintFromPx(

@@ -41,7 +41,7 @@ enum LayoutConstants {
             static let rightInset: CGFloat = LayoutConstants.Common.Margin.medium
             static let cellSpacing: CGFloat = LayoutConstants.Common.Margin.regular
             static let cellHeight: CGFloat = 192
-            static let lineSpacing: CGFloat = LayoutConstants.Common.Margin.medium
+            static let lineSpacing: CGFloat = LayoutConstants.Common.Margin.small // 16
             static let paddingWidth = leftInset + rightInset + (cellCount - 1) * cellSpacing
         }
 

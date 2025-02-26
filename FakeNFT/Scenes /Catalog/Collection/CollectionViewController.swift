@@ -64,6 +64,18 @@ class CollectionViewController: UIViewController {
             .store(in: &subscribers)
     }
 
+    // MARK: - Navigation
+    private func presentUserWebViewController(with authorName: String) {
+        let viewModel = UserWebViewModel(
+            userService: viewModel.userService,
+            authorName: authorName
+        )
+        let viewController = UserWebViewController(viewModel: viewModel)
+        viewController.delegate = self
+
+        navigationController?.pushViewController(viewController, animated: true)
+    }
+
     // MARK: - Actions
     @objc
     private func presentAuthorViewController() {
@@ -97,7 +109,7 @@ extension CollectionViewController: UICollectionViewDataSource {
     ) -> Int {
         viewModel.nfts.count
     }
-    
+
     func collectionView(
         _ collectionView: UICollectionView,
         cellForItemAt indexPath: IndexPath
@@ -125,6 +137,7 @@ extension CollectionViewController: UICollectionViewDataSource {
                 imageLoaderService: viewModel.imageLoaderService,
                 coverImage: viewModel.coverImage
             )
+            header.delegate = self
             return header
         }
         return UICollectionReusableView()
@@ -204,5 +217,38 @@ extension CollectionViewController: UICollectionViewDelegateFlowLayout {
     ) {
         let nftUI = viewModel.nfts[indexPath.item]
         presentNftCardViewController(for: nftUI)
+    }
+}
+
+// MARK: - CollectionHeaderViewDelegate
+extension CollectionViewController: CollectionHeaderViewDelegate {
+    func collectionHeaderViewDidTapCollection(_ headerView: CollectionHeaderView) {
+
+    }
+
+    func collectionHeaderViewDidTapAuthor(_ headerView: CollectionHeaderView) {
+        guard
+            let authorName = headerView.authorButton.title(for: .normal)
+        else {
+            print("Author name not found")
+            return
+        }
+
+        presentUserWebViewController(with: authorName)
+    }
+
+    func collectionHeaderViewDidTapFavorite(_ headerView: CollectionHeaderView) {
+
+    }
+
+    func collectionHeaderViewDidTapCart(_ headerView: CollectionHeaderView) {
+
+    }
+}
+
+// MARK: - UserWebViewControllerDelegate
+extension CollectionViewController: UserWebViewControllerDelegate {
+    func userWebViewControllerDidBack(_ controller: UserWebViewController) {
+        navigationController?.popViewController(animated: true)
     }
 }

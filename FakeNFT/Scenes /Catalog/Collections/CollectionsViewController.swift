@@ -8,7 +8,7 @@
 import UIKit
 import Combine
 
-final class CollectionsViewController: UIViewController {
+final class CollectionsViewController: UIViewController, FilterView {
     // MARK: - Properties
     private let viewModel: CollectionsViewModelProtocol
     private var subscribers = Set<AnyCancellable>()
@@ -75,12 +75,17 @@ final class CollectionsViewController: UIViewController {
         navigationItem.rightBarButtonItem = filterButton
     }
 
-    private func presentCollectionViewController(for collection: CollectionUI, with image: UIImage?) {
+    // MARK: - Navigation
+    private func presentCollectionViewController(
+        for collection: CollectionUI,
+        with image: UIImage?
+    ) {
         let viewModel = CollectionViewModel(
             imageLoaderService: viewModel.imageLoaderService,
             nftsService: viewModel.nftsService,
             collection: collection,
-            coverImage: image
+            coverImage: image,
+            userService: viewModel.userService
         )
         let viewController = CollectionViewController(viewModel: viewModel)
         viewController.hidesBottomBarWhenPushed = true
@@ -91,14 +96,14 @@ final class CollectionsViewController: UIViewController {
     // MARK: - Actions
     @objc
     private func presentFilterActionSheet() {
-        // TODO: - Add filters
-        let actionSheet = UIAlertController(
-            title: "Фильтры",
-            message: "Выберите фильтр",
-            preferredStyle: .actionSheet
+        showFilters(
+            style: .actionSheet,
+            buttons: [
+                .sortByName(action: viewModel.sortByCollectionName),
+                .sortByNftCount(action: viewModel.sortByNftCount),
+                .close
+            ]
         )
-        actionSheet.addAction(UIAlertAction(title: "Отмена", style: .cancel))
-        present(actionSheet, animated: true)
     }
 
     // MARK: - Constraints
@@ -141,7 +146,7 @@ extension CollectionsViewController: UITableViewDelegate {
         guard let cell = tableView.cellForRow(at: indexPath) as? CollectionsTableViewCell else { return }
         let selectedImage = cell.getLoadedImage()
         let collectionUI = viewModel.getCollection(at: indexPath)
-        
+
         presentCollectionViewController(for: collectionUI, with: selectedImage)
     }
 }

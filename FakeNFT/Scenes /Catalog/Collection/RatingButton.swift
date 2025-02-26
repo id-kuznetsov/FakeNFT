@@ -74,11 +74,11 @@ class RatingButton: UIButton {
         stackView.spacing = 8
         stackView.distribution = .fillEqually
 
-        for i in 1...maxStars {
+        for item in 1...maxStars {
             let button = UIButton(type: .system)
-            button.tag = i
+            button.tag = item
             button.setTitle("★", for: .normal)
-            button.setTitleColor(i <= rating ? .systemYellow : .lightGray, for: .normal)
+            button.setTitleColor(item <= rating ? .systemYellow : .lightGray, for: .normal)
             button.titleLabel?.font = UIFont.systemFont(ofSize: 24)
             button.addTarget(self, action: #selector(starTapped(_:)), for: .touchUpInside)
             stackView.addArrangedSubview(button)
@@ -102,4 +102,3 @@ class RatingButton: UIButton {
         }
     }
 }
-

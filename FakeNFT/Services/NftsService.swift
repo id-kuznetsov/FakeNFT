@@ -32,7 +32,7 @@ extension NftUI {
                 images: [
                     URL(string: "https://code.s3.yandex.net/Mobile/iOS/NFT/Beige/Finn/1.png")!,
                     URL(string: "https://code.s3.yandex.net/Mobile/iOS/NFT/Beige/Finn/2.png")!,
-                    URL(string: "https://code.s3.yandex.net/Mobile/iOS/NFT/Beige/Finn/3.png")!,
+                    URL(string: "https://code.s3.yandex.net/Mobile/iOS/NFT/Beige/Finn/3.png")!
                 ],
                 rating: 5,
                 description: "explicari lobortis rutrum evertitur fugit convenire ligula",
@@ -40,27 +40,27 @@ extension NftUI {
                 author: URL(string: "https://unruffled_cohen.fakenfts.org/")!,
                 id: "1"
             ),
-            NftUI(
-                createdAt: Date(),
-                name: "Baz",
-                images: [
-                    URL(string: "https://exemple.net/1.png")!,
-                    URL(string: "https://code.s3.yandex.net/Mobile/iOS/NFT/Beige/Finn/2.png")!,
-                    URL(string: "https://code.s3.yandex.net/Mobile/iOS/NFT/Beige/Finn/3.png")!,
-                ],
-                rating: 2,
-                description: "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.",
-                formattedPrice: "50 ETH",
-                author: URL(string: "https://domain.tld/")!,
-                id: "2"
-            ),
+//            NftUI(
+//                createdAt: Date(),
+//                name: "Baz",
+//                images: [
+//                    URL(string: "https://exemple.net/1.png")!,
+//                    URL(string: "https://code.s3.yandex.net/Mobile/iOS/NFT/Beige/Finn/2.png")!,
+//                    URL(string: "https://code.s3.yandex.net/Mobile/iOS/NFT/Beige/Finn/3.png")!,
+//                ],
+//                rating: 2,
+//                description: "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.",
+//                formattedPrice: "50 ETH",
+//                author: URL(string: "https://domain.tld/")!,
+//                id: "2"
+//            ),
             NftUI(
                 createdAt: Date(),
                 name: "Bar",
                 images: [
                     URL(string: "https://code.s3.yandex.net/Mobile/iOS/NFT/Beige/Finn/1.png")!,
                     URL(string: "https://code.s3.yandex.net/Mobile/iOS/NFT/Beige/Finn/2.png")!,
-                    URL(string: "https://code.s3.yandex.net/Mobile/iOS/NFT/Beige/Finn/3.png")!,
+                    URL(string: "https://code.s3.yandex.net/Mobile/iOS/NFT/Beige/Finn/3.png")!
                 ],
                 rating: 1,
                 description: "Lorem ipsum dolor",
@@ -74,7 +74,7 @@ extension NftUI {
                 images: [
                     URL(string: "https://code.s3.yandex.net/Mobile/iOS/NFT/Beige/Finn/1.png")!,
                     URL(string: "https://code.s3.yandex.net/Mobile/iOS/NFT/Beige/Finn/2.png")!,
-                    URL(string: "https://code.s3.yandex.net/Mobile/iOS/NFT/Beige/Finn/3.png")!,
+                    URL(string: "https://code.s3.yandex.net/Mobile/iOS/NFT/Beige/Finn/3.png")!
                 ],
                 rating: 0,
                 description: "",
@@ -88,7 +88,7 @@ extension NftUI {
                 images: [
                     URL(string: "https://code.s3.yandex.net/Mobile/iOS/NFT/Beige/Finn/1.png")!,
                     URL(string: "https://code.s3.yandex.net/Mobile/iOS/NFT/Beige/Finn/2.png")!,
-                    URL(string: "https://code.s3.yandex.net/Mobile/iOS/NFT/Beige/Finn/3.png")!,
+                    URL(string: "https://code.s3.yandex.net/Mobile/iOS/NFT/Beige/Finn/3.png")!
                 ],
                 rating: 4,
                 description: "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.",
@@ -102,7 +102,7 @@ extension NftUI {
                 images: [
                     URL(string: "https://code.s3.yandex.net/Mobile/iOS/NFT/Beige/Finn/1.png")!,
                     URL(string: "https://code.s3.yandex.net/Mobile/iOS/NFT/Beige/Finn/2.png")!,
-                    URL(string: "https://code.s3.yandex.net/Mobile/iOS/NFT/Beige/Finn/3.png")!,
+                    URL(string: "https://code.s3.yandex.net/Mobile/iOS/NFT/Beige/Finn/3.png")!
                 ],
                 rating: 3,
                 description: "Lorem ipsum dolor sit amet, consetetur sadipscing elitr",
@@ -116,7 +116,7 @@ extension NftUI {
                 images: [
                     URL(string: "https://code.s3.yandex.net/Mobile/iOS/NFT/Beige/Finn/1.png")!,
                     URL(string: "https://code.s3.yandex.net/Mobile/iOS/NFT/Beige/Finn/2.png")!,
-                    URL(string: "https://code.s3.yandex.net/Mobile/iOS/NFT/Beige/Finn/3.png")!,
+                    URL(string: "https://code.s3.yandex.net/Mobile/iOS/NFT/Beige/Finn/3.png")!
                 ],
                 rating: 5,
                 description: "Lorem ipsum dolor sit amet",
@@ -130,7 +130,7 @@ extension NftUI {
                 images: [
                     URL(string: "https://code.s3.yandex.net/Mobile/iOS/NFT/Beige/Finn/1.png")!,
                     URL(string: "https://code.s3.yandex.net/Mobile/iOS/NFT/Beige/Finn/2.png")!,
-                    URL(string: "https://code.s3.yandex.net/Mobile/iOS/NFT/Beige/Finn/3.png")!,
+                    URL(string: "https://code.s3.yandex.net/Mobile/iOS/NFT/Beige/Finn/3.png")!
                 ],
                 rating: 3,
                 description: "Lorem ipsum dolor sit amet",
@@ -144,7 +144,7 @@ extension NftUI {
                 images: [
                     URL(string: "https://code.s3.yandex.net/Mobile/iOS/NFT/Beige/Finn/1.png")!,
                     URL(string: "https://code.s3.yandex.net/Mobile/iOS/NFT/Beige/Finn/2.png")!,
-                    URL(string: "https://code.s3.yandex.net/Mobile/iOS/NFT/Beige/Finn/3.png")!,
+                    URL(string: "https://code.s3.yandex.net/Mobile/iOS/NFT/Beige/Finn/3.png")!
                 ],
                 rating: 2,
                 description: "Lorem ipsum dolor sit amet",
@@ -158,14 +158,14 @@ extension NftUI {
                 images: [
                     URL(string: "https://code.s3.yandex.net/Mobile/iOS/NFT/Beige/Finn/1.png")!,
                     URL(string: "https://code.s3.yandex.net/Mobile/iOS/NFT/Beige/Finn/2.png")!,
-                    URL(string: "https://code.s3.yandex.net/Mobile/iOS/NFT/Beige/Finn/3.png")!,
+                    URL(string: "https://code.s3.yandex.net/Mobile/iOS/NFT/Beige/Finn/3.png")!
                 ],
                 rating: 1,
                 description: "Lorem ipsum dolor sit amet",
                 formattedPrice: "28.27 ETH",
                 author: URL(string: "https://unruffled_cohen.fakenfts.org/")!,
                 id: "10"
-            ),
+            )
         ]
     }
 }

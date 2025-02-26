@@ -31,7 +31,7 @@ private extension CollectionUI {
                 name: "Peach",
                 cover: URL(string: "https://code.s3.yandex.net/Mobile/iOS/NFT/Обложки_коллекций/Peach.png"),
                 nfts: ["id1", "id2", "id3", "id4", "id5", "id6", "id7", "id8", "id9", "id10"],
-                description: "Lorem ipsum dolor ",
+                description: "Lorem ipsum dolor. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. ",
                 author: "Barry Sheppard",
                 id: "id3"
             ),
@@ -53,22 +53,22 @@ private extension CollectionUI {
                 author: "Lourdes Harper",
                 id: "id1"
             ),
-            CollectionUI(
-                createdAt: Date(),
-                name: "Baz",
-                cover: URL(string: "https://domain.tld/Gray.png"),
-                nfts: ["id1", "id2"],
-                description: "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. ",
-                author: "Darren Morris",
-                id: "id2"
-            ),
+//            CollectionUI(
+//                createdAt: Date(),
+//                name: "Baz",
+//                cover: URL(string: "https://domain.tld/Gray.png"),
+//                nfts: ["id1", "id2"],
+//                description: "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. ",
+//                author: "Darren Morris",
+//                id: "id2"
+//            ),
             CollectionUI(
                 createdAt: Date(),
                 name: "Quuux",
                 cover: URL(string: "https://code.s3.yandex.net/Mobile/iOS/NFT/Обложки_коллекций/Pink.png"),
                 nfts: ["id1", "id2", "id3", "id4", "id5", "id6", "id7", "id8", "id9", "id10", "id11"],
                 description: "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. ",
-                author: "",
+                author: "Peggy Leblanc",
                 id: "id5"
             ),
             CollectionUI(
