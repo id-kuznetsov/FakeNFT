@@ -9,19 +9,22 @@ import UIKit
 import Kingfisher
 
 protocol ImageLoaderService {
-    func loadImage(into imageView: UIImageView, from url: URL?, placeholder: UIImage?, completion: ((Result<UIImage, Error>) -> Void)?)
-    func loadImage(from url: URL?, completion: @escaping (Result<UIImage, Error>) -> Void)
+    func loadImage(
+        into imageView: UIImageView,
+        from url: URL?,
+        completion: @escaping (Result<UIImage, Error>) -> Void
+    )
+
     func clearCache()
 }
 
 final class ImageLoaderServiceImpl: ImageLoaderService {
-
     func loadImage(
         into imageView: UIImageView,
         from url: URL?,
-        placeholder: UIImage? = UIImage(systemName: "scribble"),
-        completion: ((Result<UIImage, Error>) -> Void)? = nil
+        completion: @escaping (Result<UIImage, Error>) -> Void
     ) {
+        let placeholder: UIImage? = .scribble
         imageView.kf.setImage(
             with: url,
             placeholder: placeholder,
@@ -29,32 +32,10 @@ final class ImageLoaderServiceImpl: ImageLoaderService {
         ) { result in
             switch result {
             case .success(let value):
-                completion?(.success(value.image))
-            case .failure(let error):
-                imageView.contentMode = .scaleAspectFit
-                completion?(.failure(error))
-#if DEBUG
-                print("DEBUG: Failed to load image from \(String(describing: url)) – \(error.localizedDescription)")
-#endif
-            }
-        }
-    }
-
-    func loadImage(from url: URL?, completion: @escaping (Result<UIImage, Error>) -> Void) {
-        guard let url = url else {
-            completion(.failure(NSError(domain: "ImageLoaderService", code: -1, userInfo: [NSLocalizedDescriptionKey: "URL is nil"])))
-            return
-        }
-
-        KingfisherManager.shared.retrieveImage(with: url) { result in
-            switch result {
-            case .success(let value):
                 completion(.success(value.image))
             case .failure(let error):
+                imageView.contentMode = .scaleAspectFit
                 completion(.failure(error))
-#if DEBUG
-                print("DEBUG: Failed to load image from \(url) – \(error.localizedDescription)")
-#endif
             }
         }
     }

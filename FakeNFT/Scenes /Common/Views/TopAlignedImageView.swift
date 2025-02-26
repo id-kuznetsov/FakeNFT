@@ -8,8 +8,7 @@
 import UIKit
 
 class TopAlignedImageView: UIImageView {
-    override func layoutSubviews() {
-        super.layoutSubviews()
+    func adjustContentMode() {
         guard let image = self.image else { return }
 
         let imageAspect = image.size.width / image.size.height
@@ -23,5 +22,13 @@ class TopAlignedImageView: UIImageView {
             let visibleRatio = bounds.height / scaledHeight
             self.layer.contentsRect = CGRect(x: 0, y: 0, width: 1, height: visibleRatio)
         }
+
+        layoutSubviews()
+    }
+
+    func resetContentMode() {
+        self.layer.contentsRect = CGRect(x: 0, y: 0, width: 1, height: 1)
+
+        layoutSubviews()
     }
 }

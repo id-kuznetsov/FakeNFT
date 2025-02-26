@@ -114,17 +114,18 @@ class NftCollectionViewCell: UICollectionViewCell, ReuseIdentifying {
         nftImageView.showShimmerAnimation()
         imageLoaderService.loadImage(
             into: nftImageView,
-            from: url,
-            placeholder: .scribble
-        ) { [weak self] result in
+            from: url
+        )
+        { [weak self] result in
             guard let self else { return }
 
             self.nftImageView.hideShimmerAnimation()
+
             switch result {
             case .success(let image):
                 self.nftImageView.image = image
             case .failure(let error):
-                print("Failed to load image: \(error.localizedDescription)")
+                print("DEBUG: Failed to load image: \(error.localizedDescription)")
             }
         }
     }

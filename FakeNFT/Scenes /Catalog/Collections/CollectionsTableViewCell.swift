@@ -8,7 +8,6 @@
 import UIKit
 
 final class CollectionsTableViewCell: UITableViewCell, ReuseIdentifying {
-
     // MARK: - UI Components
     private lazy var cellVStackView: UIStackView = {
         let view = UIStackView()
@@ -59,13 +58,6 @@ final class CollectionsTableViewCell: UITableViewCell, ReuseIdentifying {
         fatalError("init(coder:) has not been implemented")
     }
 
-    override func prepareForReuse() {
-        super.prepareForReuse()
-        coverImageView.image = nil
-        nameAndCountLabel.text = nil
-        coverImageView.contentMode = .scaleAspectFill
-    }
-
     // MARK: - Config
     func configure(with model: CollectionUI, imageLoaderService: ImageLoaderService) {
         loadCoverImage(from: model.cover, imageLoaderService: imageLoaderService)
@@ -80,20 +72,23 @@ final class CollectionsTableViewCell: UITableViewCell, ReuseIdentifying {
     private func loadCoverImage(from url: URL?, imageLoaderService: ImageLoaderService) {
         coverImageView.showShimmerAnimation()
         nameAndCountLabel.showShimmerAnimation()
+
         imageLoaderService.loadImage(
             into: coverImageView,
-            from: url,
-            placeholder: .scribble
+            from: url
         ) { [weak self] result in
             guard let self else { return }
 
             self.coverImageView.hideShimmerAnimation()
             self.nameAndCountLabel.hideShimmerAnimation()
+
             switch result {
             case .success(let image):
+                self.coverImageView.adjustContentMode()
                 self.coverImageView.image = image
             case .failure(let error):
-                print("Failed to load image: \(error.localizedDescription)")
+                self.coverImageView.resetContentMode()
+                print("DEBUG: Failed to load image: \(error.localizedDescription)")
             }
         }
     }
