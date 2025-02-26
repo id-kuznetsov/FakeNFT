@@ -26,3 +26,12 @@
 "Profile.myNftsRoute" = "Мои NFT";
 "Profile.favouritesNftsRoute" = "Избранные NFT";
 "Profile.aboutRoute" = "О разработчике";
+
+"ProfileEditing.changePhoto" = "Сменить фото";
+"ProfileEditing.uploadPhoto" = "Загрузить фото";
+"ProfileEditing.name" = "Имя";
+"ProfileEditing.namePlaceholder" = "Введите имя";
+"ProfileEditing.description" = "Описание";
+"ProfileEditing.descriptionPlaceholder" = "Введите описание";
+"ProfileEditing.website" = "Сайт";
+"ProfileEditing.websitePlaceholder" = "Введите сайт";

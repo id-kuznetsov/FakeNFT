@@ -117,7 +117,7 @@ final class ProfileEditingViewController: UIViewController {
     private func applySnapshot() {
         var snapshot = Snapshot()
         snapshot.appendSections([.header])
-        snapshot.appendItems([.avatar(nil, "Добавить фото")], toSection: .header)
+        snapshot.appendItems([.avatar(nil, L10n.ProfileEditing.uploadPhoto)], toSection: .header)
         dataSource.apply(snapshot, animatingDifferences: false)
     }
     
