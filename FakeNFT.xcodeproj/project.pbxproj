@@ -340,6 +340,7 @@
 				9174C1132D6E41D60024C358 /* Catalog */,
 				F73AD88E2D5EC2B700E4C498 /* Cart */,
 				F73AD88F2D5EC2C600E4C498 /* Statistics */,
+				91B3C33B2D6C5B6100455990 /* User */,
 				0C79EE642A76DDCF00EE90EA /* NftDetails */,
 				3F6806C829CBBC8100B4F915 /* ProductDetails */,
 			);
@@ -444,7 +445,6 @@
 			children = (
 				0CFCB7472A7808870009A829 /* Collections */,
 				913D8B382D672A72001304A3 /* Collection */,
-				91B3C33B2D6C5B6100455990 /* User */,
 			);
 			path = Catalog;
 			sourceTree = "<group>";

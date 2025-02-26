@@ -57,11 +57,11 @@ class UserWebViewController: UIViewController, ErrorView {
         addObserver()
 
         Task {
-            await loadAuthView()
+            await loadWebView()
         }
     }
 
-    private func loadAuthView() async {
+    private func loadWebView() async {
         do {
             let request = try await viewModel.authorRequest()
             webView.load(request)
@@ -69,6 +69,15 @@ class UserWebViewController: UIViewController, ErrorView {
         } catch {
             showWKWebViewError(error)
         }
+    }
+
+    private func reloadWebView() {
+        guard webView.url != nil else {
+            showWKWebViewError(URLError(.unsupportedURL))
+            return
+        }
+
+        webView.reload()
     }
 
     private func updateProgress() {
@@ -98,7 +107,7 @@ class UserWebViewController: UIViewController, ErrorView {
                     self.delegate?.userWebViewControllerDidBack(self)
                 }),
                 .reload(action: {
-                    print("reload")
+                    self.reloadWebView()
                 })
             ]
         )
