@@ -7,6 +7,7 @@
 
 import Foundation
 
+// MARK: - StatisticsViewModelProtocol
 protocol StatisticsViewModelProtocol {
     var users: [User] { get }
     var onUsersUpdated: (() -> Void)? { get set }
@@ -31,6 +32,7 @@ final class StatisticsViewModel: StatisticsViewModelProtocol {
     private var allUsersLoaded = false
     private var isInitialDataLoaded = false
     
+    // MARK: - Public properties
     var onUsersUpdated: (() -> Void)?
     var onLoadingStateChanged: ((Bool) -> Void)?
     

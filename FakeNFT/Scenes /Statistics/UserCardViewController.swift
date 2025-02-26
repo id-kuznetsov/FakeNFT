@@ -9,6 +9,7 @@ import UIKit
 
 final class UserCardViewController: UIViewController {
     
+    // MARK: - Private properties
     private var viewModel: UserCardViewModelProtocol
     
     private lazy var customNavBar: UINavigationBar = {
@@ -51,7 +52,7 @@ final class UserCardViewController: UIViewController {
     
     private lazy var webViewButton: UIButton = {
         let button = UIButton()
-        button.setTitle("Перейти на сайт пользователя", for: .normal)
+        button.setTitle(L10n.UserCard.websiteButton, for: .normal)
         button.setTitleColor(.ypBlack, for: .normal)
         button.titleLabel?.font = .systemFont(ofSize: 15, weight: .regular)
         button.layer.cornerRadius = 16
@@ -63,7 +64,7 @@ final class UserCardViewController: UIViewController {
     
     private lazy var nftLabel: UILabel = {
         let label = UILabel()
-        label.text = "Коллекция NFT"
+        label.text = L10n.UserCard.nftCollectionLabel
         label.textColor = .ypBlack
         label.font = .systemFont(ofSize: 17, weight: .bold)
         return label
@@ -112,6 +113,7 @@ final class UserCardViewController: UIViewController {
         return button
     }()
     
+    // MARK: - Lifesycle
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -120,6 +122,7 @@ final class UserCardViewController: UIViewController {
         viewModel.loadUserData()
     }
     
+    // MARK: - Initializers
     init(viewModel: UserCardViewModelProtocol) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
@@ -130,6 +133,7 @@ final class UserCardViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
+    // MARK: - Private methods
     private func setupBindings() {
         viewModel.onUserLoaded = { [weak self] user in
             DispatchQueue.main.async {
@@ -219,6 +223,7 @@ final class UserCardViewController: UIViewController {
         UIBlockingProgressIndicator.dismiss()
     }
     
+    // MARK: - Actions
     @objc private func openUserWebsite() {
         guard let urlString = viewModel.userWebsite, let url = URL(string: urlString) else { return }
         let webVC = WebViewViewController(url: url)

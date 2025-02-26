@@ -7,6 +7,7 @@
 
 import Foundation
 
+// MARK: - UserCardViewModelProtocol
 protocol UserCardViewModelProtocol {
     var onUserLoaded: ((User) -> Void)? { get set }
     var onLoadingStateChanged: ((Bool) -> Void)? { get set }
@@ -16,6 +17,7 @@ protocol UserCardViewModelProtocol {
 
 final class UserCardViewModel: UserCardViewModelProtocol {
     
+    // MARK: - Private properties
     private let userService: UserService
     private let userId: String
     
@@ -26,20 +28,24 @@ final class UserCardViewModel: UserCardViewModelProtocol {
         }
     }
     
+    // MARK: - Public properties
     var userWebsite: String? { user?.website }
     
     var onUserLoaded: ((User) -> Void)?
     var onLoadingStateChanged: ((Bool) -> Void)?
     
+    // MARK: - Initializers
     init(userService: UserService, userId: String) {
         self.userService = userService
         self.userId = userId
     }
     
+    // MARK: Public methods
     func loadUserData() {
         getUser()
     }
     
+    // MARK: Private methods
     private func getUser() {
         onLoadingStateChanged?(true)
         userService.fetchUser(by: userId) { [weak self] result in

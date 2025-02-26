@@ -22,3 +22,6 @@
 "SortOption.rating" = "По рейтингу";
 "SortOption.title" = "По названию";
 "SortOption.name" = "По имени";
+
+"UserCard.websiteButton" = "Перейти на сайт пользователя";
+"UserCard.nftCollectionLabel" = "Коллекция NFT";
