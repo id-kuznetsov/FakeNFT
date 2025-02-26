@@ -9,3 +9,12 @@ struct Profile: Decodable {
     let likes: [String]
     let id: String
 }
+
+extension Profile: Dto {
+    func asDictionary() -> [String : String] {
+        ["name": name,
+         "description": description,
+         "website": website,
+         "likes": likes.isEmpty ? "null": likes.joined(separator: ", ")]
+    }
+}
