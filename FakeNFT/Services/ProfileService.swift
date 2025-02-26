@@ -8,19 +8,13 @@ protocol ProfileService {
 
 final class ProfileServiceImpl: ProfileService {
     private let networkClient: NetworkClient
-    private let tokenStorage: TokenStorage
     
-    init(networkClient: NetworkClient, tokenStorage: TokenStorage) {
+    init(networkClient: NetworkClient) {
         self.networkClient = networkClient
-        self.tokenStorage = tokenStorage
     }
     
     func fetchProfile(_ completion: @escaping ProfileCompletion) {
-        guard let token = try? tokenStorage.retrieveToken() else {
-            fatalError()
-        }
-        
-        let request = ProfileRequest(token: token)
+        let request = ProfileRequest()
         networkClient.send(request: request, type: Profile.self) { result in
             switch result {
             case .success(let profile):
@@ -30,6 +24,4 @@ final class ProfileServiceImpl: ProfileService {
             }
         }
     }
-    
-    
 }

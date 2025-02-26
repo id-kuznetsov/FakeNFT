@@ -43,6 +43,7 @@
 		188B59362D69BEC9005D960A /* DeveloperConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 188B59352D69BEC9005D960A /* DeveloperConstants.swift */; };
 		18A3C8162D6F0B4300E8ACAC /* TextViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18A3C8152D6F0B4300E8ACAC /* TextViewCell.swift */; };
 		18A3C8182D6F136600E8ACAC /* ProfileEditingHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18A3C8172D6F136600E8ACAC /* ProfileEditingHeaderView.swift */; };
+		18A3C81B2D6F4EA000E8ACAC /* ProfileEditingService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18A3C81A2D6F4EA000E8ACAC /* ProfileEditingService.swift */; };
 		3F478ED129DB476500F6D39E /* Fonts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F478ED029DB476500F6D39E /* Fonts.swift */; };
 		3F603CCD29DB4A53000C43D7 /* ProgressHUD in Frameworks */ = {isa = PBXBuildFile; productRef = 3F603CCC29DB4A53000C43D7 /* ProgressHUD */; };
 		3F603CD029DB4A74000C43D7 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 3F603CCF29DB4A74000C43D7 /* Kingfisher */; };
@@ -129,6 +130,7 @@
 		188B59352D69BEC9005D960A /* DeveloperConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeveloperConstants.swift; sourceTree = "<group>"; };
 		18A3C8152D6F0B4300E8ACAC /* TextViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextViewCell.swift; sourceTree = "<group>"; };
 		18A3C8172D6F136600E8ACAC /* ProfileEditingHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileEditingHeaderView.swift; sourceTree = "<group>"; };
+		18A3C81A2D6F4EA000E8ACAC /* ProfileEditingService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileEditingService.swift; sourceTree = "<group>"; };
 		3F478ED029DB476500F6D39E /* Fonts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Fonts.swift; sourceTree = "<group>"; };
 		3F68069329CBBAF100B4F915 /* FakeNFT.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FakeNFT.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3F68069629CBBAF100B4F915 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -373,6 +375,7 @@
 				558E39E62C68CE0900FB86AC /* NftService.swift */,
 				0CFCB73F2A78002A0009A829 /* ExamplePutService.swift */,
 				188B590E2D68C40F005D960A /* ProfileService.swift */,
+				18A3C81A2D6F4EA000E8ACAC /* ProfileEditingService.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -695,6 +698,7 @@
 				3F478ED129DB476500F6D39E /* Fonts.swift in Sources */,
 				0C79EE6A2A76DE1000EE90EA /* NftDetailAssembly.swift in Sources */,
 				F756512F2D5EA652009B646C /* StatisticsViewController.swift in Sources */,
+				18A3C81B2D6F4EA000E8ACAC /* ProfileEditingService.swift in Sources */,
 				F75651292D5EA5B8009B646C /* ProfileViewController.swift in Sources */,
 				3FC8C39329D246BA0081F015 /* DateFormatters+Presets.swift in Sources */,
 				18800AFE2D6CC0F1004B5BAE /* TextFieldCell.swift in Sources */,
