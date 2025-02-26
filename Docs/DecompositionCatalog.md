@@ -21,16 +21,19 @@
 - CollectionViewController(with NFTCollectionView) (est: 5 часа; fact: x часов)
 - NFTCollectionViewCell (est: 4 часа; fact: x часов)
 
+#### Image Loading Animation
+- add Shimmer 
+
+#### User Screen
+- UserWebViewModel (est: 3 часа; fact: x часов)
+- UserWebViewController (est: 3 часа; fact: x часов)
+
+#### AlertPresenter
+- refactor AlertPresenter (est: 5 часа; fact: x часов)
+- refactor ErrorView (est: 2 часа; fact: x часов)
+- add FilterView (est: 2 часа; fact: x часов)
+
 ## Модуль 2:
-#### NFTCard Screen
-##### Логика
-- NFTCardDataProvider(mock data) (est: 2 часа; fact: x часов)
-- NFTCardViewModel (est: 2 часа; fact: x часов)
-##### Верстка
-- NFTImagesCollectionView (est: 3 часа; fact: x часов)
-- NFTImageCollectionViewCell (est: 3 часа; fact: x часов)
-- CurrencyTableViewCell (est: 2 часа; fact: x часов)
-- NFTCardViewController(with NFTImagesCollectionView, NFTCollectionView) (est: 4 часа; fact: x часов)
 #### Работа с сетью
 ##### Collections Screen
 - GET NFTCollections (est: 3 часа; fact: x часов)
