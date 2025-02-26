@@ -1,8 +1,11 @@
 import Foundation
 
 struct ProfileRequest: NetworkRequest {
-    var endpoint: URL? {
-        URL(string: "\(RequestConstants.baseURL)/api/v1/profile/1")
+    let endpoint: URL?
+    let dto: Dto?
+    
+    init() {
+        self.endpoint = URL(string: "\(RequestConstants.baseURL)/api/v1/profile/1")
+        self.dto = nil
     }
-    var dto: Dto?
 }
