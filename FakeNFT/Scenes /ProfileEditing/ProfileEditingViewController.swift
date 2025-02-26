@@ -52,13 +52,14 @@ final class ProfileEditingViewController: UIViewController {
         tableView.register(AvatarCell.self)
         
         tableView.allowsSelection = false
-        tableView.alwaysBounceVertical = false
+        tableView.alwaysBounceVertical = true
         tableView.showsVerticalScrollIndicator = false
         tableView.showsHorizontalScrollIndicator = false
         tableView.backgroundColor = .clear
         tableView.separatorColor = .clear
-        tableView.contentInset = UIEdgeInsets(top: 80, left: 16, bottom: 40, right: 16)
+        tableView.contentInset = UIEdgeInsets(top: 80, left: 16, bottom: 40, right: -16)
         tableView.translatesAutoresizingMaskIntoConstraints = false
+        
         return tableView
     }()
     
@@ -88,11 +89,6 @@ final class ProfileEditingViewController: UIViewController {
         super.viewDidLoad()
         setupView()
         setupLayout()
-        setupDataBindings()
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
         applySnapshot()
     }
     
@@ -116,10 +112,6 @@ final class ProfileEditingViewController: UIViewController {
             dismissButton.heightAnchor.constraint(equalToConstant: 44),
             dismissButton.widthAnchor.constraint(equalToConstant: 44),
         ])
-    }
-    
-    private func setupDataBindings() {
-        
     }
     
     private func applySnapshot() {
@@ -147,8 +139,10 @@ extension ProfileEditingViewController: UITableViewDelegate {
     }
 }
 
-// MARK: -
+// MARK: - AvatarCellDelegate
 
 extension ProfileEditingViewController: AvatarCellDelegate {
-    func didTapButton(on cell: AvatarCell) { }
+    func didTapButton(on cell: AvatarCell) {
+        
+    }
 }

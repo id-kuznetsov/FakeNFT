@@ -27,6 +27,7 @@ final class AvatarCell: UITableViewCell, ReuseIdentifying {
     
     private lazy var actionButton: UIButton = {
         let button = UIButton()
+        button.addTarget(self, action: #selector(actionButtonDidTap), for: .touchUpInside)
         button.titleLabel?.textColor = .ypWhite
         button.titleLabel?.font = .caption3
         button.titleLabel?.textAlignment = .center
@@ -83,7 +84,7 @@ final class AvatarCell: UITableViewCell, ReuseIdentifying {
         ])
     }
     
-    @objc private func changeAvatarButtonDidTap() {
+    @objc private func actionButtonDidTap() {
         delegate?.didTapButton(on: self)
     }
 }
