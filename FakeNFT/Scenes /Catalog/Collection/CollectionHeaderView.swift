@@ -148,7 +148,7 @@ class CollectionHeaderView: UICollectionReusableView, ReuseIdentifying {
 
     // MARK: - Load Image
     private func loadCoverImage(from url: URL?, imageLoaderService: ImageLoaderService) {
-        coverImageView.showShimmerAnimation()
+        showLoadingAnimation()
 
         imageLoaderService.loadImage(
             into: coverImageView,
@@ -156,7 +156,7 @@ class CollectionHeaderView: UICollectionReusableView, ReuseIdentifying {
         ) { [weak self] result in
             guard let self else { return }
 
-            self.coverImageView.hideShimmerAnimation()
+            self.hideLoadingAnimation()
 
             switch result {
             case .success(let image):
@@ -165,6 +165,15 @@ class CollectionHeaderView: UICollectionReusableView, ReuseIdentifying {
                 print("DEBUG: Failed to load image: \(error.localizedDescription)")
             }
         }
+    }
+
+    // MARK: - Loading Animation
+    private func showLoadingAnimation() {
+        coverImageView.showShimmerAnimation()
+    }
+
+    private func hideLoadingAnimation() {
+        coverImageView.hideShimmerAnimation()
     }
 
     // MARK: - Actions

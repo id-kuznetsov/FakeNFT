@@ -70,8 +70,7 @@ final class CollectionsTableViewCell: UITableViewCell, ReuseIdentifying {
 
     // MARK: - Load Image
     private func loadCoverImage(from url: URL?, imageLoaderService: ImageLoaderService) {
-        coverImageView.showShimmerAnimation()
-        nameAndCountLabel.showShimmerAnimation()
+        showLoadingAnimation()
 
         imageLoaderService.loadImage(
             into: coverImageView,
@@ -79,8 +78,7 @@ final class CollectionsTableViewCell: UITableViewCell, ReuseIdentifying {
         ) { [weak self] result in
             guard let self else { return }
 
-            self.coverImageView.hideShimmerAnimation()
-            self.nameAndCountLabel.hideShimmerAnimation()
+            self.hideLoadingAnimation()
 
             switch result {
             case .success(let image):
@@ -95,6 +93,17 @@ final class CollectionsTableViewCell: UITableViewCell, ReuseIdentifying {
 
     private func formatCollectionName(_ name: String, _ count: Int) -> String {
         return "\(name) (\(count))"
+    }
+
+    // MARK: - Loading Animation
+    private func showLoadingAnimation() {
+        coverImageView.showShimmerAnimation()
+        nameAndCountLabel.showShimmerAnimation()
+    }
+
+    private func hideLoadingAnimation() {
+        coverImageView.hideShimmerAnimation()
+        nameAndCountLabel.hideShimmerAnimation()
     }
 
     // MARK: - Constraints

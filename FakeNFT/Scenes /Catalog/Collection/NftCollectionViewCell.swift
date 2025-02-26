@@ -111,7 +111,8 @@ class NftCollectionViewCell: UICollectionViewCell, ReuseIdentifying {
 
     // MARK: - Load Image
     private func loadNftImage(from url: URL?, imageLoaderService: ImageLoaderService) {
-        nftImageView.showShimmerAnimation()
+        showLoadingAnimation()
+
         imageLoaderService.loadImage(
             into: nftImageView,
             from: url
@@ -119,7 +120,7 @@ class NftCollectionViewCell: UICollectionViewCell, ReuseIdentifying {
         { [weak self] result in
             guard let self else { return }
 
-            self.nftImageView.hideShimmerAnimation()
+            self.hideLoadingAnimation()
 
             switch result {
             case .success(let image):
@@ -128,6 +129,15 @@ class NftCollectionViewCell: UICollectionViewCell, ReuseIdentifying {
                 print("DEBUG: Failed to load image: \(error.localizedDescription)")
             }
         }
+    }
+
+    // MARK: - Loading Animation
+    private func showLoadingAnimation() {
+        nftImageView.showShimmerAnimation()
+    }
+
+    private func hideLoadingAnimation() {
+        nftImageView.hideShimmerAnimation()
     }
 
     // MARK: - Constraints
