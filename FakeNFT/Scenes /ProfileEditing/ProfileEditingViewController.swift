@@ -4,7 +4,7 @@ final class ProfileEditingViewController: UIViewController {
     
     // MARK: - Section
     
-    private enum Section: String, Hashable {
+    private enum Section: String, Hashable, CaseIterable {
         case header
         case name
         case description
@@ -15,8 +15,8 @@ final class ProfileEditingViewController: UIViewController {
     
     private enum Item: Hashable {
         case avatar(URL?, String)
-        case textField(String)
-        case textView(String)
+        case textField(String?)
+        case textView(String?)
         
         var cellHeight: CGFloat {
             switch self {
@@ -50,6 +50,7 @@ final class ProfileEditingViewController: UIViewController {
         let tableView = UITableView()
         tableView.delegate = self
         tableView.register(AvatarCell.self)
+        tableView.register(TextFieldCell.self)
         
         tableView.allowsSelection = false
         tableView.alwaysBounceVertical = true
@@ -57,7 +58,7 @@ final class ProfileEditingViewController: UIViewController {
         tableView.showsHorizontalScrollIndicator = false
         tableView.backgroundColor = .clear
         tableView.separatorColor = .clear
-        tableView.contentInset = UIEdgeInsets(top: 80, left: 16, bottom: 40, right: -16)
+        tableView.contentInset = UIEdgeInsets(top: 80, left: 0, bottom: 40, right: 0)
         tableView.translatesAutoresizingMaskIntoConstraints = false
         
         return tableView
@@ -75,8 +76,15 @@ final class ProfileEditingViewController: UIViewController {
                 avatarCell.setupCell(url: url, actionTitle: actionTitle)
                 return avatarCell
                 
-            case .textField(_):
-                return UITableViewCell()
+            case .textField(let name):
+                let cell = tableView.dequeueReusableCell(withIdentifier: TextFieldCell.defaultReuseIdentifier)
+                guard let textFieldCell = cell as? TextFieldCell else {
+                    return cell
+                }
+                textFieldCell.delegate = self
+                textFieldCell.setupCell(text: name, placeholder: L10n.ProfileEditing.namePlaceholder)
+                return textFieldCell
+                
             case .textView(_):
                 return UITableViewCell()
             }
@@ -102,8 +110,8 @@ final class ProfileEditingViewController: UIViewController {
     
     private func setupLayout() {
         NSLayoutConstraint.activate([
-            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
             tableView.topAnchor.constraint(equalTo: view.topAnchor),
             tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             
@@ -116,8 +124,9 @@ final class ProfileEditingViewController: UIViewController {
     
     private func applySnapshot() {
         var snapshot = Snapshot()
-        snapshot.appendSections([.header])
+        snapshot.appendSections([.header, .name])
         snapshot.appendItems([.avatar(nil, L10n.ProfileEditing.uploadPhoto)], toSection: .header)
+        snapshot.appendItems([.textField(nil)], toSection: .name)
         dataSource.apply(snapshot, animatingDifferences: false)
     }
     
@@ -143,6 +152,14 @@ extension ProfileEditingViewController: UITableViewDelegate {
 
 extension ProfileEditingViewController: AvatarCellDelegate {
     func didTapButton(on cell: AvatarCell) {
+        
+    }
+}
+
+// MARK: - AvatarCellDelegate
+
+extension ProfileEditingViewController: TextFieldCellDelegate {
+    func textFieldCell(_ cell: TextFieldCell, didChangeText text: String?) {
         
     }
 }

@@ -73,8 +73,8 @@ final class AvatarCell: UITableViewCell, ReuseIdentifying {
     
     private func setupLayout() {
         NSLayoutConstraint.activate([
-            avatarImageView.centerXAnchor.constraint(equalTo: centerXAnchor),
-            avatarImageView.centerYAnchor.constraint(equalTo: centerYAnchor),
+            avatarImageView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+            avatarImageView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
             avatarImageView.heightAnchor.constraint(equalToConstant: avatarImageSize.height),
             avatarImageView.widthAnchor.constraint(equalToConstant: avatarImageSize.width),
             
