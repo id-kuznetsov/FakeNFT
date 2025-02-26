@@ -13,15 +13,17 @@ final class TabBarController: UITabBarController {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
+    // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        view.backgroundColor = .systemBackground
-        configure()
+        setupTabBarAppearance()
+        setupTabs()
     }
-    
-    private func configure() {
+
+    // MARK: - Tabs
+    private func setupTabs() {
         let profileVC = UINavigationController(rootViewController: ProfileViewController(servicesAssembly: servicesAssembly))
         profileVC.tabBarItem = UITabBarItem(
             title: NSLocalizedString("Tab.profile", comment: ""),
@@ -52,13 +54,21 @@ final class TabBarController: UITabBarController {
         
         setViewControllers([profileVC, catalogVC, cartVC, statisticsVC], animated: false)
         self.selectedIndex = 1
-        
-        tabBarAppearance()
     }
     
-    private func tabBarAppearance() {
-        tabBar.tintColor = .ypBlueUniversal
-        tabBar.unselectedItemTintColor = .ypBlack
-        tabBar.backgroundColor = .ypWhite
+    // MARK: - Appearance
+    private func setupTabBarAppearance() {
+        let appearance = UITabBarAppearance()
+        appearance.configureWithOpaqueBackground()
+        appearance.backgroundColor = .ypWhite
+        appearance.stackedLayoutAppearance.selected.iconColor = .ypBlueUniversal
+        appearance.stackedLayoutAppearance.normal.iconColor = .ypBlack
+        appearance.shadowImage = nil
+        appearance.shadowColor = nil
+
+        tabBar.standardAppearance = appearance
+        if #available(iOS 15.0, *) {
+            tabBar.scrollEdgeAppearance = appearance
+        }
     }
 }
