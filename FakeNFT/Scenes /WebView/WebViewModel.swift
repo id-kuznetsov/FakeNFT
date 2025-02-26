@@ -1,5 +1,5 @@
 //
-//  UserWebViewModel.swift
+//  WebViewModel.swift
 //  FakeNFT
 //
 //  Created by Nikolai Eremenko on 24.02.2025.
@@ -8,13 +8,11 @@
 import Foundation
 import Combine
 
-protocol UserWebViewModelProtocol {
-//    var users: [UserUI] { get }
-//    var usersPublisher: Published<[UserUI]>.Publisher { get }
+protocol WebViewModelProtocol {
     func authorRequest() async throws -> URLRequest
 }
 
-enum UserWebViewModelError: Error {
+enum WebViewModelError: Error {
     case authorNotFound
     case authorUrlEmpty
 
@@ -28,10 +26,7 @@ enum UserWebViewModelError: Error {
     }
 }
 
-final class UserWebViewModel: UserWebViewModelProtocol {
-//    @Published var users = [UserUI]()
-//    var usersPublisher: Published<[UserUI]>.Publisher { $users }
-
+final class WebViewModel {
     private let userService: UserService
     private let authorName: String
 
@@ -40,18 +35,9 @@ final class UserWebViewModel: UserWebViewModelProtocol {
         userService: UserService,
         authorName: String
     ) {
-//        self.users = []
         self.userService = userService
         self.authorName = authorName
 
-//        userService.fetchUsers { users in
-//            self.users = users
-//        }
-    }
-
-    func authorRequest() async throws -> URLRequest {
-        let url = try await getCollectionAuthorUrl()
-        return URLRequest(url: url)
     }
 
     private func getUsers() async -> [UserUI] {
@@ -67,8 +53,16 @@ final class UserWebViewModel: UserWebViewModelProtocol {
 
         guard let user = users.first(where: { $0.name == authorName }),
               let website = user.website else {
-            throw UserWebViewModelError.authorNotFound
+            throw WebViewModelError.authorNotFound
         }
         return website
+    }
+}
+
+// MARK: - WebViewModelProtocol
+extension WebViewModel: WebViewModelProtocol {
+    func authorRequest() async throws -> URLRequest {
+        let url = try await getCollectionAuthorUrl()
+        return URLRequest(url: url)
     }
 }

@@ -22,7 +22,7 @@
 - NFTCollectionViewCell (est: 4 часа; fact: x часов)
 
 #### Image Loading Animation
-- add Shimmer 
+- add ShimmerView (est: 2 часа; fact: 3 часов)
 
 #### User Screen
 - UserWebViewModel (est: 3 часа; fact: x часов)

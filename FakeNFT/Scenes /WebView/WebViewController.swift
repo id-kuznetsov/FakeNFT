@@ -1,5 +1,5 @@
 //
-//  UserWebViewController.swift
+//  WebViewController.swift
 //  FakeNFT
 //
 //  Created by Nikolai Eremenko on 24.02.2025.
@@ -8,14 +8,14 @@
 import UIKit
 import WebKit
 
-protocol UserWebViewControllerDelegate: AnyObject {
-    func userWebViewControllerDidBack(_ controller: UserWebViewController)
+protocol WebViewControllerDelegate: AnyObject {
+    func webViewControllerDidBack(_ controller: WebViewController)
 }
 
-class UserWebViewController: UIViewController, ErrorView {
+class WebViewController: UIViewController, ErrorView {
     // MARK: - Properties
-    weak var delegate: UserWebViewControllerDelegate?
-    private let viewModel: UserWebViewModel
+    weak var delegate: WebViewControllerDelegate?
+    private let viewModel: WebViewModel
     private var estimatedProgressObservation: NSKeyValueObservation?
 
     // MARK: - UI
@@ -36,7 +36,7 @@ class UserWebViewController: UIViewController, ErrorView {
     }()
 
     // MARK: - Init
-    init(viewModel: UserWebViewModel) {
+    init(viewModel: WebViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
@@ -104,7 +104,7 @@ class UserWebViewController: UIViewController, ErrorView {
                 .back(action: { [weak self] in
                     guard let self else { return }
 
-                    self.delegate?.userWebViewControllerDidBack(self)
+                    self.delegate?.webViewControllerDidBack(self)
                 }),
                 .reload(action: {
                     self.reloadWebView()
@@ -128,7 +128,7 @@ class UserWebViewController: UIViewController, ErrorView {
     }
 }
 
-extension UserWebViewController: WKNavigationDelegate {
+extension WebViewController: WKNavigationDelegate {
     func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {
         showWKWebViewError(error)
     }

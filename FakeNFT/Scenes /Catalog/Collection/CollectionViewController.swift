@@ -66,11 +66,11 @@ class CollectionViewController: UIViewController {
 
     // MARK: - Navigation
     private func presentUserWebViewController(with authorName: String) {
-        let viewModel = UserWebViewModel(
+        let viewModel = WebViewModel(
             userService: viewModel.userService,
             authorName: authorName
         )
-        let viewController = UserWebViewController(viewModel: viewModel)
+        let viewController = WebViewController(viewModel: viewModel)
         viewController.delegate = self
 
         navigationController?.pushViewController(viewController, animated: true)
@@ -246,9 +246,9 @@ extension CollectionViewController: CollectionHeaderViewDelegate {
     }
 }
 
-// MARK: - UserWebViewControllerDelegate
-extension CollectionViewController: UserWebViewControllerDelegate {
-    func userWebViewControllerDidBack(_ controller: UserWebViewController) {
+// MARK: - WebViewControllerDelegate
+extension CollectionViewController: WebViewControllerDelegate {
+    func webViewControllerDidBack(_ controller: WebViewController) {
         navigationController?.popViewController(animated: true)
     }
 }

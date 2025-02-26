@@ -65,8 +65,8 @@
 		91B3C3362D6C390500455990 /* TopAlignedImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91B3C3352D6C390500455990 /* TopAlignedImageView.swift */; };
 		91B3C3382D6C453000455990 /* UserUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91B3C3372D6C453000455990 /* UserUI.swift */; };
 		91B3C33A2D6C462A00455990 /* UserService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91B3C3392D6C462A00455990 /* UserService.swift */; };
-		91B3C33D2D6C5BFE00455990 /* UserWebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91B3C33C2D6C5BFE00455990 /* UserWebViewController.swift */; };
-		91B3C33F2D6C673C00455990 /* UserWebViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91B3C33E2D6C673C00455990 /* UserWebViewModel.swift */; };
+		91B3C33D2D6C5BFE00455990 /* WebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91B3C33C2D6C5BFE00455990 /* WebViewController.swift */; };
+		91B3C33F2D6C673C00455990 /* WebViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91B3C33E2D6C673C00455990 /* WebViewModel.swift */; };
 		E19CD5AB2A98B56600CA39A5 /* NftImageCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E19CD5AA2A98B56600CA39A5 /* NftImageCollectionViewCell.swift */; };
 		E1A1B9DA2AA01CE400C3AFBC /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1A1B9D92AA01CE400C3AFBC /* TabBarController.swift */; };
 		F75651292D5EA5B8009B646C /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F75651282D5EA5B8009B646C /* ProfileViewController.swift */; };
@@ -154,8 +154,8 @@
 		91B3C3352D6C390500455990 /* TopAlignedImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopAlignedImageView.swift; sourceTree = "<group>"; };
 		91B3C3372D6C453000455990 /* UserUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserUI.swift; sourceTree = "<group>"; };
 		91B3C3392D6C462A00455990 /* UserService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserService.swift; sourceTree = "<group>"; };
-		91B3C33C2D6C5BFE00455990 /* UserWebViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserWebViewController.swift; sourceTree = "<group>"; };
-		91B3C33E2D6C673C00455990 /* UserWebViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserWebViewModel.swift; sourceTree = "<group>"; };
+		91B3C33C2D6C5BFE00455990 /* WebViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewController.swift; sourceTree = "<group>"; };
+		91B3C33E2D6C673C00455990 /* WebViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewModel.swift; sourceTree = "<group>"; };
 		E19CD5AA2A98B56600CA39A5 /* NftImageCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NftImageCollectionViewCell.swift; sourceTree = "<group>"; };
 		E1A1B9D92AA01CE400C3AFBC /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
 		F73197A72D60AC7800EBBEB9 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -340,7 +340,7 @@
 				9174C1132D6E41D60024C358 /* Catalog */,
 				F73AD88E2D5EC2B700E4C498 /* Cart */,
 				F73AD88F2D5EC2C600E4C498 /* Statistics */,
-				91B3C33B2D6C5B6100455990 /* User */,
+				91B3C33B2D6C5B6100455990 /* WebView */,
 				0C79EE642A76DDCF00EE90EA /* NftDetails */,
 				3F6806C829CBBC8100B4F915 /* ProductDetails */,
 			);
@@ -449,13 +449,13 @@
 			path = Catalog;
 			sourceTree = "<group>";
 		};
-		91B3C33B2D6C5B6100455990 /* User */ = {
+		91B3C33B2D6C5B6100455990 /* WebView */ = {
 			isa = PBXGroup;
 			children = (
-				91B3C33C2D6C5BFE00455990 /* UserWebViewController.swift */,
-				91B3C33E2D6C673C00455990 /* UserWebViewModel.swift */,
+				91B3C33C2D6C5BFE00455990 /* WebViewController.swift */,
+				91B3C33E2D6C673C00455990 /* WebViewModel.swift */,
 			);
-			path = User;
+			path = WebView;
 			sourceTree = "<group>";
 		};
 		E19CD5A92A98B55900CA39A5 /* Cell */ = {
@@ -691,7 +691,7 @@
 				F756512B2D5EA5F2009B646C /* CollectionsViewController.swift in Sources */,
 				0CFCB7402A78002A0009A829 /* ExamplePutService.swift in Sources */,
 				913D8B342D67142D001304A3 /* NftsService.swift in Sources */,
-				91B3C33F2D6C673C00455990 /* UserWebViewModel.swift in Sources */,
+				91B3C33F2D6C673C00455990 /* WebViewModel.swift in Sources */,
 				91B3C33A2D6C462A00455990 /* UserService.swift in Sources */,
 				913D88F42D6481A9001304A3 /* Icons.swift in Sources */,
 				913D882E2D637B08001304A3 /* CollectionsService.swift in Sources */,
@@ -701,7 +701,7 @@
 				558E39E72C68CE0A00FB86AC /* NftService.swift in Sources */,
 				3F68069729CBBAF100B4F915 /* AppDelegate.swift in Sources */,
 				3F68069929CBBAF100B4F915 /* SceneDelegate.swift in Sources */,
-				91B3C33D2D6C5BFE00455990 /* UserWebViewController.swift in Sources */,
+				91B3C33D2D6C5BFE00455990 /* WebViewController.swift in Sources */,
 				913D8B402D675335001304A3 /* CollectionHeaderView.swift in Sources */,
 				0C79EE6C2A76DE2E00EE90EA /* ServicesAssemly.swift in Sources */,
 				0CFCB74E2A7817DC0009A829 /* NftStorage.swift in Sources */,
