@@ -146,6 +146,12 @@ final class UserCardViewController: UIViewController {
                 isLoading ? self?.showLoadingIndicator() : self?.hideLoadingIndicator()
             }
         }
+        
+        viewModel.onErrorOccurred = { [weak self] _ in
+            DispatchQueue.main.async {
+                self?.showNetworkErrorAlert()
+            }
+        }
     }
     
     private func updateUI(with user: User) {
@@ -215,6 +221,21 @@ final class UserCardViewController: UIViewController {
         customNavBar.setItems([navItem], animated: false)
     }
     
+    private func showNetworkErrorAlert() {
+        AlertPresenter.presentNetworkErrorAlert(on: self) { [weak self] in
+            self?.viewModel.loadUserData()
+        }
+    }
+    
+    private func showInaccessibleWebsiteAlert() {
+        AlertPresenter.presentAlertWithOneSelection(
+            on: self,
+            title: L10n.Error.title,
+            message: L10n.UserCard.websiteInaccessible,
+            actionTitle: L10n.Button.ok
+        )
+    }
+    
     private func showLoadingIndicator() {
         UIBlockingProgressIndicator.show()
     }
@@ -225,9 +246,17 @@ final class UserCardViewController: UIViewController {
     
     // MARK: - Actions
     @objc private func openUserWebsite() {
-        guard let urlString = viewModel.userWebsite, let url = URL(string: urlString) else { return }
-        let webVC = WebViewViewController(url: url)
-        navigationController?.pushViewController(webVC, animated: true)
+        viewModel.checkUserWebsite { [weak self] isAccessible in
+            guard let self = self else { return }
+            
+            if isAccessible {
+                guard let urlString = self.viewModel.userWebsite, let url = URL(string: urlString) else { return }
+                let webVC = WebViewViewController(url: url)
+                self.navigationController?.pushViewController(webVC, animated: true)
+            } else {
+                showInaccessibleWebsiteAlert()
+            }
+        }
     }
     
     @objc private func getUserCollection() {

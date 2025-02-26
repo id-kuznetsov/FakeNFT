@@ -57,6 +57,7 @@
 		F76A11332D6D228200FCB398 /* UserDetailRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = F76A11322D6D228200FCB398 /* UserDetailRequest.swift */; };
 		F76A11362D6D23AD00FCB398 /* UserCardViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F76A11352D6D23AD00FCB398 /* UserCardViewModel.swift */; };
 		F76A11382D6E57CD00FCB398 /* WebViewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F76A11372D6E57CC00FCB398 /* WebViewViewController.swift */; };
+		F76DD34B2D6FC13800BBC404 /* WebsiteAccessRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = F76DD34A2D6FC13800BBC404 /* WebsiteAccessRequest.swift */; };
 		F79A2F3E2D6679F7003C6739 /* StatisticsUserDefaultsStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = F79A2F3D2D6679F7003C6739 /* StatisticsUserDefaultsStorage.swift */; };
 		F79A2F402D668335003C6739 /* StatisticsCacheStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = F79A2F3F2D668335003C6739 /* StatisticsCacheStorage.swift */; };
 		F7C51C0E2D63BE7800CA8D85 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7C51C0D2D63BE7800CA8D85 /* User.swift */; };
@@ -138,6 +139,7 @@
 		F76A11322D6D228200FCB398 /* UserDetailRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDetailRequest.swift; sourceTree = "<group>"; };
 		F76A11352D6D23AD00FCB398 /* UserCardViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserCardViewModel.swift; sourceTree = "<group>"; };
 		F76A11372D6E57CC00FCB398 /* WebViewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewViewController.swift; sourceTree = "<group>"; };
+		F76DD34A2D6FC13800BBC404 /* WebsiteAccessRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebsiteAccessRequest.swift; sourceTree = "<group>"; };
 		F79A2F3D2D6679F7003C6739 /* StatisticsUserDefaultsStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsUserDefaultsStorage.swift; sourceTree = "<group>"; };
 		F79A2F3F2D668335003C6739 /* StatisticsCacheStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsCacheStorage.swift; sourceTree = "<group>"; };
 		F7C51C0D2D63BE7800CA8D85 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
@@ -377,6 +379,7 @@
 				0C79EE602A76DCD600EE90EA /* NftByIdRequest.swift */,
 				F7C51C182D63EA2600CA8D85 /* UsersRequest.swift */,
 				F76A11322D6D228200FCB398 /* UserDetailRequest.swift */,
+				F76DD34A2D6FC13800BBC404 /* WebsiteAccessRequest.swift */,
 			);
 			path = Requests;
 			sourceTree = "<group>";
@@ -635,6 +638,7 @@
 				F726C4BA2D6E746F004FA56C /* UIBlockingProgressIndicator.swift in Sources */,
 				0CF2C2DD2A783CE600FDC837 /* ErrorView.swift in Sources */,
 				5CD04EE02D5FE74C0013C751 /* AlertPresenter.swift in Sources */,
+				F76DD34B2D6FC13800BBC404 /* WebsiteAccessRequest.swift in Sources */,
 				5CD04EE12D5FE74C0013C751 /* SortOption.swift in Sources */,
 				0C79EE682A76DE0900EE90EA /* NftDetailPresenter.swift in Sources */,
 				3F68069B29CBBAF100B4F915 /* ProductDetailsTableViewController.swift in Sources */,
