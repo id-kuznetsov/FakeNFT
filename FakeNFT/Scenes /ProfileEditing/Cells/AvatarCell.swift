@@ -52,8 +52,8 @@ final class AvatarCell: UITableViewCell, ReuseIdentifying {
     
     // MARK: - Public Methods
     
-    func setupCell(url: URL?, actionTitle: String) {
-        if let url {
+    func setupCell(avatar: String) {
+        if let url = URL(string: avatar) {
             let options: KingfisherOptionsInfo = [
                 .transition(.fade(1)),
                 .cacheOriginalImage
@@ -61,6 +61,8 @@ final class AvatarCell: UITableViewCell, ReuseIdentifying {
             avatarImageView.kf.indicatorType = .activity
             avatarImageView.kf.setImage(with: url, options: options)
         }
+        
+        let actionTitle = avatar.isEmpty ? L10n.ProfileEditing.uploadPhoto : L10n.ProfileEditing.changePhoto
         actionButton.setTitle(actionTitle, for: .normal)
     }
     

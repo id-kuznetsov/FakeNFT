@@ -27,14 +27,14 @@ final class ProfileEditingViewController: UIViewController {
     // MARK: - Item
     
     private enum Item: Hashable {
-        case avatar(URL?, String)
-        case textFieldName(String?)
-        case textView(String?)
-        case textFieldWebsite(String?)
+        case avatar(String)
+        case textFieldName(String)
+        case textView(String)
+        case textFieldWebsite(String)
         
         var cellHeight: CGFloat {
             switch self {
-            case .avatar(_, _):
+            case .avatar(_):
                 return 70.0
             case .textFieldName(_):
                 return 44.0
@@ -51,9 +51,13 @@ final class ProfileEditingViewController: UIViewController {
     private typealias DataSource = UITableViewDiffableDataSource<Section, Item>
     private typealias Snapshot = NSDiffableDataSourceSnapshot<Section, Item>
     
-    // MARK: - Private Properties
+    // MARK: - Constants
     
     private let headerHeight: CGFloat = 60.0
+    
+    // MARK: - Private Properties
+    
+    private let viewModel: ProfileEditingViewModel
     
     private lazy var dismissButton: UIButton = {
         let button = UIButton()
@@ -90,13 +94,13 @@ final class ProfileEditingViewController: UIViewController {
     private lazy var dataSource: DataSource = {
         DataSource(tableView: tableView) { tableView, indexPath, item in
             switch item {
-            case .avatar(let url, let actionTitle):
+            case .avatar(let avatar):
                 let cell = tableView.dequeueReusableCell(withIdentifier: AvatarCell.defaultReuseIdentifier)
                 guard let avatarCell = cell as? AvatarCell else {
                     return cell
                 }
                 avatarCell.delegate = self
-                avatarCell.setupCell(url: url, actionTitle: actionTitle)
+                avatarCell.setupCell(avatar: avatar)
                 return avatarCell
                 
             case .textFieldName(let name):
@@ -127,13 +131,30 @@ final class ProfileEditingViewController: UIViewController {
         }
     }()
     
+    // MARK: - Init
+    
+    init(viewModel: ProfileEditingViewModel) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    @available(*, unavailable)
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     // MARK: - Lifecycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
         setupLayout()
-        applySnapshot()
+        setupDataBindings()
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        viewModel.viewWillDisappear()
     }
     
     // MARK: - Private Methods
@@ -158,13 +179,24 @@ final class ProfileEditingViewController: UIViewController {
         ])
     }
     
-    private func applySnapshot() {
+    private func setupDataBindings() {
+        viewModel.profileEditingDto.bind { [weak self] dto in
+            self?.applySnapshot(
+                avatar: dto.avatar,
+                name: dto.name,
+                description: dto.description,
+                website: dto.website
+            )
+        }
+    }
+    
+    private func applySnapshot(avatar: String, name: String, description: String, website: String) {
         var snapshot = Snapshot()
         snapshot.appendSections([.header, .name, .description, .website])
-        snapshot.appendItems([.avatar(nil, L10n.ProfileEditing.changePhoto)], toSection: .header)
-        snapshot.appendItems([.textFieldName(nil)], toSection: .name)
-        snapshot.appendItems([.textView(nil)], toSection: .description)
-        snapshot.appendItems([.textFieldWebsite(nil)], toSection: .website)
+        snapshot.appendItems([.avatar(avatar)], toSection: .header)
+        snapshot.appendItems([.textFieldName(name)], toSection: .name)
+        snapshot.appendItems([.textView(description)], toSection: .description)
+        snapshot.appendItems([.textFieldWebsite(website)], toSection: .website)
         dataSource.apply(snapshot, animatingDifferences: false)
     }
     
@@ -217,7 +249,7 @@ extension ProfileEditingViewController: UITableViewDelegate {
 
 extension ProfileEditingViewController: AvatarCellDelegate {
     func didTapButton(on cell: AvatarCell) {
-        
+        viewModel.avatarButtonDidTap()
     }
 }
 
@@ -225,7 +257,20 @@ extension ProfileEditingViewController: AvatarCellDelegate {
 
 extension ProfileEditingViewController: TextFieldCellDelegate {
     func textFieldCell(_ cell: TextFieldCell, didChangeText text: String?) {
+        guard let indexPath = tableView.indexPath(for: cell),
+              let item = dataSource.itemIdentifier(for: indexPath) else {
+            assertionFailure("Can't identify cell")
+            return
+        }
         
+        switch item {
+        case .textFieldName:
+            viewModel.nameDidChange(updatedName: text ?? "")
+        case .textFieldWebsite:
+            viewModel.descriptionDidChange(updatedDescription: text ?? "")
+        default:
+            return
+        }
     }
 }
 
@@ -237,5 +282,7 @@ extension ProfileEditingViewController: TextViewCellDelegate {
         tableView.beginUpdates()
         tableView.endUpdates()
         UIView.setAnimationsEnabled(true)
+        
+        viewModel.descriptionDidChange(updatedDescription: text ?? "")
     }
 }

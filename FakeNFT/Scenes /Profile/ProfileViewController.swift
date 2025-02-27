@@ -167,7 +167,6 @@ final class ProfileViewController: UIViewController, ErrorView {
     private func setupDataBindings() {
         viewModel.profile.bind { [weak self] profile in
             guard let profile else { return }
-            self?.stopLoading()
             if let url = URL(string: profile.avatar) {
                 self?.profileCardView.setAvatarImage(url: url)
             }
@@ -176,6 +175,14 @@ final class ProfileViewController: UIViewController, ErrorView {
             self?.linkButton.setTitle(profile.website, for: .normal)
             self?.applySnapshot(myNftsNumber: profile.nfts.count,
                                 favouritesNumber: profile.likes.count)
+        }
+        
+        viewModel.isLoading.bind { [weak self] isLoading in
+            if isLoading {
+                self?.startLoading()
+            } else {
+                self?.stopLoading()
+            }
         }
         
         viewModel.errorModel.bind { [weak self] errorModel in

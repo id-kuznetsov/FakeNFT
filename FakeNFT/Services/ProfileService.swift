@@ -4,7 +4,7 @@ typealias ProfileCompletion = (Result<Profile, Error>) -> Void
 
 protocol ProfileService {
     func fetchProfile(_ completion: @escaping ProfileCompletion)
-    func updateProfile(with updatedProfile: Profile, _ completion: @escaping ProfileCompletion)
+    func updateProfile(with dto: ProfileEditingDto, _ completion: @escaping ProfileCompletion)
 }
 
 enum ProfileUpdateField {
@@ -30,9 +30,9 @@ final class ProfileServiceImpl: ProfileService {
         }
     }
     
-    func updateProfile(with updatedProfile: Profile, _ completion: @escaping ProfileCompletion) {
+    func updateProfile(with dto: ProfileEditingDto, _ completion: @escaping ProfileCompletion) {
         updateProfileTask?.cancel()
-        let request = ProfileEditingRequest(dto: updatedProfile)
+        let request = ProfileEditingRequest(dto: dto)
         
         updateProfileTask = networkClient.send(request: request, type: Profile.self) { [weak self] result in
             self?.updateProfileTask = nil

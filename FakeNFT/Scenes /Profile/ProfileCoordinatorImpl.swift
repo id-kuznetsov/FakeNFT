@@ -16,13 +16,19 @@ final class ProfileCoordinatorImpl: ProfileCoordinator {
         navigationController.setViewControllers([viewController], animated: false)
     }
     
-    func profileEditingScene(profile: Profile) {
+    func profileEditingScene(profile: Profile, delegate: ProfileEditingDelegate) {
         guard let profileViewController = navigationController.topViewController as? ProfileViewController else {
             return
         }
         
-        let viewController = ProfileEditingViewController()
-        profileViewController.present(viewController, animated: true)
+        let viewModel = ProfileEditingViewModelImpl(profile: profile, coordinator: self)
+        viewModel.delegate = delegate
+        let profileEditingViewController = ProfileEditingViewController(viewModel: viewModel)
+        profileViewController.present(profileEditingViewController, animated: true)
+    }
+    
+    func avatarEditingScene(avatar: String) {
+        
     }
     
     func myNftsScene(nfts: [String]) {

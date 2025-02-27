@@ -1,84 +1,72 @@
 import UIKit
 
-protocol ProfileEditingViewModelImplDelegate: AnyObject {
-    func didEndEditingProfile(with result: Result<Profile, Error>)
+protocol ProfileEditingDelegate: AnyObject {
+    func didEndEditingProfile(_ profileEditingDto: ProfileEditingDto)
 }
 
 final class ProfileEditingViewModelImpl: ProfileEditingViewModel {
-    weak var delegate: ProfileEditingViewModelImplDelegate?
     
-    var avatar: Observable<URL?>
-    var name: Observable<String?>
-    var description: Observable<String?>
-    var website: Observable<String?>
+    // MARK: - Public Properties
     
-    var nameWarning: Observable<ProfileEditingWarning?>
-    var descriptionWarning: Observable<ProfileEditingWarning?>
-    var websiteWarning: Observable<ProfileEditingWarning?>
+    weak var delegate: ProfileEditingDelegate?
+    var profileEditingDto: Observable<ProfileEditingDto>
+    
+    // MARK: - Private Properties
     
     private let coordinator: ProfileCoordinator
     
-    private let profile: Profile
-    private let maxNameLength = 35
-    private let maxDescriptionLength = 150
-    
-    init(profile: Profile, coordinator: ProfileCoordinator) {
-        self.profile = profile
-        self.coordinator = coordinator
-        
-        avatar = Observable(value: URL(string: profile.avatar))
-        name = Observable(value: profile.name)
-        description = Observable(value: profile.description)
-        website = Observable(value: profile.website)
-        
-        nameWarning = Observable(value: nil)
-        descriptionWarning = Observable(value: nil)
-        websiteWarning = Observable(value: nil)
+    private var avatar: String { 
+        get { profileEditingDto.value.avatar }
+        set { profileEditingDto.value.avatar = newValue }
     }
     
-    func viewWillDismiss() {
-        delegate?.didEndEditingProfile(with: .success(profile))
+    private var name: String {
+        get { profileEditingDto.value.name }
+        set { profileEditingDto.value.name = newValue }
+    }
+    
+    private var description: String {
+        get { profileEditingDto.value.description }
+        set { profileEditingDto.value.description = newValue }
+    }
+    
+    private var website: String {
+        get { profileEditingDto.value.website }
+        set { profileEditingDto.value.website = newValue }
+    }
+    
+    // MARK: - Init
+    
+    init(profile: Profile, coordinator: ProfileCoordinator) {
+        self.coordinator = coordinator
+        let dto = ProfileEditingDto(
+            avatar: profile.avatar,
+            name: profile.name,
+            description: profile.description,
+            website: profile.website
+        )
+        profileEditingDto = Observable(value: dto)
+    }
+    
+    // MARK: - Public Properties
+    
+    func viewWillDisappear() {
+        delegate?.didEndEditingProfile(profileEditingDto.value)
     }
     
     func avatarButtonDidTap() {
-        
+        coordinator.avatarEditingScene(avatar: avatar)
     }
     
-    func nameDidChange(editedName: String) {
-        let isValid = validateStringLength(text: editedName, length: maxNameLength)
-        if isValid {
-            name.value = editedName
-            nameWarning.value = nil
-        } else {
-            nameWarning.value = ProfileEditingWarning(message: "Name is too long or empty.")
-        }
+    func nameDidChange(updatedName: String) {
+        name = updatedName
     }
     
-    func descriptionDidChange(editedDescription: String) {
-        let isValid = validateStringLength(text: editedDescription, length: maxDescriptionLength)
-        if isValid {
-            description.value = editedDescription
-            descriptionWarning.value = nil
-        } else {
-            descriptionWarning.value = ProfileEditingWarning(message: "Description is too long or empty.")
-        }
+    func descriptionDidChange(updatedDescription: String) {
+        description = updatedDescription
     }
     
-    func websiteDidChange(editedWebsite: String) {
-        if isValidUrl(urlString: editedWebsite) {
-            website.value = editedWebsite
-            websiteWarning.value = nil
-        } else {
-            websiteWarning.value = ProfileEditingWarning(message: "Invalid website URL.")
-        }
-    }
-    
-    private func validateStringLength(text: String, length: Int) -> Bool {
-        return text.count <= length && !text.isEmpty
-    }
-    
-    private func isValidUrl(urlString: String) -> Bool {
-        guard let url = URL(string: urlString) else { return false }
-        return UIApplication.shared.canOpenURL(url)
+    func websiteDidChange(updatedWebsite: String) {
+        website = updatedWebsite
     }
 }

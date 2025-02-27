@@ -2,6 +2,7 @@ import Foundation
 
 final class ProfileViewModelImpl: ProfileViewModel {
     var profile = Observable<Profile?>(value: nil)
+    var isLoading = Observable<Bool>(value: true)
     var errorModel = Observable<ErrorModel?>(value: nil)
     
     private let profileService: ProfileService
@@ -13,19 +14,12 @@ final class ProfileViewModelImpl: ProfileViewModel {
     }
     
     func viewWillAppear() {
-        profileService.fetchProfile { [weak self] result in
-            switch result {
-            case .success(let profile):
-                self?.profile.value = profile
-            case .failure(let error):
-                self?.errorModel.value = self?.createErrorModel(with: error)
-            }
-        }
+        fetchProfile()
     }
     
     func editButtonDidTap() {
         guard let profile = profile.value else { return }
-        coordinator.profileEditingScene(profile: profile)
+        coordinator.profileEditingScene(profile: profile, delegate: self)
     }
     
     func myNftsCellDidSelect() {
@@ -59,7 +53,34 @@ final class ProfileViewModelImpl: ProfileViewModel {
         
         let actionText = L10n.Error.repeat
         return ErrorModel(message: message, actionText: actionText) { [weak self] in
-            self?.viewWillAppear()
+            self?.fetchProfile()
+        }
+    }
+    
+    private func fetchProfile() {
+        isLoading.value = true
+        profileService.fetchProfile { [weak self] result in
+            switch result {
+            case .success(let profile):
+                self?.isLoading.value = false
+                self?.profile.value = profile
+            case .failure(let error):
+                self?.errorModel.value = self?.createErrorModel(with: error)
+            }
+        }
+    }
+}
+
+extension ProfileViewModelImpl: ProfileEditingDelegate {
+    func didEndEditingProfile(_ profileEditingDto: ProfileEditingDto) {
+        isLoading.value = true
+        profileService.updateProfile(with: profileEditingDto) { [weak self] result in
+            switch result {
+            case .success:
+                self?.fetchProfile()
+            case .failure(let error):
+                self?.errorModel.value = self?.createErrorModel(with: error)
+            }
         }
     }
 }
