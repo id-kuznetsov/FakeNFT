@@ -67,16 +67,29 @@ final class StatisticsViewController: UIViewController {
         }
         
         NSLayoutConstraint.activate([
+            // customNavBar constraints
             customNavBar.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             customNavBar.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             customNavBar.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             
+            // tableView constraints
             tableView.topAnchor.constraint(equalTo: customNavBar.bottomAnchor, constant: 20),
-            tableView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
-            tableView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16),
+            tableView.leadingAnchor.constraint(
+                equalTo: view.safeAreaLayoutGuide.leadingAnchor,
+                constant: StatisticsConstants.StatisticsVc.TableViewParams.sideMarginFromEdges
+            ),
+            tableView.trailingAnchor.constraint(
+                equalTo: view.safeAreaLayoutGuide.trailingAnchor,
+                constant: -StatisticsConstants.StatisticsVc.TableViewParams.sideMarginFromEdges
+            ),
             tableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
         ])
-        tableView.scrollIndicatorInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: -3)
+        tableView.scrollIndicatorInsets = UIEdgeInsets(
+            top: 0,
+            left: 0,
+            bottom: 0,
+            right: -StatisticsConstants.StatisticsVc.TableViewParams.containerViewRightInset
+        )
         configureCustomNavBar()
     }
     
@@ -177,7 +190,7 @@ extension StatisticsViewController: UITableViewDelegate {
         _ tableView: UITableView,
         heightForRowAt indexPath: IndexPath
     ) -> CGFloat {
-        88
+        StatisticsConstants.StatisticsVc.TableViewParams.heightForRow
     }
     
     func tableView(

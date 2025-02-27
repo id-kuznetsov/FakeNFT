@@ -29,7 +29,7 @@ final class UserCardViewController: UIViewController {
     
     private lazy var avatarImageView: UIImageView = {
         let view = UIImageView()
-        view.layer.cornerRadius = 34
+        view.layer.cornerRadius = StatisticsConstants.Common.cornerRadiusBig
         view.layer.masksToBounds = true
         view.clipsToBounds = true
         return view
@@ -55,7 +55,7 @@ final class UserCardViewController: UIViewController {
         button.setTitle(L10n.UserCard.websiteButton, for: .normal)
         button.setTitleColor(.ypBlack, for: .normal)
         button.titleLabel?.font = .caption1
-        button.layer.cornerRadius = 16
+        button.layer.cornerRadius = StatisticsConstants.Common.cornerRadiusXHight
         button.layer.borderColor = UIColor.ypBlack.cgColor
         button.layer.borderWidth = 1.0
         button.addTarget(self, action: #selector(openUserWebsite), for: .touchUpInside)
@@ -91,12 +91,12 @@ final class UserCardViewController: UIViewController {
         
         let nftLabelsStackView = UIStackView(arrangedSubviews: [nftLabel, nftCountLabel])
         nftLabelsStackView.axis = .horizontal
-        nftLabelsStackView.spacing = 8
+        nftLabelsStackView.spacing = StatisticsConstants.UserCardVc.MainScreen.nftButtonSpacing
         nftLabelsStackView.alignment = .center
         
         let mainStackView = UIStackView(arrangedSubviews: [nftLabelsStackView, chevronImageView])
         mainStackView.axis = .horizontal
-        mainStackView.spacing = 8
+        mainStackView.spacing = StatisticsConstants.UserCardVc.MainScreen.nftButtonSpacing
         mainStackView.alignment = .center
         mainStackView.distribution = .equalSpacing
         
@@ -180,33 +180,60 @@ final class UserCardViewController: UIViewController {
         }
         
         NSLayoutConstraint.activate([
+            // customNavBar constraints
             customNavBar.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             customNavBar.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             customNavBar.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             
+            // avatarImageView constraints
             avatarImageView.topAnchor.constraint(equalTo: customNavBar.bottomAnchor, constant: 20),
-            avatarImageView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            avatarImageView.widthAnchor.constraint(equalToConstant: 70),
+            avatarImageView.leadingAnchor.constraint(
+                equalTo: view.leadingAnchor,
+                constant: StatisticsConstants.UserCardVc.MainScreen.avatarLeftInset
+            ),
+            avatarImageView.widthAnchor.constraint(
+                equalToConstant: StatisticsConstants.UserCardVc.MainScreen.avatarWidth
+            ),
             avatarImageView.heightAnchor.constraint(equalTo: avatarImageView.widthAnchor),
             
+            // nameLabel constraints
             nameLabel.centerYAnchor.constraint(equalTo: avatarImageView.centerYAnchor),
-            nameLabel.leadingAnchor.constraint(equalTo: avatarImageView.trailingAnchor, constant: 16),
+            nameLabel.leadingAnchor.constraint(
+                equalTo: avatarImageView.trailingAnchor,
+                constant: StatisticsConstants.UserCardVc.MainScreen.nameLabelLeftInset
+            ),
             
-            descriptionLabel.topAnchor.constraint(equalTo: avatarImageView.bottomAnchor, constant: 20),
-            descriptionLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
-            descriptionLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16),
+            // descriptionLabel constraints
+            descriptionLabel.topAnchor.constraint(
+                equalTo: avatarImageView.bottomAnchor,
+                constant: StatisticsConstants.UserCardVc.MainScreen.descriptionTopInset
+            ),
+            descriptionLabel.leadingAnchor.constraint(equalTo: avatarImageView.leadingAnchor),
+            descriptionLabel.trailingAnchor.constraint(
+                equalTo: view.safeAreaLayoutGuide.trailingAnchor,
+                constant: -StatisticsConstants.UserCardVc.MainScreen.descriptionRightInset
+            ),
             
-            webViewButton.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: 28),
+            // webViewButton constraints
+            webViewButton.topAnchor.constraint(
+                equalTo: descriptionLabel.bottomAnchor,
+                constant: StatisticsConstants.UserCardVc.MainScreen.webViewButtonTopInset
+            ),
             webViewButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            webViewButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            webViewButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-            webViewButton.heightAnchor.constraint(equalToConstant: 40),
+            webViewButton.leadingAnchor.constraint(equalTo: avatarImageView.leadingAnchor),
+            webViewButton.trailingAnchor.constraint(equalTo: descriptionLabel.trailingAnchor),
+            webViewButton.heightAnchor.constraint(
+                equalToConstant: StatisticsConstants.UserCardVc.MainScreen.webViewButtonHeight
+            ),
             
-            nftButton.topAnchor.constraint(equalTo: webViewButton.bottomAnchor, constant: 56),
+            // nftButton constraints
+            nftButton.topAnchor.constraint(
+                equalTo: webViewButton.bottomAnchor,
+                constant: StatisticsConstants.UserCardVc.MainScreen.nftButtonTopInset),
             nftButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            nftButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            nftButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-            nftButton.heightAnchor.constraint(equalToConstant: 40)
+            nftButton.leadingAnchor.constraint(equalTo: avatarImageView.leadingAnchor),
+            nftButton.trailingAnchor.constraint(equalTo: descriptionLabel.trailingAnchor),
+            nftButton.heightAnchor.constraint(equalTo: webViewButton.heightAnchor)
         ])
         
         setupBindings()

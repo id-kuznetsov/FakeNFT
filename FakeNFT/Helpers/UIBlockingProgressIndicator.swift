@@ -1,5 +1,5 @@
 //
-//  UIBlockingProgressHUD.swift
+//  UIBlockingProgressIndicator.swift
 //  FakeNFT
 //
 //  Created by Aleksei Frolov on 25.02.2025.
