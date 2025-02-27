@@ -55,6 +55,7 @@ class WebViewController: UIViewController, ErrorView {
 
         setupConstraints()
         addObserver()
+        setupPullToRefresh()
 
         Task {
             await loadWebView()
@@ -71,13 +72,15 @@ class WebViewController: UIViewController, ErrorView {
         }
     }
 
-    private func reloadWebView() {
-        guard webView.url != nil else {
-            showWKWebViewError(URLError(.unsupportedURL))
-            return
+    private func reloadWebView() async {
+        do {
+            let request =  try await viewModel.authorRequest()
+            webView.load(request)
+            webView.reload()
+            webView.scrollView.refreshControl?.endRefreshing()
+        } catch {
+            showWKWebViewError(error)
         }
-
-        webView.reload()
     }
 
     private func updateProgress() {
@@ -85,12 +88,20 @@ class WebViewController: UIViewController, ErrorView {
         progressView.isHidden = fabs(webView.estimatedProgress - 1.0) <= 0.0001
     }
 
+    private func setupPullToRefresh() {
+        let refreshControl = UIRefreshControl()
+        refreshControl.addTarget(self, action: #selector(didPullToRefresh), for: .valueChanged)
+        webView.scrollView.refreshControl = refreshControl
+    }
+
+    // MARK: - Observers
     private func addObserver() {
         estimatedProgressObservation = webView.observe(
             \.estimatedProgress,
              options: [],
              changeHandler: { [weak self] _, _ in
-                 guard let self = self else { return }
+                 guard let self else { return }
+
                  self.updateProgress()
              }
         )
@@ -106,11 +117,23 @@ class WebViewController: UIViewController, ErrorView {
 
                     self.delegate?.webViewControllerDidBack(self)
                 }),
-                .reload(action: {
-                    self.reloadWebView()
+                .reload(action: { [weak self] in
+                    guard let self else { return }
+
+                    Task {
+                        await self.reloadWebView()
+                    }
                 })
             ]
         )
+    }
+
+    // MARK: - Actions
+    @objc
+    private func didPullToRefresh() {
+        Task {
+            await reloadWebView()
+        }
     }
 
     // MARK: - Constraints
