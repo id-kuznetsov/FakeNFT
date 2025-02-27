@@ -25,10 +25,18 @@ final class AvatarView: UIView {
         return imageView
     }()
     
+    private lazy var overlayView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .ypBackgroundUniversal
+        view.layer.cornerRadius = avatarImageSize.height / 2
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+    
     private lazy var actionButton: UIButton = {
         let button = UIButton()
         button.addTarget(self, action: #selector(actionButtonDidTap), for: .touchUpInside)
-        button.setTitleColor(.ypWhite, for: .normal)
+        button.setTitleColor(.ypWhiteUniversal, for: .normal)
         button.titleLabel?.font = .caption3
         button.titleLabel?.textAlignment = .center
         button.titleLabel?.numberOfLines = 2
@@ -52,7 +60,7 @@ final class AvatarView: UIView {
     
     // MARK: - Public Methods
     
-    func setupCell(avatar: String) {
+    func setImage(avatar: String) {
         if let url = URL(string: avatar) {
             let options: KingfisherOptionsInfo = [
                 .transition(.fade(1)),
@@ -71,6 +79,7 @@ final class AvatarView: UIView {
     private func setupView() {
         backgroundColor = .clear
         addSubview(avatarImageView)
+        addSubview(overlayView)
         addSubview(actionButton)
     }
     
@@ -80,6 +89,11 @@ final class AvatarView: UIView {
             avatarImageView.centerYAnchor.constraint(equalTo: centerYAnchor),
             avatarImageView.heightAnchor.constraint(equalToConstant: avatarImageSize.height),
             avatarImageView.widthAnchor.constraint(equalToConstant: avatarImageSize.width),
+            
+            overlayView.centerXAnchor.constraint(equalTo: centerXAnchor),
+            overlayView.centerYAnchor.constraint(equalTo: centerYAnchor),
+            overlayView.heightAnchor.constraint(equalToConstant: avatarImageSize.height),
+            overlayView.widthAnchor.constraint(equalToConstant: avatarImageSize.width),
             
             actionButton.leadingAnchor.constraint(equalTo: avatarImageView.leadingAnchor, constant: 5),
             actionButton.trailingAnchor.constraint(equalTo: avatarImageView.trailingAnchor, constant: -5),

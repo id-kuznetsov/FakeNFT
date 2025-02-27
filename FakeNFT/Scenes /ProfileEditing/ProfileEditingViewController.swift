@@ -38,20 +38,27 @@ final class ProfileEditingViewController: UIViewController {
     
     private lazy var nameLabel = createHeaderLabel(text: L10n.ProfileEditing.name)
     
-    private lazy var nameTextField = createTextField(placeholder: L10n.ProfileEditing.namePlaceholder)
+    private lazy var nameTextField = createTextField(
+        placeholder: L10n.ProfileEditing.namePlaceholder,
+        action: #selector(nameTextFieldDidChange)
+    )
     
     private lazy var descriptionLabel = createHeaderLabel(text: L10n.ProfileEditing.description)
     
     private lazy var descriptionTextView: EditingTextView = {
         let textView = EditingTextView()
         textView.delegate = self
+        textView.setPlaceholder(L10n.ProfileEditing.descriptionPlaceholder)
         textView.translatesAutoresizingMaskIntoConstraints = false
         return textView
     }()
     
     private lazy var websiteLabel = createHeaderLabel(text: L10n.ProfileEditing.website)
     
-    private lazy var websiteTextField = createTextField(placeholder: L10n.ProfileEditing.websitePlaceholder)
+    private lazy var websiteTextField = createTextField(
+        placeholder: L10n.ProfileEditing.websitePlaceholder,
+        action: #selector(websiteTextFieldDidChange)
+    )
     
     // MARK: - Init
     
@@ -156,7 +163,21 @@ final class ProfileEditingViewController: UIViewController {
     }
     
     private func setupDataBindings() {
+        viewModel.avatar.bind { [weak self] avatar in
+            self?.avatarView.setImage(avatar: avatar)
+        }
         
+        viewModel.name.bind { [weak self] name in
+            self?.nameTextField.text = name
+        }
+        
+        viewModel.description.bind { [weak self] description in
+            self?.descriptionTextView.setText(description)
+        }
+        
+        viewModel.website.bind { [weak self] website in
+            self?.websiteTextField.text = website
+        }
     }
     
     private func addDismissKeyboardGesture() {
@@ -190,8 +211,10 @@ final class ProfileEditingViewController: UIViewController {
         return label
     }
     
-    private func createTextField(placeholder: String) -> UITextField {
+    private func createTextField(placeholder: String, action: Selector) -> UITextField {
         let textField = UITextField()
+        textField.addTarget(self, action: action, for: .editingChanged)
+        textField.placeholder = placeholder
         textField.backgroundColor = .ypLightGrey
         textField.font = .bodyRegular
         textField.textColor = .ypBlack
@@ -213,6 +236,14 @@ final class ProfileEditingViewController: UIViewController {
     }
     
     // MARK: - Actions
+    
+    @objc private func nameTextFieldDidChange(_ textField: UITextField) {
+        viewModel.nameDidChange(updatedName: textField.text ?? "")
+    }
+
+    @objc private func websiteTextFieldDidChange(_ textField: UITextField) {
+        viewModel.websiteDidChange(updatedWebsite: textField.text ?? "")
+    }
     
     @objc func dismissKeyboard() {
         view.endEditing(true)
@@ -254,5 +285,6 @@ extension ProfileEditingViewController: AvatarViewDelegate {
 extension ProfileEditingViewController: EditingTextViewDelegate {
     func editingTextView(_ view: EditingTextView, didChangeText text: String?) {
         self.view.layoutIfNeeded()
+        viewModel.descriptionDidChange(updatedDescription: text ?? "")
     }
 }

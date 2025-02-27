@@ -9,64 +9,51 @@ final class ProfileEditingViewModelImpl: ProfileEditingViewModel {
     // MARK: - Public Properties
     
     weak var delegate: ProfileEditingDelegate?
-    var profileEditingDto: Observable<ProfileEditingDto>
+    
+    var avatar: Observable<String>
+    var name: Observable<String>
+    var description: Observable<String>
+    var website: Observable<String>
     
     // MARK: - Private Properties
     
     private let coordinator: ProfileCoordinator
     
-    private var avatar: String { 
-        get { profileEditingDto.value.avatar }
-        set { profileEditingDto.value.avatar = newValue }
-    }
-    
-    private var name: String {
-        get { profileEditingDto.value.name }
-        set { profileEditingDto.value.name = newValue }
-    }
-    
-    private var description: String {
-        get { profileEditingDto.value.description }
-        set { profileEditingDto.value.description = newValue }
-    }
-    
-    private var website: String {
-        get { profileEditingDto.value.website }
-        set { profileEditingDto.value.website = newValue }
-    }
-    
     // MARK: - Init
     
     init(profile: Profile, coordinator: ProfileCoordinator) {
         self.coordinator = coordinator
-        let dto = ProfileEditingDto(
-            avatar: profile.avatar,
-            name: profile.name,
-            description: profile.description,
-            website: profile.website
-        )
-        profileEditingDto = Observable(value: dto)
+        avatar = Observable(value: profile.avatar)
+        name = Observable(value: profile.name)
+        description = Observable(value: profile.description)
+        website = Observable(value: profile.website)
     }
     
     // MARK: - Public Properties
     
     func viewWillDisappear() {
-//        delegate?.didEndEditingProfile(profileEditingDto.value)
+        let dto = ProfileEditingDto(
+            avatar: avatar.value,
+            name: name.value,
+            description: description.value,
+            website: website.value
+        )
+        delegate?.didEndEditingProfile(dto)
     }
     
     func avatarButtonDidTap() {
-        coordinator.avatarEditingScene(avatar: avatar)
+        coordinator.avatarEditingScene(avatar: avatar.value)
     }
     
     func nameDidChange(updatedName: String) {
-        name = updatedName
+        name.value = updatedName
     }
     
     func descriptionDidChange(updatedDescription: String) {
-        description = updatedDescription
+        description.value = updatedDescription
     }
     
     func websiteDidChange(updatedWebsite: String) {
-        website = updatedWebsite
+        website.value = updatedWebsite
     }
 }

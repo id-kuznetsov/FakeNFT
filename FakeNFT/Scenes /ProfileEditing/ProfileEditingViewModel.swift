@@ -1,7 +1,10 @@
 import Foundation
 
 protocol ProfileEditingViewModel {
-    var profileEditingDto: Observable<ProfileEditingDto> { get }
+    var avatar: Observable<String> { get }
+    var name: Observable<String> { get }
+    var description: Observable<String> { get }
+    var website: Observable<String> { get }
     
     func viewWillDisappear()
     func avatarButtonDidTap()

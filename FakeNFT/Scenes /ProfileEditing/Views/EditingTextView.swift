@@ -5,7 +5,12 @@ protocol EditingTextViewDelegate: AnyObject {
 }
 
 final class EditingTextView: UIView {
+    
+    // MARK: - Public Properties
+    
     weak var delegate: EditingTextViewDelegate?
+    
+    // MARK: - Private Properties
     
     private lazy var textView: UITextView = {
         let textView = UITextView()
@@ -21,13 +26,15 @@ final class EditingTextView: UIView {
     
     private let placeholderLabel: UILabel = {
         let label = UILabel()
-        label.font = .bodyRegular
-        label.textColor = .ypPlaceholderUniversal
+        label.font = .systemFont(ofSize: 16)
+        label.textColor = .ypPlaceholder
         label.textAlignment = .left
         label.isHidden = false
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
+    
+    // MARK: - Init
     
     init() {
         super.init(frame: .zero)
@@ -39,10 +46,18 @@ final class EditingTextView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func setupCell(text: String?, placeholder: String?) {
+    // MARK: - Public Methods
+    
+    func setText(_ text: String) {
+        placeholderLabel.isHidden = !text.isEmpty
         textView.text = text
+    }
+    
+    func setPlaceholder(_ placeholder: String) {
         placeholderLabel.text = placeholder
     }
+    
+    // MARK: - Private Methods
     
     private func setupView() {
         backgroundColor = .clear
@@ -65,8 +80,11 @@ final class EditingTextView: UIView {
     }
 }
 
+// MARK: - UITextViewDelegate
+
 extension EditingTextView: UITextViewDelegate {
     func textViewDidChange(_ textView: UITextView) {
+        placeholderLabel.isHidden = !textView.text.isEmpty
         updateHeight()
         delegate?.editingTextView(self, didChangeText: textView.text)
     }
