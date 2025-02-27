@@ -1,11 +1,11 @@
 import UIKit
 
-protocol TextViewCellDelegate: AnyObject {
-    func textViewCell(_ cell: TextViewCell, didChangeText text: String?)
+protocol EditingTextViewDelegate: AnyObject {
+    func editingTextView(_ view: EditingTextView, didChangeText text: String?)
 }
 
-final class TextViewCell: UITableViewCell, ReuseIdentifying {
-    weak var delegate: TextViewCellDelegate?
+final class EditingTextView: UIView {
+    weak var delegate: EditingTextViewDelegate?
     
     private lazy var textView: UITextView = {
         let textView = UITextView()
@@ -29,9 +29,9 @@ final class TextViewCell: UITableViewCell, ReuseIdentifying {
         return label
     }()
     
-    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
-        setupContentView()
+    init() {
+        super.init(frame: .zero)
+        setupView()
         setupLayout()
     }
     
@@ -44,17 +44,18 @@ final class TextViewCell: UITableViewCell, ReuseIdentifying {
         placeholderLabel.text = placeholder
     }
     
-    private func setupContentView() {
-        contentView.addSubview(textView)
-        contentView.addSubview(placeholderLabel)
+    private func setupView() {
+        backgroundColor = .clear
+        addSubview(textView)
+        addSubview(placeholderLabel)
     }
     
     private func setupLayout() {
         NSLayoutConstraint.activate([
-            textView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            textView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            textView.topAnchor.constraint(equalTo: contentView.topAnchor),
-            textView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
+            textView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            textView.trailingAnchor.constraint(equalTo: trailingAnchor),
+            textView.topAnchor.constraint(equalTo: topAnchor),
+            textView.bottomAnchor.constraint(equalTo: bottomAnchor),
             
             placeholderLabel.leadingAnchor.constraint(equalTo: textView.leadingAnchor, constant: 18),
             placeholderLabel.trailingAnchor.constraint(equalTo: textView.trailingAnchor, constant: -18),
@@ -64,10 +65,19 @@ final class TextViewCell: UITableViewCell, ReuseIdentifying {
     }
 }
 
-extension TextViewCell: UITextViewDelegate {
+extension EditingTextView: UITextViewDelegate {
     func textViewDidChange(_ textView: UITextView) {
-        placeholderLabel.isHidden = !textView.text.isEmpty
-        delegate?.textViewCell(self, didChangeText: textView.text)
+        updateHeight()
+        delegate?.editingTextView(self, didChangeText: textView.text)
+    }
+    
+    private func updateHeight() {
+        let size = textView.sizeThatFits(CGSize(width: textView.frame.width, height: .greatestFiniteMagnitude))
+        textView.constraints.forEach { constraint in
+            if constraint.firstAttribute == .height {
+                constraint.constant = size.height
+            }
+        }
     }
 }
 

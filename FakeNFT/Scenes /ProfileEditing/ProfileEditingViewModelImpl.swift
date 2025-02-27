@@ -51,7 +51,7 @@ final class ProfileEditingViewModelImpl: ProfileEditingViewModel {
     // MARK: - Public Properties
     
     func viewWillDisappear() {
-        delegate?.didEndEditingProfile(profileEditingDto.value)
+//        delegate?.didEndEditingProfile(profileEditingDto.value)
     }
     
     func avatarButtonDidTap() {

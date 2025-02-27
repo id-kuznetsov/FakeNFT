@@ -1,15 +1,15 @@
 import UIKit
 import Kingfisher
 
-protocol AvatarCellDelegate: AnyObject {
-    func didTapButton(on cell: AvatarCell)
+protocol AvatarViewDelegate: AnyObject {
+    func didTapButton(on view: AvatarView)
 }
 
-final class AvatarCell: UITableViewCell, ReuseIdentifying {
+final class AvatarView: UIView {
     
     // MARK: - Public Properties
     
-    weak var delegate: AvatarCellDelegate?
+    weak var delegate: AvatarViewDelegate?
     
     // MARK: - Private Properties
     
@@ -39,9 +39,9 @@ final class AvatarCell: UITableViewCell, ReuseIdentifying {
     
     // MARK: - Init
     
-    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
-        setupContentView()
+    override init(frame: CGRect) {
+        super.init(frame: .zero)
+        setupView()
         setupLayout()
     }
     
@@ -68,16 +68,16 @@ final class AvatarCell: UITableViewCell, ReuseIdentifying {
     
     // MARK: - Private Methods
     
-    private func setupContentView() {
-        contentView.backgroundColor = .clear
-        contentView.addSubview(avatarImageView)
-        contentView.addSubview(actionButton)
+    private func setupView() {
+        backgroundColor = .clear
+        addSubview(avatarImageView)
+        addSubview(actionButton)
     }
     
     private func setupLayout() {
         NSLayoutConstraint.activate([
-            avatarImageView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
-            avatarImageView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
+            avatarImageView.centerXAnchor.constraint(equalTo: centerXAnchor),
+            avatarImageView.centerYAnchor.constraint(equalTo: centerYAnchor),
             avatarImageView.heightAnchor.constraint(equalToConstant: avatarImageSize.height),
             avatarImageView.widthAnchor.constraint(equalToConstant: avatarImageSize.width),
             
