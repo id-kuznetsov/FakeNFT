@@ -4,7 +4,7 @@ typealias ProfileCompletion = (Result<Profile, Error>) -> Void
 
 protocol ProfileService {
     func fetchProfile(_ completion: @escaping ProfileCompletion)
-    func updateProfile(field: ProfileUpdateField, value: String, _ completion: @escaping ProfileCompletion)
+    func updateProfile(with updatedProfile: Profile, _ completion: @escaping ProfileCompletion)
 }
 
 enum ProfileUpdateField {
@@ -14,7 +14,7 @@ enum ProfileUpdateField {
 final class ProfileServiceImpl: ProfileService {
     private let networkClient: NetworkClient
     private var fetchProfileTask: NetworkTask?
-    private var networkTasks: [ProfileUpdateField: NetworkTask] = [:]
+    private var updateProfileTask: NetworkTask?
     
     init(networkClient: NetworkClient) {
         self.networkClient = networkClient
@@ -30,24 +30,12 @@ final class ProfileServiceImpl: ProfileService {
         }
     }
     
-    func updateProfile(field: ProfileUpdateField, value: String, _ completion: @escaping ProfileCompletion) {
-        networkTasks[field]?.cancel()
+    func updateProfile(with updatedProfile: Profile, _ completion: @escaping ProfileCompletion) {
+        updateProfileTask?.cancel()
+        let request = ProfileEditingRequest(dto: updatedProfile)
         
-        let dto: ProfileEditingDto
-        switch field {
-        case .avatar:
-            dto = ProfileEditingDto(avatar: value)
-        case .name:
-            dto = ProfileEditingDto(name: value)
-        case .description:
-            dto = ProfileEditingDto(description: value)
-        case .website:
-            dto = ProfileEditingDto(website: value)
-        }
-        
-        let request = ProfileEditingRequest(dto: dto)
-        networkTasks[field] = networkClient.send(request: request, type: Profile.self) { [weak self] result in
-            self?.networkTasks[field] = nil
+        updateProfileTask = networkClient.send(request: request, type: Profile.self) { [weak self] result in
+            self?.updateProfileTask = nil
             completion(result)
         }
     }
