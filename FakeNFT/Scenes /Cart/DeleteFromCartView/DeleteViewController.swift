@@ -80,7 +80,7 @@ final class DeleteViewController: UIViewController {
     init(image: UIImage, viewModel: DeleteViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
-        nftImageView.image = image
+        nftImageView.image = image //TODO: image to viewModel
     }
     
     @available(*, unavailable)
@@ -105,9 +105,6 @@ final class DeleteViewController: UIViewController {
     private func didTapReturnButton() {
         dismiss(animated: true)
     }
-    
-    // MARK: - Public Methods
-    
     
     // MARK: - Private Methods
     
