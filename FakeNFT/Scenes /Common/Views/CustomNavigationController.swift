@@ -31,9 +31,9 @@ class CustomNavigationController: UINavigationController {
 
     private func setupNavigationBar() {
         let transparentAppearance = UINavigationBarAppearance()
-        transparentAppearance.configureWithTransparentBackground()
+        transparentAppearance.configureWithTransparentBackground() // Полностью прозрачный фон
         transparentAppearance.backgroundColor = .clear
-        transparentAppearance.shadowColor = .clear
+        transparentAppearance.shadowColor = .clear // Убираем тень под баром
 
         navigationBar.standardAppearance = transparentAppearance
         navigationBar.scrollEdgeAppearance = transparentAppearance
