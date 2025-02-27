@@ -28,31 +28,40 @@ final class TabBarController: UITabBarController {
             image: UIImage(systemName: "person.circle"),
             selectedImage: UIImage(systemName: "person.circle.fill")
         )
-        
-        let catalogVC = UINavigationController(rootViewController: CatalogViewController(servicesAssembly: servicesAssembly))
-        catalogVC.tabBarItem = UITabBarItem(
-            title: NSLocalizedString("Tab.catalog", comment: ""),
-            image: UIImage(systemName: "square.stack.3d.up"),
-            selectedImage: UIImage(systemName: "square.stack.3d.up.fill")
+
+        let catalogViewController = TestCatalogViewController(servicesAssembly: servicesAssembly)
+        let catalogNavigationController = CustomNavigationController(rootViewController: catalogViewController)
+        catalogNavigationController.tabBarItem = UITabBarItem(
+            title: L10n.Tab.catalog,
+            image: .catalogTab,
+            tag: 2
         )
-        
+
         let cartVC = UINavigationController(rootViewController: CartViewController(servicesAssembly: servicesAssembly))
         cartVC.tabBarItem = UITabBarItem(
             title: NSLocalizedString("Tab.cart", comment: ""),
             image: UIImage(systemName: "bag"),
             selectedImage: UIImage(systemName: "bag.fill")
         )
-        
+
         let statisticsVC = UINavigationController(rootViewController: StatisticsViewController(servicesAssembly: servicesAssembly))
         statisticsVC.tabBarItem = UITabBarItem(
             title: NSLocalizedString("Tab.statistic", comment: ""),
             image: UIImage(systemName: "chart.bar"),
             selectedImage: UIImage(systemName: "chart.bar.fill")
         )
-        
-        setViewControllers([profileVC, catalogVC, cartVC, statisticsVC], animated: false)
+
+        setViewControllers(
+            [
+                profileVC,
+                catalogNavigationController,
+                cartVC,
+                statisticsVC
+            ],
+            animated: false
+        )
         self.selectedIndex = 1
-        
+
         tabBarAppearance()
     }
     
