@@ -20,7 +20,7 @@ extension FilterView where Self: UIViewController {
             title: title,
             message: message,
             buttons: buttons,
-            style: .actionSheet
+            style: .filter
         )
         AlertPresenter.showAlert(on: self, model: model)
     }

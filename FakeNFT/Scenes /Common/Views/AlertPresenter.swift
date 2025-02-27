@@ -1,13 +1,32 @@
 import UIKit
 
 struct AlertPresenter {
-    static func showAlert(on viewController: UIViewController, model: AlertModel) {
+    static func showAlert(
+        on viewController: UIViewController,
+        model: AlertModel
+    ) {
         showBasicAlert(
             on: viewController,
             title: model.title,
             message: model.message,
             buttons: model.buttons,
-            style: UIAlertController.Style(from: model.style)
+            style: model.style,
+            image: nil
+        )
+    }
+
+    static func showChangeNftRatingView(
+        on viewController: UIViewController,
+        model: AlertModel,
+        image: UIImage
+    ) {
+        showBasicAlert(
+            on: viewController,
+            title: model.title,
+            message: model.message,
+            buttons: model.buttons,
+            style: model.style,
+            image: image,
         )
     }
 
@@ -16,14 +35,38 @@ struct AlertPresenter {
         title: String?,
         message: String?,
         buttons: [AlertButton],
+        style: AlertStyle,
+        image: UIImage?
+    ) {
+        switch style {
+        case .alert, .filter:
+            guard !buttons.isEmpty else {
+                print("⚠️ AlertPresenter: передан пустой массив кнопок – алерт не будет показан.")
+                return
+            }
+
+            showRegularAlertController(
+                on: viewController,
+                title: title,
+                message: message,
+                buttons: buttons,
+                style: UIAlertController.Style(from: style)
+            )
+        case .nftRating:
+            showRatingAlertController(
+                on: viewController,
+                image: image
+            )
+        }
+    }
+
+    private static func showRegularAlertController(
+        on viewController: UIViewController,
+        title: String?,
+        message: String?,
+        buttons: [AlertButton],
         style: UIAlertController.Style
     ) {
-
-        guard !buttons.isEmpty else {
-            print("⚠️ AlertPresenter: передан пустой массив кнопок – алерт не будет показан.")
-            return
-        }
-
         let alert = UIAlertController(title: title,
                                       message: message,
                                       preferredStyle: style)
@@ -41,6 +84,18 @@ struct AlertPresenter {
             viewController.present(alert, animated: true)
         }
     }
+
+    private static func showRatingAlertController(
+        on viewController: UIViewController,
+        image: UIImage?
+    ) {
+        let alert = NFTRatingAlertViewController(image: image)
+
+        DispatchQueue.main.async {
+            viewController.present(alert, animated: true)
+        }
+    }
+
 }
 
 extension UIAlertAction.Style {
@@ -61,8 +116,10 @@ extension UIAlertController.Style {
         switch style {
         case .alert:
             self = .alert
-        case .actionSheet:
+        case .filter:
             self = .actionSheet
+        case .nftRating:
+            self = .alert
         }
     }
 }

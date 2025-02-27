@@ -7,22 +7,40 @@
 
 import UIKit
 
+protocol NftCollectionViewCellDelegate: AnyObject {
+    func nftCollectionViewCellDidTapFavorite(_ cell: NftCollectionViewCell)
+    func nftCollectionViewCellDidTapCart(_ cell: NftCollectionViewCell)
+    func nftCollectionViewCellDidTapRating(_ cell: NftCollectionViewCell)
+}
+
 class NftCollectionViewCell: UICollectionViewCell, ReuseIdentifying {
+    weak var delegate: NftCollectionViewCellDelegate?
+
     // MARK: - UI
-    private lazy var nftImageView: UIImageView = {
+    lazy var favoriteButton: UIButton = {
+        let view = UIButton(type: .custom)
+        view.setImage(.heart, for: .normal)
+        view.tintColor = .ypWhiteUniversal
+        view.addTarget(self, action: #selector(didTapFavorite), for: .touchUpInside)
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+
+    lazy var cartButton: UIButton = {
+        let view = UIButton(type: .custom)
+        view.setImage(.icCart, for: .normal)
+        view.tintColor = .ypBlack
+        view.addTarget(self, action: #selector(didTapCart), for: .touchUpInside)
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+
+    lazy var nftImageView: UIImageView = {
         let view = UIImageView()
         view.contentMode = .scaleAspectFill
         view.clipsToBounds = true
         view.layer.cornerRadius = LayoutConstants.Common.cornerRadiusMedium
         view.tintColor = .systemGray
-        view.translatesAutoresizingMaskIntoConstraints = false
-        return view
-    }()
-
-    private lazy var favoriteButton: UIButton = {
-        let view = UIButton(type: .custom)
-        view.setImage(.heart, for: .normal)
-        view.tintColor = .ypWhiteUniversal
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
@@ -46,6 +64,7 @@ class NftCollectionViewCell: UICollectionViewCell, ReuseIdentifying {
 
     private lazy var ratingButton: RatingButton = {
         let view = RatingButton()
+        view.addTarget(self, action: #selector(didTapRating), for: .touchUpInside)
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
@@ -66,23 +85,13 @@ class NftCollectionViewCell: UICollectionViewCell, ReuseIdentifying {
         return view
     }()
 
-    private lazy var cartButton: UIButton = {
-        let view = UIButton(type: .custom)
-        view.setImage(.icCart, for: .normal)
-        view.tintColor = .ypBlack
-        view.translatesAutoresizingMaskIntoConstraints = false
-        return view
-    }()
-
     // MARK: - Init
     override init(frame: CGRect) {
         super.init(frame: frame)
 
         addSubview(nftImageView)
-        nftImageView.addSubview(favoriteButton)
-
+        addSubview(favoriteButton)
         addSubview(ratingButton)
-
         addSubview(nftHStackView)
         nftHStackView.addArrangedSubview(nftVStackView)
         nftVStackView.addArrangedSubview(nameLabel)
@@ -140,6 +149,22 @@ class NftCollectionViewCell: UICollectionViewCell, ReuseIdentifying {
         nftImageView.hideShimmerAnimation()
     }
 
+    // MARK: - Actions
+    @objc
+    private func didTapFavorite() {
+        delegate?.nftCollectionViewCellDidTapFavorite(self)
+    }
+
+    @objc
+    private func didTapCart() {
+        delegate?.nftCollectionViewCellDidTapCart(self)
+    }
+
+    @objc
+    private func didTapRating() {
+        delegate?.nftCollectionViewCellDidTapRating(self)
+    }
+
     // MARK: - Constraints
     private func setupConstraints() {
         NSLayoutConstraint.activate([
@@ -150,8 +175,8 @@ class NftCollectionViewCell: UICollectionViewCell, ReuseIdentifying {
                 equalToConstant: LayoutConstants.CollectionScreen.Cell.imageHeight
             ),
 
-            favoriteButton.trailingAnchor.constraint(equalTo: nftImageView.trailingAnchor),
-            favoriteButton.topAnchor.constraint(equalTo: nftImageView.topAnchor),
+            favoriteButton.trailingAnchor.constraint(equalTo: trailingAnchor),
+            favoriteButton.topAnchor.constraint(equalTo: topAnchor),
             favoriteButton.heightAnchor.constraint(
                 equalToConstant: LayoutConstants.CollectionScreen.Cell.buttonHeight
             ),

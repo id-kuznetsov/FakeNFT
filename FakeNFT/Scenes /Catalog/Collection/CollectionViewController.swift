@@ -8,7 +8,7 @@
 import UIKit
 import Combine
 
-class CollectionViewController: UIViewController {
+class CollectionViewController: UIViewController, ErrorView, RatingView {
     // MARK: - Properties
     private var subscribers = Set<AnyCancellable>()
     private let viewModel: CollectionViewModelProtocol
@@ -65,7 +65,7 @@ class CollectionViewController: UIViewController {
     }
 
     // MARK: - Navigation
-    private func presentUserWebViewController(with authorName: String) {
+    private func presentWebViewController(with authorName: String) {
         let viewModel = WebViewModel(
             userService: viewModel.userService,
             authorName: authorName
@@ -74,16 +74,6 @@ class CollectionViewController: UIViewController {
         viewController.delegate = self
 
         navigationController?.pushViewController(viewController, animated: true)
-    }
-
-    // MARK: - Actions
-    @objc
-    private func presentAuthorViewController() {
-        print("Author button tapped")
-    }
-
-    private func presentNftCardViewController(for nft: NftUI) {
-        print("nft cell tapped")
     }
 
     // MARK: - Constraints
@@ -118,6 +108,7 @@ extension CollectionViewController: UICollectionViewDataSource {
         let nftUI = viewModel.nfts[indexPath.item]
 
         cell.backgroundColor = .clear
+        cell.delegate = self
         cell.configure(
             nftUI: nftUI,
             imageLoaderService: viewModel.imageLoaderService
@@ -216,33 +207,49 @@ extension CollectionViewController: UICollectionViewDelegateFlowLayout {
         didSelectItemAt indexPath: IndexPath
     ) {
         let nftUI = viewModel.nfts[indexPath.item]
-        presentNftCardViewController(for: nftUI)
+        print("nft cell tapped - \(nftUI.name)")
     }
 }
 
 // MARK: - CollectionHeaderViewDelegate
 extension CollectionViewController: CollectionHeaderViewDelegate {
-    func collectionHeaderViewDidTapCollection(_ headerView: CollectionHeaderView) {
-
-    }
-
     func collectionHeaderViewDidTapAuthor(_ headerView: CollectionHeaderView) {
         guard
             let authorName = headerView.authorButton.title(for: .normal)
         else {
-            print("Author name not found")
+            let error: Error = NSError(
+                domain: "", code: 404, userInfo: [NSLocalizedDescriptionKey: "Author name not found"]
+            )
+            showError(error: error, buttons: [.close])
             return
         }
 
-        presentUserWebViewController(with: authorName)
+        presentWebViewController(with: authorName)
     }
+}
 
-    func collectionHeaderViewDidTapFavorite(_ headerView: CollectionHeaderView) {
+// MARK: - NftCollectionViewCellDelegate
+extension CollectionViewController: NftCollectionViewCellDelegate {
+    func nftCollectionViewCellDidTapRating(_ cell: NftCollectionViewCell) {
+        guard let image = cell.nftImageView.image else { return }
 
+        showChangeRating(image)
     }
-
-    func collectionHeaderViewDidTapCart(_ headerView: CollectionHeaderView) {
-
+    
+    func nftCollectionViewCellDidTapFavorite(_ cell: NftCollectionViewCell) {
+        if cell.favoriteButton.tintColor == .ypWhiteUniversal {
+            cell.favoriteButton.tintColor = .ypRedUniversal
+        } else if cell.favoriteButton.tintColor == .ypRedUniversal {
+            cell.favoriteButton.tintColor = .ypWhiteUniversal
+        }
+    }
+    
+    func nftCollectionViewCellDidTapCart(_ cell: NftCollectionViewCell) {
+        if cell.cartButton.image(for: .normal) == .icCart {
+            cell.cartButton.setImage(.icCartDelete, for: .normal)
+        } else if cell.cartButton.image(for: .normal) == .icCartDelete {
+            cell.cartButton.setImage(.icCart, for: .normal)
+        }
     }
 }
 

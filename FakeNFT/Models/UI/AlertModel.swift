@@ -7,7 +7,8 @@
 
 enum AlertStyle {
     case alert
-    case actionSheet
+    case filter
+    case nftRating
 }
 
 struct AlertModel {
@@ -15,11 +16,13 @@ struct AlertModel {
     let message: String?
     let buttons: [AlertButton]
     let style: AlertStyle
-
-    init(title: String?,
-         message: String?,
-         buttons: [AlertButton],
-         style: AlertStyle = .alert) {
+    
+    init(
+        title: String?,
+        message: String?,
+        buttons: [AlertButton],
+        style: AlertStyle = .alert
+    ) {
         self.title = title
         self.message = message
         self.buttons = buttons

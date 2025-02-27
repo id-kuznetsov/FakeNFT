@@ -8,10 +8,7 @@
 import UIKit
 
 protocol CollectionHeaderViewDelegate: AnyObject {
-    func collectionHeaderViewDidTapCollection(_ headerView: CollectionHeaderView)
     func collectionHeaderViewDidTapAuthor(_ headerView: CollectionHeaderView)
-    func collectionHeaderViewDidTapFavorite(_ headerView: CollectionHeaderView)
-    func collectionHeaderViewDidTapCart(_ headerView: CollectionHeaderView)
 }
 
 class CollectionHeaderView: UICollectionReusableView, ReuseIdentifying {

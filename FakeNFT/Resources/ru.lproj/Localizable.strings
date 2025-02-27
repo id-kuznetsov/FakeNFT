@@ -2,6 +2,7 @@
 
 "Alert.Title.networkError" = "Ошибка";
 "Alert.Title.sort" = "Сортировка";
+"Alert.Title.rateNft" = "Оценить?";
 
 "Alert.Message.network" = "Произошла ошибка сети";
 "Alert.Message.unknown" = "Произошла неизвестная ошибка";
@@ -9,6 +10,7 @@
 "Alert.Message.timeoutError" = "Время ожидания запроса истекло.";
 "Alert.Message.sslError" = "Не удалось установить безопасное соединение. Попробуйте позже.";
 "Alert.Message.serverNotFound" = "Не удается найти сервер.";
+"Alert.Message.rateNft" = "Нажмите на звезду, чтобы оценить.";
 
 "Alert.Button.cancel" = "Отмена";
 "Alert.Button.close" = "Закрыть";

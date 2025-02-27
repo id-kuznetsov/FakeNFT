@@ -9,31 +9,34 @@
 ## Модуль 1:
 
 #### Collections Screen
-- CollectionsDataProvider(mock data) (est: 2 часа; fact: x часов)
-- CollectionsViewModel (est: 3 часа; fact: x часов)
-- CollectionsViewController (est: 5 часа; fact: x часов)
-- CollectionTableViewCell (est: 4 часа; fact: x часов)
+- CollectionsDataProvider(mock data) (est: 2 часа; fact: 2 часов)
+- CollectionsViewModel (est: 3 часа; fact: 3 часов)
+- CollectionsViewController (est: 5 часа; fact: 5 часов)
+- CollectionTableViewCell (est: 4 часа; fact: 4 часов)
 
 #### Collection Screen
-- CollectionDataProvider(mock data) (est: 2 часа; fact: x часов)
-- CollectionViewModel (est: 3 часа; fact: x часов)
-- NFTCollectionView (est: 3 часа; fact: x часов)
-- CollectionViewController(with NFTCollectionView) (est: 5 часа; fact: x часов)
-- NFTCollectionViewCell (est: 4 часа; fact: x часов)
+- CollectionDataProvider(mock data) (est: 2 часа; fact: 3 часов)
+- CollectionViewModel (est: 3 часа; fact: 3 часов)
+- CollectionViewController(with NFTCollectionView) (est: 5 часа; fact: 6 часов)
+- NFTCollectionViewCell (est: 4 часа; fact: 4 часов)
+- CollectionHeaderView (est: 3 часа; fact: 4 часов)
 
-#### Image Loading Animation
-- add ShimmerView (est: 2 часа; fact: 3 часов)
+#### Image Loading
+- add ImageLoaderService (est: 2 часа; fact: 3 часов)
+- add loading animations (est: 2 часа; fact: 3 часов)
 
-#### User Screen
-- UserWebViewModel (est: 3 часа; fact: x часов)
-- UserWebViewController (est: 3 часа; fact: x часов)
+#### WebView
+- WebViewModel (est: 3 часа; fact: 2 часов)
+- WebViewController (est: 3 часа; fact: 3 часов)
 
 #### AlertPresenter
-- refactor AlertPresenter (est: 5 часа; fact: x часов)
-- refactor ErrorView (est: 2 часа; fact: x часов)
-- add FilterView (est: 2 часа; fact: x часов)
+- refactor AlertPresenter (est: 5 часа; fact: 4 часов)
+- refactor ErrorView (est: 2 часа; fact: 3 часов)
+- add FilterView (est: 2 часа; fact: 2 часов)
+
 
 ## Модуль 2:
+
 #### Работа с сетью
 ##### Collections Screen
 - GET NFTCollections (est: 3 часа; fact: x часов)
