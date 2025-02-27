@@ -8,11 +8,11 @@
 import Foundation
 import Combine
 
-protocol WebViewModelProtocol {
+protocol WebViewViewModelProtocol {
     func authorRequest() async throws -> URLRequest
 }
 
-enum WebViewModelError: Error {
+enum WebViewViewModelError: Error {
     case authorNotFound
     case authorUrlEmpty
 
@@ -26,7 +26,7 @@ enum WebViewModelError: Error {
     }
 }
 
-final class WebViewModel {
+final class WebViewViewModel {
     private let userService: UserService
     private let authorName: String
 
@@ -53,14 +53,14 @@ final class WebViewModel {
 
         guard let user = users.first(where: { $0.name == authorName }),
               let website = user.website else {
-            throw WebViewModelError.authorNotFound
+            throw WebViewViewModelError.authorNotFound
         }
         return website
     }
 }
 
-// MARK: - WebViewModelProtocol
-extension WebViewModel: WebViewModelProtocol {
+// MARK: - WebViewViewModelProtocol
+extension WebViewViewModel: WebViewViewModelProtocol {
     func authorRequest() async throws -> URLRequest {
         let url = try await getCollectionAuthorUrl()
         return URLRequest(url: url)

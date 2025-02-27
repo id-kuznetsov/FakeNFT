@@ -15,7 +15,7 @@ protocol WebViewControllerDelegate: AnyObject {
 class WebViewController: UIViewController, ErrorView {
     // MARK: - Properties
     weak var delegate: WebViewControllerDelegate?
-    private let viewModel: WebViewModel
+    private let viewModel: WebViewViewModel
     private var estimatedProgressObservation: NSKeyValueObservation?
 
     // MARK: - UI
@@ -36,7 +36,7 @@ class WebViewController: UIViewController, ErrorView {
     }()
 
     // MARK: - Init
-    init(viewModel: WebViewModel) {
+    init(viewModel: WebViewViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }

@@ -9,32 +9,33 @@
 ## Part 1:
 
 #### Collections Screen
-- CollectionsDataProvider(mock data) (est: 2 часа; fact: 2 часа)
+- CollectionsService(mock data) (est: 2 часа; fact: 2 часа)
 - CollectionsViewModel (est: 3 часа; fact: 3 часа)
-- CollectionsViewController (est: 5 часа; fact: 5 часов)
-- CollectionsTableViewCell (est: 4 часа; fact: 4 часа)
+- CollectionsViewController (est: 5 часа; fact: 6 часов)
+- CollectionsTableViewCell (est: 4 часа; fact: 5 часа)
 
 #### Collection Screen
-- CollectionDataProvider(mock data) (est: 2 часа; fact: 3 часа)
-- CollectionViewModel (est: 3 часа; fact: 3 часа)
-- CollectionViewController(with NFTCollectionView) (est: 5 часа; fact: 6 часов)
+- NftsService(mock data) (est: 2 часа; fact: 2 часа)
+- UsersService(mock data) (est: 2 часа; fact: 2 часа)
+- CollectionViewModel (est: 3 часа; fact: 2 часа)
+- CollectionViewController (est: 5 часа; fact: 6 часов)
+- CollectionHeaderView (est: 4 часа; fact: 5 часа)
 - NFTCollectionViewCell (est: 4 часа; fact: 4 часа)
-- CollectionHeaderView (est: 3 часа; fact: 4 часа)
 
 #### Image Loading
-- add ImageLoaderService (est: 2 часа; fact: 3 часа)
-- add loading animations (est: 2 часа; fact: 3 часа)
+- ImageLoaderService (est: 2 часа; fact: 3 часа)
+- loading animations (est: 2 часа; fact: 3 часа)
 
 #### WebView
-- WebViewModel (est: 3 часа; fact: 2 часа)
+- WebViewViewModel (est: 3 часа; fact: 2 часа)
 - WebViewController (est: 3 часа; fact: 3 часа)
 
 #### AlertPresenter
-- refactor AlertPresenter (est: 5 часа; fact: 4 часа)
-- refactor ErrorView (est: 2 часа; fact: 3 часа)
-- add FilterView (est: 2 часа; fact: 2 часа)
-- add NFTRatingView (est: 2 часа; fact: 2 часа)
-- add NFTRatingAlertViewController (est: 2 часа; fact: 4 часа)
+- AlertPresenter (est: 5 часа; fact: 4 часа)
+- ErrorView (est: 2 часа; fact: 3 часа)
+- FilterView (est: 2 часа; fact: 2 часа)
+- NFTRatingView (est: 2 часа; fact: 2 часа)
+- NFTRatingAlertViewController (est: 2 часа; fact: 4 часа)
 
 ## Part 2:
 

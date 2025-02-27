@@ -66,7 +66,7 @@ class CollectionViewController: UIViewController, ErrorView, RatingView {
 
     // MARK: - Navigation
     private func presentWebViewController(with authorName: String) {
-        let viewModel = WebViewModel(
+        let viewModel = WebViewViewModel(
             userService: viewModel.userService,
             authorName: authorName
         )
