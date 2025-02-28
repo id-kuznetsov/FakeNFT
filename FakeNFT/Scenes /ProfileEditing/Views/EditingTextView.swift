@@ -2,6 +2,7 @@ import UIKit
 
 protocol EditingTextViewDelegate: AnyObject {
     func editingTextView(_ view: EditingTextView, didChangeText text: String?)
+    func editingTextView(_ view: EditingTextView, shouldChangeText text: String) -> Bool
 }
 
 final class EditingTextView: UIView {
@@ -83,6 +84,13 @@ final class EditingTextView: UIView {
 // MARK: - UITextViewDelegate
 
 extension EditingTextView: UITextViewDelegate {
+    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
+        let currentText = textView.text ?? ""
+        let newText = (currentText as NSString).replacingCharacters(in: range, with: text)
+        
+        return delegate?.editingTextView(self, shouldChangeText: newText) ?? false
+    }
+    
     func textViewDidChange(_ textView: UITextView) {
         placeholderLabel.isHidden = !textView.text.isEmpty
         updateHeight()

@@ -2,6 +2,11 @@ import UIKit
 
 final class ProfileEditingViewController: UIViewController {
     
+    // MARK: Constants
+    
+    private let nameTextFieldIdentifier = "name-textfield"
+    private let websiteTextFieldIdentifier = "website-textfield"
+    
     // MARK: - Private Properties
     
     private let viewModel: ProfileEditingViewModel
@@ -40,8 +45,10 @@ final class ProfileEditingViewController: UIViewController {
     
     private lazy var nameTextField = createTextField(
         placeholder: L10n.ProfileEditing.namePlaceholder,
-        action: #selector(nameTextFieldDidChange)
+        identifier: nameTextFieldIdentifier
     )
+    
+    private lazy var nameWarningLabel = UILabel()
     
     private lazy var descriptionLabel = createHeaderLabel(text: L10n.ProfileEditing.description)
     
@@ -53,12 +60,16 @@ final class ProfileEditingViewController: UIViewController {
         return textView
     }()
     
+    private lazy var descriptionWarningLabel = UILabel()
+    
     private lazy var websiteLabel = createHeaderLabel(text: L10n.ProfileEditing.website)
     
     private lazy var websiteTextField = createTextField(
         placeholder: L10n.ProfileEditing.websitePlaceholder,
-        action: #selector(websiteTextFieldDidChange)
+        identifier: websiteTextFieldIdentifier
     )
+    
+    private lazy var websiteWarningLabel = UILabel()
     
     // MARK: - Init
     
@@ -211,9 +222,10 @@ final class ProfileEditingViewController: UIViewController {
         return label
     }
     
-    private func createTextField(placeholder: String, action: Selector) -> UITextField {
+    private func createTextField(placeholder: String, identifier: String) -> UITextField {
         let textField = UITextField()
-        textField.addTarget(self, action: action, for: .editingChanged)
+        textField.delegate = self
+        textField.accessibilityIdentifier = identifier
         textField.placeholder = placeholder
         textField.backgroundColor = .ypLightGrey
         textField.font = .bodyRegular
@@ -236,14 +248,6 @@ final class ProfileEditingViewController: UIViewController {
     }
     
     // MARK: - Actions
-    
-    @objc private func nameTextFieldDidChange(_ textField: UITextField) {
-        viewModel.nameDidChange(updatedName: textField.text ?? "")
-    }
-
-    @objc private func websiteTextFieldDidChange(_ textField: UITextField) {
-        viewModel.websiteDidChange(updatedWebsite: textField.text ?? "")
-    }
     
     @objc func dismissKeyboard() {
         view.endEditing(true)
@@ -282,9 +286,31 @@ extension ProfileEditingViewController: AvatarViewDelegate {
     }
 }
 
+extension ProfileEditingViewController: UITextFieldDelegate {
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        let currentText = textField.text ?? ""
+        let newText = (currentText as NSString).replacingCharacters(in: range, with: string)
+        
+        if textField.accessibilityIdentifier == nameTextFieldIdentifier {
+            viewModel.nameDidChange(updatedName: newText)
+        } else if textField.accessibilityIdentifier == websiteTextFieldIdentifier {
+            viewModel.websiteDidChange(updatedWebsite: newText)
+        }
+        
+        // Characters change using bindings
+        return false
+    }
+}
+
 extension ProfileEditingViewController: EditingTextViewDelegate {
     func editingTextView(_ view: EditingTextView, didChangeText text: String?) {
         self.view.layoutIfNeeded()
-        viewModel.descriptionDidChange(updatedDescription: text ?? "")
+    }
+    
+    func editingTextView(_ view: EditingTextView, shouldChangeText text: String) -> Bool {
+        viewModel.descriptionDidChange(updatedDescription: text)
+        
+        // Characters change using bindings
+        return false
     }
 }
