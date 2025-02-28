@@ -48,7 +48,8 @@ final class ProfileEditingViewController: UIViewController, ErrorView {
         identifier: nameTextFieldIdentifier
     )
     
-    private lazy var nameWarningLabel = UILabel()
+    private lazy var nameWarningLabel = createWarningLabel()
+    private var nameWarningConstraint: NSLayoutConstraint?
     
     private lazy var descriptionLabel = createHeaderLabel(text: L10n.ProfileEditing.description)
     
@@ -60,7 +61,8 @@ final class ProfileEditingViewController: UIViewController, ErrorView {
         return textView
     }()
     
-    private lazy var descriptionWarningLabel = UILabel()
+    private lazy var descriptionWarningLabel = createWarningLabel()
+    private var descriptionWarningConstraint: NSLayoutConstraint?
     
     private lazy var websiteLabel = createHeaderLabel(text: L10n.ProfileEditing.website)
     
@@ -69,7 +71,8 @@ final class ProfileEditingViewController: UIViewController, ErrorView {
         identifier: websiteTextFieldIdentifier
     )
     
-    private lazy var websiteWarningLabel = UILabel()
+    private lazy var websiteWarningLabel = createWarningLabel()
+    private var websiteWarningConstraint: NSLayoutConstraint?
     
     // MARK: - Init
     
@@ -113,10 +116,13 @@ final class ProfileEditingViewController: UIViewController, ErrorView {
         contentView.addSubview(avatarView)
         contentView.addSubview(nameLabel)
         contentView.addSubview(nameTextField)
+        contentView.addSubview(nameWarningLabel)
         contentView.addSubview(descriptionLabel)
         contentView.addSubview(descriptionTextView)
+        contentView.addSubview(descriptionWarningLabel)
         contentView.addSubview(websiteLabel)
         contentView.addSubview(websiteTextField)
+        contentView.addSubview(websiteWarningLabel)
         view.addSubview(dismissButton)
     }
     
@@ -152,7 +158,10 @@ final class ProfileEditingViewController: UIViewController, ErrorView {
             nameTextField.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
             nameTextField.heightAnchor.constraint(equalToConstant: 44),
             
-            descriptionLabel.topAnchor.constraint(equalTo: nameTextField.bottomAnchor, constant: 24),
+            nameWarningLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+            nameWarningLabel.topAnchor.constraint(equalTo: nameTextField.bottomAnchor),
+            
+            descriptionLabel.topAnchor.constraint(equalTo: nameWarningLabel.bottomAnchor, constant: 24),
             descriptionLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
             descriptionLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
             
@@ -161,7 +170,10 @@ final class ProfileEditingViewController: UIViewController, ErrorView {
             descriptionTextView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
             descriptionTextView.heightAnchor.constraint(greaterThanOrEqualToConstant: 44),
             
-            websiteLabel.topAnchor.constraint(equalTo: descriptionTextView.bottomAnchor, constant: 24),
+            descriptionWarningLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+            descriptionWarningLabel.topAnchor.constraint(equalTo: descriptionTextView.bottomAnchor),
+            
+            websiteLabel.topAnchor.constraint(equalTo: descriptionWarningLabel.bottomAnchor, constant: 24),
             websiteLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
             websiteLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
             
@@ -169,8 +181,22 @@ final class ProfileEditingViewController: UIViewController, ErrorView {
             websiteTextField.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
             websiteTextField.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
             websiteTextField.heightAnchor.constraint(equalToConstant: 44),
-            websiteTextField.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -16),
+            
+            websiteWarningLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+            websiteWarningLabel.topAnchor.constraint(equalTo: websiteTextField.bottomAnchor),
+            
+            websiteWarningLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -16),
         ])
+        
+        
+        nameWarningConstraint = nameWarningLabel.heightAnchor.constraint(equalToConstant: 0)
+        nameWarningConstraint?.isActive = true
+        
+        descriptionWarningConstraint = descriptionWarningLabel.heightAnchor.constraint(equalToConstant: 0)
+        descriptionWarningConstraint?.isActive = true
+        
+        websiteWarningConstraint = websiteWarningLabel.heightAnchor.constraint(equalToConstant: 0)
+        websiteWarningConstraint?.isActive = true
     }
     
     private func setupDataBindings() {
@@ -193,6 +219,45 @@ final class ProfileEditingViewController: UIViewController, ErrorView {
         viewModel.errorModel.bind { [weak self] errorModel in
             if let errorModel {
                 self?.showError(errorModel)
+            }
+        }
+        
+        viewModel.nameWarning.bind { [weak self] warning in
+            guard let self = self else { return }
+            self.nameWarningLabel.text = warning?.rawValue
+            
+            let newConstant: CGFloat = warning == nil ? 0 : 30
+            guard self.nameWarningConstraint?.constant != newConstant else { return }
+            
+            UIView.animate(withDuration: 0.3) {
+                self.nameWarningConstraint?.constant = newConstant
+                self.view.layoutIfNeeded()
+            }
+        }
+        
+        viewModel.descriptionWarning.bind { [weak self] warning in
+            guard let self = self else { return }
+            self.descriptionWarningLabel.text = warning?.rawValue
+            
+            let newConstant: CGFloat = warning == nil ? 0 : 30
+            guard self.descriptionWarningConstraint?.constant != newConstant else { return }
+            
+            UIView.animate(withDuration: 0.3) {
+                self.descriptionWarningConstraint?.constant = newConstant
+                self.view.layoutIfNeeded()
+            }
+        }
+        
+        viewModel.websiteWarning.bind { [weak self] warning in
+            guard let self = self else { return }
+            self.websiteWarningLabel.text = warning?.rawValue
+            
+            let newConstant: CGFloat = warning == nil ? 0 : 30
+            guard self.websiteWarningConstraint?.constant != newConstant else { return }
+            
+            UIView.animate(withDuration: 0.3) {
+                self.websiteWarningConstraint?.constant = newConstant
+                self.view.layoutIfNeeded()
             }
         }
     }
@@ -242,6 +307,15 @@ final class ProfileEditingViewController: UIViewController, ErrorView {
         textField.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 16, height: 0))
         textField.translatesAutoresizingMaskIntoConstraints = false
         return textField
+    }
+    
+    private func createWarningLabel() -> UILabel {
+        let label = UILabel()
+        label.font = .bodyRegular
+        label.textColor = .ypRedUniversal
+        label.numberOfLines = 0
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
     }
     
     private func findFirstResponder() -> UIView? {
@@ -333,6 +407,16 @@ extension ProfileEditingViewController: UITextFieldDelegate {
         
         // Characters change using bindings
         return false
+    }
+    
+    func textFieldShouldClear(_ textField: UITextField) -> Bool {
+        if textField.accessibilityIdentifier == nameTextFieldIdentifier {
+            viewModel.nameDidChange(updatedName: "")
+        } else if textField.accessibilityIdentifier == websiteTextFieldIdentifier {
+            viewModel.websiteDidChange(updatedWebsite: "")
+        }
+        
+        return true
     }
 }
 

@@ -53,9 +53,12 @@ final class ProfileEditingViewModelImpl: ProfileEditingViewModel {
     // MARK: - Public Properties
     
     func viewWillDisappear() {
+        // Name can't be empty
+        let dtoName = name.value.isEmpty ? profile.name : name.value
+        
         let dto = ProfileEditingDto(
             avatar: avatar.value,
-            name: name.value,
+            name: dtoName,
             description: description.value,
             website: website.value
         )
@@ -115,7 +118,7 @@ final class ProfileEditingViewModelImpl: ProfileEditingViewModel {
         website.value = updatedWebsite
         
         guard let url = URL(string: updatedWebsite) else {
-            websiteWarning.value = .incorrectWebsite
+            websiteWarning.value = updatedWebsite.isEmpty ? nil : .incorrectWebsite
             return
         }
         

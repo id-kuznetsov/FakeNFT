@@ -27,10 +27,6 @@ final class ProfileCoordinatorImpl: ProfileCoordinator {
         profileViewController.present(profileEditingViewController, animated: true)
     }
     
-    func avatarEditingScene(avatar: String) {
-        
-    }
-    
     func myNftsScene(nfts: [String]) {
         let vc = UIViewController()
         vc.view.backgroundColor = .ypWhite
