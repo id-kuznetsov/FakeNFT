@@ -3,6 +3,7 @@ import Kingfisher
 
 protocol AvatarViewDelegate: AnyObject {
     func didTapButton(on view: AvatarView)
+    func didFailImageLoading()
 }
 
 final class AvatarView: UIView {
@@ -10,6 +11,31 @@ final class AvatarView: UIView {
     // MARK: - Public Properties
     
     weak var delegate: AvatarViewDelegate?
+    
+    var avatar: String = "" {
+        didSet {
+            guard let url = URL(string: avatar) else {
+                avatarImageView.image = nil
+                actionButton.setTitle(L10n.ProfileEditing.uploadPhoto, for: .normal)
+                return
+            }
+            
+            let options: KingfisherOptionsInfo = [
+                .transition(.fade(1)),
+                .cacheOriginalImage
+            ]
+            avatarImageView.kf.indicatorType = .activity
+            avatarImageView.kf.setImage(with: url, options: options) { [weak self] result in
+                switch result {
+                case .success(_):
+                    self?.actionButton.setTitle(L10n.ProfileEditing.changePhoto, for: .normal)
+                case .failure(_):
+                    self?.avatarImageView.image = nil
+                    self?.delegate?.didFailImageLoading()
+                }
+            }
+        }
+    }
     
     // MARK: - Private Properties
     
@@ -58,22 +84,6 @@ final class AvatarView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    // MARK: - Public Methods
-    
-    func setImage(avatar: String) {
-        if let url = URL(string: avatar) {
-            let options: KingfisherOptionsInfo = [
-                .transition(.fade(1)),
-                .cacheOriginalImage
-            ]
-            avatarImageView.kf.indicatorType = .activity
-            avatarImageView.kf.setImage(with: url, options: options)
-        }
-        
-        let actionTitle = avatar.isEmpty ? L10n.ProfileEditing.uploadPhoto : L10n.ProfileEditing.changePhoto
-        actionButton.setTitle(actionTitle, for: .normal)
-    }
-    
     // MARK: - Private Methods
     
     private func setupView() {
@@ -100,6 +110,8 @@ final class AvatarView: UIView {
             actionButton.centerYAnchor.constraint(equalTo: avatarImageView.centerYAnchor),
         ])
     }
+    
+    // MARK: - Actions
     
     @objc private func actionButtonDidTap() {
         delegate?.didTapButton(on: self)

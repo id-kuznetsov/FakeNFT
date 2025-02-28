@@ -1,6 +1,6 @@
 import UIKit
 
-final class ProfileEditingViewController: UIViewController {
+final class ProfileEditingViewController: UIViewController, ErrorView {
     
     // MARK: Constants
     
@@ -175,7 +175,7 @@ final class ProfileEditingViewController: UIViewController {
     
     private func setupDataBindings() {
         viewModel.avatar.bind { [weak self] avatar in
-            self?.avatarView.setImage(avatar: avatar)
+            self?.avatarView.avatar = avatar
         }
         
         viewModel.name.bind { [weak self] name in
@@ -188,6 +188,12 @@ final class ProfileEditingViewController: UIViewController {
         
         viewModel.website.bind { [weak self] website in
             self?.websiteTextField.text = website
+        }
+        
+        viewModel.errorModel.bind { [weak self] errorModel in
+            if let errorModel {
+                self?.showError(errorModel)
+            }
         }
     }
     
@@ -282,9 +288,37 @@ final class ProfileEditingViewController: UIViewController {
 
 extension ProfileEditingViewController: AvatarViewDelegate {
     func didTapButton(on view: AvatarView) {
+        let alertController = UIAlertController(title: "Изменить изобаражение", message: nil, preferredStyle: .alert)
+        alertController.addTextField { [weak self] textField in
+            textField.placeholder = "Введите URL изображения"
+            textField.text = self?.avatarView.avatar
+        }
         
+        let okAction = UIAlertAction(title: "OK", style: .default) { [weak self] action in
+            if let textField = alertController.textFields?.first,
+               let avatar = textField.text {
+                self?.viewModel.avatarUpdateAction(updatedAvatar: avatar)
+            }
+        }
+        alertController.addAction(okAction)
+        
+        let removeAction = UIAlertAction(title: "Удалить", style: .destructive) { [weak self] action in
+            self?.viewModel.avatarRemoveAction()
+        }
+        alertController.addAction(removeAction)
+        
+        let cancelAction = UIAlertAction(title: "Отмена", style: .cancel, handler: nil)
+        alertController.addAction(cancelAction)
+        
+        self.present(alertController, animated: true, completion: nil)
+    }
+    
+    func didFailImageLoading() {
+        viewModel.didFailImageLoading()
     }
 }
+
+// MARK: - UITextFieldDelegate
 
 extension ProfileEditingViewController: UITextFieldDelegate {
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
@@ -301,6 +335,8 @@ extension ProfileEditingViewController: UITextFieldDelegate {
         return false
     }
 }
+
+// MARK: - EditingTextViewDelegate
 
 extension ProfileEditingViewController: EditingTextViewDelegate {
     func editingTextView(_ view: EditingTextView, didChangeText text: String?) {

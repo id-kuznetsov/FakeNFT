@@ -31,6 +31,8 @@ final class ProfileEditingViewModelImpl: ProfileEditingViewModel {
     var descriptionWarning = Observable<ProfileEditingWarning?>(value: nil)
     var websiteWarning = Observable<ProfileEditingWarning?>(value: nil)
     
+    var errorModel: Observable<ErrorModel?>
+    
     // MARK: - Private Properties
     
     private let coordinator: ProfileCoordinator
@@ -45,6 +47,7 @@ final class ProfileEditingViewModelImpl: ProfileEditingViewModel {
         name = Observable(value: profile.name)
         description = Observable(value: profile.description)
         website = Observable(value: profile.website)
+        errorModel = Observable(value: nil)
     }
     
     // MARK: - Public Properties
@@ -59,8 +62,32 @@ final class ProfileEditingViewModelImpl: ProfileEditingViewModel {
         //        delegate?.didEndEditingProfile(dto)
     }
     
-    func avatarButtonDidTap() {
-        coordinator.avatarEditingScene(avatar: avatar.value)
+    func avatarUpdateAction(updatedAvatar: String) {
+        guard let url = URL(string: updatedAvatar) else {
+            didFailImageLoading()
+            return
+        }
+        
+        url.isReachable { [weak self] isReachable in
+            if isReachable {
+                self?.avatar.value = updatedAvatar
+            } else {
+                self?.didFailImageLoading()
+            }
+        }
+    }
+    
+    func avatarRemoveAction() {
+        avatar.value = ""
+    }
+    
+    func didFailImageLoading() {
+        avatar.value = ""
+        errorModel.value = ErrorModel(
+            message: "Невозможно изменить изображение",
+            actionText: "OK",
+            action: {}
+        )
     }
     
     func nameDidChange(updatedName: String) {
@@ -99,9 +126,5 @@ final class ProfileEditingViewModelImpl: ProfileEditingViewModel {
                 self?.websiteWarning.value = .incorrectWebsite
             }
         }
-    }
-    
-    private func isValidWebsite(link: String) -> Bool {
-        true
     }
 }

@@ -8,9 +8,12 @@ protocol ProfileEditingViewModel {
     var nameWarning: Observable<ProfileEditingWarning?> { get }
     var descriptionWarning: Observable<ProfileEditingWarning?> { get }
     var websiteWarning: Observable<ProfileEditingWarning?> { get }
+    var errorModel: Observable<ErrorModel?> { get }
     
     func viewWillDisappear()
-    func avatarButtonDidTap()
+    func avatarUpdateAction(updatedAvatar: String)
+    func avatarRemoveAction()
+    func didFailImageLoading()
     func nameDidChange(updatedName: String)
     func descriptionDidChange(updatedDescription: String)
     func websiteDidChange(updatedWebsite: String)
