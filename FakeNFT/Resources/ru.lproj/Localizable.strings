@@ -35,3 +35,14 @@
 "ProfileEditing.descriptionPlaceholder" = "Введите описание";
 "ProfileEditing.website" = "Сайт";
 "ProfileEditing.websitePlaceholder" = "Введите сайт";
+
+"ProfileEditing.emptyNameWarning" = "Необходимо ввести имя";
+"ProfileEditing.limitWarning" = "Максимальная длина %d символов";
+"ProfileEditing.incorrectWebsiteWarning" = "Некорректная ссылка";
+
+"ProfileEditingAlert.changePhoto" = "Изменить изобаражение";
+"ProfileEditingAlert.urlPlaceholder" = "Введите URL изображения";
+"ProfileEditingAlert.okAction" = "OK";
+"ProfileEditingAlert.removeAction" = "Удалить";
+"ProfileEditingAlert.cancelAction" = "Отмена";
+"ProfileEditingAlert.imageLoadingError" = "Невозможно изменить изображение";

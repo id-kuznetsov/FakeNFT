@@ -167,9 +167,7 @@ final class ProfileViewController: UIViewController, ErrorView {
     private func setupDataBindings() {
         viewModel.profile.bind { [weak self] profile in
             guard let profile else { return }
-            if let url = URL(string: profile.avatar) {
-                self?.profileCardView.setAvatarImage(url: url)
-            }
+            self?.profileCardView.setAvatarImage(url: profile.avatar)
             self?.profileCardView.setNameText(profile.name)
             self?.profileCardView.setDescriptionText(profile.description)
             self?.linkButton.setTitle(profile.website, for: .normal)

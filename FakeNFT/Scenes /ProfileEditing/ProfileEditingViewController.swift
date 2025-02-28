@@ -224,7 +224,7 @@ final class ProfileEditingViewController: UIViewController, ErrorView {
         
         viewModel.nameWarning.bind { [weak self] warning in
             guard let self = self else { return }
-            self.nameWarningLabel.text = warning?.rawValue
+            self.nameWarningLabel.text = warning?.title
             
             let newConstant: CGFloat = warning == nil ? 0 : 30
             guard self.nameWarningConstraint?.constant != newConstant else { return }
@@ -237,7 +237,7 @@ final class ProfileEditingViewController: UIViewController, ErrorView {
         
         viewModel.descriptionWarning.bind { [weak self] warning in
             guard let self = self else { return }
-            self.descriptionWarningLabel.text = warning?.rawValue
+            self.descriptionWarningLabel.text = warning?.title
             
             let newConstant: CGFloat = warning == nil ? 0 : 30
             guard self.descriptionWarningConstraint?.constant != newConstant else { return }
@@ -250,7 +250,7 @@ final class ProfileEditingViewController: UIViewController, ErrorView {
         
         viewModel.websiteWarning.bind { [weak self] warning in
             guard let self = self else { return }
-            self.websiteWarningLabel.text = warning?.rawValue
+            self.websiteWarningLabel.text = warning?.title
             
             let newConstant: CGFloat = warning == nil ? 0 : 30
             guard self.websiteWarningConstraint?.constant != newConstant else { return }
@@ -362,13 +362,13 @@ final class ProfileEditingViewController: UIViewController, ErrorView {
 
 extension ProfileEditingViewController: AvatarViewDelegate {
     func didTapButton(on view: AvatarView) {
-        let alertController = UIAlertController(title: "Изменить изобаражение", message: nil, preferredStyle: .alert)
+        let alertController = UIAlertController(title: L10n.ProfileEditingAlert.changePhoto, message: nil, preferredStyle: .alert)
         alertController.addTextField { [weak self] textField in
-            textField.placeholder = "Введите URL изображения"
+            textField.placeholder = L10n.ProfileEditingAlert.urlPlaceholder
             textField.text = self?.avatarView.avatar
         }
         
-        let okAction = UIAlertAction(title: "OK", style: .default) { [weak self] action in
+        let okAction = UIAlertAction(title: L10n.ProfileEditingAlert.okAction, style: .default) { [weak self] action in
             if let textField = alertController.textFields?.first,
                let avatar = textField.text {
                 self?.viewModel.avatarUpdateAction(updatedAvatar: avatar)
@@ -376,12 +376,12 @@ extension ProfileEditingViewController: AvatarViewDelegate {
         }
         alertController.addAction(okAction)
         
-        let removeAction = UIAlertAction(title: "Удалить", style: .destructive) { [weak self] action in
+        let removeAction = UIAlertAction(title: L10n.ProfileEditingAlert.removeAction, style: .destructive) { [weak self] action in
             self?.viewModel.avatarRemoveAction()
         }
         alertController.addAction(removeAction)
         
-        let cancelAction = UIAlertAction(title: "Отмена", style: .cancel, handler: nil)
+        let cancelAction = UIAlertAction(title: L10n.ProfileEditingAlert.cancelAction, style: .cancel, handler: nil)
         alertController.addAction(cancelAction)
         
         self.present(alertController, animated: true, completion: nil)

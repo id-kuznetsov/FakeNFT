@@ -4,11 +4,22 @@ protocol ProfileEditingDelegate: AnyObject {
     func didEndEditingProfile(_ profileEditingDto: ProfileEditingDto)
 }
 
-enum ProfileEditingWarning: String {
-    case emptyName = "empty name"
-    case nameLimit = "name limit"
-    case descriptionLimit = "description limit"
-    case incorrectWebsite = "incorrect website"
+enum ProfileEditingWarning {
+    case emptyName
+    case nameLimit(Int)
+    case descriptionLimit(Int)
+    case incorrectWebsite
+    
+    var title: String {
+        switch self {
+        case .emptyName:
+            L10n.ProfileEditing.emptyNameWarning
+        case .nameLimit(let limit), .descriptionLimit(let limit):
+            L10n.ProfileEditing.limitWarning(limit)
+        case .incorrectWebsite:
+            L10n.ProfileEditing.incorrectWebsiteWarning
+        }
+    }
 }
 
 final class ProfileEditingViewModelImpl: ProfileEditingViewModel {
@@ -55,14 +66,15 @@ final class ProfileEditingViewModelImpl: ProfileEditingViewModel {
     func viewWillDisappear() {
         // Name can't be empty
         let dtoName = name.value.isEmpty ? profile.name : name.value
+        let dtoWebsite = websiteWarning.value == nil ? website.value : ""
         
         let dto = ProfileEditingDto(
             avatar: avatar.value,
             name: dtoName,
             description: description.value,
-            website: website.value
+            website: dtoWebsite
         )
-        //        delegate?.didEndEditingProfile(dto)
+        delegate?.didEndEditingProfile(dto)
     }
     
     func avatarUpdateAction(updatedAvatar: String) {
@@ -101,7 +113,7 @@ final class ProfileEditingViewModelImpl: ProfileEditingViewModel {
                 nameWarning.value = .emptyName
             }
         } else {
-            nameWarning.value = .nameLimit
+            nameWarning.value = .nameLimit(maxNameLength)
         }
     }
     
@@ -110,7 +122,7 @@ final class ProfileEditingViewModelImpl: ProfileEditingViewModel {
             description.value = updatedDescription
             descriptionWarning.value = nil
         } else {
-            descriptionWarning.value = .descriptionLimit
+            descriptionWarning.value = .descriptionLimit(maxDescriptionLength)
         }
     }
     

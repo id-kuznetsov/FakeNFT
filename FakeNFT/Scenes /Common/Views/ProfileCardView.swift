@@ -76,13 +76,20 @@ final class ProfileCardView: UIView {
         descriptionLabel.text = text
     }
     
-    func setAvatarImage(url: URL) {
+    func setAvatarImage(url: String) {
         let options: KingfisherOptionsInfo = [
             .transition(.fade(1)),
             .cacheOriginalImage
         ]
         avatarImageView.kf.indicatorType = .activity
-        avatarImageView.kf.setImage(with: url, options: options)
+        avatarImageView.kf.setImage(with: URL(string: url), options: options) { [weak self] result in
+            switch result {
+            case .success:
+                return
+            case .failure:
+                self?.avatarImageView.image = nil
+            }
+        }
     }
     
     // MARK: - Private Methods
