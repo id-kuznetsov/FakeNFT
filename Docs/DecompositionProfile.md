@@ -23,17 +23,17 @@
 
 ## Модуль 2:
 #### ProfileEditing Screen
-- ProfileEditingViewModel (protocol) (est: 2 часа; fact: x часов)
-- EditTextField (Имя, сайт) (est: 1 час; fact: x часов)
-- Верстка ProfileEditingViewController (EditAvatarButton + NameEditTextField + DescriptionEditTextView + SiteEditTextView) (est: 3 часа; fact: x часов)
-- Подписать модель Profile под протокол Dto (est: 30 мин; fact: x часов)
-- Расширение протокола ProfileService (PUT request) (est: 1 час; fact: x часов)
-- ProfileServiceImpl (mock data) (est: 1 часа; fact: x часов)
-- ProfileEditingViewModel (est: 2 часа; fact: x часов)
-- Биндинг данных (est: 30 мин; fact: x часов)
-- Внедрение UIImagePicker или PHPickerViewController для смены AvatarImage (неуверен, для меня неизвестные компоненты) (est: ??? часа; fact: x часов)
-- ProfilePutRequest (est: 30 мин; fact: x часов)
-- ProfileServiceImpl (отправка PUT запроса на бэк) (est: 1 час; fact: x часов)
+- ProfileEditingViewModel (protocol) (est: 2 часа; fact: 2 часа)
+- EditTextField (Имя, сайт) (est: 1 час; fact: 30 мин)
+- Верстка ProfileEditingViewController (EditAvatarButton + NameEditTextField + DescriptionEditTextView + SiteEditTextView) (est: 3 часа; fact: 6 часов часов)
+- Подписать модель Profile под протокол Dto (est: 30 мин; fact: 1 час 30 мин)
+- Расширение протокола ProfileService (PUT request) (est: 1 час; fact: 1 час)
+- ProfileServiceImpl (mock data) (est: 1 часа; fact: 2 часа)
+- ProfileEditingViewModel (est: 2 часа; fact: 4 часа)
+- Биндинг данных (est: 30 мин; fact: 1 час)
+- Добавление логики обновление аватарки (est: 3 часа; fact: 4 часа)
+- ProfilePutRequest (est: 30 мин; fact: 1 час)
+- ProfileServiceImpl (отправка PUT запроса на бэк) (est: 1 час; fact: 2 часа)
 
 ## Модуль 3:
 #### MyNft Screen
