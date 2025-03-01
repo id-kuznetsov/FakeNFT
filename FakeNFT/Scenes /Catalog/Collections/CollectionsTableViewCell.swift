@@ -35,8 +35,6 @@ final class CollectionsTableViewCell: UITableViewCell, ReuseIdentifying {
         view.font = .bodyBold
         view.textColor = .ypBlack
         view.textAlignment = .left
-        view.clipsToBounds = true
-        view.layer.cornerRadius = LayoutConstants.Common.cornerRadiusRegular
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
@@ -62,10 +60,6 @@ final class CollectionsTableViewCell: UITableViewCell, ReuseIdentifying {
     func configure(with model: CollectionUI, imageLoaderService: ImageLoaderService) {
         loadCoverImage(from: model.cover, imageLoaderService: imageLoaderService)
         nameAndCountLabel.text = formatCollectionName(model.name, model.nfts.count)
-    }
-
-    func getLoadedImage() -> UIImage? {
-        return coverImageView.image
     }
 
     // MARK: - Load Image
@@ -98,12 +92,10 @@ final class CollectionsTableViewCell: UITableViewCell, ReuseIdentifying {
     // MARK: - Loading Animation
     private func showLoadingAnimation() {
         coverImageView.showShimmerAnimation()
-        nameAndCountLabel.showShimmerAnimation()
     }
 
     private func hideLoadingAnimation() {
         coverImageView.hideShimmerAnimation()
-        nameAndCountLabel.hideShimmerAnimation()
     }
 
     // MARK: - Constraints

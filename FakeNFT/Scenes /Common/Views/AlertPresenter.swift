@@ -26,7 +26,7 @@ struct AlertPresenter {
             message: model.message,
             buttons: model.buttons,
             style: model.style,
-            image: image,
+            image: image
         )
     }
 

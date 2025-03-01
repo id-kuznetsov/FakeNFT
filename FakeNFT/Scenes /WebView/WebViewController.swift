@@ -12,7 +12,7 @@ protocol WebViewControllerDelegate: AnyObject {
     func webViewControllerDidBack(_ controller: WebViewController)
 }
 
-class WebViewController: UIViewController, ErrorView {
+final class WebViewController: UIViewController, ErrorView {
     // MARK: - Properties
     weak var delegate: WebViewControllerDelegate?
     private let viewModel: WebViewViewModel

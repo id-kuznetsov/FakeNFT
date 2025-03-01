@@ -77,14 +77,12 @@ final class CollectionsViewController: UIViewController, FilterView {
 
     // MARK: - Navigation
     private func presentCollectionViewController(
-        for collection: CollectionUI,
-        with image: UIImage?
+        for collection: CollectionUI
     ) {
         let viewModel = CollectionViewModel(
             imageLoaderService: viewModel.imageLoaderService,
             nftsService: viewModel.nftsService,
             collection: collection,
-            coverImage: image,
             userService: viewModel.userService
         )
         let viewController = CollectionViewController(viewModel: viewModel)
@@ -143,10 +141,7 @@ extension CollectionsViewController: UITableViewDataSource {
 // MARK: - UITableViewDelegate
 extension CollectionsViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        guard let cell = tableView.cellForRow(at: indexPath) as? CollectionsTableViewCell else { return }
-        let selectedImage = cell.getLoadedImage()
         let collectionUI = viewModel.getCollection(at: indexPath)
-
-        presentCollectionViewController(for: collectionUI, with: selectedImage)
+        presentCollectionViewController(for: collectionUI)
     }
 }

@@ -8,7 +8,7 @@
 import UIKit
 import Combine
 
-class CollectionViewController: UIViewController, ErrorView, RatingView {
+final class CollectionViewController: UIViewController, ErrorView, RatingView {
     // MARK: - Properties
     private var subscribers = Set<AnyCancellable>()
     private let viewModel: CollectionViewModelProtocol
@@ -125,8 +125,7 @@ extension CollectionViewController: UICollectionViewDataSource {
             let header: CollectionHeaderView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, indexPath: indexPath)
             header.configure(
                 with: viewModel.collection,
-                imageLoaderService: viewModel.imageLoaderService,
-                coverImage: viewModel.coverImage
+                imageLoaderService: viewModel.imageLoaderService
             )
             header.delegate = self
             return header
@@ -190,8 +189,7 @@ extension CollectionViewController: UICollectionViewDelegateFlowLayout {
         let headerView = CollectionHeaderView(frame: .zero)
         headerView.configure(
             with: viewModel.collection,
-            imageLoaderService: viewModel.imageLoaderService,
-            coverImage: viewModel.coverImage
+            imageLoaderService: viewModel.imageLoaderService
         )
 
         return headerView.systemLayoutSizeFitting(

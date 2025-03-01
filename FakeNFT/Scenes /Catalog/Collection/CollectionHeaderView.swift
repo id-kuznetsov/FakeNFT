@@ -11,7 +11,7 @@ protocol CollectionHeaderViewDelegate: AnyObject {
     func collectionHeaderViewDidTapAuthor(_ headerView: CollectionHeaderView)
 }
 
-class CollectionHeaderView: UICollectionReusableView, ReuseIdentifying {
+final class CollectionHeaderView: UICollectionReusableView, ReuseIdentifying {
     weak var delegate: CollectionHeaderViewDelegate?
 
     // MARK: - UI
@@ -126,18 +126,12 @@ class CollectionHeaderView: UICollectionReusableView, ReuseIdentifying {
 
     func configure(
         with model: CollectionUI,
-        imageLoaderService: ImageLoaderService,
-        coverImage: UIImage?
+        imageLoaderService: ImageLoaderService
     ) {
-        if let coverImage {
-            coverImageView.image = coverImage
-        } else {
-            loadCoverImage(
-                from: model.cover,
-                imageLoaderService: imageLoaderService
-            )
-        }
-
+        loadCoverImage(
+            from: model.cover,
+            imageLoaderService: imageLoaderService
+        )
         nameLabel.text = model.name
         authorButton.setTitle(model.author, for: .normal)
         descriptionLabel.text = model.description

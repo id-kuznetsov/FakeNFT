@@ -7,7 +7,7 @@
 
 import UIKit
 
-class RatingButton: UIButton {
+final class RatingButton: UIButton {
     private let maxStars = 5
     private var rating: Int = 0 {
         didSet {

@@ -5,14 +5,13 @@
 //  Created by Nikolai Eremenko on 20.02.2025.
 //
 
-import UIKit
+import Foundation
 import Combine
 
 protocol CollectionViewModelProtocol {
     var collection: CollectionUI { get }
     var imageLoaderService: ImageLoaderService { get }
     var userService: UserService { get }
-    var coverImage: UIImage? { get }
     var nfts: [NftUI] { get set }
     var nftsPublisher: Published<[NftUI]>.Publisher { get }
     func numberOfItems() -> Int
@@ -25,7 +24,6 @@ final class CollectionViewModel: CollectionViewModelProtocol {
     private let nftsService: NftsService
 
     var collection: CollectionUI
-    let coverImage: UIImage?
 
     @Published var nfts: [NftUI]
     var nftsPublisher: Published<[NftUI]>.Publisher { $nfts }
@@ -37,14 +35,12 @@ final class CollectionViewModel: CollectionViewModelProtocol {
         imageLoaderService: ImageLoaderService,
         nftsService: NftsService,
         collection: CollectionUI,
-        coverImage: UIImage?,
         userService: UserService
     ) {
         self.imageLoaderService = imageLoaderService
         self.nftsService = nftsService
         self.collection = collection
         self.nfts = []
-        self.coverImage = coverImage
         self.userService = userService
 
         nftsService.loadNfts { nfts in

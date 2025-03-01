@@ -13,7 +13,7 @@ protocol NftCollectionViewCellDelegate: AnyObject {
     func nftCollectionViewCellDidTapRating(_ cell: NftCollectionViewCell)
 }
 
-class NftCollectionViewCell: UICollectionViewCell, ReuseIdentifying {
+final class NftCollectionViewCell: UICollectionViewCell, ReuseIdentifying {
     weak var delegate: NftCollectionViewCellDelegate?
 
     // MARK: - UI

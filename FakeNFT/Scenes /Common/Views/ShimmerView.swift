@@ -7,7 +7,7 @@
 
 import UIKit
 
-class ShimmerView: UIView {
+final class ShimmerView: UIView {
     private let gradientLayer = CAGradientLayer()
     private var isAnimating = false
 

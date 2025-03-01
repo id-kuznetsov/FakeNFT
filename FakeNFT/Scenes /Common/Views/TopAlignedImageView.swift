@@ -7,9 +7,14 @@
 
 import UIKit
 
-class TopAlignedImageView: UIImageView {
+final class TopAlignedImageView: UIImageView {
     func adjustContentMode() {
         guard let image = self.image else { return }
+
+        guard image.size.height > 0, image.size.width > 0, bounds.height > 0 else {
+            self.layer.contentsRect = CGRect(x: 0, y: 0, width: 1, height: 1)
+            return
+        }
 
         let imageAspect = image.size.width / image.size.height
         let viewAspect = bounds.width / bounds.height
