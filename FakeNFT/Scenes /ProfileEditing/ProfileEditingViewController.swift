@@ -116,16 +116,8 @@ final class ProfileEditingViewController: UIViewController, ErrorView {
         view.backgroundColor = .ypWhite
         view.addSubview(scrollView)
         scrollView.addSubview(contentView)
-        contentView.addSubview(avatarView)
-        contentView.addSubview(nameLabel)
-        contentView.addSubview(nameTextField)
-        contentView.addSubview(nameWarningLabel)
-        contentView.addSubview(descriptionLabel)
-        contentView.addSubview(descriptionTextView)
-        contentView.addSubview(descriptionWarningLabel)
-        contentView.addSubview(websiteLabel)
-        contentView.addSubview(websiteTextField)
-        contentView.addSubview(websiteWarningLabel)
+        contentView.addSubviews(avatarView, nameLabel, nameTextField, nameWarningLabel, descriptionLabel, descriptionTextView,
+                                descriptionWarningLabel, websiteLabel, websiteTextField, websiteWarningLabel)
         view.addSubview(dismissButton)
     }
     
