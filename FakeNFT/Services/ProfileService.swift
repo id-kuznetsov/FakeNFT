@@ -1,14 +1,15 @@
 import Foundation
 
-typealias ProfileCompletion = (Result<Profile, Error>) -> Void
+typealias ProfileCompletion = (Result<Profile, ProfileServiceError>) -> Void
 
 protocol ProfileService {
     func fetchProfile(_ completion: @escaping ProfileCompletion)
     func updateProfile(with dto: ProfileEditingDto, _ completion: @escaping ProfileCompletion)
 }
 
-enum ProfileUpdateField {
-    case avatar, name, description, website
+enum ProfileServiceError: Error {
+    case profileFetchingFail
+    case profileUpdatingFail
 }
 
 final class ProfileServiceImpl: ProfileService {
@@ -26,7 +27,12 @@ final class ProfileServiceImpl: ProfileService {
         
         fetchProfileTask = networkClient.send(request: request, type: Profile.self) { [weak self] result in
             self?.fetchProfileTask = nil
-            completion(result)
+            switch result {
+            case .success(let profile):
+                completion(.success(profile))
+            case .failure(_):
+                completion(.failure(.profileFetchingFail))
+            }
         }
     }
     
@@ -36,7 +42,12 @@ final class ProfileServiceImpl: ProfileService {
         
         updateProfileTask = networkClient.send(request: request, type: Profile.self) { [weak self] result in
             self?.updateProfileTask = nil
-            completion(result)
+            switch result {
+            case .success(let profile):
+                completion(.success(profile))
+            case .failure(_):
+                completion(.failure(.profileUpdatingFail))
+            }
         }
     }
 }

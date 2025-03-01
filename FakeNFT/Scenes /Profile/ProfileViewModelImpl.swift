@@ -43,17 +43,25 @@ final class ProfileViewModelImpl: ProfileViewModel {
     }
     
     private func createErrorModel(with error: Error) -> ErrorModel {
-        let message: String
         switch error {
-        case is NetworkClientError:
-            message = L10n.Error.network
+        case ProfileServiceError.profileFetchingFail:
+            return ErrorModel(
+                message: L10n.Profile.fetchingError,
+                actionText: L10n.Error.repeat,
+                action: { [weak self] in self?.fetchProfile() }
+            )
+        case ProfileServiceError.profileUpdatingFail:
+            return ErrorModel(
+                message: L10n.Profile.updatingError,
+                actionText: L10n.Button.close,
+                action: { [weak self] in self?.fetchProfile() }
+            )
         default:
-            message = L10n.Error.unknown
-        }
-        
-        let actionText = L10n.Error.repeat
-        return ErrorModel(message: message, actionText: actionText) { [weak self] in
-            self?.fetchProfile()
+            return ErrorModel(
+                message: L10n.Profile.unknownError,
+                actionText: L10n.Button.close,
+                action: { [weak self] in self?.fetchProfile() }
+            )
         }
     }
     

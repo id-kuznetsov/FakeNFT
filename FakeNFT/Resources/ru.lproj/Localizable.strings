@@ -26,6 +26,9 @@
 "Profile.myNftsRoute" = "Мои NFT";
 "Profile.favouritesNftsRoute" = "Избранные NFT";
 "Profile.aboutRoute" = "О разработчике";
+"Profile.fetchingError" = "Не удалось загрузить профиль";
+"Profile.updatingError" = "Не удалось изменить профиль. Пожалуйста, попробуйте еще раз";
+"Profile.unknownError" = "Произошла неизвестная ошибка";
 
 "ProfileEditing.changePhoto" = "Сменить фото";
 "ProfileEditing.uploadPhoto" = "Загрузить фото";
@@ -35,7 +38,6 @@
 "ProfileEditing.descriptionPlaceholder" = "Введите описание";
 "ProfileEditing.website" = "Сайт";
 "ProfileEditing.websitePlaceholder" = "Введите сайт";
-
 "ProfileEditing.emptyNameWarning" = "Необходимо ввести имя";
 "ProfileEditing.limitWarning" = "Максимальная длина %d символов";
 "ProfileEditing.incorrectWebsiteWarning" = "Некорректная ссылка";

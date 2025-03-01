@@ -44,6 +44,7 @@ final class ProfileEditingViewController: UIViewController, ErrorView {
     private lazy var nameLabel = createHeaderLabel(text: L10n.ProfileEditing.name)
     
     private lazy var nameTextField = createTextField(
+        text: viewModel.name,
         placeholder: L10n.ProfileEditing.namePlaceholder,
         identifier: nameTextFieldIdentifier
     )
@@ -55,6 +56,7 @@ final class ProfileEditingViewController: UIViewController, ErrorView {
     
     private lazy var descriptionTextView: EditingTextView = {
         let textView = EditingTextView()
+        textView.setText(viewModel.description)
         textView.delegate = self
         textView.setPlaceholder(L10n.ProfileEditing.descriptionPlaceholder)
         textView.translatesAutoresizingMaskIntoConstraints = false
@@ -67,6 +69,7 @@ final class ProfileEditingViewController: UIViewController, ErrorView {
     private lazy var websiteLabel = createHeaderLabel(text: L10n.ProfileEditing.website)
     
     private lazy var websiteTextField = createTextField(
+        text: viewModel.website,
         placeholder: L10n.ProfileEditing.websitePlaceholder,
         identifier: websiteTextFieldIdentifier
     )
@@ -204,18 +207,6 @@ final class ProfileEditingViewController: UIViewController, ErrorView {
             self?.avatarView.avatar = avatar
         }
         
-        viewModel.name.bind { [weak self] name in
-            self?.nameTextField.text = name
-        }
-        
-        viewModel.description.bind { [weak self] description in
-            self?.descriptionTextView.setText(description)
-        }
-        
-        viewModel.website.bind { [weak self] website in
-            self?.websiteTextField.text = website
-        }
-        
         viewModel.errorModel.bind { [weak self] errorModel in
             if let errorModel {
                 self?.showError(errorModel)
@@ -293,10 +284,11 @@ final class ProfileEditingViewController: UIViewController, ErrorView {
         return label
     }
     
-    private func createTextField(placeholder: String, identifier: String) -> UITextField {
+    private func createTextField(text: String, placeholder: String, identifier: String) -> UITextField {
         let textField = UITextField()
         textField.delegate = self
         textField.accessibilityIdentifier = identifier
+        textField.text = text
         textField.placeholder = placeholder
         textField.backgroundColor = .ypLightGrey
         textField.font = .bodyRegular
@@ -399,21 +391,21 @@ extension ProfileEditingViewController: UITextFieldDelegate {
         let currentText = textField.text ?? ""
         let newText = (currentText as NSString).replacingCharacters(in: range, with: string)
         
+        var shouldChange = false
         if textField.accessibilityIdentifier == nameTextFieldIdentifier {
-            viewModel.nameDidChange(updatedName: newText)
+            shouldChange = viewModel.shouldChangeName(updatedName: newText)
         } else if textField.accessibilityIdentifier == websiteTextFieldIdentifier {
-            viewModel.websiteDidChange(updatedWebsite: newText)
+            shouldChange = viewModel.shouldChangeWebsite(updatedWebsite: newText)
         }
         
-        // Characters change using bindings
-        return false
+        return shouldChange
     }
     
     func textFieldShouldClear(_ textField: UITextField) -> Bool {
         if textField.accessibilityIdentifier == nameTextFieldIdentifier {
-            viewModel.nameDidChange(updatedName: "")
+            viewModel.shouldChangeName(updatedName: "")
         } else if textField.accessibilityIdentifier == websiteTextFieldIdentifier {
-            viewModel.websiteDidChange(updatedWebsite: "")
+            viewModel.shouldChangeWebsite(updatedWebsite: "")
         }
         
         return true
@@ -428,9 +420,6 @@ extension ProfileEditingViewController: EditingTextViewDelegate {
     }
     
     func editingTextView(_ view: EditingTextView, shouldChangeText text: String) -> Bool {
-        viewModel.descriptionDidChange(updatedDescription: text)
-        
-        // Characters change using bindings
-        return false
+        viewModel.shouldChangeDescription(updatedDescription: text)
     }
 }

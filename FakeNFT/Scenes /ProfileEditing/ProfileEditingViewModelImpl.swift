@@ -1,25 +1,7 @@
-import UIKit
+import Foundation
 
 protocol ProfileEditingDelegate: AnyObject {
     func didEndEditingProfile(_ profileEditingDto: ProfileEditingDto)
-}
-
-enum ProfileEditingWarning {
-    case emptyName
-    case nameLimit(Int)
-    case descriptionLimit(Int)
-    case incorrectWebsite
-    
-    var title: String {
-        switch self {
-        case .emptyName:
-            L10n.ProfileEditing.emptyNameWarning
-        case .nameLimit(let limit), .descriptionLimit(let limit):
-            L10n.ProfileEditing.limitWarning(limit)
-        case .incorrectWebsite:
-            L10n.ProfileEditing.incorrectWebsiteWarning
-        }
-    }
 }
 
 final class ProfileEditingViewModelImpl: ProfileEditingViewModel {
@@ -34,9 +16,9 @@ final class ProfileEditingViewModelImpl: ProfileEditingViewModel {
     weak var delegate: ProfileEditingDelegate?
     
     var avatar: Observable<String>
-    var name: Observable<String>
-    var description: Observable<String>
-    var website: Observable<String>
+    var name: String
+    var description: String
+    var website: String
     
     var nameWarning = Observable<ProfileEditingWarning?>(value: nil)
     var descriptionWarning = Observable<ProfileEditingWarning?>(value: nil)
@@ -55,9 +37,9 @@ final class ProfileEditingViewModelImpl: ProfileEditingViewModel {
         self.coordinator = coordinator
         self.profile = profile
         avatar = Observable(value: profile.avatar)
-        name = Observable(value: profile.name)
-        description = Observable(value: profile.description)
-        website = Observable(value: profile.website)
+        name = profile.name
+        description = profile.description
+        website = profile.website
         errorModel = Observable(value: nil)
     }
     
@@ -65,15 +47,16 @@ final class ProfileEditingViewModelImpl: ProfileEditingViewModel {
     
     func viewWillDisappear() {
         // Name can't be empty
-        let dtoName = name.value.isEmpty ? profile.name : name.value
-        let dtoWebsite = websiteWarning.value == nil ? website.value : ""
+        let dtoName = name.isEmpty ? profile.name : name
+        let dtoWebsite = websiteWarning.value == nil ? website : ""
         
         let dto = ProfileEditingDto(
             avatar: avatar.value,
             name: dtoName,
-            description: description.value,
+            description: description,
             website: dtoWebsite
         )
+        
         delegate?.didEndEditingProfile(dto)
     }
     
@@ -99,39 +82,44 @@ final class ProfileEditingViewModelImpl: ProfileEditingViewModel {
     func didFailImageLoading() {
         avatar.value = ""
         errorModel.value = ErrorModel(
-            message: "Невозможно изменить изображение",
-            actionText: "OK",
+            message: L10n.ProfileEditingAlert.imageLoadingError,
+            actionText: L10n.ProfileEditingAlert.okAction,
             action: {}
         )
     }
     
-    func nameDidChange(updatedName: String) {
-        if updatedName.count <= maxNameLength {
-            name.value = updatedName
-            nameWarning.value = nil
-            if updatedName.isEmpty {
-                nameWarning.value = .emptyName
-            }
-        } else {
+    func shouldChangeName(updatedName: String) -> Bool {
+        guard updatedName.count <= maxNameLength else {
             nameWarning.value = .nameLimit(maxNameLength)
+            return false
         }
+        
+        name = updatedName
+        nameWarning.value = nil
+        if updatedName.isEmpty {
+            nameWarning.value = .emptyName
+        }
+        
+        return true
     }
     
-    func descriptionDidChange(updatedDescription: String) {
-        if updatedDescription.count <= maxDescriptionLength {
-            description.value = updatedDescription
-            descriptionWarning.value = nil
-        } else {
+    func shouldChangeDescription(updatedDescription: String) -> Bool {
+        guard updatedDescription.count <= maxDescriptionLength else {
             descriptionWarning.value = .descriptionLimit(maxDescriptionLength)
+            return false
         }
+        
+        description = updatedDescription
+        descriptionWarning.value = nil
+        return true
     }
     
-    func websiteDidChange(updatedWebsite: String) {
-        website.value = updatedWebsite
+    func shouldChangeWebsite(updatedWebsite: String) -> Bool {
+        website = updatedWebsite
         
         guard let url = URL(string: updatedWebsite) else {
             websiteWarning.value = updatedWebsite.isEmpty ? nil : .incorrectWebsite
-            return
+            return true
         }
         
         url.isReachable { [weak self] isReachable in
@@ -141,5 +129,6 @@ final class ProfileEditingViewModelImpl: ProfileEditingViewModel {
                 self?.websiteWarning.value = .incorrectWebsite
             }
         }
+        return true
     }
 }

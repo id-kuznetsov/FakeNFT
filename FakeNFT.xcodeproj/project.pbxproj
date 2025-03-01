@@ -24,6 +24,7 @@
 		0CFCB74B2A780EA80009A829 /* UIView+Constraints.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CFCB74A2A780EA80009A829 /* UIView+Constraints.swift */; };
 		0CFCB74E2A7817DC0009A829 /* NftStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CFCB74D2A7817DC0009A829 /* NftStorage.swift */; };
 		1874E2692D719B810036D8B6 /* URL+ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1874E2682D719B810036D8B6 /* URL+ext.swift */; };
+		1874E2892D7232320036D8B6 /* ProfileEditingWarning.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1874E2882D7232320036D8B6 /* ProfileEditingWarning.swift */; };
 		18800AD92D6CA0B6004B5BAE /* ProfileEditingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18800AD82D6CA0B6004B5BAE /* ProfileEditingViewController.swift */; };
 		18800ADB2D6CAA31004B5BAE /* ProfileEditingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18800ADA2D6CAA31004B5BAE /* ProfileEditingViewModel.swift */; };
 		18800B002D6CC9B0004B5BAE /* AvatarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18800AFF2D6CC9B0004B5BAE /* AvatarView.swift */; };
@@ -112,6 +113,7 @@
 		0CFCB74A2A780EA80009A829 /* UIView+Constraints.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Constraints.swift"; sourceTree = "<group>"; };
 		0CFCB74D2A7817DC0009A829 /* NftStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NftStorage.swift; sourceTree = "<group>"; };
 		1874E2682D719B810036D8B6 /* URL+ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URL+ext.swift"; sourceTree = "<group>"; };
+		1874E2882D7232320036D8B6 /* ProfileEditingWarning.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileEditingWarning.swift; sourceTree = "<group>"; };
 		18800AD82D6CA0B6004B5BAE /* ProfileEditingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileEditingViewController.swift; sourceTree = "<group>"; };
 		18800ADA2D6CAA31004B5BAE /* ProfileEditingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileEditingViewModel.swift; sourceTree = "<group>"; };
 		18800AFF2D6CC9B0004B5BAE /* AvatarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AvatarView.swift; sourceTree = "<group>"; };
@@ -261,6 +263,7 @@
 				18800AD82D6CA0B6004B5BAE /* ProfileEditingViewController.swift */,
 				18800ADA2D6CAA31004B5BAE /* ProfileEditingViewModel.swift */,
 				18A3C8282D6FA80800E8ACAC /* ProfileEditingViewModelImpl.swift */,
+				1874E2882D7232320036D8B6 /* ProfileEditingWarning.swift */,
 			);
 			path = ProfileEditing;
 			sourceTree = "<group>";
@@ -722,6 +725,7 @@
 				F756512B2D5EA5F2009B646C /* CatalogViewController.swift in Sources */,
 				188B59112D68C9AC005D960A /* ProfileCardView.swift in Sources */,
 				188B591D2D68FE5F005D960A /* ProfileViewModelImpl.swift in Sources */,
+				1874E2892D7232320036D8B6 /* ProfileEditingWarning.swift in Sources */,
 				0CFCB7402A78002A0009A829 /* ExamplePutService.swift in Sources */,
 				188B59312D69B08B005D960A /* NavigationController.swift in Sources */,
 				913D88F42D6481A9001304A3 /* Icons.swift in Sources */,
