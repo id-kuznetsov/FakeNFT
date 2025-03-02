@@ -17,4 +17,20 @@ final class ServicesAssembly {
             storage: nftStorage
         )
     }
+
+    var collectionsService: CollectionsService {
+        CollectionsServiceImpl()
+    }
+
+    var nftsService: NftsService {
+        NftsServiceImpl()
+    }
+
+    var imageLoaderService: ImageLoaderService {
+        ImageLoaderServiceImpl()
+    }
+
+    var userService: UserService {
+        UserServiceImpl()
+    }
 }

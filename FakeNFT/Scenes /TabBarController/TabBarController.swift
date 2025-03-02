@@ -1,14 +1,13 @@
 import UIKit
 
 final class TabBarController: UITabBarController {
-    
     private let servicesAssembly: ServicesAssembly
-    
+
     init(servicesAssembly: ServicesAssembly) {
         self.servicesAssembly = servicesAssembly
         super.init(nibName: nil, bundle: nil)
     }
-    
+
     @available(*, unavailable)
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -31,12 +30,18 @@ final class TabBarController: UITabBarController {
             selectedImage: UIImage(systemName: "person.circle.fill")
         )
 
-        let catalogViewController = TestCatalogViewController(servicesAssembly: servicesAssembly)
+        let catalogViewModel = CollectionsViewModel(
+            imageLoaderService: servicesAssembly.imageLoaderService,
+            collectionsService: servicesAssembly.collectionsService,
+            nftsService: servicesAssembly.nftsService,
+            userService: servicesAssembly.userService
+        )
+        let catalogViewController = CollectionsViewController(viewModel: catalogViewModel)
         let catalogNavigationController = CustomNavigationController(rootViewController: catalogViewController)
         catalogNavigationController.tabBarItem = UITabBarItem(
             title: L10n.Tab.catalog,
             image: .catalogTab,
-            tag: 2
+            tag: 1
         )
 
         let cartVC = UINavigationController(rootViewController: CartViewController(servicesAssembly: servicesAssembly))

@@ -1,4 +1,5 @@
 import Foundation
+import UIKit
 
 // MARK: - Protocol
 
@@ -50,9 +51,8 @@ final class NftDetailPresenterImpl: NftDetailPresenter {
             let cellModels = nft.images.map { NftDetailCellModel(url: $0) }
             view?.displayCells(cellModels)
         case .failed(let error):
-            let errorModel = makeErrorModel(error)
             view?.hideLoading()
-            view?.showError(errorModel)
+            view?.showError(error)
         }
     }
 
@@ -64,21 +64,6 @@ final class NftDetailPresenterImpl: NftDetailPresenter {
             case .failure(let error):
                 self?.state = .failed(error)
             }
-        }
-    }
-
-    private func makeErrorModel(_ error: Error) -> ErrorModel {
-        let message: String
-        switch error {
-        case is NetworkClientError:
-            message = NSLocalizedString("Error.network", comment: "")
-        default:
-            message = NSLocalizedString("Error.unknown", comment: "")
-        }
-
-        let actionText = NSLocalizedString("Error.repeat", comment: "")
-        return ErrorModel(message: message, actionText: actionText) { [weak self] in
-            self?.state = .loading
         }
     }
 }

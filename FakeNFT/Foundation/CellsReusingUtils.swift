@@ -16,6 +16,12 @@ extension ReuseIdentifying where Self: UICollectionViewCell {
     }
 }
 
+extension ReuseIdentifying where Self: UICollectionReusableView {
+    static var defaultReuseIdentifier: String {
+        NSStringFromClass(self).components(separatedBy: ".").last ?? NSStringFromClass(self)
+    }
+}
+
 extension UITableView {
     func register<T: UITableViewCell>(_: T.Type) where T: ReuseIdentifying {
         register(T.self, forCellReuseIdentifier: T.defaultReuseIdentifier)
@@ -35,11 +41,37 @@ extension UICollectionView {
         register(T.self, forCellWithReuseIdentifier: T.defaultReuseIdentifier)
     }
 
+    func register<T: UICollectionReusableView>(
+        _: T.Type,
+        forSupplementaryViewOfKind kind: String
+    ) where T: ReuseIdentifying {
+        register(
+            T.self,
+            forSupplementaryViewOfKind: kind,
+            withReuseIdentifier: T.defaultReuseIdentifier
+        )
+    }
+
     func dequeueReusableCell<T: UICollectionViewCell>(indexPath: IndexPath) -> T where T: ReuseIdentifying {
         guard let cell = dequeueReusableCell(withReuseIdentifier: T.defaultReuseIdentifier, for: indexPath) as? T else {
             assertionFailure("Could not dequeue cell with identifier: \(T.defaultReuseIdentifier) for: \(indexPath)")
             return T()
         }
         return cell
+    }
+
+    func dequeueReusableSupplementaryView<T: UICollectionReusableView>(
+        ofKind kind: String,
+        indexPath: IndexPath
+    ) -> T where T: ReuseIdentifying {
+        guard let reusableSupplementaryView = dequeueReusableSupplementaryView(
+            ofKind: kind,
+            withReuseIdentifier: T.defaultReuseIdentifier,
+            for: indexPath
+        ) as? T else {
+            assertionFailure("Could not dequeue ReusableView with identifier: \(T.defaultReuseIdentifier) for: \(indexPath)")
+            return T()
+        }
+        return reusableSupplementaryView
     }
 }
