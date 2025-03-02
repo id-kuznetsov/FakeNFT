@@ -275,9 +275,12 @@ extension CartViewController: UITableViewDelegate {}
 
 extension CartViewController: CartTableViewCellDelegate {
     func didTapRemoveButton(with nftId: String, image: UIImage?) {
-        guard let image else { return }
-        let viewController = DeleteViewController(image: image, viewModel: DeleteViewModel(orderService: viewModel.orderService))
         
+        guard let image else { return }
+        let viewModel = DeleteViewModel(image: image) { [weak self] in
+            self?.viewModel.deleteItem(with: nftId)
+        }
+        let viewController = DeleteViewController(viewModel: viewModel)
         
         viewController.modalPresentationStyle = .overFullScreen
         present(viewController, animated: true)

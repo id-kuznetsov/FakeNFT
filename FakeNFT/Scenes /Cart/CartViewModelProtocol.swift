@@ -17,4 +17,5 @@ protocol CartViewModelProtocol {
     func getTotalCost() -> Double
     func loadData()
     func sortItems(by sortOption: SortOption)
+    func deleteItem(with nftId: String)
 }

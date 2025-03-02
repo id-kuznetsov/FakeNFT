@@ -70,6 +70,24 @@ final class CartViewModel: CartViewModelProtocol {
         onItemsUpdate?()
     }
     
+    func deleteItem(with nftId: String) {
+        let updatedNftIds = nftsInCart
+            .map { $0.id }
+            .filter{ $0 != nftId }
+        
+        
+        orderService.putOrder(nfts: updatedNftIds) { [weak self] result in
+            switch result {
+            case .success(let order):
+                self?.loadNFTs(by: order.nfts)
+            case .failure(let error):
+                print("Error: \(error) in \(#function) \(#file)")
+                // TODO: в cart-3 передать ошибку через алерт
+            }
+            
+        }
+    }
+    
     // MARK: - Private Methods
     
     private func loadNFTs(by ids: [String]) {

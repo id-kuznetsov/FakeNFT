@@ -26,13 +26,13 @@ final class SuccessViewController: UIViewController {
         label.textColor = .ypBlack
         label.textAlignment = .center
         label.numberOfLines = 0
-        label.text = "Успех! Оплата прошла, поздравляем с покупкой!"
+        label.text = L10n.Payment.Success.title
         return label
     }()
     
     private lazy var returnToCartButton: UIButton = {
         let button = UIButton()
-        button.setTitle("Вернуться в каталог", for: .normal)
+        button.setTitle(L10n.Payment.Success.button, for: .normal)
         button.setTitleColor(.ypWhite, for: .normal)
         button.backgroundColor = .ypBlack
         button.titleLabel?.font = .systemFont(ofSize: 17, weight: .bold)
@@ -52,13 +52,14 @@ final class SuccessViewController: UIViewController {
         super.viewDidLoad()
         
         setupUI()
+        
     }
     
     // MARK: - Action
     
     @objc
-    private func didTapBackToCart() {
-        
+    private func didTapBackToCart() { 
+        dismiss(animated: true, completion: nil)
     }
     
     // MARK: - Public Methods

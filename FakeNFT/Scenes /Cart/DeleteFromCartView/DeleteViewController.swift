@@ -9,7 +9,7 @@ import UIKit
 
 final class DeleteViewController: UIViewController {
     
-    private let viewModel: DeleteViewModel
+    private let viewModel: DeleteViewModelProtocol
     
     // MARK: - Private Properties
 
@@ -77,28 +77,31 @@ final class DeleteViewController: UIViewController {
     
     // MARK: - Initialisers
     
-    init(image: UIImage, viewModel: DeleteViewModel) {
+    init(viewModel: DeleteViewModelProtocol) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
-        nftImageView.image = image //TODO: image to viewModel
     }
     
     @available(*, unavailable)
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
     // MARK: - Lifecycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
+        bindViewModel()
     }
     
     // MARK: - Action
     
     @objc
     private func didTapDeleteButton() {
-        // TODO: delete logic
+        dismiss(animated: true) { [weak self] in
+            self?.viewModel.deleteNFT()
+        }
     }
     
     @objc
@@ -107,6 +110,10 @@ final class DeleteViewController: UIViewController {
     }
     
     // MARK: - Private Methods
+    
+    private func bindViewModel() {
+        nftImageView.image = viewModel.image
+    }
     
     private func setupUI() {
         view.addSubviews(

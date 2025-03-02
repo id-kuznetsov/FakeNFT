@@ -8,16 +8,20 @@
 import Foundation
 
 typealias OrderCompletion = (Result<Order, Error>) -> Void
+typealias OrderPutCompletion = (Result<Order, Error>) -> Void
 typealias CurrenciesCompletion = (Result<CurrencyValues, Error>) -> Void
 
 protocol OrderService{
     func getOrder(completion: @escaping OrderCompletion)
     func getCurrencies(completion: @escaping CurrenciesCompletion)
+    func putOrder(nfts: [String], completion: @escaping OrderPutCompletion)
+    func getCurrentOrder() -> Order?
 }
 
 final class OrderServiceImpl: OrderService {
     
     private let networkClient: NetworkClient
+    private var currentOrder: Order?
     
     init(networkClient: NetworkClient) {
         self.networkClient = networkClient
@@ -26,9 +30,10 @@ final class OrderServiceImpl: OrderService {
     func getOrder(completion: @escaping OrderCompletion) {
         let request = OrderRequest()
         
-        networkClient.send(request: request, type: Order.self) { result in
+        networkClient.send(request: request, type: Order.self) { [weak self] result in
             switch result {
             case .success(let order):
+                self?.currentOrder = order
                 completion(.success(order))
             case .failure(let error):
                 completion(.failure(error))
@@ -47,5 +52,24 @@ final class OrderServiceImpl: OrderService {
                 completion(.failure(error))
             }
         }
+    }
+    
+    func putOrder(nfts: [String], completion: @escaping OrderPutCompletion) {
+        let dto = OrderDtoObject(nfts: nfts)
+        let request = OrderPutRequest(dto: dto)
+        
+        networkClient.send(request: request, type: Order.self) { [weak self] result in
+            switch result {
+            case .success(let order):
+                self?.currentOrder = order
+                completion(.success(order))
+            case .failure(let error):
+                completion(.failure(error))
+            }
+        }
+    }
+    
+    func getCurrentOrder() -> Order? {
+        return currentOrder
     }
 }

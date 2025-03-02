@@ -10,7 +10,7 @@ import Foundation
 final class PaymentViewModel: PaymentViewModelProtocol {
     
     // MARK: - Public Properties
-    
+
     var onItemsUpdate: (() -> Void)?
     
     var paymentMethodCount: Int {
@@ -19,6 +19,7 @@ final class PaymentViewModel: PaymentViewModelProtocol {
     
     // MARK: - Private Properties
     
+    private var selectedCurrencyIndex: Int?
     private let orderService: OrderService
     private var currencyCards: [CurrencyCard] = []
     
@@ -51,6 +52,18 @@ final class PaymentViewModel: PaymentViewModelProtocol {
                 // TODO: в cart-3 передать ошибку через алерт
             }
         }
+    }
+    
+    func setSelectedCurrencyIndex(_ index: Int) {
+        selectedCurrencyIndex = index
+    }
+
+    func getSelectedCurrencyIndex() -> Int? {
+        return selectedCurrencyIndex
+    }
+
+    func isCurrencySelected() -> Bool {
+        return selectedCurrencyIndex != nil
     }
 }
 

@@ -13,8 +13,6 @@ final class PaymentViewController: UIViewController {
     
     private var viewModel: PaymentViewModelProtocol
     
-    private var selectedCurrencyIndex: Int?
-    
     private lazy var leftBarButtonItem: UIBarButtonItem = {
         let button = UIBarButtonItem(
             image: .chevronLeft,
@@ -134,8 +132,16 @@ final class PaymentViewController: UIViewController {
     
     @objc
     private func didTapPayButton() {
-        // TODO: handle tap pay button
-       print("pay")
+        if !viewModel.isCurrencySelected() {
+            showAlertForNotChoosePaymentMethod()
+        } else {
+            let vc = SuccessViewController()
+            vc.modalPresentationStyle = .fullScreen
+            present(vc, animated: true) { [weak self] in
+                self?.navigationController?.popViewController(animated: false)
+            }
+            
+        }
     }
     
     // MARK: - Private Methods
@@ -180,6 +186,15 @@ final class PaymentViewController: UIViewController {
             payButton
         ]
         viewsToHide.forEach { $0.isHidden = isLoading }
+    }
+    
+    private func showAlertForNotChoosePaymentMethod() {
+        AlertPresenter.presentAlertWithOneSelection(
+            on: self,
+            title: L10n.Payment.Alert.title,
+            message: L10n.Payment.Alert.message,
+            actionTitle: "Ok"
+        )
     }
     
     private func setupConstraints() {
@@ -260,12 +275,12 @@ extension PaymentViewController: UICollectionViewDataSource {
 extension PaymentViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         guard let item = collectionView.cellForItem(at: indexPath) as? PaymentCollectionViewCell else { return }
-        if selectedCurrencyIndex != nil {
-            guard let prevIndex = selectedCurrencyIndex,
-                  let prevCell = collectionView.cellForItem(at: IndexPath(row: prevIndex, section: 0)) as? PaymentCollectionViewCell else { return }
+        
+        if let prevIndex = viewModel.getSelectedCurrencyIndex(),
+           let prevCell = collectionView.cellForItem(at: IndexPath(row: prevIndex, section: 0)) as? PaymentCollectionViewCell { 
             prevCell.makeCellSelected(isSelected: false)
         }
-        selectedCurrencyIndex = indexPath.item
+        viewModel.setSelectedCurrencyIndex(indexPath.item)
         item.makeCellSelected(isSelected: true)
     }
 }

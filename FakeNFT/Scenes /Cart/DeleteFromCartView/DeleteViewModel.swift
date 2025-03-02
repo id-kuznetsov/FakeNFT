@@ -5,25 +5,24 @@
 //  Created by Ilya Kuznetsov on 25.02.2025.
 //
 
-import Foundation
+import UIKit
 
 protocol DeleteViewModelProtocol {
-    
+    var image: UIImage { get }
+    var deleteNFT: () -> Void { get }
 }
 
 final class DeleteViewModel: DeleteViewModelProtocol {
+
+    // MARK: - Public Properties
     
-    // MARK: - Private Properties
-    
-    private let orderService: OrderService
+    let image: UIImage
+    let deleteNFT: () -> Void
     
     // MARK: - Initialisers
     
-    init(orderService: OrderService) {
-        self.orderService = orderService
-        
+    init(image: UIImage, deleteNFT: @escaping () -> Void) {
+        self.image = image
+        self.deleteNFT = deleteNFT
     }
-    
-    // MARK: - Public Methods
-    
 }
