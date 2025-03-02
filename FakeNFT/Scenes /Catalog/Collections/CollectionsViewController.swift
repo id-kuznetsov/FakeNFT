@@ -11,10 +11,16 @@ import Combine
 final class CollectionsViewController: UIViewController, FilterView, ErrorView, LoadingView {
     // MARK: - Properties
     private let viewModel: CollectionsViewModelProtocol
+    private var dataSource: UITableViewDiffableDataSource<Int, CollectionUI>!
     private var subscribers = Set<AnyCancellable>()
 
     // MARK: - UI
-    lazy var activityIndicator = UIActivityIndicatorView()
+    lazy var activityIndicator: UIActivityIndicatorView = {
+        let view = UIActivityIndicatorView(style: .large)
+        view.hidesWhenStopped = true
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
 
     private lazy var tableView: UITableView = {
         let view = UITableView(frame: .zero, style: .plain)
@@ -23,7 +29,6 @@ final class CollectionsViewController: UIViewController, FilterView, ErrorView, 
         view.rowHeight = LayoutConstants.CollectionsScreen.rowHeight
         view.separatorStyle = .none
         view.delegate = self
-        view.dataSource = self
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
@@ -46,47 +51,69 @@ final class CollectionsViewController: UIViewController, FilterView, ErrorView, 
         setupNavigationBar()
         setupLayout()
 
+        setupDataSource()
+
         bindViewModel()
         viewModel.loadData()
     }
 
+    // MARK: - Binding
     private func bindViewModel() {
-        viewModel.collectionsPublisher
+        viewModel.collections
             .receive(on: DispatchQueue.main)
-            .sink( receiveValue: { [weak self] _ in
-                self?.tableView.reloadData()
+            .sink( receiveValue: { [weak self] collections in
+                self?.applySnapshot(collections)
             })
             .store(in: &subscribers)
-    }
 
-
-//    override func viewDidDisappear(_ animated: Bool) {
-//        super.viewDidDisappear(animated)
-//        subscribers.forEach { $0.cancel() }
-//        subscribers.removeAll()
-//    }
-
-    private func stateDidChanged() {
-        viewModel.statePublisher
+        viewModel.state
             .receive(on: DispatchQueue.main)
+            .dropFirst()
             .sink( receiveValue: { [weak self] state in
                 guard let self else { return }
 
                 switch state {
-                case .initial:
-                    assertionFailure("can't move to initial state")
                 case .loading:
                     self.showLoading()
-                    self.viewModel.loadData()
+                    print("show loading")
                 case .success:
                     self.hideLoading()
-                    self.tableView.reloadData()
+                    print("success hide loading")
                 case .failed(let error):
                     self.hideLoading()
+                    print("failed hide loading")
                     self.showError(error)
+                    print("show error")
+                default:
+                    break
                 }
             })
             .store(in: &subscribers)
+    }
+
+    private func applySnapshot(_ collections: [CollectionUI], animating: Bool = true) {
+        var snapshot = dataSource.snapshot()
+        snapshot.deleteAllItems()
+        snapshot.appendSections([0])
+        snapshot.appendItems(collections, toSection: 0)
+        dataSource.apply(snapshot, animatingDifferences: animating)
+    }
+
+    // MARK: - DataSource
+    private func setupDataSource() {
+        dataSource = UITableViewDiffableDataSource<Int, CollectionUI>(
+            tableView: tableView
+        ) { [weak self] tableView, indexPath, collection in
+            guard let self = self else { return UITableViewCell() }
+
+            let cell: CollectionsTableViewCell = self.tableView.dequeueReusableCell()
+            cell.selectionStyle = .none
+            cell.configure(
+                with: collection,
+                imageLoaderService: self.viewModel.imageLoaderService
+            )
+            return cell
+        }
     }
 
     // MARK: - Setup NavBar
@@ -151,10 +178,8 @@ final class CollectionsViewController: UIViewController, FilterView, ErrorView, 
     private func setupLayout() {
         view.backgroundColor = .ypWhite
 
-        tableView.addSubview(activityIndicator)
-        activityIndicator.constraintCenters(to: tableView)
-
         view.addSubview(tableView)
+        view.addSubview(activityIndicator)
 
         NSLayoutConstraint.activate([
             tableView.topAnchor.constraint(
@@ -163,28 +188,11 @@ final class CollectionsViewController: UIViewController, FilterView, ErrorView, 
             ),
             tableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
             tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+
+            activityIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            activityIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor)
         ])
-    }
-}
-
-// MARK: - UITableViewDataSource
-extension CollectionsViewController: UITableViewDataSource {
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        viewModel.collections.count
-    }
-
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell: CollectionsTableViewCell = tableView.dequeueReusableCell()
-        let collectionUI = viewModel.getCollection(at: indexPath)
-
-        cell.selectionStyle = .none
-        cell.configure(
-            with: collectionUI,
-            imageLoaderService: viewModel.imageLoaderService
-        )
-
-        return cell
     }
 }
 

@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct CollectionUI: Encodable {
+struct CollectionUI: Hashable {
     let createdAt: Date
     let name: String
     let cover: URL?

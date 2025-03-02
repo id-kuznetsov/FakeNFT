@@ -14,14 +14,10 @@ protocol CollectionsViewModelProtocol {
     var nftsService: NftsService { get }
     var userService: UserService { get }
 
-    var collections: [CollectionUI] { get }
-    var collectionsPublisher: Published<[CollectionUI]>.Publisher { get }
-
-    var state: CollectionsState { get }
-    var statePublisher: Published<CollectionsState>.Publisher { get }
+    var collections: AnyPublisher<[CollectionUI], Never> { get }
+    var state: AnyPublisher<CollectionsState, Never> { get }
 
     func loadData()
-    func numberOfRows() -> Int
     func getCollection(at indexPath: IndexPath) -> CollectionUI
     func sortByNftCount()
     func sortByCollectionName()
@@ -38,11 +34,11 @@ final class CollectionsViewModel: CollectionsViewModelProtocol {
     let userService: UserService
     private let collectionsService: CollectionsService
 
-    @Published var state = CollectionsState.initial
-    var statePublisher: Published<CollectionsState>.Publisher { $state }
+    @Published private var _state: CollectionsState = .initial
+    var state: AnyPublisher<CollectionsState, Never> { $_state.eraseToAnyPublisher() }
 
-    @Published var collections = [CollectionUI]()
-    var collectionsPublisher: Published<[CollectionUI]>.Publisher { $collections }
+    @Published private var _collections: [CollectionUI] = []
+    var collections: AnyPublisher<[CollectionUI], Never> { $_collections.eraseToAnyPublisher() }
 
     private var cancellables = Set<AnyCancellable>()
 
@@ -62,34 +58,38 @@ final class CollectionsViewModel: CollectionsViewModelProtocol {
         self.userService = userService
     }
 
-    func numberOfRows() -> Int {
-        collections.count
-    }
-
     func getCollection(at indexPath: IndexPath) -> CollectionUI {
-        collections[indexPath.row]
+        guard _collections.indices.contains(indexPath.row) else {
+            fatalError("🔥 Index out of range: \(indexPath.row)")
+        }
+        return _collections[indexPath.row]
     }
 
     func sortByNftCount() {
-        print("🎯 Сортировка по количеству NFT")
+        _collections.sort { $0.nfts.count > $1.nfts.count }
+        _collections = _collections
     }
 
     func sortByCollectionName() {
-        print("🎯 Сортировка по названию коллекции")
+        // TODO: add loadData with sortBy name
+        _collections.sort { $0.name < $1.name }
+        _collections = _collections
     }
 
     func loadData() {
-        collectionsService.fetchCollections(
-            page: currentPage,
-            sortBy: sortBy
-        )
-            .sink(receiveCompletion: { completion in
-                if case .failure(let error) = completion {
-                    print("Ошибка: \(error)")
-                }
-            }, receiveValue: { [weak self] data in
-                self?.collections = data
-            })
+        _state = .loading
+
+        collectionsService.fetchCollections(page: currentPage, sortBy: sortBy)
+            .map { collections -> CollectionsState in
+                self._collections = collections
+                return .success
+            }
+            .catch { error -> Just<CollectionsState> in
+                Just(.failed(error))
+            }
+            .sink { [weak self] newState in
+                self?._state = newState
+            }
             .store(in: &cancellables)
     }
 }
