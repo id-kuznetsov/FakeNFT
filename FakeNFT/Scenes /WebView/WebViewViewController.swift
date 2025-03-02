@@ -30,19 +30,19 @@ final class WebViewViewController: UIViewController {
         return navBar
     }()
     
-    private lazy var backButton: UIButton = {
-        let button = UIButton(type: .system)
-        button.setImage(UIImage.chevronLeft, for: .normal)
-        button.tintColor = .ypBlack
-        button.addTarget(self, action: #selector(backButtonTapped), for: .touchUpInside)
-        return button
-    }()
+//    private lazy var backButton: UIButton = {
+//        let button = UIButton(type: .system)
+//        button.setImage(UIImage.chevronLeft, for: .normal)
+//        button.tintColor = .ypBlack
+//        button.addTarget(self, action: #selector(backButtonTapped), for: .touchUpInside)
+//        return button
+//    }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
         setupLayout()
-        configureCustomNavBar()
+//        configureCustomNavBar()
     }
     
     init(url: URL) {
@@ -95,12 +95,12 @@ final class WebViewViewController: UIViewController {
         ])
     }
     
-    private func configureCustomNavBar() {
-        let navItem = UINavigationItem()
-        let backBarButton = UIBarButtonItem(customView: backButton)
-        navItem.leftBarButtonItem = backBarButton
-        customNavBar.setItems([navItem], animated: false)
-    }
+//    private func configureCustomNavBar() {
+//        let navItem = UINavigationItem()
+//        let backBarButton = UIBarButtonItem(customView: backButton)
+//        navItem.leftBarButtonItem = backBarButton
+//        customNavBar.setItems([navItem], animated: false)
+//    }
     
     // MARK: - Actions
     @objc private func backButtonTapped() {

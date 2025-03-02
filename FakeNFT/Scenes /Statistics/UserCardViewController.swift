@@ -12,13 +12,6 @@ final class UserCardViewController: UIViewController {
     // MARK: - Private properties
     private var viewModel: UserCardViewModelProtocol
     
-    private lazy var customNavBar: UINavigationBar = {
-        let navBar = UINavigationBar()
-        navBar.barTintColor = .ypWhite
-        navBar.shadowImage = UIImage()
-        return navBar
-    }()
-    
     private lazy var backButton: UIButton = {
         let button = UIButton(type: .system)
         button.setImage(UIImage.chevronLeft, for: .normal)
@@ -118,7 +111,6 @@ final class UserCardViewController: UIViewController {
         super.viewDidLoad()
         
         setupUI()
-        configureCustomNavBar()
         viewModel.loadUserData()
     }
     
@@ -173,20 +165,14 @@ final class UserCardViewController: UIViewController {
     private func setupUI() {
         view.backgroundColor = .ypWhite
         
-        [customNavBar, avatarImageView, nameLabel, descriptionLabel,
+        [avatarImageView, nameLabel, descriptionLabel,
          webViewButton, nftButton].forEach { element in
             view.addSubview(element)
             element.translatesAutoresizingMaskIntoConstraints = false
         }
         
         NSLayoutConstraint.activate([
-            // customNavBar constraints
-            customNavBar.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            customNavBar.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            customNavBar.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            
-            // avatarImageView constraints
-            avatarImageView.topAnchor.constraint(equalTo: customNavBar.bottomAnchor, constant: 20),
+            avatarImageView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
             avatarImageView.leadingAnchor.constraint(
                 equalTo: view.leadingAnchor,
                 constant: StatisticsConstants.UserCardVc.MainScreen.avatarLeftInset
@@ -196,14 +182,12 @@ final class UserCardViewController: UIViewController {
             ),
             avatarImageView.heightAnchor.constraint(equalTo: avatarImageView.widthAnchor),
             
-            // nameLabel constraints
             nameLabel.centerYAnchor.constraint(equalTo: avatarImageView.centerYAnchor),
             nameLabel.leadingAnchor.constraint(
                 equalTo: avatarImageView.trailingAnchor,
                 constant: StatisticsConstants.UserCardVc.MainScreen.nameLabelLeftInset
             ),
             
-            // descriptionLabel constraints
             descriptionLabel.topAnchor.constraint(
                 equalTo: avatarImageView.bottomAnchor,
                 constant: StatisticsConstants.UserCardVc.MainScreen.descriptionTopInset
@@ -214,7 +198,6 @@ final class UserCardViewController: UIViewController {
                 constant: -StatisticsConstants.UserCardVc.MainScreen.descriptionRightInset
             ),
             
-            // webViewButton constraints
             webViewButton.topAnchor.constraint(
                 equalTo: descriptionLabel.bottomAnchor,
                 constant: StatisticsConstants.UserCardVc.MainScreen.webViewButtonTopInset
@@ -226,7 +209,6 @@ final class UserCardViewController: UIViewController {
                 equalToConstant: StatisticsConstants.UserCardVc.MainScreen.webViewButtonHeight
             ),
             
-            // nftButton constraints
             nftButton.topAnchor.constraint(
                 equalTo: webViewButton.bottomAnchor,
                 constant: StatisticsConstants.UserCardVc.MainScreen.nftButtonTopInset),
@@ -237,15 +219,6 @@ final class UserCardViewController: UIViewController {
         ])
         
         setupBindings()
-    }
-    
-    private func configureCustomNavBar() {
-        let navItem = UINavigationItem()
-        
-        let backBarButton = UIBarButtonItem(customView: backButton)
-        navItem.leftBarButtonItem = backBarButton
-        
-        customNavBar.setItems([navItem], animated: false)
     }
     
     private func showNetworkErrorAlert() {

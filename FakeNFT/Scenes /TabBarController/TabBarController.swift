@@ -51,8 +51,9 @@ final class TabBarController: UITabBarController {
             userDefaultsStorage: StatisticsUserDefaultsStorage(),
             cacheStorage: StatisticsCacheStorage()
         )
-        let statisticsVC = UINavigationController(rootViewController: StatisticsViewController(viewModel: statisticsViewModel))
-        statisticsVC.tabBarItem = UITabBarItem(
+        let statisticsVC = StatisticsViewController(viewModel: statisticsViewModel)
+        let statisticsNavigationController = CustomNavigationController(rootViewController: statisticsVC)
+        statisticsNavigationController.tabBarItem = UITabBarItem(
             title: L10n.Tab.statistic,
             image: UIImage(named: "ic.statistics.fill"),
             selectedImage: nil
@@ -63,7 +64,7 @@ final class TabBarController: UITabBarController {
                 profileVC,
                 catalogNavigationController,
                 cartVC,
-                statisticsVC
+                statisticsNavigationController
             ],
             animated: false
         )
