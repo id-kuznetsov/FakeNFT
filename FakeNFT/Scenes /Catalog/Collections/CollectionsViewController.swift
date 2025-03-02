@@ -8,12 +8,14 @@
 import UIKit
 import Combine
 
-final class CollectionsViewController: UIViewController, FilterView {
+final class CollectionsViewController: UIViewController, FilterView, ErrorView, LoadingView {
     // MARK: - Properties
     private let viewModel: CollectionsViewModelProtocol
     private var subscribers = Set<AnyCancellable>()
 
     // MARK: - UI
+    lazy var activityIndicator = UIActivityIndicatorView()
+
     private lazy var tableView: UITableView = {
         let view = UITableView(frame: .zero, style: .plain)
         view.backgroundColor = .ypWhite
@@ -41,10 +43,9 @@ final class CollectionsViewController: UIViewController, FilterView {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        view.backgroundColor = .ypWhite
-        view.addSubview(tableView)
         setupNavigationBar()
-        setupConstraints()
+        setupLayout()
+        viewModel.loadCollections()
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -61,6 +62,29 @@ final class CollectionsViewController: UIViewController, FilterView {
         super.viewDidDisappear(animated)
         subscribers.forEach { $0.cancel() }
         subscribers.removeAll()
+    }
+
+    private func stateDidChanged() {
+        viewModel.statePublisher
+            .receive(on: DispatchQueue.main)
+            .sink( receiveValue: { [weak self] state in
+                guard let self else { return }
+
+                switch state {
+                case .initial:
+                    assertionFailure("can't move to initial state")
+                case .loading:
+                    self.showLoading()
+                    self.viewModel.loadCollections()
+                case .success:
+                    self.hideLoading()
+                    self.tableView.reloadData()
+                case .failed(let error):
+                    self.hideLoading()
+                    self.showError(error)
+                }
+            })
+            .store(in: &subscribers)
     }
 
     // MARK: - Setup NavBar
@@ -91,6 +115,23 @@ final class CollectionsViewController: UIViewController, FilterView {
         navigationController?.pushViewController(viewController, animated: true)
     }
 
+    // MARK: - Alert
+    func showError(_ error: Error) {
+        showError(
+            error: error,
+            buttons: [
+                .cancel,
+                .reload(
+                    action: { [weak self] in
+                        guard let self else { return }
+
+                        self.viewModel.viewDidLoad()
+                    }
+                )
+            ]
+        )
+    }
+
     // MARK: - Actions
     @objc
     private func presentFilterActionSheet() {
@@ -105,7 +146,14 @@ final class CollectionsViewController: UIViewController, FilterView {
     }
 
     // MARK: - Constraints
-    private func setupConstraints() {
+    private func setupLayout() {
+        view.backgroundColor = .ypWhite
+
+        tableView.addSubview(activityIndicator)
+        activityIndicator.constraintCenters(to: tableView)
+
+        view.addSubview(tableView)
+
         NSLayoutConstraint.activate([
             tableView.topAnchor.constraint(
                 equalTo: view.safeAreaLayoutGuide.topAnchor,

@@ -19,9 +19,11 @@ final class ServicesAssembly {
     }
 
     var collectionsService: CollectionsService {
-        CollectionsServiceImpl()
+        CollectionsServiceImpl(
+            networkClient: networkClient
+        )
     }
-
+    
     var nftsService: NftsService {
         NftsServiceImpl()
     }
