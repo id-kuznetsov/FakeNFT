@@ -6,7 +6,6 @@
 //
 
 import UIKit
-import ProgressHUD
 
 final class StatisticsViewController: UIViewController {
     
@@ -22,7 +21,7 @@ final class StatisticsViewController: UIViewController {
     
     private lazy var filterButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setImage(UIImage(named: "ic.filter"), for: .normal)
+        button.setImage(UIImage(named: "ic.sort"), for: .normal)
         button.tintColor = .ypBlack
         button.addTarget(self, action: #selector(filterButtonTapped), for: .touchUpInside)
         return button
@@ -68,16 +67,29 @@ final class StatisticsViewController: UIViewController {
         }
         
         NSLayoutConstraint.activate([
+            // customNavBar constraints
             customNavBar.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             customNavBar.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             customNavBar.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             
+            // tableView constraints
             tableView.topAnchor.constraint(equalTo: customNavBar.bottomAnchor, constant: 20),
-            tableView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
-            tableView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16),
+            tableView.leadingAnchor.constraint(
+                equalTo: view.safeAreaLayoutGuide.leadingAnchor,
+                constant: StatisticsConstants.StatisticsVc.TableViewParams.sideMarginFromEdges
+            ),
+            tableView.trailingAnchor.constraint(
+                equalTo: view.safeAreaLayoutGuide.trailingAnchor,
+                constant: -StatisticsConstants.StatisticsVc.TableViewParams.sideMarginFromEdges
+            ),
             tableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
         ])
-        tableView.scrollIndicatorInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: -3)
+        tableView.scrollIndicatorInsets = UIEdgeInsets(
+            top: 0,
+            left: 0,
+            bottom: 0,
+            right: -StatisticsConstants.StatisticsVc.TableViewParams.containerViewRightInset
+        )
         configureCustomNavBar()
     }
     
@@ -104,17 +116,25 @@ final class StatisticsViewController: UIViewController {
                 isLoading ? self?.showLoadingIndicator() : self?.hideLoadingIndicator()
             }
         }
+        viewModel.onErrorOccurred = { [weak self] _ in
+            DispatchQueue.main.async {
+                self?.showNetworkErrorAlert()
+            }
+        }
+    }
+    
+    private func showNetworkErrorAlert() {
+        AlertPresenter.presentNetworkErrorAlert(on: self) { [weak self] in
+            self?.viewModel.fetchNextPage()
+        }
     }
     
     private func showLoadingIndicator() {
-        self.view.isUserInteractionEnabled = false
-        ProgressHUD.colorAnimation = .ypBlack
-        ProgressHUD.show()
+        UIBlockingProgressIndicator.show()
     }
     
     private func hideLoadingIndicator() {
-        self.view.isUserInteractionEnabled = true
-        ProgressHUD.dismiss()
+        UIBlockingProgressIndicator.dismiss()
     }
     
     // MARK: - Actions
@@ -170,7 +190,19 @@ extension StatisticsViewController: UITableViewDelegate {
         _ tableView: UITableView,
         heightForRowAt indexPath: IndexPath
     ) -> CGFloat {
-        88
+        StatisticsConstants.StatisticsVc.TableViewParams.heightForRow
+    }
+    
+    func tableView(
+        _ tableView: UITableView,
+        didSelectRowAt indexPath: IndexPath
+    ) {
+        let user = viewModel.users[indexPath.row]
+        let userCardViewModel = viewModel.createUserCardViewModel(for: user.id)
+        let userCardVC = UserCardViewController(viewModel: userCardViewModel)
+        
+        navigationController?.pushViewController(userCardVC, animated: true)
+        tabBarController?.tabBar.isHidden = true
     }
     
     func tableView(

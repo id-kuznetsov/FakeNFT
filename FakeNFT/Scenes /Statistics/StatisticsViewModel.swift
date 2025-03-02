@@ -5,20 +5,28 @@
 //  Created by Aleksei Frolov on 17.02.2025.
 //
 
-import UIKit
+import Foundation
 
+// MARK: - StatisticsViewModelProtocol
 protocol StatisticsViewModelProtocol {
     var users: [User] { get }
     var onUsersUpdated: (() -> Void)? { get set }
     var onLoadingStateChanged: ((Bool) -> Void)? { get set }
+    var onErrorOccurred: ((String) -> Void)? { get set }
     
     func loadInitialData()
     func fetchNextPage()
     func sortUsers(by option: SortOption?)
     func clearAllStatisticsData()
+    func createUserCardViewModel(for userId: String) -> UserCardViewModelProtocol
 }
 
 final class StatisticsViewModel: StatisticsViewModelProtocol {
+    
+    // MARK: - Public properties
+    var onUsersUpdated: (() -> Void)?
+    var onLoadingStateChanged: ((Bool) -> Void)?
+    var onErrorOccurred: ((String) -> Void)?
     
     // MARK: - Private properties
     private var userDefaultsStorage: StatisticsUserDefaultsStorageProtocol
@@ -29,9 +37,6 @@ final class StatisticsViewModel: StatisticsViewModelProtocol {
     private var isLoading = false
     private var allUsersLoaded = false
     private var isInitialDataLoaded = false
-    
-    var onUsersUpdated: (() -> Void)?
-    var onLoadingStateChanged: ((Bool) -> Void)?
     
     // MARK: - Initializers
     init(
@@ -75,6 +80,7 @@ final class StatisticsViewModel: StatisticsViewModelProtocol {
                     self.onUsersUpdated?()
                 }
             case .failure(let error):
+                self.onErrorOccurred?("Не удалось получить данные")
                 print("Ошибка загрузки пользователей \(error.localizedDescription)")
             }
         }
@@ -97,6 +103,10 @@ final class StatisticsViewModel: StatisticsViewModelProtocol {
             break
         }
         onUsersUpdated?()
+    }
+    
+    func createUserCardViewModel(for userId: String) -> UserCardViewModelProtocol {
+        UserCardViewModel(userService: userService, userId: userId)
     }
     
     // Calling this method on logout (when the authorization functionality will be implemented)

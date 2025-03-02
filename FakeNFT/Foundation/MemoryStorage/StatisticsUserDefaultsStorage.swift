@@ -51,6 +51,7 @@ final class StatisticsUserDefaultsStorage: StatisticsUserDefaultsStorageProtocol
     func clearStatisticsUserDefaults() {
         storage.removeObject(forKey: Keys.currentPage.rawValue)
         storage.removeObject(forKey: Keys.sortOptionInStatistics.rawValue)
+        storage.removeObject(forKey: Keys.previousPageSize.rawValue)
     }
     
     private enum Keys: String {

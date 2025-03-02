@@ -44,20 +44,28 @@
 		5CD04EEF2D5FE7510013C751 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5CD04EE22D5FE7510013C751 /* Assets.xcassets */; };
 		5CD04EF22D5FE7510013C751 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 5CD04EE82D5FE7510013C751 /* Localizable.strings */; };
 		5CD04EF52D5FE7510013C751 /* Strings+Generated.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CD04EED2D5FE7510013C751 /* Strings+Generated.swift */; };
+		913D88F42D6481A9001304A3 /* Icons.swift in Sources */ = {isa = PBXBuildFile; fileRef = 913D88F32D6481A9001304A3 /* Icons.swift */; };
 		E19CD5AB2A98B56600CA39A5 /* NftImageCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E19CD5AA2A98B56600CA39A5 /* NftImageCollectionViewCell.swift */; };
 		E1A1B9DA2AA01CE400C3AFBC /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1A1B9D92AA01CE400C3AFBC /* TabBarController.swift */; };
+		F726C4BA2D6E746F004FA56C /* UIBlockingProgressIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = F726C4B92D6E746F004FA56C /* UIBlockingProgressIndicator.swift */; };
 		F73E91552D67DC570046BC3B /* CachedUsers.swift in Sources */ = {isa = PBXBuildFile; fileRef = F73E91542D67DC570046BC3B /* CachedUsers.swift */; };
 		F75651292D5EA5B8009B646C /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F75651282D5EA5B8009B646C /* ProfileViewController.swift */; };
 		F756512B2D5EA5F2009B646C /* CatalogViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F756512A2D5EA5F2009B646C /* CatalogViewController.swift */; };
 		F756512D2D5EA623009B646C /* CartViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F756512C2D5EA623009B646C /* CartViewController.swift */; };
 		F756512F2D5EA652009B646C /* StatisticsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F756512E2D5EA652009B646C /* StatisticsViewController.swift */; };
+		F76A112F2D6CEA4900FCB398 /* UserCardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F76A112E2D6CEA4900FCB398 /* UserCardViewController.swift */; };
+		F76A11332D6D228200FCB398 /* UserDetailRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = F76A11322D6D228200FCB398 /* UserDetailRequest.swift */; };
+		F76A11362D6D23AD00FCB398 /* UserCardViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F76A11352D6D23AD00FCB398 /* UserCardViewModel.swift */; };
+		F76A11382D6E57CD00FCB398 /* WebViewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F76A11372D6E57CC00FCB398 /* WebViewViewController.swift */; };
+		F76DD34B2D6FC13800BBC404 /* WebsiteAccessRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = F76DD34A2D6FC13800BBC404 /* WebsiteAccessRequest.swift */; };
 		F79A2F3E2D6679F7003C6739 /* StatisticsUserDefaultsStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = F79A2F3D2D6679F7003C6739 /* StatisticsUserDefaultsStorage.swift */; };
 		F79A2F402D668335003C6739 /* StatisticsCacheStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = F79A2F3F2D668335003C6739 /* StatisticsCacheStorage.swift */; };
+		F7C3DB6C2D707C630025B6E8 /* StatisticsConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7C3DB6B2D707C630025B6E8 /* StatisticsConstants.swift */; };
 		F7C51C0E2D63BE7800CA8D85 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7C51C0D2D63BE7800CA8D85 /* User.swift */; };
 		F7C51C102D63BF0500CA8D85 /* StatisticsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7C51C0F2D63BF0500CA8D85 /* StatisticsViewModel.swift */; };
 		F7C51C122D63BFA400CA8D85 /* StatisticsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7C51C112D63BFA400CA8D85 /* StatisticsCell.swift */; };
 		F7C51C142D63E90500CA8D85 /* UserService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7C51C132D63E90500CA8D85 /* UserService.swift */; };
-		F7C51C192D63EA2600CA8D85 /* UserRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7C51C182D63EA2600CA8D85 /* UserRequest.swift */; };
+		F7C51C192D63EA2600CA8D85 /* UsersRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7C51C182D63EA2600CA8D85 /* UsersRequest.swift */; };
 		F7ED40DA2D60B27C00D4BE9D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F73197A72D60AC7800EBBEB9 /* LaunchScreen.storyboard */; };
 /* End PBXBuildFile section */
 
@@ -118,21 +126,29 @@
 		5CD04EE22D5FE7510013C751 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		5CD04EE72D5FE7510013C751 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Localizable.strings; sourceTree = "<group>"; };
 		5CD04EED2D5FE7510013C751 /* Strings+Generated.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Strings+Generated.swift"; sourceTree = "<group>"; };
+		913D88F32D6481A9001304A3 /* Icons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Icons.swift; sourceTree = "<group>"; };
 		E19CD5AA2A98B56600CA39A5 /* NftImageCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NftImageCollectionViewCell.swift; sourceTree = "<group>"; };
 		E1A1B9D92AA01CE400C3AFBC /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
+		F726C4B92D6E746F004FA56C /* UIBlockingProgressIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIBlockingProgressIndicator.swift; sourceTree = "<group>"; };
 		F73197A72D60AC7800EBBEB9 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
 		F73E91542D67DC570046BC3B /* CachedUsers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CachedUsers.swift; sourceTree = "<group>"; };
 		F75651282D5EA5B8009B646C /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		F756512A2D5EA5F2009B646C /* CatalogViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatalogViewController.swift; sourceTree = "<group>"; };
 		F756512C2D5EA623009B646C /* CartViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CartViewController.swift; sourceTree = "<group>"; };
 		F756512E2D5EA652009B646C /* StatisticsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsViewController.swift; sourceTree = "<group>"; };
+		F76A112E2D6CEA4900FCB398 /* UserCardViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserCardViewController.swift; sourceTree = "<group>"; };
+		F76A11322D6D228200FCB398 /* UserDetailRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDetailRequest.swift; sourceTree = "<group>"; };
+		F76A11352D6D23AD00FCB398 /* UserCardViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserCardViewModel.swift; sourceTree = "<group>"; };
+		F76A11372D6E57CC00FCB398 /* WebViewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewViewController.swift; sourceTree = "<group>"; };
+		F76DD34A2D6FC13800BBC404 /* WebsiteAccessRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebsiteAccessRequest.swift; sourceTree = "<group>"; };
 		F79A2F3D2D6679F7003C6739 /* StatisticsUserDefaultsStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsUserDefaultsStorage.swift; sourceTree = "<group>"; };
 		F79A2F3F2D668335003C6739 /* StatisticsCacheStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsCacheStorage.swift; sourceTree = "<group>"; };
+		F7C3DB6B2D707C630025B6E8 /* StatisticsConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsConstants.swift; sourceTree = "<group>"; };
 		F7C51C0D2D63BE7800CA8D85 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		F7C51C0F2D63BF0500CA8D85 /* StatisticsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsViewModel.swift; sourceTree = "<group>"; };
 		F7C51C112D63BFA400CA8D85 /* StatisticsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsCell.swift; sourceTree = "<group>"; };
 		F7C51C132D63E90500CA8D85 /* UserService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserService.swift; sourceTree = "<group>"; };
-		F7C51C182D63EA2600CA8D85 /* UserRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserRequest.swift; sourceTree = "<group>"; };
+		F7C51C182D63EA2600CA8D85 /* UsersRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsersRequest.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -224,6 +240,8 @@
 			isa = PBXGroup;
 			children = (
 				3F478ED029DB476500F6D39E /* Fonts.swift */,
+				913D88F32D6481A9001304A3 /* Icons.swift */,
+				F7C3DB6B2D707C630025B6E8 /* StatisticsConstants.swift */,
 			);
 			path = DesignSystem;
 			sourceTree = "<group>";
@@ -296,6 +314,7 @@
 		3F6806C729CBBC5B00B4F915 /* Scenes  */ = {
 			isa = PBXGroup;
 			children = (
+				F76A11392D6E57D800FCB398 /* WebView */,
 				F73AD88F2D5EC2C600E4C498 /* Statistics */,
 				F73AD88E2D5EC2B700E4C498 /* Cart */,
 				F73AD88D2D5EC29C00E4C498 /* Profile */,
@@ -361,7 +380,9 @@
 				0C79EE622A76DD1900EE90EA /* RequestConstants.swift */,
 				3FC8C39029D2453B0081F015 /* ExamplePutRequest.swift */,
 				0C79EE602A76DCD600EE90EA /* NftByIdRequest.swift */,
-				F7C51C182D63EA2600CA8D85 /* UserRequest.swift */,
+				F7C51C182D63EA2600CA8D85 /* UsersRequest.swift */,
+				F76A11322D6D228200FCB398 /* UserDetailRequest.swift */,
+				F76DD34A2D6FC13800BBC404 /* WebsiteAccessRequest.swift */,
 			);
 			path = Requests;
 			sourceTree = "<group>";
@@ -371,6 +392,7 @@
 			children = (
 				5CD04EDD2D5FE74C0013C751 /* AlertPresenter.swift */,
 				5CD04EDE2D5FE74C0013C751 /* SortOption.swift */,
+				F726C4B92D6E746F004FA56C /* UIBlockingProgressIndicator.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -426,8 +448,18 @@
 				F7C51C0D2D63BE7800CA8D85 /* User.swift */,
 				F7C51C0F2D63BF0500CA8D85 /* StatisticsViewModel.swift */,
 				F7C51C112D63BFA400CA8D85 /* StatisticsCell.swift */,
+				F76A112E2D6CEA4900FCB398 /* UserCardViewController.swift */,
+				F76A11352D6D23AD00FCB398 /* UserCardViewModel.swift */,
 			);
 			path = Statistics;
+			sourceTree = "<group>";
+		};
+		F76A11392D6E57D800FCB398 /* WebView */ = {
+			isa = PBXGroup;
+			children = (
+				F76A11372D6E57CC00FCB398 /* WebViewViewController.swift */,
+			);
+			path = WebView;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -600,21 +632,27 @@
 				F73E91552D67DC570046BC3B /* CachedUsers.swift in Sources */,
 				0C79EE6A2A76DE1000EE90EA /* NftDetailAssembly.swift in Sources */,
 				F756512F2D5EA652009B646C /* StatisticsViewController.swift in Sources */,
+				F76A11382D6E57CD00FCB398 /* WebViewViewController.swift in Sources */,
 				F7C51C0E2D63BE7800CA8D85 /* User.swift in Sources */,
 				F75651292D5EA5B8009B646C /* ProfileViewController.swift in Sources */,
 				F7C51C102D63BF0500CA8D85 /* StatisticsViewModel.swift in Sources */,
 				3FC8C39329D246BA0081F015 /* DateFormatters+Presets.swift in Sources */,
 				0CFCB7422A78013E0009A829 /* Nft.swift in Sources */,
+				F726C4BA2D6E746F004FA56C /* UIBlockingProgressIndicator.swift in Sources */,
 				0CF2C2DD2A783CE600FDC837 /* ErrorView.swift in Sources */,
 				5CD04EE02D5FE74C0013C751 /* AlertPresenter.swift in Sources */,
+				F76DD34B2D6FC13800BBC404 /* WebsiteAccessRequest.swift in Sources */,
 				5CD04EE12D5FE74C0013C751 /* SortOption.swift in Sources */,
 				0C79EE682A76DE0900EE90EA /* NftDetailPresenter.swift in Sources */,
 				3F68069B29CBBAF100B4F915 /* ProductDetailsTableViewController.swift in Sources */,
 				F756512B2D5EA5F2009B646C /* CatalogViewController.swift in Sources */,
 				0CFCB7402A78002A0009A829 /* ExamplePutService.swift in Sources */,
+				F76A112F2D6CEA4900FCB398 /* UserCardViewController.swift in Sources */,
 				F7C51C142D63E90500CA8D85 /* UserService.swift in Sources */,
-				F7C51C192D63EA2600CA8D85 /* UserRequest.swift in Sources */,
+				F7C51C192D63EA2600CA8D85 /* UsersRequest.swift in Sources */,
 				F7C51C122D63BFA400CA8D85 /* StatisticsCell.swift in Sources */,
+				F76A11362D6D23AD00FCB398 /* UserCardViewModel.swift in Sources */,
+				913D88F42D6481A9001304A3 /* Icons.swift in Sources */,
 				3F6806D529CBBEC700B4F915 /* NetworkTask.swift in Sources */,
 				0CF2C2DB2A783C1B00FDC837 /* LoadingView.swift in Sources */,
 				558E39E72C68CE0A00FB86AC /* NftService.swift in Sources */,
@@ -630,12 +668,14 @@
 				E19CD5AB2A98B56600CA39A5 /* NftImageCollectionViewCell.swift in Sources */,
 				F79A2F3E2D6679F7003C6739 /* StatisticsUserDefaultsStorage.swift in Sources */,
 				0CF2C2E12A784C7000FDC837 /* LinePageControl.swift in Sources */,
+				F7C3DB6C2D707C630025B6E8 /* StatisticsConstants.swift in Sources */,
 				5CD04EF52D5FE7510013C751 /* Strings+Generated.swift in Sources */,
 				3F6806D329CBBE9600B4F915 /* NetworkRequest.swift in Sources */,
 				0CFCB7492A7808900009A829 /* TestCatalogController.swift in Sources */,
 				F756512D2D5EA623009B646C /* CartViewController.swift in Sources */,
 				3F6806D129CBBE6B00B4F915 /* NetworkClient.swift in Sources */,
 				0CFCB7442A7802440009A829 /* NftDetailInput.swift in Sources */,
+				F76A11332D6D228200FCB398 /* UserDetailRequest.swift in Sources */,
 				0C79EE632A76DD1900EE90EA /* RequestConstants.swift in Sources */,
 				F79A2F402D668335003C6739 /* StatisticsCacheStorage.swift in Sources */,
 			);

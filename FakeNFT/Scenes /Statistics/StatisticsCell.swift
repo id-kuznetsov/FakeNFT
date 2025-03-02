@@ -15,7 +15,7 @@ final class StatisticsCell: UITableViewCell {
     // MARK: - Private properties
     private lazy var indexLabel: UILabel = {
         let label = UILabel()
-        label.font = .systemFont(ofSize: 15, weight: .regular)
+        label.font = .caption1
         label.textColor = .ypBlack
         return label
     }()
@@ -23,14 +23,14 @@ final class StatisticsCell: UITableViewCell {
     private lazy var avatarImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleToFill
-        imageView.layer.cornerRadius = 14
+        imageView.layer.cornerRadius = StatisticsConstants.Common.cornerRadiusHight
         imageView.clipsToBounds = true
         return imageView
     }()
     
     private lazy var nameLabel: UILabel = {
         let label = UILabel()
-        label.font = .systemFont(ofSize: 22, weight: .bold)
+        label.font = .headline3
         label.textColor = .ypBlack
         label.numberOfLines = 1
         label.lineBreakMode = .byTruncatingTail
@@ -41,7 +41,7 @@ final class StatisticsCell: UITableViewCell {
     
     private lazy var ratingLabel: UILabel = {
         let label = UILabel()
-        label.font = .systemFont(ofSize: 22, weight: .bold)
+        label.font = .headline3
         label.textColor = .ypBlack
         label.setContentCompressionResistancePriority(.required, for: .horizontal)
         label.setContentHuggingPriority(.required, for: .horizontal)
@@ -51,7 +51,7 @@ final class StatisticsCell: UITableViewCell {
     private lazy var containerView: UIView = {
         let view = UIView()
         view.backgroundColor = .ypLightGrey
-        view.layer.cornerRadius = 12
+        view.layer.cornerRadius = StatisticsConstants.Common.cornerRadiusMedium
         return view
     }()
     
@@ -79,25 +79,60 @@ final class StatisticsCell: UITableViewCell {
         }
         
         NSLayoutConstraint.activate([
+            // indexLabel constraints
             indexLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             indexLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
             
-            containerView.leadingAnchor.constraint(equalTo: indexLabel.trailingAnchor, constant: 16),
-            containerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -3),
-            containerView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 4),
-            containerView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -4),
-            containerView.heightAnchor.constraint(equalToConstant: 80),
+            // containerView constraints
+            containerView.leadingAnchor.constraint(
+                equalTo: indexLabel.trailingAnchor,
+                constant: StatisticsConstants.StatisticsVc.TableViewParams.sideMarginFromEdges
+            ),
+            containerView.trailingAnchor.constraint(
+                equalTo: contentView.trailingAnchor,
+                constant: -StatisticsConstants.StatisticsVc.TableViewParams.containerViewRightInset
+            ),
+            containerView.topAnchor.constraint(
+                equalTo: contentView.topAnchor,
+                constant: StatisticsConstants.StatisticsVc.TableViewParams.containerViewTop
+            ),
+            containerView.bottomAnchor.constraint(
+                equalTo: contentView.bottomAnchor,
+                constant: -StatisticsConstants.StatisticsVc.TableViewParams.containerViewBottom
+            ),
+            containerView.heightAnchor.constraint(
+                equalToConstant: StatisticsConstants.StatisticsVc.TableViewParams.containerViewHight
+            ),
             
-            avatarImageView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 16),
+            // avatarImageView constraints
+            avatarImageView.leadingAnchor.constraint(
+                equalTo: containerView.leadingAnchor,
+                constant: StatisticsConstants.StatisticsVc.TableViewParams.sideMarginFromEdges
+            ),
             avatarImageView.centerYAnchor.constraint(equalTo: containerView.centerYAnchor),
-            avatarImageView.widthAnchor.constraint(equalToConstant: 28),
-            avatarImageView.heightAnchor.constraint(equalToConstant: 28),
+            avatarImageView.widthAnchor.constraint(
+                equalToConstant: StatisticsConstants.StatisticsVc.TableViewParams.avatarWidth
+            ),
+            avatarImageView.heightAnchor.constraint(
+                equalToConstant: StatisticsConstants.StatisticsVc.TableViewParams.avatarHeight
+            ),
             
-            nameLabel.leadingAnchor.constraint(equalTo: avatarImageView.trailingAnchor, constant: 8),
+            // nameLabel constraints
+            nameLabel.leadingAnchor.constraint(
+                equalTo: avatarImageView.trailingAnchor,
+                constant: StatisticsConstants.StatisticsVc.TableViewParams.nameLabelLeftInset
+            ),
             nameLabel.centerYAnchor.constraint(equalTo: containerView.centerYAnchor),
-            nameLabel.trailingAnchor.constraint(lessThanOrEqualTo: ratingLabel.leadingAnchor, constant: -16),
+            nameLabel.trailingAnchor.constraint(
+                lessThanOrEqualTo: ratingLabel.leadingAnchor,
+                constant: -StatisticsConstants.StatisticsVc.TableViewParams.sideMarginFromEdges
+            ),
             
-            ratingLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -16),
+            // ratingLabel constraints
+            ratingLabel.trailingAnchor.constraint(
+                equalTo: containerView.trailingAnchor,
+                constant: -StatisticsConstants.StatisticsVc.TableViewParams.sideMarginFromEdges
+            ),
             ratingLabel.centerYAnchor.constraint(equalTo: containerView.centerYAnchor)
         ])
     }
@@ -108,7 +143,7 @@ final class StatisticsCell: UITableViewCell {
         nameLabel.text = user.name
         ratingLabel.text = "\(user.rating)"
         
-        let placeholderImage = UIImage(named: "ic.person.crop.circle.fill")
+        let placeholderImage = UIImage.profileTab?.withTintColor(.ypGrayUniversal, renderingMode: .alwaysOriginal)
         
         if let avatarURLString = user.avatar, let url = URL(string: avatarURLString) {
             avatarImageView.kf.setImage(with: url, placeholder: placeholderImage)
