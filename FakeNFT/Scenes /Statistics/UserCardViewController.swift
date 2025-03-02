@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SafariServices
 
 final class UserCardViewController: UIViewController {
     
@@ -251,8 +252,13 @@ final class UserCardViewController: UIViewController {
             
             if isAccessible {
                 guard let urlString = self.viewModel.userWebsite, let url = URL(string: urlString) else { return }
-                let webVC = WebViewViewController(url: url)
-                self.navigationController?.pushViewController(webVC, animated: true)
+                let safariVC = SFSafariViewController(url: url)
+                safariVC.preferredControlTintColor = .ypBlack
+                safariVC.preferredBarTintColor = .ypWhite
+                safariVC.modalPresentationStyle = .overFullScreen
+                safariVC.delegate = self
+                
+                present(safariVC, animated: true)
             } else {
                 showInaccessibleWebsiteAlert()
             }
@@ -266,5 +272,11 @@ final class UserCardViewController: UIViewController {
     
     @objc private func backButtonTapped() {
         navigationController?.popViewController(animated: true)
+    }
+}
+
+extension UserCardViewController: SFSafariViewControllerDelegate {
+    func safariViewControllerDidFinish(_ controller: SFSafariViewController) {
+        dismiss(animated: true)
     }
 }
