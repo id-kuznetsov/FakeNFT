@@ -45,11 +45,12 @@ final class CollectionsViewController: UIViewController, FilterView, ErrorView, 
 
         setupNavigationBar()
         setupLayout()
-        viewModel.loadCollections()
+
+        bindViewModel()
+        viewModel.loadData()
     }
 
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
+    private func bindViewModel() {
         viewModel.collectionsPublisher
             .receive(on: DispatchQueue.main)
             .sink( receiveValue: { [weak self] _ in
@@ -58,11 +59,12 @@ final class CollectionsViewController: UIViewController, FilterView, ErrorView, 
             .store(in: &subscribers)
     }
 
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
-        subscribers.forEach { $0.cancel() }
-        subscribers.removeAll()
-    }
+
+//    override func viewDidDisappear(_ animated: Bool) {
+//        super.viewDidDisappear(animated)
+//        subscribers.forEach { $0.cancel() }
+//        subscribers.removeAll()
+//    }
 
     private func stateDidChanged() {
         viewModel.statePublisher
@@ -75,7 +77,7 @@ final class CollectionsViewController: UIViewController, FilterView, ErrorView, 
                     assertionFailure("can't move to initial state")
                 case .loading:
                     self.showLoading()
-                    self.viewModel.loadCollections()
+                    self.viewModel.loadData()
                 case .success:
                     self.hideLoading()
                     self.tableView.reloadData()
@@ -125,7 +127,7 @@ final class CollectionsViewController: UIViewController, FilterView, ErrorView, 
                     action: { [weak self] in
                         guard let self else { return }
 
-                        self.viewModel.viewDidLoad()
+                        self.viewModel.loadData()
                     }
                 )
             ]

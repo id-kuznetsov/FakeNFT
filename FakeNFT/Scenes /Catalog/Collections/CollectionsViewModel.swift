@@ -20,8 +20,7 @@ protocol CollectionsViewModelProtocol {
     var state: CollectionsState { get }
     var statePublisher: Published<CollectionsState>.Publisher { get }
 
-    func viewDidLoad()
-    func loadCollections()
+    func loadData()
     func numberOfRows() -> Int
     func getCollection(at indexPath: IndexPath) -> CollectionUI
     func sortByNftCount()
@@ -45,6 +44,8 @@ final class CollectionsViewModel: CollectionsViewModelProtocol {
     @Published var collections = [CollectionUI]()
     var collectionsPublisher: Published<[CollectionUI]>.Publisher { $collections }
 
+    private var cancellables = Set<AnyCancellable>()
+
     private var currentPage = 0
     private var sortBy: String?
 
@@ -59,11 +60,6 @@ final class CollectionsViewModel: CollectionsViewModelProtocol {
         self.nftsService = nftsService
         self.collectionsService = collectionsService
         self.userService = userService
-    }
-
-    func viewDidLoad() {
-        state = .loading
-        loadCollections()
     }
 
     func numberOfRows() -> Int {
@@ -82,22 +78,18 @@ final class CollectionsViewModel: CollectionsViewModelProtocol {
         print("🎯 Сортировка по названию коллекции")
     }
 
-    func loadCollections() {
-
+    func loadData() {
         collectionsService.fetchCollections(
             page: currentPage,
             sortBy: sortBy
-        ) { [weak self] result in
-            guard let self else { return }
-
-            switch result {
-            case .success(let collections):
-                self.collections = collections
-                self.state = .success
-            case .failure(let error):
-                self.state = .failed(error)
-            }
-        }
+        )
+            .sink(receiveCompletion: { completion in
+                if case .failure(let error) = completion {
+                    print("Ошибка: \(error)")
+                }
+            }, receiveValue: { [weak self] data in
+                self?.collections = data
+            })
+            .store(in: &cancellables)
     }
 }
-
