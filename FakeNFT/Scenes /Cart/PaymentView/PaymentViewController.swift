@@ -137,6 +137,7 @@ final class PaymentViewController: UIViewController {
         if !viewModel.isCurrencySelected() {
             showAlertForNotChoosePaymentMethod()
         } else {
+            setLoadingStateForPayment(isLoading: true)
             viewModel.paymentProcessing()
         }
     }
@@ -151,7 +152,9 @@ final class PaymentViewController: UIViewController {
         
         viewModel.onPaymentProcessingStart = { [weak self] in
             self?.cartViewModel.clearCart()
+            self?.setLoadingStateForPayment(isLoading: false)
             self?.showSuccessScreen()
+            
         }
         
         viewModel.onError = { [weak self] in
@@ -192,6 +195,12 @@ final class PaymentViewController: UIViewController {
             payButton
         ]
         viewsToHide.forEach { $0.isHidden = isLoading }
+    }
+    
+    private func setLoadingStateForPayment(isLoading: Bool) {
+        isLoading ? activityIndicator.startAnimating() : activityIndicator.stopAnimating()
+        
+        view.isUserInteractionEnabled = !isLoading
     }
     
     private func showSuccessScreen() {
