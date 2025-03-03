@@ -100,7 +100,7 @@ final class CollectionsViewModel: CollectionsViewModelProtocol {
         isLoadingPage = true
 
         if reset {
-            _collections = []
+            _collections = (0..<4).map { _ in CollectionUI.placeholder }
         } else {
             currentPage += 1
         }

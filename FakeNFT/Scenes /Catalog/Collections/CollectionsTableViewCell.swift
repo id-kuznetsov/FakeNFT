@@ -58,8 +58,13 @@ final class CollectionsTableViewCell: UITableViewCell, ReuseIdentifying {
 
     // MARK: - Config
     func configure(with model: CollectionUI, imageLoaderService: ImageLoaderService) {
-        loadCoverImage(from: model.cover, imageLoaderService: imageLoaderService)
-        nameAndCountLabel.text = formatCollectionName(model.name, model.nfts.count)
+        if model.isPlaceholder {
+            showLoadingAnimation()
+            nameAndCountLabel.text = model.name
+        } else {
+            loadCoverImage(from: model.cover, imageLoaderService: imageLoaderService)
+            nameAndCountLabel.text = formatCollectionName(model.name, model.nfts.count)
+        }
     }
 
     // MARK: - Load Image

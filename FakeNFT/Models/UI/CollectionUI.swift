@@ -15,4 +15,20 @@ struct CollectionUI: Hashable {
     let description: String
     let author: String
     let id: String
+    let isPlaceholder: Bool
+}
+
+extension CollectionUI {
+    static var placeholder: CollectionUI {
+        return CollectionUI(
+            createdAt: Date(),
+            name: "Загрузка...",
+            cover: nil,
+            nfts: [],
+            description: "Загрузка...",
+            author: "Загрузка...",
+            id: UUID().uuidString,
+            isPlaceholder: true
+        )
+    }
 }

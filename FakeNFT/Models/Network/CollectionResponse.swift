@@ -33,7 +33,8 @@ extension CollectionResponse {
             nfts: self.nfts,
             description: self.description,
             author: self.author,
-            id: self.id
+            id: self.id,
+            isPlaceholder: false
         )
     }
 }
