@@ -15,16 +15,16 @@ public final class CollectionsServiceAssembly {
         self.servicesAssembler = servicesAssembler
     }
 
-    public func build(/*with input: NftDetailInput*/) -> UIViewController {
+    public func build() -> UIViewController {
         let viewModel = CollectionsViewModel(
-//            input: input,
             imageLoaderService: servicesAssembler.imageLoaderService,
             collectionsService: servicesAssembler.collectionsService,
             nftsService: servicesAssembler.nftsService,
-            userService: servicesAssembler.userService
+            userService: servicesAssembler.userService,
+            collectionsSortOptionStorageService: servicesAssembler.collectionsSortOptionService
         )
         let viewController = CollectionsViewController(viewModel: viewModel)
-//        presenter.view = viewController
+        
         return viewController
     }
 }

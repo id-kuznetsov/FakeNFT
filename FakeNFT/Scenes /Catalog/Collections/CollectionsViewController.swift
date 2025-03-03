@@ -184,8 +184,12 @@ final class CollectionsViewController: UIViewController, FilterView, ErrorView, 
         showFilters(
             style: .actionSheet,
             buttons: [
-                .sortByName(action: viewModel.sortByCollectionName),
-                .sortByNftCount(action: viewModel.sortByNftCount),
+                .sortByName(action: { [weak self] in
+                    self?.viewModel.sortCollections(by: .name)
+                }),
+                .sortByNftCount(action: { [weak self] in
+                    self?.viewModel.sortCollections(by: .nfts)
+                }),
                 .close
             ]
         )

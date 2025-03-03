@@ -9,7 +9,7 @@ import Foundation
 
 struct CollectionsRequest: NetworkRequest {
     let page: Int
-    let sortBy: String?
+    let sortBy: CollectionSortOptions
 
     var endpoint: URL? {
         var components = URLComponents(string: "\(RequestConstants.baseURL)/api/v1/collections")
@@ -18,8 +18,13 @@ struct CollectionsRequest: NetworkRequest {
             URLQueryItem(name: "size", value: "4")
         ]
 
-        if let sortBy = sortBy {
-            queryItems.append(URLQueryItem(name: "sortBy", value: sortBy))
+        switch sortBy {
+        case .name:
+            queryItems.append(URLQueryItem(name: "sortBy", value: sortBy.rawValue))
+        case .nfts:
+            queryItems.append(URLQueryItem(name: "sortBy", value: sortBy.rawValue))
+        default:
+            break
         }
 
         components?.queryItems = queryItems

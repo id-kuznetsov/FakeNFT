@@ -11,6 +11,7 @@ import Combine
 // MARK: - Protocol
 protocol CollectionsViewModelProtocol {
     var imageLoaderService: ImageLoaderService { get }
+    var collectionsService: CollectionService { get }
     var nftsService: NftsService { get }
     var userService: UserService { get }
 
@@ -19,9 +20,8 @@ protocol CollectionsViewModelProtocol {
 
     func loadData()
     func loadNextPage(reset: Bool)
+    func sortCollections(by option: CollectionSortOptions)
     func getCollection(at indexPath: IndexPath) -> CollectionUI
-    func sortByNftCount()
-    func sortByCollectionName()
 }
 
 // MARK: - State
@@ -29,11 +29,20 @@ enum CollectionsState {
     case initial, loading, failed(Error), success
 }
 
+// MARK: - Sort
+enum CollectionSortOptions: String {
+    case none
+    case name = "name"
+    case nfts = "nfts"
+}
+
 final class CollectionsViewModel: CollectionsViewModelProtocol {
     let imageLoaderService: ImageLoaderService
     let nftsService: NftsService
     let userService: UserService
-    private let collectionsService: CollectionService
+    let collectionsService: CollectionService
+
+    private let collectionsSortOptionStorageService: CollectionsSortOptionStorageService
 
     @Published private var _state: CollectionsState = .initial
     var state: AnyPublisher<CollectionsState, Never> { $_state.eraseToAnyPublisher() }
@@ -44,7 +53,7 @@ final class CollectionsViewModel: CollectionsViewModelProtocol {
     private var cancellables = Set<AnyCancellable>()
 
     private var currentPage = 0
-    private var sortBy: String?
+    private var sortBy: CollectionSortOptions
     private var isLoadingPage = false
     private var hasMorePages = true
 
@@ -53,12 +62,15 @@ final class CollectionsViewModel: CollectionsViewModelProtocol {
         imageLoaderService: ImageLoaderService,
         collectionsService: CollectionService,
         nftsService: NftsService,
-        userService: UserService
+        userService: UserService,
+        collectionsSortOptionStorageService: CollectionsSortOptionStorageService
     ) {
         self.imageLoaderService = imageLoaderService
         self.nftsService = nftsService
         self.collectionsService = collectionsService
         self.userService = userService
+        self.collectionsSortOptionStorageService = collectionsSortOptionStorageService
+        self.sortBy = collectionsSortOptionStorageService.loadSortOption()
     }
 
     func getCollection(at indexPath: IndexPath) -> CollectionUI {
@@ -68,15 +80,11 @@ final class CollectionsViewModel: CollectionsViewModelProtocol {
         return _collections[indexPath.row]
     }
 
-    func sortByNftCount() {
-        _collections.sort { $0.nfts.count > $1.nfts.count }
-        _collections = _collections
-    }
+    func sortCollections(by option: CollectionSortOptions) {
+        sortBy = option
+        collectionsSortOptionStorageService.saveSortOption(option)
+        loadData()
 
-    func sortByCollectionName() {
-        // TODO: add loadData with sortBy name
-        _collections.sort { $0.name < $1.name }
-        _collections = _collections
     }
     
     func loadData() {

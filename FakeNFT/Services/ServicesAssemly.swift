@@ -23,7 +23,11 @@ final class ServicesAssembly {
             networkClient: networkClient
         )
     }
-    
+
+    var collectionsSortOptionService: CollectionsSortOptionStorageService {
+        CollectionsSortOptionStorageServiceImpl()
+    }
+
     var nftsService: NftsService {
         NftsServiceImpl()
     }

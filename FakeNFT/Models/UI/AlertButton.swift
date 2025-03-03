@@ -7,16 +7,16 @@
 
 enum AlertButton {
     case cancel
-    case reload(action: (() -> Void))
+    case reload(action: () -> Void = {})
     case notNow
-    case rate(action: (() -> Void))
+    case rate(action: () -> Void = {})
     case close
-    case back(action: (() -> Void))
-    case sortByNftCount(action: (() -> Void))
-    case sortByPrice(action: (() -> Void))
-    case sortByRating(action: (() -> Void))
-    case sortByTitle(action: (() -> Void))
-    case sortByName(action: (() -> Void))
+    case back(action: () -> Void = {})
+    case sortByNftCount(action: () -> Void = {})
+    case sortByPrice(action: () -> Void = {})
+    case sortByRating(action: () -> Void = {})
+    case sortByTitle(action: () -> Void = {})
+    case sortByName(action: () -> Void = {})
 
     var title: String {
         switch self {
@@ -55,18 +55,18 @@ enum AlertButton {
         }
     }
 
-    var action: (() -> Void)? {
+    var action: (() -> Void) {
         switch self {
         case .cancel, .notNow, .close:
-            return nil
+            return {}
         case .reload(let action),
-                .rate(let action),
-                .back(let action),
-                .sortByNftCount(let action),
-                .sortByPrice(let action),
-                .sortByRating(let action),
-                .sortByTitle(let action),
-                .sortByName(let action):
+             .rate(let action),
+             .back(let action),
+             .sortByNftCount(let action),
+             .sortByPrice(let action),
+             .sortByRating(let action),
+             .sortByTitle(let action),
+             .sortByName(let action):
             return action
         }
     }

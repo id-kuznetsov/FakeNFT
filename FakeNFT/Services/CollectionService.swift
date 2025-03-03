@@ -11,7 +11,7 @@ import Combine
 protocol CollectionService {
     func fetchCollections(
         page: Int,
-        sortBy: String?
+        sortBy: CollectionSortOptions
     ) -> AnyPublisher<[CollectionUI], Error>
 }
 
@@ -22,7 +22,7 @@ final class CollectionServiceImpl: CollectionService {
         self.networkClient = networkClient
     }
 
-    func fetchCollections(page: Int, sortBy: String?) -> AnyPublisher<[CollectionUI], Error> {
+    func fetchCollections(page: Int, sortBy: CollectionSortOptions) -> AnyPublisher<[CollectionUI], Error> {
         let request = CollectionsRequest(page: page, sortBy: sortBy)
 
         return Deferred {

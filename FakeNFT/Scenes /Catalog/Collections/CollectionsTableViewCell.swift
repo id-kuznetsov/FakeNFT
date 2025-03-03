@@ -72,7 +72,9 @@ final class CollectionsTableViewCell: UITableViewCell, ReuseIdentifying {
         ) { [weak self] result in
             guard let self else { return }
 
-            self.hideLoadingAnimation()
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) { [weak self] in
+                self?.hideLoadingAnimation()
+            }
 
             switch result {
             case .success(let image):
