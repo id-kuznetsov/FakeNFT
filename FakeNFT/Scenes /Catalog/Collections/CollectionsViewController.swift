@@ -15,13 +15,6 @@ final class CollectionsViewController: UIViewController, FilterView, ErrorView, 
     private var subscribers = Set<AnyCancellable>()
 
     // MARK: - UI
-    lazy var activityIndicator: UIActivityIndicatorView = {
-        let view = UIActivityIndicatorView(style: .large)
-        view.hidesWhenStopped = true
-        view.translatesAutoresizingMaskIntoConstraints = false
-        return view
-    }()
-
     private lazy var tableView: UITableView = {
         let view = UITableView(frame: .zero, style: .plain)
         view.backgroundColor = .ypWhite
@@ -74,14 +67,15 @@ final class CollectionsViewController: UIViewController, FilterView, ErrorView, 
 
                 switch state {
                 case .loading:
-                    self.showLoading()
+                    self.tableView.bounces = false
                     self.tableView.isUserInteractionEnabled = false
+                    self.showLoading()
                 case .success:
-                    self.hideLoading()
+                    self.tableView.bounces = true
                     self.tableView.isUserInteractionEnabled = true
+                    self.hideLoading()
                 case .failed(let error):
                     self.hideLoading()
-                    self.tableView.isUserInteractionEnabled = true
                     self.showError(error)
                 default:
                     break
@@ -90,7 +84,6 @@ final class CollectionsViewController: UIViewController, FilterView, ErrorView, 
             .store(in: &subscribers)
 
         tableView.publisher(for: \.contentOffset, options: [.new])
-            .debounce(for: .milliseconds(300), scheduler: DispatchQueue.main)
             .sink { [weak self] contentOffset in
                 guard let self = self else { return }
 
@@ -198,9 +191,7 @@ final class CollectionsViewController: UIViewController, FilterView, ErrorView, 
     // MARK: - Constraints
     private func setupLayout() {
         view.backgroundColor = .ypWhite
-
         view.addSubview(tableView)
-        tableView.addSubview(activityIndicator)
 
         NSLayoutConstraint.activate([
             tableView.topAnchor.constraint(
@@ -209,10 +200,7 @@ final class CollectionsViewController: UIViewController, FilterView, ErrorView, 
             ),
             tableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
             tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-
-            activityIndicator.centerXAnchor.constraint(equalTo: tableView.centerXAnchor),
-            activityIndicator.centerYAnchor.constraint(equalTo: tableView.centerYAnchor)
+            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
         ])
     }
 }
