@@ -12,7 +12,7 @@ final class DeleteViewController: UIViewController {
     private let viewModel: DeleteViewModelProtocol
     
     // MARK: - Private Properties
-
+    
     private lazy var blurView: UIVisualEffectView = {
         let blurView = UIVisualEffectView(effect: UIBlurEffect(style: .light))
         blurView.frame = view.bounds

@@ -220,9 +220,9 @@ final class CartViewController: UIViewController {
     private func showErrorAlert(message: String) {
         AlertPresenter.presentAlertWithTwoSelections(
             on: self,
-            title: "Не удалось получить данные", // TODO: local
-            firstActionTitle: "Отмена",
-            secondActionTitle: "Повторить") { [weak self] in
+            title: L10n.Payment.ErrorAlert.title,
+            firstActionTitle: L10n.Payment.ErrorAlert.cancelTitle,
+            secondActionTitle: L10n.Payment.ErrorAlert.repeatTitle) { [weak self] in
                 self?.viewModel.loadData()
             }
     }
@@ -315,7 +315,6 @@ extension CartViewController: CartTableViewCellDelegate {
         viewController.modalPresentationStyle = .overFullScreen
         present(viewController, animated: true)
     }
-
 }
 
 private extension CartViewController {

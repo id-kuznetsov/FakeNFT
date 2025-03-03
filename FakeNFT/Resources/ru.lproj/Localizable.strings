@@ -27,8 +27,7 @@
 "Payment.agreement.link" = "Пользовательского соглашения";
 "Payment.alert.title" = "Не выбран способ оплаты";
 "Payment.alert.message" = "Для того чтобы оплатить заказ, выберите валюту";
-"Payment.errorAlert.title" = "";
-"Payment.errorAlert.message" = "Не удалось произвести оплату";
+"Payment.errorAlert.title" = "Не удалось произвести оплату";
 "Payment.errorAlert.cancelTitle" = "Отмена";
 "Payment.errorAlert.repeatTitle" = "Повторить";
 "Payment.alert.buttonTextOk" = "Ок";

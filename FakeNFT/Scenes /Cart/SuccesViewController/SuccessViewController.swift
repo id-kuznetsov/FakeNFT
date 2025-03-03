@@ -8,7 +8,7 @@
 import UIKit
 
 final class SuccessViewController: UIViewController {
-
+    
     // MARK: - Private Properties
     
     private lazy var successImageView: UIImageView = {
@@ -37,7 +37,7 @@ final class SuccessViewController: UIViewController {
         button.addTarget(self, action: #selector(didTapBackToCart), for: .touchUpInside)
         return button
     }()
-
+    
     // MARK: - Lifecycle
     
     override func viewDidLoad() {
@@ -52,7 +52,7 @@ final class SuccessViewController: UIViewController {
     private func didTapBackToCart() { 
         dismiss(animated: true, completion: nil)
     }
-
+    
     // MARK: - Private Methods
     
     private func setupUI() {

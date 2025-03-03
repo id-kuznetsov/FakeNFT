@@ -214,9 +214,9 @@ final class PaymentViewController: UIViewController {
     private func showPaymentErrorAlert() {
         AlertPresenter.presentAlertWithTwoSelections(
             on: self,
-            title: "Не удалось произвести оплату", // TODO: local
-            firstActionTitle: "Отменв",
-            secondActionTitle: "Повторить") { [weak self] in
+            title: L10n.Payment.ErrorAlert.title,
+            firstActionTitle: L10n.Payment.ErrorAlert.cancelTitle,
+            secondActionTitle: L10n.Payment.ErrorAlert.repeatTitle) { [weak self] in
                 self?.viewModel.paymentProcessing()
             }
     }

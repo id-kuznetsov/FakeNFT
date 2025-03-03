@@ -13,7 +13,7 @@ protocol DeleteViewModelProtocol {
 }
 
 final class DeleteViewModel: DeleteViewModelProtocol {
-
+    
     // MARK: - Public Properties
     
     let image: UIImage

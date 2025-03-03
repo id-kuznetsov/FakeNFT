@@ -10,7 +10,7 @@ import Foundation
 final class PaymentViewModel: PaymentViewModelProtocol {
     
     // MARK: - Public Properties
-
+    
     var onItemsUpdate: (() -> Void)?
     var onPaymentProcessingStart: (() -> Void)?
     var onError: (() -> Void)?
@@ -59,11 +59,11 @@ final class PaymentViewModel: PaymentViewModelProtocol {
     func setSelectedCurrencyIndex(_ index: Int) {
         selectedCurrencyIndex = index
     }
-
+    
     func getSelectedCurrencyIndex() -> Int? {
         return selectedCurrencyIndex
     }
-
+    
     func isCurrencySelected() -> Bool {
         return selectedCurrencyIndex != nil
     }
