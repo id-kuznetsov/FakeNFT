@@ -1,5 +1,5 @@
 //
-//  CollectionsService.swift
+//  CollectionService.swift
 //  FakeNFT
 //
 //  Created by Nikolai Eremenko on 17.02.2025.
@@ -8,14 +8,14 @@
 import Foundation
 import Combine
 
-protocol CollectionsService {
+protocol CollectionService {
     func fetchCollections(
         page: Int,
         sortBy: String?
     ) -> AnyPublisher<[CollectionUI], Error>
 }
 
-final class CollectionsServiceImpl: CollectionsService {
+final class CollectionServiceImpl: CollectionService {
     private let networkClient: NetworkClient
 
     init(networkClient: NetworkClient) {

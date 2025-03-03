@@ -75,19 +75,36 @@ final class CollectionsViewController: UIViewController, FilterView, ErrorView, 
                 switch state {
                 case .loading:
                     self.showLoading()
-                    print("show loading")
+                    self.tableView.isUserInteractionEnabled = false
                 case .success:
                     self.hideLoading()
-                    print("success hide loading")
+                    self.tableView.isUserInteractionEnabled = true
                 case .failed(let error):
                     self.hideLoading()
-                    print("failed hide loading")
+                    self.tableView.isUserInteractionEnabled = true
                     self.showError(error)
-                    print("show error")
                 default:
                     break
                 }
             })
+            .store(in: &subscribers)
+
+        tableView.publisher(for: \.contentOffset, options: [.new])
+            .debounce(for: .milliseconds(300), scheduler: DispatchQueue.main)
+            .sink { [weak self] contentOffset in
+                guard let self = self else { return }
+
+                let offsetY = contentOffset.y
+                let contentHeight = self.tableView.contentSize.height
+                let frameHeight = self.tableView.frame.size.height
+                let threshold: CGFloat = 10
+
+                guard contentHeight > frameHeight else { return }
+
+                if offsetY > contentHeight - frameHeight - threshold {
+                    self.viewModel.loadNextPage(reset: false)
+                }
+            }
             .store(in: &subscribers)
     }
 
@@ -179,7 +196,7 @@ final class CollectionsViewController: UIViewController, FilterView, ErrorView, 
         view.backgroundColor = .ypWhite
 
         view.addSubview(tableView)
-        view.addSubview(activityIndicator)
+        tableView.addSubview(activityIndicator)
 
         NSLayoutConstraint.activate([
             tableView.topAnchor.constraint(
@@ -190,8 +207,8 @@ final class CollectionsViewController: UIViewController, FilterView, ErrorView, 
             tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
 
-            activityIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            activityIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor)
+            activityIndicator.centerXAnchor.constraint(equalTo: tableView.centerXAnchor),
+            activityIndicator.centerYAnchor.constraint(equalTo: tableView.centerYAnchor)
         ])
     }
 }

@@ -18,6 +18,7 @@ protocol CollectionsViewModelProtocol {
     var state: AnyPublisher<CollectionsState, Never> { get }
 
     func loadData()
+    func loadNextPage(reset: Bool)
     func getCollection(at indexPath: IndexPath) -> CollectionUI
     func sortByNftCount()
     func sortByCollectionName()
@@ -32,7 +33,7 @@ final class CollectionsViewModel: CollectionsViewModelProtocol {
     let imageLoaderService: ImageLoaderService
     let nftsService: NftsService
     let userService: UserService
-    private let collectionsService: CollectionsService
+    private let collectionsService: CollectionService
 
     @Published private var _state: CollectionsState = .initial
     var state: AnyPublisher<CollectionsState, Never> { $_state.eraseToAnyPublisher() }
@@ -44,11 +45,13 @@ final class CollectionsViewModel: CollectionsViewModelProtocol {
 
     private var currentPage = 0
     private var sortBy: String?
+    private var isLoadingPage = false
+    private var hasMorePages = true
 
     // MARK: - Init
     init(
         imageLoaderService: ImageLoaderService,
-        collectionsService: CollectionsService,
+        collectionsService: CollectionService,
         nftsService: NftsService,
         userService: UserService
     ) {
@@ -75,19 +78,45 @@ final class CollectionsViewModel: CollectionsViewModelProtocol {
         _collections.sort { $0.name < $1.name }
         _collections = _collections
     }
-
+    
     func loadData() {
+        currentPage = 0
+        hasMorePages = true
+        loadNextPage(reset: true)
+    }
+
+    func loadNextPage(reset: Bool = false) {
+        guard !isLoadingPage, hasMorePages else { return }
+
         _state = .loading
+        isLoadingPage = true
+
+        if reset {
+            _collections = []
+        } else {
+            currentPage += 1
+        }
 
         collectionsService.fetchCollections(page: currentPage, sortBy: sortBy)
-            .map { collections -> CollectionsState in
-                self._collections = collections
+            .map { [weak self] newCollections -> CollectionsState in
+
+                if newCollections.isEmpty {
+                    self?.hasMorePages = false
+                }
+
+                if reset {
+                    self?._collections = newCollections
+                } else {
+                    self?._collections.append(contentsOf: newCollections)
+                }
+
                 return .success
             }
             .catch { error -> Just<CollectionsState> in
                 Just(.failed(error))
             }
             .sink { [weak self] newState in
+                self?.isLoadingPage = false
                 self?._state = newState
             }
             .store(in: &cancellables)

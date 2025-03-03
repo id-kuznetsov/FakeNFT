@@ -18,8 +18,8 @@ final class ServicesAssembly {
         )
     }
 
-    var collectionsService: CollectionsService {
-        CollectionsServiceImpl(
+    var collectionsService: CollectionService {
+        CollectionServiceImpl(
             networkClient: networkClient
         )
     }
