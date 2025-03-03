@@ -27,11 +27,9 @@ final class ProfileCoordinatorImpl: ProfileCoordinator {
         profileViewController.present(profileEditingViewController, animated: true)
     }
     
-    func myNftsScene(nfts: [String]) {
-        let vc = UIViewController()
-        vc.view.backgroundColor = .ypWhite
-        vc.hidesBottomBarWhenPushed = true
-        navigationController.pushViewController(vc, animated: true)
+    func myNFTsScene(nfts: [String]) {
+        let myNFTsViewController = MyNFTsViewController()
+        navigationController.pushViewController(myNFTsViewController, animated: true)
     }
     
     func favouritesScene(likes: [String]) {
