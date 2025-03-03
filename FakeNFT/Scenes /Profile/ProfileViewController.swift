@@ -34,9 +34,11 @@ final class ProfileViewController: UIViewController, ErrorView {
     
     // MARK: - Constants
     
-    private let profileRoutingCellHeight = 70.0
-    private let numberOfCells = 3
-    private let activityIndicatorViewSize = CGSize(width: 25.0, height: 25.0)
+    private enum Constants {
+        static let profileRoutingCellHeight = 70.0
+        static let numberOfCells = 3
+        static let activityIndicatorViewSize = CGSize(width: 25.0, height: 25.0)
+    }
     
     // MARK: - Private Properties
     
@@ -152,10 +154,10 @@ final class ProfileViewController: UIViewController, ErrorView {
             profileRoutingTableView.topAnchor.constraint(equalTo: linkButton.bottomAnchor, constant: 40),
             profileRoutingTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             profileRoutingTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            profileRoutingTableView.heightAnchor.constraint(equalToConstant: profileRoutingCellHeight * CGFloat(numberOfCells)),
+            profileRoutingTableView.heightAnchor.constraint(equalToConstant: Constants.profileRoutingCellHeight * CGFloat(Constants.numberOfCells)),
             
-            activityIndicatorView.heightAnchor.constraint(equalToConstant: activityIndicatorViewSize.height),
-            activityIndicatorView.widthAnchor.constraint(equalToConstant: activityIndicatorViewSize.width),
+            activityIndicatorView.heightAnchor.constraint(equalToConstant: Constants.activityIndicatorViewSize.height),
+            activityIndicatorView.widthAnchor.constraint(equalToConstant: Constants.activityIndicatorViewSize.width),
             activityIndicatorView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             activityIndicatorView.centerYAnchor.constraint(equalTo: view.centerYAnchor)
         ])
@@ -224,7 +226,7 @@ final class ProfileViewController: UIViewController, ErrorView {
 
 extension ProfileViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        profileRoutingCellHeight
+        Constants.profileRoutingCellHeight
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
