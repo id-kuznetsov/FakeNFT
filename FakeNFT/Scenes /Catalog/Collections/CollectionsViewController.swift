@@ -21,8 +21,15 @@ final class CollectionsViewController: UIViewController, FilterView, ErrorView, 
         view.register(CollectionsTableViewCell.self)
         view.rowHeight = LayoutConstants.CollectionsScreen.rowHeight
         view.separatorStyle = .none
+        view.refreshControl = refreshControlView
         view.delegate = self
         view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+
+    private lazy var refreshControlView: UIRefreshControl = {
+        let view = UIRefreshControl()
+        view.addTarget(self, action: #selector(didPullToRefresh), for: .valueChanged)
         return view
     }()
 
@@ -63,7 +70,7 @@ final class CollectionsViewController: UIViewController, FilterView, ErrorView, 
             .receive(on: DispatchQueue.main)
             .dropFirst()
             .sink( receiveValue: { [weak self] state in
-                guard let self else { return }
+                guard let self = self else { return }
 
                 switch state {
                 case .loading:
@@ -186,6 +193,16 @@ final class CollectionsViewController: UIViewController, FilterView, ErrorView, 
                 .close
             ]
         )
+    }
+
+    @objc
+    private func didPullToRefresh() {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2) { [weak self] in
+            guard let self = self else { return }
+
+            self.refreshControlView.endRefreshing()
+            self.viewModel.loadData()
+        }
     }
 
     // MARK: - Constraints

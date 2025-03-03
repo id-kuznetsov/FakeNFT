@@ -14,7 +14,6 @@ extension LoadingView where Self: UIViewController {
 
         let customLoadingView = CustomLoadingView()
         customLoadingView.tag = tag
-//        indicator.hidesWhenStopped = true
         customLoadingView.layer.cornerRadius = 10
         customLoadingView.clipsToBounds = true
         customLoadingView.backgroundColor = .ypWhite
