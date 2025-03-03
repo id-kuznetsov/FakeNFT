@@ -8,11 +8,7 @@
 import UIKit
 
 final class SuccessViewController: UIViewController {
-    
-    // MARK: - Public Properties
-    
-    
-    
+
     // MARK: - Private Properties
     
     private lazy var successImageView: UIImageView = {
@@ -41,18 +37,13 @@ final class SuccessViewController: UIViewController {
         button.addTarget(self, action: #selector(didTapBackToCart), for: .touchUpInside)
         return button
     }()
-    
-    // MARK: - Initialisers
-    
-    
-    
+
     // MARK: - Lifecycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         setupUI()
-        
     }
     
     // MARK: - Action
@@ -61,11 +52,7 @@ final class SuccessViewController: UIViewController {
     private func didTapBackToCart() { 
         dismiss(animated: true, completion: nil)
     }
-    
-    // MARK: - Public Methods
-    
-    
-    
+
     // MARK: - Private Methods
     
     private func setupUI() {
@@ -115,12 +102,5 @@ final class SuccessViewController: UIViewController {
             returnToCartButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -16),
             returnToCartButton.heightAnchor.constraint(equalToConstant: 60)
         ]
-    }
-    
-    // MARK: - Extensions
-    
-    
-    
+    } 
 }
-
-

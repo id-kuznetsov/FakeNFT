@@ -13,6 +13,7 @@ final class CartViewModel: CartViewModelProtocol {
     
     let orderService: OrderService
     var onItemsUpdate: (() -> Void)?
+    var onError: ((String) -> Void)?
     var itemsCount: Int {
         nftsInCart.count
     }
@@ -51,6 +52,7 @@ final class CartViewModel: CartViewModelProtocol {
                 
             case .failure(let error):
                 print("Error: \(error) in \(#function) \(#file)")
+                self?.onError?(error.localizedDescription)
             }
         })
     }
@@ -82,9 +84,21 @@ final class CartViewModel: CartViewModelProtocol {
                 self?.loadNFTs(by: order.nfts)
             case .failure(let error):
                 print("Error: \(error) in \(#function) \(#file)")
-                // TODO: в cart-3 передать ошибку через алерт
+                self?.onError?(error.localizedDescription)
             }
             
+        }
+    }
+    
+    func clearCart() {
+        orderService.putOrder(nfts: []) { [weak self] result in
+            switch result {
+            case .success(let order):
+                self?.loadNFTs(by: order.nfts)
+            case .failure(let error):
+                print("Error: \(error) in \(#function) \(#file)")
+                self?.onError?(error.localizedDescription)
+            }
         }
     }
     
@@ -96,7 +110,7 @@ final class CartViewModel: CartViewModelProtocol {
         
         for id in ids {
             group.enter()
-            nftService.loadNft(id: id) { result in
+            nftService.loadNft(id: id) { [weak self] result in
                 DispatchQueue.main.async {
                     defer { group.leave() }
                     
@@ -115,8 +129,8 @@ final class CartViewModel: CartViewModelProtocol {
                         )
                         loadedNFTs.append(orderCard)
                     case .failure(let error):
-                        print("Ошибка загрузки NFT: \(error.localizedDescription) \(#function) \(#file)")
-                        // TODO: в cart-3 передать ошибку через алерт
+                        print("Error loading NFT: \(error.localizedDescription) \(#function) \(#file)")
+                        self?.onError?(error.localizedDescription)
                     }
                 }
             }

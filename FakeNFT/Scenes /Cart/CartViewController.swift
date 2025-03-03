@@ -41,6 +41,7 @@ final class CartViewController: UIViewController {
         tableView.rowHeight = Constants.tableViewRowHeight
         tableView.dataSource = self
         tableView.delegate = self
+        tableView.refreshControl = refreshControl
         return tableView
     }()
     
@@ -88,6 +89,12 @@ final class CartViewController: UIViewController {
         return activityIndicator
     }()
     
+    private lazy var refreshControl: UIRefreshControl = {
+        let refreshControl = UIRefreshControl()
+        refreshControl.addTarget(self, action: #selector(didRefresh), for: .valueChanged)
+        return refreshControl
+    }()
+    
     // MARK: - Initialisers
     
     init(viewModel: CartViewModelProtocol) {
@@ -125,10 +132,17 @@ final class CartViewController: UIViewController {
     @objc
     private func didTapPaymentButton() {
         let paymentViewModel = PaymentViewModel(orderService: viewModel.orderService)
-        let paymentViewController = PaymentViewController(viewModel: paymentViewModel)
+        let paymentViewController = PaymentViewController(viewModel: paymentViewModel, cartViewModel: viewModel)
         let paymentNavigationController = UINavigationController(rootViewController: paymentViewController)
         paymentNavigationController.modalPresentationStyle = .fullScreen
         self.navigationController?.pushViewController(paymentViewController, animated: true)
+    }
+    
+    @objc
+    private func didRefresh() {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+            self.viewModel.loadData()
+        }
     }
     
     // MARK: - Private Methods
@@ -140,6 +154,12 @@ final class CartViewController: UIViewController {
             self?.setLoadingState(isLoading: false)
             self?.setupNavigationBar()
             self?.configureEmptyCartView(isCartEmpty: self?.viewModel.isCartEmpty ?? true)
+            self?.refreshControl.endRefreshing()
+        }
+        
+        viewModel.onError = { [weak self] errorMessage in
+            self?.showErrorAlert(message: errorMessage)
+            self?.refreshControl.endRefreshing()
         }
     }
     
@@ -195,6 +215,16 @@ final class CartViewController: UIViewController {
         } else {
             emptyCartLabel.isHidden = !isCartEmpty
         }
+    }
+    
+    private func showErrorAlert(message: String) {
+        AlertPresenter.presentAlertWithTwoSelections(
+            on: self,
+            title: "Не удалось получить данные", // TODO: local
+            firstActionTitle: "Отмена",
+            secondActionTitle: "Повторить") { [weak self] in
+                self?.viewModel.loadData()
+            }
     }
     
     // MARK: Constraints

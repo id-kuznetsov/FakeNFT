@@ -10,6 +10,7 @@ import Foundation
 protocol CartViewModelProtocol {
     var orderService: OrderService { get } 
     var onItemsUpdate: (() -> Void)? { get set }
+    var onError: ((String) -> Void)? { get set }
     var itemsCount: Int { get }
     var isCartEmpty: Bool { get }
     
@@ -18,4 +19,5 @@ protocol CartViewModelProtocol {
     func loadData()
     func sortItems(by sortOption: SortOption)
     func deleteItem(with nftId: String)
+    func clearCart()
 }

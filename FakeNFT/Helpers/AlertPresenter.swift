@@ -21,7 +21,7 @@ final class AlertPresenter {
     
     static func presentAlertWithTwoSelections(on viewController: UIViewController,
                                               title: String,
-                                              message: String,
+                                              message: String? = nil,
                                               firstActionTitle: String,
                                               firstActionCompletion: (() -> Void)? = nil,
                                               secondActionTitle: String,
@@ -59,5 +59,3 @@ final class AlertPresenter {
         viewController.present(alertController, animated: true)
     }
 }
-
-

@@ -12,6 +12,7 @@ final class PaymentViewController: UIViewController {
     // MARK: - Private Properties
     
     private var viewModel: PaymentViewModelProtocol
+    private var cartViewModel: CartViewModelProtocol
     
     private lazy var leftBarButtonItem: UIBarButtonItem = {
         let button = UIBarButtonItem(
@@ -85,8 +86,9 @@ final class PaymentViewController: UIViewController {
     
     // MARK: - Initialisers
     
-    init(viewModel: PaymentViewModelProtocol) {
+    init(viewModel: PaymentViewModelProtocol, cartViewModel: CartViewModelProtocol) {
         self.viewModel = viewModel
+        self.cartViewModel = cartViewModel
         super.init(nibName: nil, bundle: nil)
         setLoadingState(isLoading: true)
         setupBindings()
@@ -135,12 +137,7 @@ final class PaymentViewController: UIViewController {
         if !viewModel.isCurrencySelected() {
             showAlertForNotChoosePaymentMethod()
         } else {
-            let vc = SuccessViewController()
-            vc.modalPresentationStyle = .fullScreen
-            present(vc, animated: true) { [weak self] in
-                self?.navigationController?.popViewController(animated: false)
-            }
-            
+            viewModel.paymentProcessing()
         }
     }
     
@@ -150,6 +147,15 @@ final class PaymentViewController: UIViewController {
         viewModel.onItemsUpdate = { [weak self] in
             self?.collectionView.reloadData()
             self?.setLoadingState(isLoading: false)
+        }
+        
+        viewModel.onPaymentProcessingStart = { [weak self] in
+            self?.cartViewModel.clearCart()
+            self?.showSuccessScreen()
+        }
+        
+        viewModel.onError = { [weak self] in
+            self?.showPaymentErrorAlert()
         }
     }
     
@@ -186,6 +192,24 @@ final class PaymentViewController: UIViewController {
             payButton
         ]
         viewsToHide.forEach { $0.isHidden = isLoading }
+    }
+    
+    private func showSuccessScreen() {
+        let vc = SuccessViewController()
+        vc.modalPresentationStyle = .fullScreen
+        present(vc, animated: true) { [weak self] in
+            self?.navigationController?.popViewController(animated: false)
+        }
+    }
+    
+    private func showPaymentErrorAlert() {
+        AlertPresenter.presentAlertWithTwoSelections(
+            on: self,
+            title: "Не удалось произвести оплату", // TODO: local
+            firstActionTitle: "Отменв",
+            secondActionTitle: "Повторить") { [weak self] in
+                self?.viewModel.paymentProcessing()
+            }
     }
     
     private func showAlertForNotChoosePaymentMethod() {
