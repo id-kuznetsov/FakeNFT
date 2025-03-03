@@ -26,3 +26,25 @@
 "Profile.myNftsRoute" = "Мои NFT";
 "Profile.favouritesNftsRoute" = "Избранные NFT";
 "Profile.aboutRoute" = "О разработчике";
+"Profile.fetchingError" = "Не удалось загрузить профиль";
+"Profile.updatingError" = "Не удалось изменить профиль. Пожалуйста, попробуйте еще раз";
+"Profile.unknownError" = "Произошла неизвестная ошибка";
+
+"ProfileEditing.changePhoto" = "Сменить фото";
+"ProfileEditing.uploadPhoto" = "Загрузить фото";
+"ProfileEditing.name" = "Имя";
+"ProfileEditing.namePlaceholder" = "Введите имя";
+"ProfileEditing.description" = "Описание";
+"ProfileEditing.descriptionPlaceholder" = "Введите описание";
+"ProfileEditing.website" = "Сайт";
+"ProfileEditing.websitePlaceholder" = "Введите сайт";
+"ProfileEditing.emptyNameWarning" = "Необходимо ввести имя";
+"ProfileEditing.limitWarning" = "Максимальная длина %d символов";
+"ProfileEditing.incorrectWebsiteWarning" = "Некорректная ссылка";
+
+"ProfileEditingAlert.changePhoto" = "Изменить изобаражение";
+"ProfileEditingAlert.urlPlaceholder" = "Введите URL изображения";
+"ProfileEditingAlert.okAction" = "OK";
+"ProfileEditingAlert.removeAction" = "Удалить";
+"ProfileEditingAlert.cancelAction" = "Отмена";
+"ProfileEditingAlert.imageLoadingError" = "Невозможно изменить изображение";

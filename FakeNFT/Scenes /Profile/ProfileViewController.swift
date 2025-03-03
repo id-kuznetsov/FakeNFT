@@ -78,6 +78,7 @@ final class ProfileViewController: UIViewController, ErrorView {
     private lazy var profileRoutingTableView: UITableView = {
         let tableView = UITableView()
         tableView.delegate = self
+        tableView.separatorColor = .clear
         tableView.isScrollEnabled = false
         tableView.translatesAutoresizingMaskIntoConstraints = false
         return tableView
@@ -98,7 +99,6 @@ final class ProfileViewController: UIViewController, ErrorView {
                 cell.textLabel?.font = .bodyBold
                 cell.textLabel?.textColor = .ypBlack
             }
-            cell.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: tableView.bounds.width)
             cell.selectionStyle = .none
             cell.backgroundColor = .ypWhite
             cell.setAccessoryView(with: .ypBlack)
@@ -124,7 +124,7 @@ final class ProfileViewController: UIViewController, ErrorView {
         super.viewDidLoad()
         setupView()
         setupLayout()
-        setupDataBinding()
+        setupDataBindings()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -137,10 +137,7 @@ final class ProfileViewController: UIViewController, ErrorView {
     
     private func setupView() {
         view.backgroundColor = .ypWhite
-        view.addSubview(activityIndicatorView)
-        view.addSubview(profileCardView)
-        view.addSubview(linkButton)
-        view.addSubview(profileRoutingTableView)
+        view.addSubviews(activityIndicatorView, profileCardView, linkButton, profileRoutingTableView)
     }
     
     private func setupLayout() {
@@ -164,18 +161,23 @@ final class ProfileViewController: UIViewController, ErrorView {
         ])
     }
     
-    private func setupDataBinding() {
+    private func setupDataBindings() {
         viewModel.profile.bind { [weak self] profile in
             guard let profile else { return }
-            self?.stopLoading()
-            if let url = URL(string: profile.avatar) {
-                self?.profileCardView.setAvatarImage(url: url)
-            }
+            self?.profileCardView.setAvatarImage(url: profile.avatar)
             self?.profileCardView.setNameText(profile.name)
             self?.profileCardView.setDescriptionText(profile.description)
             self?.linkButton.setTitle(profile.website, for: .normal)
             self?.applySnapshot(myNftsNumber: profile.nfts.count,
                                 favouritesNumber: profile.likes.count)
+        }
+        
+        viewModel.isLoading.bind { [weak self] isLoading in
+            if isLoading {
+                self?.startLoading()
+            } else {
+                self?.stopLoading()
+            }
         }
         
         viewModel.errorModel.bind { [weak self] errorModel in
