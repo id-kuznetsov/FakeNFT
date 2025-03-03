@@ -50,9 +50,7 @@ final class CollectionsViewController: UIViewController, FilterView, ErrorView, 
 
         setupNavigationBar()
         setupLayout()
-
         setupDataSource()
-
         bindViewModel()
         viewModel.loadData()
     }

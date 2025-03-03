@@ -14,10 +14,8 @@ protocol CollectionsViewModelProtocol {
     var collectionsService: CollectionService { get }
     var nftsService: NftsService { get }
     var userService: UserService { get }
-
     var collections: AnyPublisher<[CollectionUI], Never> { get }
     var state: AnyPublisher<CollectionsState, Never> { get }
-
     func loadData()
     func loadNextPage(reset: Bool)
     func sortCollections(by option: CollectionSortOptions)
@@ -42,16 +40,13 @@ final class CollectionsViewModel: CollectionsViewModelProtocol {
     let userService: UserService
     let collectionsService: CollectionService
 
-    private let collectionsSortOptionStorageService: CollectionsSortOptionStorageService
-
     @Published private var _state: CollectionsState = .initial
     var state: AnyPublisher<CollectionsState, Never> { $_state.eraseToAnyPublisher() }
-
     @Published private var _collections: [CollectionUI] = []
     var collections: AnyPublisher<[CollectionUI], Never> { $_collections.eraseToAnyPublisher() }
 
+    private let collectionsSortOptionStorageService: CollectionsSortOptionStorageService
     private var cancellables = Set<AnyCancellable>()
-
     private var currentPage = 0
     private var sortBy: CollectionSortOptions
     private var isLoadingPage = false
