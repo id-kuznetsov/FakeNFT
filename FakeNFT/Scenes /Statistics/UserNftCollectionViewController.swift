@@ -10,25 +10,17 @@ import UIKit
 final class UserNftCollectionViewController: UIViewController {
     
     // MARK: - Private properties
-    private let viewModel: UserNftCollectionViewModelProtocol
+    private var viewModel: UserNftCollectionViewModelProtocol
     
     private lazy var collectionView: UICollectionView = {
-        let collectionView = UICollectionView(
-            frame: .zero,
-            collectionViewLayout: UICollectionViewLayout()
-        )
-        collectionView.register(
-            UICollectionViewCell.self,
-            forCellWithReuseIdentifier: "PlaceholderCell"
-        )
-        collectionView.dataSource = self
-        collectionView.delegate = self
+        let layout = UICollectionViewFlowLayout()
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.backgroundColor = .ypWhite
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         return collectionView
     }()
     
-    // MARK: - Initializer
+    // MARK: - Initializers
     init(viewModel: UserNftCollectionViewModelProtocol) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
@@ -44,14 +36,34 @@ final class UserNftCollectionViewController: UIViewController {
         super.viewDidLoad()
         
         setupUI()
+        setupBindings()
+        viewModel.loadNftCollection()
     }
     
     // MARK: - Private methods
+    private func setupCollectionView() {
+        collectionView.dataSource = self
+        collectionView.delegate = self
+        collectionView.register(
+            UserNftCollectionCell.self,
+            forCellWithReuseIdentifier: UserNftCollectionCell.identifier
+        )
+    }
+    
+    private func setupBindings() {
+        viewModel.onNftCollectionUpdated = { [weak self] in
+            DispatchQueue.main.async {
+                self?.collectionView.reloadData()
+            }
+        }
+    }
+    
     private func setupUI() {
         view.backgroundColor = .white
         title = "Коллекция NFT"
         
         view.addSubview(collectionView)
+        setupCollectionView()
         
         NSLayoutConstraint.activate([
             collectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
@@ -68,28 +80,53 @@ extension UserNftCollectionViewController: UICollectionViewDataSource {
         _ collectionView: UICollectionView,
         numberOfItemsInSection section: Int
     ) -> Int {
-        6
+        viewModel.nftCollection.count
     }
     
     func collectionView(
         _ collectionView: UICollectionView,
         cellForItemAt indexPath: IndexPath
     ) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(
-            withReuseIdentifier: "PlaceholderCell",
+        guard let cell = collectionView.dequeueReusableCell(
+            withReuseIdentifier: UserNftCollectionCell.identifier,
             for: indexPath
-        )
+        ) as? UserNftCollectionCell else {
+            return UICollectionViewCell()
+        }
         
-        cell.contentView.backgroundColor = .ypLightGrey
-        cell.layer.cornerRadius = 12
-        cell.layer.masksToBounds = true
+        let nftItem = viewModel.nftCollection[indexPath.row]
+        cell.configure(with: nftItem)
         
         return cell
     }
 }
 
-// MARK: - UICollectionViewDelegate
-extension UserNftCollectionViewController: UICollectionViewDelegate {
+// MARK: - UICollectionViewDelegateFlowLayout
+extension UserNftCollectionViewController: UICollectionViewDelegateFlowLayout {
+    func collectionView(
+        _ collectionView: UICollectionView,
+        layout collectionViewLayout: UICollectionViewLayout,
+        sizeForItemAt indexPath: IndexPath
+    ) -> CGSize {
+        return CGSize(
+            width: (collectionView.bounds.width - 2 * 16 - 2 * 10) / 3,
+            height: 192
+        )
+    }
     
+    func collectionView(
+        _ collectionView: UICollectionView,
+        layout collectionViewLayout: UICollectionViewLayout,
+        insetForSectionAt section: Int
+    ) -> UIEdgeInsets {
+        UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
+    }
+    
+    func collectionView(
+        _ collectionView: UICollectionView,
+        layout collectionViewLayout: UICollectionViewLayout,
+        minimumLineSpacingForSectionAt section: Int
+    ) -> CGFloat {
+        8
+    }
 }
-
