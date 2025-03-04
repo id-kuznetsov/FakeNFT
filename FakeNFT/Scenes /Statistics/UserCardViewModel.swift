@@ -15,6 +15,7 @@ protocol UserCardViewModelProtocol {
     var userWebsite: String? { get }
     func loadUserData()
     func checkUserWebsite(completion: @escaping (Bool) -> Void)
+    func createUserCollectionViewModel() -> UserNftCollectionViewModelProtocol
 }
 
 final class UserCardViewModel: UserCardViewModelProtocol {
@@ -71,5 +72,11 @@ final class UserCardViewModel: UserCardViewModelProtocol {
                 print("Ошибка загрузки пользователя: \(error.localizedDescription)")
             }
         }
+    }
+}
+
+extension UserCardViewModel {
+    func createUserCollectionViewModel() -> UserNftCollectionViewModelProtocol {
+        return UserNftCollectionViewModel()
     }
 }

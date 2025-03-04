@@ -96,6 +96,7 @@ final class UserCardViewController: UIViewController {
         
         button.addSubview(mainStackView)
         mainStackView.translatesAutoresizingMaskIntoConstraints = false
+        mainStackView.isUserInteractionEnabled = false
         
         NSLayoutConstraint.activate([
             mainStackView.leadingAnchor.constraint(equalTo: button.leadingAnchor),
@@ -266,8 +267,10 @@ final class UserCardViewController: UIViewController {
     }
     
     @objc private func getUserCollection() {
-        // TO DO: Переход на коллекцию NFT пользователя
-        print("Переход на коллекцию NFT пользователя")
+        let collectionViewModel = viewModel.createUserCollectionViewModel()
+        let collectionVC = UserNftCollectionViewController(viewModel: collectionViewModel)
+        
+        navigationController?.pushViewController(collectionVC, animated: true)
     }
     
     @objc private func backButtonTapped() {
