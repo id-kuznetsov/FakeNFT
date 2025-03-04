@@ -8,7 +8,7 @@
 import UIKit
 
 protocol UserNftCollectionViewModelProtocol {
-    var nftCollection: [NftItem] { get }
+    var nftCollection: [Nft] { get }
     var onNftCollectionUpdated: (() -> Void)? { get set }
     func loadNftCollection()
 }
@@ -16,7 +16,9 @@ protocol UserNftCollectionViewModelProtocol {
 final class UserNftCollectionViewModel: UserNftCollectionViewModelProtocol {
     
     // MARK: - Private properties
-    private(set) var nftCollection: [NftItem] = [] {
+    private let nftService: NftService
+    private let nftIds: [String]
+    private(set) var nftCollection: [Nft] = [] {
         didSet {
             onNftCollectionUpdated?()
         }
@@ -24,14 +26,33 @@ final class UserNftCollectionViewModel: UserNftCollectionViewModelProtocol {
     
     var onNftCollectionUpdated: (() -> Void)?
     
+    // MARK: - Initializers
+    init(nftService: NftService, nftIds: [String]) {
+        self.nftService = nftService
+        self.nftIds = nftIds
+    }
+    
     // MARK: - Public methods
     func loadNftCollection() {
-        nftCollection = [
-            NftItem(imageName: "nft1", name: "Archie", rating: 4, price: 1.78, isFavorite: true),
-            NftItem(imageName: "nft2", name: "Emma", rating: 3, price: 1.78, isFavorite: false),
-            NftItem(imageName: "nft3", name: "Stella", rating: 3, price: 1.78, isFavorite: true),
-            NftItem(imageName: "nft4", name: "Toast", rating: 2, price: 1.78, isFavorite: false),
-            NftItem(imageName: "nft5", name: "Zeus", rating: 2, price: 1.78, isFavorite: false)
-        ]
+        let group = DispatchGroup()
+        var loadedNfts: [Nft] = []
+        
+        for nftId in nftIds {
+            group.enter()
+            nftService.loadNft(id: nftId) { result in
+                defer { group.leave() }
+                switch result {
+                case .success(let nft):
+                    loadedNfts.append(nft)
+                case .failure(let error):
+                    print("Ошибка при загрузке NFT \(nftId): \(error.localizedDescription)")
+                }
+            }
+        }
+        
+        group.notify(queue: .main) {
+            self.nftCollection = loadedNfts
+            self.onNftCollectionUpdated?()
+        }
     }
 }

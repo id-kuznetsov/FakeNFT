@@ -28,24 +28,32 @@ final class UserCardViewModel: UserCardViewModelProtocol {
     
     // MARK: - Private properties
     private let userService: UserService
+    private let nftService: NftService
     private let userId: String
+    private var nftIds: [String] = []
     
     private var user: User? {
         didSet {
             guard let user = user else { return }
+            self.nftIds = user.nfts ?? []
             onUserLoaded?(user)
         }
     }
     
     // MARK: - Initializers
-    init(userService: UserService, userId: String) {
+    init(userService: UserService, nftService: NftService, userId: String) {
         self.userService = userService
+        self.nftService = nftService
         self.userId = userId
     }
     
     // MARK: Public methods
     func loadUserData() {
         getUser()
+    }
+    
+    func createUserCollectionViewModel() -> UserNftCollectionViewModelProtocol {
+        return UserNftCollectionViewModel(nftService: nftService, nftIds: nftIds)
     }
     
     func checkUserWebsite(completion: @escaping (Bool) -> Void) {
@@ -72,11 +80,5 @@ final class UserCardViewModel: UserCardViewModelProtocol {
                 print("Ошибка загрузки пользователя: \(error.localizedDescription)")
             }
         }
-    }
-}
-
-extension UserCardViewModel {
-    func createUserCollectionViewModel() -> UserNftCollectionViewModelProtocol {
-        return UserNftCollectionViewModel()
     }
 }

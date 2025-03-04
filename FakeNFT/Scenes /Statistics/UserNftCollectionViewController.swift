@@ -94,8 +94,8 @@ extension UserNftCollectionViewController: UICollectionViewDataSource {
             return UICollectionViewCell()
         }
         
-        let nftItem = viewModel.nftCollection[indexPath.row]
-        cell.configure(with: nftItem)
+        let nft = viewModel.nftCollection[indexPath.row]
+        cell.configure(with: nft)
         
         return cell
     }

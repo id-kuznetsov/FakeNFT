@@ -26,7 +26,7 @@ final class UserNftCollectionCell: UICollectionViewCell {
         let heartImage = UIImage.heart
         button.setImage(heartImage, for: .normal)
         button.tintColor = .ypWhite
-        button.backgroundColor = .ypWhite
+        button.backgroundColor = .clear
         return button
     }()
     
@@ -121,11 +121,16 @@ final class UserNftCollectionCell: UICollectionViewCell {
     }
     
     // MARK: - Public methods
-    func configure(with model: NftItem) {
-        nftImageView.image = UIImage(named: model.imageName)
+    func configure(with model: Nft) {
+        if let imageUrl = model.images.first {
+            nftImageView.kf.setImage(with: imageUrl)
+        } else {
+            nftImageView.image = UIImage(named: "ic.close")
+        }
+
         nftNameLabel.text = model.name
         ratingStackView.setRating(model.rating)
         priceLabel.text = "\(model.price) ETH"
-        likeButton.tintColor = model.isFavorite ? .ypRedUniversal : .ypWhite
+        likeButton.tintColor = (model.isFavorite ?? false) ? .ypRedUniversal : .ypWhite
     }
 }
