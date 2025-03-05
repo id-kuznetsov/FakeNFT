@@ -39,25 +39,29 @@
 
 ## Part 2:
 
-#### Работа с сетью
+#### Работа с сетью и кэш
 ##### Collections Screen
-- GET NFTCollections (est: 3 часа; fact: x часа)
-##### Collection Screen
-- GET NFTCollection (est: 3 часа; fact: x часа)
-- GET NFTs for collection (est: 3 часа; fact: x часа)
-- PUT favorite NFT (est: 3 часа; fact: x часа)
-- PUT cart (est: 3 часа; fact: x часа)
+- CollectionsRequest (est: 2 часа; fact: 2 часа)
+- FetchCollections (est: 3 часа; fact: 4 часа)
+- CollectionsViewController State (est: 2 часа; fact: 3 часа)
+- Collections Errors (est: 2 часа; fact: 2 часа)
+- Collections paging (est: 2 часа; fact: 4 часа)
+- Collections sorting (est: 3 часа; fact: 3 часа)
+- Collections sort options storage (est: 2 часа; fact: 2 часа)
+- LoadingView (est: 2 часа; fact: 2 часа)
+- Delete ProgressHud (est: 1 часа; fact: 1 часа)
+- Collections placeholder cell (est: 2 часа; fact: 2 часа)
+- CacheService (est: 5 часа; fact: 12 часа)
+- NetworkMonitor (est: 1 часа; fact: 3 часа)
 
 ## Part 3:
-#### Sort catalog, network, errors and states
-- Network errors (est: 4 часа; fact: x часа)
-- Load state (est: 6 часа; fact: x часа)
-##### Logic
-- Сортировка коллекций по названию (est: 3 часа; fact: x часа)
-- Сортировка коллекций по количеству NFT (est: 3 часа; fact: x часа)
-###### NFTCard Network
-- GET NFT request (est: 4 часа; fact: x часа)
-- GET currencies request (est: 4 часа; fact: x часа)
-- GET array of NFT request (est: 4 часа; fact: x часа)
-- Favorite NFT (est: 4 часа; fact: x часа)
-- Cart (est: 4 часа; fact: x часа)
+#### Работа с сетью и кэш
+##### Collection Screen
+- CollectionRequest (est: 2 часа; fact: x часа)
+- NftsRequest (est: 2 часа; fact: 2 часа)
+- CollectionViewController State (est: 3 часа; fact: x часа)
+- Collection Errors (est: 2 часа; fact: x часа)
+- Collection Nfts paging (est: 2 часа; fact: 4 часа)
+- Nft placeholder cell (est: 2 часа; fact: 2 часа)
+- PUT favorite NFT (est: 3 часа; fact: x часа)
+- PUT cart (est: 3 часа; fact: x часа)
