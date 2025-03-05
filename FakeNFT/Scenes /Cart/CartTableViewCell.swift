@@ -10,8 +10,13 @@ import Kingfisher
 
 final class CartTableViewCell: UITableViewCell, ReuseIdentifying {
     
+    // MARK: - Public Properties
+    
+    weak var delegate: CartTableViewCellDelegate?
+    
     // MARK: - Private Properties
     
+    private var nftId: String?
     private lazy var nftImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFit
@@ -78,12 +83,14 @@ final class CartTableViewCell: UITableViewCell, ReuseIdentifying {
     
     @objc
     private func didTapRemoveFromCartButton() {
-        // TODO: delete from cart
+        guard let nftId else { return }
+        delegate?.didTapRemoveButton(with: nftId, image: nftImageView.image)
     }
     
     // MARK: - Public Methods
     
     func setupCell(with orderCard: OrderCard) {
+        nftId = orderCard.id
         nftImageView.kf.indicatorType = .activity
         nftImageView.kf.setImage(with: orderCard.imageURL
         ){ [weak self] result in
@@ -93,7 +100,7 @@ final class CartTableViewCell: UITableViewCell, ReuseIdentifying {
                 contentMode = .scaleAspectFill
                 self.nftImageView.image = value.image
             case .failure(let error):
-                print("Failed set image in cell with error: \(error.localizedDescription)")
+                assertionFailure("Failed set image in cell with error: \(error.localizedDescription)")
             }
         }
         ratingStackView.setRating(orderCard.rating)

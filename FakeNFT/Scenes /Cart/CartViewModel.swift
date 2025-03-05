@@ -13,8 +13,12 @@ final class CartViewModel: CartViewModelProtocol {
     
     let orderService: OrderService
     var onItemsUpdate: (() -> Void)?
+    var onError: ((String) -> Void)?
     var itemsCount: Int {
         nftsInCart.count
+    }
+    var isCartEmpty: Bool {
+        nftsInCart.isEmpty
     }
     
     // MARK: - Private Properties
@@ -48,6 +52,7 @@ final class CartViewModel: CartViewModelProtocol {
                 
             case .failure(let error):
                 print("Error: \(error) in \(#function) \(#file)")
+                self?.onError?(error.localizedDescription)
             }
         })
     }
@@ -67,6 +72,36 @@ final class CartViewModel: CartViewModelProtocol {
         onItemsUpdate?()
     }
     
+    func deleteItem(with nftId: String) {
+        let updatedNftIds = nftsInCart
+            .map { $0.id }
+            .filter{ $0 != nftId }
+        
+        
+        orderService.putOrder(nfts: updatedNftIds) { [weak self] result in
+            switch result {
+            case .success(let order):
+                self?.loadNFTs(by: order.nfts)
+            case .failure(let error):
+                assertionFailure("Error: \(error) in \(#function) \(#file)")
+                self?.onError?(error.localizedDescription)
+            }
+            
+        }
+    }
+    
+    func clearCart() {
+        orderService.putOrder(nfts: []) { [weak self] result in
+            switch result {
+            case .success(let order):
+                self?.loadNFTs(by: order.nfts)
+            case .failure(let error):
+                assertionFailure("Error: \(error) in \(#function) \(#file)")
+                self?.onError?(error.localizedDescription)
+            }
+        }
+    }
+    
     // MARK: - Private Methods
     
     private func loadNFTs(by ids: [String]) {
@@ -75,17 +110,18 @@ final class CartViewModel: CartViewModelProtocol {
         
         for id in ids {
             group.enter()
-            nftService.loadNft(id: id) { result in
+            nftService.loadNft(id: id) { [weak self] result in
                 DispatchQueue.main.async {
                     defer { group.leave() }
                     
                     switch result {
                     case .success(let nft):
                         guard let url = nft.images.first else {
-                            print("Unable to get image URL in \(#function) \(#file)")
+                            assertionFailure("Unable to get image URL in \(#function) \(#file)")
                             return
                         }
                         let orderCard = OrderCard(
+                            id: nft.id,
                             name: nft.name,
                             rating: nft.rating,
                             price: nft.price,
@@ -93,8 +129,8 @@ final class CartViewModel: CartViewModelProtocol {
                         )
                         loadedNFTs.append(orderCard)
                     case .failure(let error):
-                        print("Ошибка загрузки NFT: \(error.localizedDescription) \(#function) \(#file)")
-                        // TODO: в cart-3 передать ошибку через алерт
+                        assertionFailure("Error loading NFT: \(error.localizedDescription) \(#function) \(#file)")
+                        self?.onError?(error.localizedDescription)
                     }
                 }
             }

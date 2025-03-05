@@ -12,8 +12,7 @@ final class PaymentViewController: UIViewController {
     // MARK: - Private Properties
     
     private var viewModel: PaymentViewModelProtocol
-    
-    private var selectedCurrencyIndex: Int?
+    private var cartViewModel: CartViewModelProtocol
     
     private lazy var leftBarButtonItem: UIBarButtonItem = {
         let button = UIBarButtonItem(
@@ -87,8 +86,9 @@ final class PaymentViewController: UIViewController {
     
     // MARK: - Initialisers
     
-    init(viewModel: PaymentViewModelProtocol) {
+    init(viewModel: PaymentViewModelProtocol, cartViewModel: CartViewModelProtocol) {
         self.viewModel = viewModel
+        self.cartViewModel = cartViewModel
         super.init(nibName: nil, bundle: nil)
         setLoadingState(isLoading: true)
         setupBindings()
@@ -134,8 +134,12 @@ final class PaymentViewController: UIViewController {
     
     @objc
     private func didTapPayButton() {
-        // TODO: handle tap pay button
-       print("pay")
+        if !viewModel.isCurrencySelected() {
+            showAlertForNotChoosePaymentMethod()
+        } else {
+            setLoadingStateForPayment(isLoading: true)
+            viewModel.paymentProcessing()
+        }
     }
     
     // MARK: - Private Methods
@@ -144,6 +148,17 @@ final class PaymentViewController: UIViewController {
         viewModel.onItemsUpdate = { [weak self] in
             self?.collectionView.reloadData()
             self?.setLoadingState(isLoading: false)
+        }
+        
+        viewModel.onPaymentProcessingStart = { [weak self] in
+            self?.cartViewModel.clearCart()
+            self?.setLoadingStateForPayment(isLoading: false)
+            self?.showSuccessScreen()
+            
+        }
+        
+        viewModel.onError = { [weak self] in
+            self?.showPaymentErrorAlert()
         }
     }
     
@@ -180,6 +195,43 @@ final class PaymentViewController: UIViewController {
             payButton
         ]
         viewsToHide.forEach { $0.isHidden = isLoading }
+    }
+    
+    private func setLoadingStateForPayment(isLoading: Bool) {
+        isLoading ? activityIndicator.startAnimating() : activityIndicator.stopAnimating()
+        
+        view.isUserInteractionEnabled = !isLoading
+    }
+    
+    private func showSuccessScreen() {
+        let vc = SuccessViewController()
+        vc.modalPresentationStyle = .fullScreen
+        present(vc, animated: true) { [weak self] in
+            self?.navigationController?.popViewController(animated: false)
+        }
+    }
+    
+    private func showPaymentErrorAlert() {
+        let cancelPaymentAction: () -> Void = { [weak self] in
+            self?.setLoadingState(isLoading: false)
+        }
+        AlertPresenter.presentAlertWithTwoSelections(
+            on: self,
+            title: L10n.Payment.ErrorAlert.title,
+            firstActionTitle: L10n.Payment.ErrorAlert.cancelTitle,
+            firstActionCompletion: cancelPaymentAction,
+            secondActionTitle: L10n.Payment.ErrorAlert.repeatTitle) { [weak self] in
+                self?.viewModel.paymentProcessing()
+            }
+    }
+    
+    private func showAlertForNotChoosePaymentMethod() {
+        AlertPresenter.presentAlertWithOneSelection(
+            on: self,
+            title: L10n.Payment.Alert.title,
+            message: L10n.Payment.Alert.message,
+            actionTitle: "Ok"
+        )
     }
     
     private func setupConstraints() {
@@ -260,12 +312,12 @@ extension PaymentViewController: UICollectionViewDataSource {
 extension PaymentViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         guard let item = collectionView.cellForItem(at: indexPath) as? PaymentCollectionViewCell else { return }
-        if selectedCurrencyIndex != nil {
-            guard let prevIndex = selectedCurrencyIndex,
-                  let prevCell = collectionView.cellForItem(at: IndexPath(row: prevIndex, section: 0)) as? PaymentCollectionViewCell else { return }
+        
+        if let prevIndex = viewModel.getSelectedCurrencyIndex(),
+           let prevCell = collectionView.cellForItem(at: IndexPath(row: prevIndex, section: 0)) as? PaymentCollectionViewCell { 
             prevCell.makeCellSelected(isSelected: false)
         }
-        selectedCurrencyIndex = indexPath.item
+        viewModel.setSelectedCurrencyIndex(indexPath.item)
         item.makeCellSelected(isSelected: true)
     }
 }

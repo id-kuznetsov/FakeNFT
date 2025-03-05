@@ -64,7 +64,7 @@ final class PaymentCollectionViewCell: UICollectionViewCell, ReuseIdentifying {
                 paymentImageView.contentMode = .scaleAspectFit
                 self.paymentImageView.image = value.image
             case .failure(let error):
-                print("Failed set image in cell with error: \(error.localizedDescription)")
+                assertionFailure("Failed set image in cell with error: \(error.localizedDescription)")
             }
         }
         

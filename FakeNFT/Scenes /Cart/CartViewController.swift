@@ -23,6 +23,16 @@ final class CartViewController: UIViewController {
         return barButtonItem
     }()
     
+    private lazy var emptyCartLabel: UILabel = {
+        let label = UILabel()
+        label.font = .bodyBold
+        label.textColor = .ypBlack
+        label.textAlignment = .center
+        label.numberOfLines = 0
+        label.text = L10n.Cart.Label.emptyCart
+        return label
+    }()
+    
     private lazy var tableView: UITableView = {
         let tableView = UITableView()
         tableView.register(CartTableViewCell.self)
@@ -31,6 +41,7 @@ final class CartViewController: UIViewController {
         tableView.rowHeight = Constants.tableViewRowHeight
         tableView.dataSource = self
         tableView.delegate = self
+        tableView.refreshControl = refreshControl
         return tableView
     }()
     
@@ -78,6 +89,12 @@ final class CartViewController: UIViewController {
         return activityIndicator
     }()
     
+    private lazy var refreshControl: UIRefreshControl = {
+        let refreshControl = UIRefreshControl()
+        refreshControl.addTarget(self, action: #selector(didRefresh), for: .valueChanged)
+        return refreshControl
+    }()
+    
     // MARK: - Initialisers
     
     init(viewModel: CartViewModelProtocol) {
@@ -115,10 +132,17 @@ final class CartViewController: UIViewController {
     @objc
     private func didTapPaymentButton() {
         let paymentViewModel = PaymentViewModel(orderService: viewModel.orderService)
-        let paymentViewController = PaymentViewController(viewModel: paymentViewModel)
+        let paymentViewController = PaymentViewController(viewModel: paymentViewModel, cartViewModel: viewModel)
         let paymentNavigationController = UINavigationController(rootViewController: paymentViewController)
         paymentNavigationController.modalPresentationStyle = .fullScreen
         self.navigationController?.pushViewController(paymentViewController, animated: true)
+    }
+    
+    @objc
+    private func didRefresh() {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+            self.viewModel.loadData()
+        }
     }
     
     // MARK: - Private Methods
@@ -129,6 +153,13 @@ final class CartViewController: UIViewController {
             self?.updatePaymentViewLabels()
             self?.setLoadingState(isLoading: false)
             self?.setupNavigationBar()
+            self?.configureEmptyCartView(isCartEmpty: self?.viewModel.isCartEmpty ?? true)
+            self?.refreshControl.endRefreshing()
+        }
+        
+        viewModel.onError = { [weak self] errorMessage in
+            self?.showErrorAlert(message: errorMessage)
+            self?.refreshControl.endRefreshing()
         }
     }
     
@@ -142,7 +173,8 @@ final class CartViewController: UIViewController {
                 totalNFTCountInOrderLabel,
                 totalCostLabel,
                 paymentButton,
-                activityIndicator
+                activityIndicator,
+                emptyCartLabel
             ]
         )
         setupConstraints()
@@ -168,11 +200,31 @@ final class CartViewController: UIViewController {
     
     private func setLoadingState(isLoading: Bool) {
         isLoading ? activityIndicator.startAnimating() : activityIndicator.stopAnimating()
-        
-        paymentView.isHidden = isLoading
-        paymentButton.isHidden = isLoading
-        totalCostLabel.isHidden = isLoading
-        totalNFTCountInOrderLabel.isHidden = isLoading
+        let viewsToHide = [paymentView, paymentButton, totalCostLabel, totalNFTCountInOrderLabel, emptyCartLabel]
+        viewsToHide.forEach { $0.isHidden = isLoading }
+    }
+    
+    private func configureEmptyCartView(isCartEmpty: Bool) {
+        if isCartEmpty {
+            emptyCartLabel.isHidden = !isCartEmpty
+            paymentView.isHidden = isCartEmpty
+            paymentButton.isHidden = isCartEmpty
+            totalCostLabel.isHidden = isCartEmpty
+            totalNFTCountInOrderLabel.isHidden = isCartEmpty
+            navigationItem.rightBarButtonItem = nil
+        } else {
+            emptyCartLabel.isHidden = !isCartEmpty
+        }
+    }
+    
+    private func showErrorAlert(message: String) {
+        AlertPresenter.presentAlertWithTwoSelections(
+            on: self,
+            title: L10n.Payment.ErrorAlert.title,
+            firstActionTitle: L10n.Payment.ErrorAlert.cancelTitle,
+            secondActionTitle: L10n.Payment.ErrorAlert.repeatTitle) { [weak self] in
+                self?.viewModel.loadData()
+            }
     }
     
     // MARK: Constraints
@@ -186,6 +238,7 @@ final class CartViewController: UIViewController {
             paymentButtonConstraints()
         )
         activityIndicator.constraintCenters(to: view)
+        emptyCartLabel.constraintCenters(to: view)
     }
     
     private func tableViewConstraints() -> [NSLayoutConstraint] {
@@ -241,6 +294,7 @@ extension CartViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell: CartTableViewCell = tableView.dequeueReusableCell()
         cell.selectionStyle = .none
+        cell.delegate = self
         let orderCard = viewModel.getItem(at: indexPath.row)
         cell.setupCell(with: orderCard)
         return cell
@@ -248,6 +302,20 @@ extension CartViewController: UITableViewDataSource {
 }
 
 extension CartViewController: UITableViewDelegate {}
+
+extension CartViewController: CartTableViewCellDelegate {
+    func didTapRemoveButton(with nftId: String, image: UIImage?) {
+        
+        guard let image else { return }
+        let viewModel = DeleteViewModel(image: image) { [weak self] in
+            self?.viewModel.deleteItem(with: nftId)
+        }
+        let viewController = DeleteViewController(viewModel: viewModel)
+        
+        viewController.modalPresentationStyle = .overFullScreen
+        present(viewController, animated: true)
+    }
+}
 
 private extension CartViewController {
     struct Constants {

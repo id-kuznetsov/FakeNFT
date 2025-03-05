@@ -12,6 +12,8 @@ final class PaymentViewModel: PaymentViewModelProtocol {
     // MARK: - Public Properties
     
     var onItemsUpdate: (() -> Void)?
+    var onPaymentProcessingStart: (() -> Void)?
+    var onError: (() -> Void)?
     
     var paymentMethodCount: Int {
         currencyCards.count
@@ -19,6 +21,7 @@ final class PaymentViewModel: PaymentViewModelProtocol {
     
     // MARK: - Private Properties
     
+    private var selectedCurrencyIndex: Int?
     private let orderService: OrderService
     private var currencyCards: [CurrencyCard] = []
     
@@ -47,11 +50,41 @@ final class PaymentViewModel: PaymentViewModelProtocol {
                 }
                 self?.onItemsUpdate?()
             case .failure(let error):
+                assertionFailure("Error: \(error) in \(#function) \(#file)")
+                self?.onError?()
+            }
+        }
+    }
+    
+    func setSelectedCurrencyIndex(_ index: Int) {
+        selectedCurrencyIndex = index
+    }
+    
+    func getSelectedCurrencyIndex() -> Int? {
+        return selectedCurrencyIndex
+    }
+    
+    func isCurrencySelected() -> Bool {
+        return selectedCurrencyIndex != nil
+    }
+    
+    func paymentProcessing() {
+        guard let id = selectedCurrencyIndex else {
+            return
+        }
+        
+        orderService.setCurrencyBeforePayment(id: "\(id)") { [weak self] result in
+            switch result {
+            case .success(let response):
+                if response.success == true {
+                    self?.onPaymentProcessingStart?()
+                } else {
+                    self?.onError?()
+                }
+            case .failure(let error):
                 print("Error: \(error) in \(#function) \(#file)")
-                // TODO: в cart-3 передать ошибку через алерт
+                self?.onError?()
             }
         }
     }
 }
-
-
