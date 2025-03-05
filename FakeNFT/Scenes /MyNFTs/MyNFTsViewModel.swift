@@ -5,7 +5,7 @@ protocol MyNFTsViewModel {
     
     func didTapFavouriteButtonOnCell(
         at indexPath: IndexPath,
-        _ completion: @escaping (Bool) -> Void
+        _ completion: @escaping (Result<Bool, Error>) -> Void
     )
     
     func didRefresh()

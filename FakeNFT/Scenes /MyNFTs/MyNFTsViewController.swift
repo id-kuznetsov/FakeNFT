@@ -15,7 +15,7 @@ final class MyNFTsViewController: UIViewController {
     
     // MARK: - Private Properties
     
-    let nftService = NftServiceImpl(networkClient: DefaultNetworkClient(), storage: NftStorageImpl())
+    private let viewModel: MyNFTsViewModel
     
     private lazy var tableView: UITableView = {
         let tableView = UITableView()
@@ -43,9 +43,11 @@ final class MyNFTsViewController: UIViewController {
     
     // MARK: - Init
     
-    init() {
+    init(viewModel: MyNFTsViewModel) {
+        self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
         hidesBottomBarWhenPushed = true
+        title = "Мои NFT"
     }
     
     @available(*, unavailable)
@@ -67,7 +69,6 @@ final class MyNFTsViewController: UIViewController {
     private func setupView() {
         view.backgroundColor = .ypWhite
         view.addSubviews(tableView)
-        title = "Мои NFT"
     }
     
     private func setupLayout() {
@@ -80,7 +81,9 @@ final class MyNFTsViewController: UIViewController {
     }
     
     private func setupDataBindings() {
-        
+        viewModel.nfts.bind { [weak self] nfts in
+            self?.applySnapshot(nfts: nfts)
+        }
     }
     
     private func applySnapshot(nfts: [Nft]) {
