@@ -26,7 +26,7 @@ final class SuccessViewController: UIViewController {
         return label
     }()
     
-    private lazy var returnToCartButton: UIButton = {
+    private lazy var returnToCatalogButton: UIButton = {
         let button = UIButton()
         button.setTitle(L10n.Payment.Success.button, for: .normal)
         button.setTitleColor(.ypWhite, for: .normal)
@@ -34,7 +34,7 @@ final class SuccessViewController: UIViewController {
         button.titleLabel?.font = .systemFont(ofSize: 17, weight: .bold)
         button.layer.cornerRadius = 16
         button.layer.masksToBounds = true
-        button.addTarget(self, action: #selector(didTapBackToCart), for: .touchUpInside)
+        button.addTarget(self, action: #selector(didTapBackToCatalog), for: .touchUpInside)
         return button
     }()
     
@@ -49,8 +49,13 @@ final class SuccessViewController: UIViewController {
     // MARK: - Action
     
     @objc
-    private func didTapBackToCart() { 
+    private func didTapBackToCatalog() { 
         dismiss(animated: true, completion: nil)
+        guard let tabBarController = presentingViewController as? UITabBarController else {
+            return
+        }
+
+        tabBarController.selectedIndex = 1
     }
     
     // MARK: - Private Methods
@@ -62,7 +67,7 @@ final class SuccessViewController: UIViewController {
             [
                 successImageView,
                 successLabel,
-                returnToCartButton
+                returnToCatalogButton
             ]
         )
         
@@ -97,10 +102,10 @@ final class SuccessViewController: UIViewController {
     
     private func returnToCartButtonConstraints() -> [NSLayoutConstraint] {
         [
-            returnToCartButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-            returnToCartButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -12),
-            returnToCartButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -16),
-            returnToCartButton.heightAnchor.constraint(equalToConstant: 60)
+            returnToCatalogButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            returnToCatalogButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -12),
+            returnToCatalogButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -16),
+            returnToCatalogButton.heightAnchor.constraint(equalToConstant: 60)
         ]
     } 
 }

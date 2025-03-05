@@ -212,10 +212,14 @@ final class PaymentViewController: UIViewController {
     }
     
     private func showPaymentErrorAlert() {
+        let cancelPaymentAction: () -> Void = { [weak self] in
+            self?.setLoadingState(isLoading: false)
+        }
         AlertPresenter.presentAlertWithTwoSelections(
             on: self,
             title: L10n.Payment.ErrorAlert.title,
             firstActionTitle: L10n.Payment.ErrorAlert.cancelTitle,
+            firstActionCompletion: cancelPaymentAction,
             secondActionTitle: L10n.Payment.ErrorAlert.repeatTitle) { [weak self] in
                 self?.viewModel.paymentProcessing()
             }

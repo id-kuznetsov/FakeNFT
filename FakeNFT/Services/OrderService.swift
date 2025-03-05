@@ -10,7 +10,7 @@ import Foundation
 typealias OrderCompletion = (Result<Order, Error>) -> Void
 typealias OrderPutCompletion = (Result<Order, Error>) -> Void
 typealias CurrenciesCompletion = (Result<CurrencyValues, Error>) -> Void
-typealias SetCurrencyCompletion = (Result<CurrencySet, Error>) -> Void
+typealias SetCurrencyCompletion = (Result<CurrencyPaymentResponse, Error>) -> Void
 
 protocol OrderService{
     func getOrder(completion: @escaping OrderCompletion)
@@ -70,7 +70,7 @@ final class OrderServiceImpl: OrderService {
     func setCurrencyBeforePayment(id: String, completion: @escaping SetCurrencyCompletion) {
         let request = SetCurrencyRequest(id: id)
         
-        networkClient.send(request: request, type: CurrencySet.self) {  result in
+        networkClient.send(request: request, type: CurrencyPaymentResponse.self) {  result in
             switch result {
             case .success(let data):
                 completion(.success(data))

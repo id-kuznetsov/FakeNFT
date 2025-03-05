@@ -83,7 +83,7 @@ final class CartViewModel: CartViewModelProtocol {
             case .success(let order):
                 self?.loadNFTs(by: order.nfts)
             case .failure(let error):
-                print("Error: \(error) in \(#function) \(#file)")
+                assertionFailure("Error: \(error) in \(#function) \(#file)")
                 self?.onError?(error.localizedDescription)
             }
             
@@ -96,7 +96,7 @@ final class CartViewModel: CartViewModelProtocol {
             case .success(let order):
                 self?.loadNFTs(by: order.nfts)
             case .failure(let error):
-                print("Error: \(error) in \(#function) \(#file)")
+                assertionFailure("Error: \(error) in \(#function) \(#file)")
                 self?.onError?(error.localizedDescription)
             }
         }
@@ -117,7 +117,7 @@ final class CartViewModel: CartViewModelProtocol {
                     switch result {
                     case .success(let nft):
                         guard let url = nft.images.first else {
-                            print("Unable to get image URL in \(#function) \(#file)")
+                            assertionFailure("Unable to get image URL in \(#function) \(#file)")
                             return
                         }
                         let orderCard = OrderCard(
@@ -129,7 +129,7 @@ final class CartViewModel: CartViewModelProtocol {
                         )
                         loadedNFTs.append(orderCard)
                     case .failure(let error):
-                        print("Error loading NFT: \(error.localizedDescription) \(#function) \(#file)")
+                        assertionFailure("Error loading NFT: \(error.localizedDescription) \(#function) \(#file)")
                         self?.onError?(error.localizedDescription)
                     }
                 }

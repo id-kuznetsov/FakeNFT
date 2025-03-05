@@ -25,7 +25,7 @@ final class CartViewController: UIViewController {
     
     private lazy var emptyCartLabel: UILabel = {
         let label = UILabel()
-        label.font = .systemFont(ofSize: 17, weight: .bold)
+        label.font = .bodyBold
         label.textColor = .ypBlack
         label.textAlignment = .center
         label.numberOfLines = 0

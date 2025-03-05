@@ -50,7 +50,7 @@ final class PaymentViewModel: PaymentViewModelProtocol {
                 }
                 self?.onItemsUpdate?()
             case .failure(let error):
-                print("Error: \(error) in \(#function) \(#file)")
+                assertionFailure("Error: \(error) in \(#function) \(#file)")
                 self?.onError?()
             }
         }
@@ -78,6 +78,8 @@ final class PaymentViewModel: PaymentViewModelProtocol {
             case .success(let response):
                 if response.success == true {
                     self?.onPaymentProcessingStart?()
+                } else {
+                    self?.onError?()
                 }
             case .failure(let error):
                 print("Error: \(error) in \(#function) \(#file)")

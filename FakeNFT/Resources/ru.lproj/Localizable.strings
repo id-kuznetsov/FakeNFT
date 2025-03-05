@@ -32,7 +32,7 @@
 "Payment.errorAlert.repeatTitle" = "Повторить";
 "Payment.alert.buttonTextOk" = "Ок";
 "Payment.success.title" = "Успех! Оплата прошла, поздравляем с покупкой!";
-"Payment.success.button" = "Вернуться в корзину";
+"Payment.success.button" = "Вернуться в каталог";
 
 "Sort.title" = "Сортировка";
 "SortOption.nftCount" = "По количеству NFT";

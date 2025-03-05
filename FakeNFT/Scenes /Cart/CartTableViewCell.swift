@@ -100,7 +100,7 @@ final class CartTableViewCell: UITableViewCell, ReuseIdentifying {
                 contentMode = .scaleAspectFill
                 self.nftImageView.image = value.image
             case .failure(let error):
-                print("Failed set image in cell with error: \(error.localizedDescription)")
+                assertionFailure("Failed set image in cell with error: \(error.localizedDescription)")
             }
         }
         ratingStackView.setRating(orderCard.rating)
