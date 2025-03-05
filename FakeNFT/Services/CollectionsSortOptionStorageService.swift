@@ -18,7 +18,11 @@ struct UserDefault<Value> {
     private let defaultValue: Value
     private let userDefaults: UserDefaults
 
-    init(key: String, defaultValue: Value, userDefaults: UserDefaults = .standard) {
+    init(
+        key: String,
+        defaultValue: Value,
+        userDefaults: UserDefaults = .standard
+    ) {
         self.key = key
         self.defaultValue = defaultValue
         self.userDefaults = userDefaults
@@ -27,7 +31,6 @@ struct UserDefault<Value> {
     var wrappedValue: Value {
         get {
             guard let value = userDefaults.object(forKey: key) as? Value else {
-                print("⚠️ [UserDefault] Ошибка чтения значения для ключа: \(key). Используется значение по умолчанию: \(defaultValue)")
                 return defaultValue
             }
             return value
@@ -52,7 +55,6 @@ final class CollectionsSortOptionStorageServiceImpl: CollectionsSortOptionStorag
 
     func loadSortOption() -> CollectionSortOptions {
         guard let sortOption = CollectionSortOptions(rawValue: storedSortOption) else {
-            print("⚠️ [CollectionsSortStorageService] Ошибка: неизвестный вариант сортировки '\(storedSortOption)'. Используется .none")
             return .none
         }
         return sortOption

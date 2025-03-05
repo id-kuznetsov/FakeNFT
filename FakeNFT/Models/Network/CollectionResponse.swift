@@ -19,15 +19,7 @@ struct CollectionResponse: Decodable {
 
 extension CollectionResponse {
     func toUIModel() -> CollectionUI? {
-        DateFormatter.defaultDateFormatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
-
-        guard let date = DateFormatter.defaultDateFormatter.date(from: self.createdAt) else {
-            print("DEBUG: Ошибка - Не удалось преобразовать дату - \(self.createdAt)")
-            return nil
-        }
-
         return CollectionUI(
-            createdAt: date,
             name: self.name,
             cover: URL(string: self.cover),
             nfts: self.nfts,

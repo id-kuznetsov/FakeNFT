@@ -7,8 +7,7 @@
 
 import Foundation
 
-struct CollectionUI: Hashable {
-    let createdAt: Date
+struct CollectionUI: Codable, Hashable {
     let name: String
     let cover: URL?
     let nfts: [String]
@@ -21,12 +20,11 @@ struct CollectionUI: Hashable {
 extension CollectionUI {
     static var placeholder: CollectionUI {
         return CollectionUI(
-            createdAt: Date(),
-            name: "Загрузка...",
+            name: "",
             cover: nil,
             nfts: [],
-            description: "Загрузка...",
-            author: "Загрузка...",
+            description: "",
+            author: "",
             id: UUID().uuidString,
             isPlaceholder: true
         )

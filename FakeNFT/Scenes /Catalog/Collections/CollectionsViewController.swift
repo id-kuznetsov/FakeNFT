@@ -27,6 +27,16 @@ final class CollectionsViewController: UIViewController, FilterView, ErrorView, 
         return view
     }()
 
+    private lazy var filterButton: UIBarButtonItem = {
+        let view = UIBarButtonItem()
+        view.style = .plain
+        view.image = .icSort
+        view.tintColor = .ypBlack
+        view.target = self
+        view.action = #selector(presentFilterActionSheet)
+        return view
+    }()
+
     private lazy var refreshControlView: UIRefreshControl = {
         let view = UIRefreshControl()
         view.addTarget(self, action: #selector(didPullToRefresh), for: .valueChanged)
@@ -48,11 +58,10 @@ final class CollectionsViewController: UIViewController, FilterView, ErrorView, 
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        setupNavigationBar()
         setupLayout()
         setupDataSource()
         bindViewModel()
-        viewModel.loadData()
+        viewModel.loadData(skipCache: false)
     }
 
     // MARK: - Binding
@@ -74,14 +83,19 @@ final class CollectionsViewController: UIViewController, FilterView, ErrorView, 
                 case .loading:
                     self.tableView.bounces = false
                     self.tableView.isUserInteractionEnabled = false
+                    self.filterButton.isEnabled = false
                     self.showLoading()
                 case .success:
                     self.tableView.bounces = true
                     self.tableView.isUserInteractionEnabled = true
+                    self.filterButton.isEnabled = true
                     self.hideLoading()
                 case .failed(let error):
                     self.hideLoading()
                     self.showError(error)
+                    self.tableView.bounces = true
+                    self.tableView.isUserInteractionEnabled = true
+                    self.filterButton.isEnabled = true
                 default:
                     break
                 }
@@ -100,7 +114,7 @@ final class CollectionsViewController: UIViewController, FilterView, ErrorView, 
                 guard contentHeight > frameHeight else { return }
 
                 if offsetY > contentHeight - frameHeight - threshold {
-                    self.viewModel.loadNextPage(reset: false)
+                    self.viewModel.loadNextPage(reset: false, skipCache: false)
                 }
             }
             .store(in: &subscribers)
@@ -131,18 +145,6 @@ final class CollectionsViewController: UIViewController, FilterView, ErrorView, 
         }
     }
 
-    // MARK: - Setup NavBar
-    private func setupNavigationBar() {
-        let filterButton = UIBarButtonItem(
-            image: .icSort,
-            style: .plain,
-            target: self,
-            action: #selector(presentFilterActionSheet)
-        )
-        filterButton.tintColor = .ypBlack
-        navigationItem.rightBarButtonItem = filterButton
-    }
-
     // MARK: - Navigation
     private func presentCollectionViewController(
         for collection: CollectionUI
@@ -169,7 +171,7 @@ final class CollectionsViewController: UIViewController, FilterView, ErrorView, 
                     action: { [weak self] in
                         guard let self else { return }
 
-                        self.viewModel.loadData()
+                        self.viewModel.loadData(skipCache: false)
                     }
                 )
             ]
@@ -199,13 +201,14 @@ final class CollectionsViewController: UIViewController, FilterView, ErrorView, 
             guard let self = self else { return }
 
             self.refreshControlView.endRefreshing()
-            self.viewModel.loadData()
+            self.viewModel.loadData(skipCache: true)
         }
     }
 
     // MARK: - Constraints
     private func setupLayout() {
         view.backgroundColor = .ypWhite
+        navigationItem.rightBarButtonItem = filterButton
         view.addSubview(tableView)
 
         NSLayoutConstraint.activate([

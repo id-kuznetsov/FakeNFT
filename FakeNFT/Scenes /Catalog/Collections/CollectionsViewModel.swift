@@ -16,8 +16,8 @@ protocol CollectionsViewModelProtocol {
     var userService: UserService { get }
     var collections: AnyPublisher<[CollectionUI], Never> { get }
     var state: AnyPublisher<CollectionsState, Never> { get }
-    func loadData()
-    func loadNextPage(reset: Bool)
+    func loadData(skipCache: Bool)
+    func loadNextPage(reset: Bool, skipCache: Bool)
     func sortCollections(by option: CollectionSortOptions)
     func getCollection(at indexPath: IndexPath) -> CollectionUI
 }
@@ -82,13 +82,13 @@ final class CollectionsViewModel: CollectionsViewModelProtocol {
 
     }
     
-    func loadData() {
+    func loadData(skipCache: Bool = false) {
         currentPage = 0
         hasMorePages = true
         loadNextPage(reset: true)
     }
 
-    func loadNextPage(reset: Bool = false) {
+    func loadNextPage(reset: Bool = false, skipCache: Bool = false) {
         guard !isLoadingPage, hasMorePages else { return }
 
         _state = .loading
@@ -100,17 +100,25 @@ final class CollectionsViewModel: CollectionsViewModelProtocol {
             currentPage += 1
         }
 
-        collectionsService.fetchCollections(page: currentPage, sortBy: sortBy)
+        collectionsService.fetchCollections(
+            page: currentPage,
+            sortBy: sortBy,
+            skipCache: skipCache
+        )
             .map { [weak self] newCollections -> CollectionsState in
+                guard let self = self else { return .failed(NSError(domain: "ViewModel", code: -1, userInfo: nil)) }
 
                 if newCollections.isEmpty {
-                    self?.hasMorePages = false
+                    self.hasMorePages = false
                 }
 
                 if reset {
-                    self?._collections = newCollections
+                    self._collections = newCollections
                 } else {
-                    self?._collections.append(contentsOf: newCollections)
+                    let uniqueNew = newCollections.filter { newItem in
+                        !self._collections.contains(where: { $0.id == newItem.id })
+                    }
+                    self._collections.append(contentsOf: uniqueNew)
                 }
 
                 return .success
