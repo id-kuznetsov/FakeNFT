@@ -10,6 +10,7 @@ import UIKit
 protocol UserNftCollectionViewModelProtocol {
     var nftCollection: [Nft] { get }
     var onNftCollectionUpdated: (() -> Void)? { get set }
+    var onLoadingStateChanged: ((Bool) -> Void)? { get set }
     func loadNftCollection()
 }
 
@@ -25,6 +26,7 @@ final class UserNftCollectionViewModel: UserNftCollectionViewModelProtocol {
     }
     
     var onNftCollectionUpdated: (() -> Void)?
+    var onLoadingStateChanged: ((Bool) -> Void)?
     
     // MARK: - Initializers
     init(nftService: NftService, nftIds: [String]) {
@@ -34,6 +36,8 @@ final class UserNftCollectionViewModel: UserNftCollectionViewModelProtocol {
     
     // MARK: - Public methods
     func loadNftCollection() {
+        onLoadingStateChanged?(true)
+        
         let group = DispatchGroup()
         var loadedNfts: [Nft] = []
         
@@ -51,8 +55,12 @@ final class UserNftCollectionViewModel: UserNftCollectionViewModelProtocol {
         }
         
         group.notify(queue: .main) {
-            self.nftCollection = loadedNfts
-            self.onNftCollectionUpdated?()
+            self.nftCollection = self.sortNftCollection(loadedNfts)
+            self.onLoadingStateChanged?(false)
         }
+    }
+    
+    private func sortNftCollection(_ nfts: [Nft]) -> [Nft] {
+        nfts.sorted { $0.name.lowercased() < $1.name.lowercased() }
     }
 }

@@ -56,6 +56,20 @@ final class UserNftCollectionViewController: UIViewController {
                 self?.collectionView.reloadData()
             }
         }
+        
+        viewModel.onLoadingStateChanged = { [weak self] isLoading in
+            DispatchQueue.main.async {
+                isLoading ? self?.showLoadingIndicator() : self?.hideLoadingIndicator()
+            }
+        }
+    }
+    
+    private func showLoadingIndicator() {
+        UIBlockingProgressIndicator.show()
+    }
+    
+    private func hideLoadingIndicator() {
+        UIBlockingProgressIndicator.dismiss()
     }
     
     private func setupUI() {
