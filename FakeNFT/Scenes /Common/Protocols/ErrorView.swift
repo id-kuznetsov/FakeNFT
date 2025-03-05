@@ -12,10 +12,19 @@ extension ErrorView where Self: UIViewController {
         let message: String
 
         switch error {
-        case let urlError as URLError:
-            message = handleURLError(urlError)
-        case is NetworkClientError:
-            message = L10n.Alert.Message.network
+        case let networkClientError as NetworkClientError:
+            switch networkClientError {
+            case .httpStatusCode(404):
+                message = L10n.Alert.Message.serverNotFound
+            case .httpStatusCode(403):
+                message = L10n.Alert.Message.sslError
+            case .urlSessionError:
+                message = L10n.Alert.Message.timeoutError
+            default:
+                message = L10n.Alert.Message.network
+            }
+        case is NetworkMonitorError:
+            message = L10n.Alert.Message.networkError
         default:
             message = L10n.Alert.Message.unknown
         }
@@ -27,20 +36,5 @@ extension ErrorView where Self: UIViewController {
             style: .alert
         )
         AlertPresenter.showAlert(on: self, model: model)
-    }
-
-    private func handleURLError(_ error: URLError) -> String {
-        switch error.code {
-        case .notConnectedToInternet:
-            return L10n.Alert.Message.networkError
-        case .timedOut:
-            return L10n.Alert.Message.timeoutError
-        case .secureConnectionFailed:
-            return L10n.Alert.Message.sslError
-        case .cannotFindHost:
-            return L10n.Alert.Message.serverNotFound
-        default:
-            return L10n.Alert.Message.unknown
-        }
     }
 }

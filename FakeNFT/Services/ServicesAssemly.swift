@@ -24,7 +24,8 @@ final class ServicesAssembly {
     var collectionsService: CollectionService {
         CollectionServiceImpl(
             networkClient: networkClient,
-            cacheService: cacheService
+            cacheService: cacheService,
+            networkMonitor: NetworkMonitorImpl()
         )
     }
 

@@ -19,14 +19,24 @@ protocol CollectionService {
 final class CollectionServiceImpl: CollectionService {
     private let networkClient: NetworkClient
     private let cacheService: CacheService
+    private let networkMonitor: NetworkMonitor
     private let cacheLifetime: TimeInterval = 10 * 60
+    private var cancellables = Set<AnyCancellable>()
 
     init(
         networkClient: NetworkClient,
-        cacheService: CacheService
+        cacheService: CacheService,
+        networkMonitor: NetworkMonitor
     ) {
         self.networkClient = networkClient
         self.cacheService = cacheService
+        self.networkMonitor = networkMonitor
+
+        self.networkMonitor.connectivityPublisher
+            .sink { isConnected in
+                print("Сеть доступна: \(isConnected)")
+            }
+            .store(in: &cancellables)
     }
 
     func fetchCollections(
@@ -89,22 +99,26 @@ final class CollectionServiceImpl: CollectionService {
         forPage page: Int,
         sortBy: CollectionSortOptions
     ) -> AnyPublisher<[CollectionUI], Error> {
-        let key = cacheKey(forPage: page, sortBy: sortBy)
-        return Deferred {
-            Future<[CollectionUI], Error> { promise in
-                let request = CollectionsRequest(page: page, sortBy: sortBy)
-                self.networkClient.send(
-                    request: request,
-                    type: [CollectionResponse].self
-                ) { result in
-                    switch result {
-                    case .success(let response):
-                        let convertedModels = response.compactMap { $0.toUIModel() }
-                        self.cacheService.save(data: convertedModels, forKey: key)
-                        promise(.success(convertedModels))
-                    case .failure(let error):
-                        promise(.failure(error))
-                    }
+        return Future<[CollectionUI], Error> { promise in
+            if !self.networkMonitor.isConnected {
+                promise(.failure(NetworkMonitorError.noInternetConnection))
+                return
+            }
+
+            let key = self.cacheKey(forPage: page, sortBy: sortBy)
+            let request = CollectionsRequest(page: page, sortBy: sortBy)
+
+            self.networkClient.send(
+                request: request,
+                type: [CollectionResponse].self
+            ) { result in
+                switch result {
+                case .success(let response):
+                    let convertedModels = response.compactMap { $0.toUIModel() }
+                    self.cacheService.save(data: convertedModels, forKey: key)
+                    promise(.success(convertedModels))
+                case .failure(let error):
+                    promise(.failure(error))
                 }
             }
         }
