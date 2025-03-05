@@ -8,34 +8,40 @@ final class MyNFTsViewController: UIViewController {
         case main
     }
     
-    // MARK: - Item
-    
-    private struct MyNftModel: Hashable {
-        
-    }
-    
     // MARK: - Type Aliases
     
-    private typealias DataSource = UITableViewDiffableDataSource<Section, MyNftModel>
-    private typealias Snapshot = NSDiffableDataSourceSnapshot<Section, MyNftModel>
+    private typealias DataSource = UITableViewDiffableDataSource<Section, Nft>
+    private typealias Snapshot = NSDiffableDataSourceSnapshot<Section, Nft>
+    
+    // MARK: - Private Properties
+    
+    let nftService = NftServiceImpl(networkClient: DefaultNetworkClient(), storage: NftStorageImpl())
     
     private lazy var tableView: UITableView = {
         let tableView = UITableView()
         tableView.register(MyNFTCell.self)
         tableView.delegate = self
+        
+        tableView.backgroundColor = .clear
         tableView.separatorColor = .clear
+        tableView.allowsSelection = false
         tableView.translatesAutoresizingMaskIntoConstraints = false
         return tableView
     }()
     
     private lazy var dataSource: DataSource = {
-        DataSource(tableView: tableView) { tableView, indexPath, routeItem in
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: MyNFTCell.defaultReuseIdentifier) else {
-                return nil
+        DataSource(tableView: tableView) { [weak self] tableView, indexPath, nft in
+            let cell = tableView.dequeueReusableCell(withIdentifier: MyNFTCell.defaultReuseIdentifier)
+            guard let myNFTCell = cell as? MyNFTCell else {
+                return UITableViewCell()
             }
-            return cell
+            
+            myNFTCell.setupCell(nft: nft, isLiked: false)
+            return myNFTCell
         }
     }()
+    
+    // MARK: - Init
     
     init() {
         super.init(nibName: nil, bundle: nil)
@@ -48,13 +54,12 @@ final class MyNFTsViewController: UIViewController {
     }
     
     // MARK: - Life Cycle
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
         setupLayout()
         setupDataBindings()
-        applySnapshot()
     }
     
     // MARK: - Private Methods
@@ -62,6 +67,7 @@ final class MyNFTsViewController: UIViewController {
     private func setupView() {
         view.backgroundColor = .ypWhite
         view.addSubviews(tableView)
+        title = "Мои NFT"
     }
     
     private func setupLayout() {
@@ -77,10 +83,10 @@ final class MyNFTsViewController: UIViewController {
         
     }
     
-    private func applySnapshot() {
+    private func applySnapshot(nfts: [Nft]) {
         var snapshot = Snapshot()
         snapshot.appendSections([.main])
-        snapshot.appendItems([MyNftModel()])
+        snapshot.appendItems(nfts)
         dataSource.apply(snapshot, animatingDifferences: false)
     }
 }
@@ -90,5 +96,11 @@ final class MyNFTsViewController: UIViewController {
 extension MyNFTsViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         140.0
+    }
+}
+
+extension MyNFTsViewController: MyNFTCellDelegate {
+    func didTapFavouriteButton(on cell: MyNFTCell) {
+        
     }
 }

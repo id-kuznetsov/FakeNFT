@@ -24,7 +24,7 @@ final class ProfileViewModelImpl: ProfileViewModel {
     
     func myNftsCellDidSelect() {
         guard let profile = profile.value else { return }
-        coordinator.myNFTsScene(nfts: profile.nfts)
+        coordinator.myNFTsScene(nfts: profile.nfts, favourites: profile.likes)
     }
     
     func favouritesCellDidSelect() {

@@ -27,8 +27,8 @@ final class ProfileCoordinatorImpl: ProfileCoordinator {
         profileViewController.present(profileEditingViewController, animated: true)
     }
     
-    func myNFTsScene(nfts: [String]) {
-        let myNFTsViewController = MyNFTsViewController()
+    func myNFTsScene(nfts: [String], favourites: [String]) {
+        let myNFTsViewController = MyNFTsViewController(nfts: nfts, favourites: favourites)
         navigationController.pushViewController(myNFTsViewController, animated: true)
     }
     

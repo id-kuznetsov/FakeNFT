@@ -2,8 +2,9 @@ import Foundation
 
 typealias NftCompletion = (Result<Nft, Error>) -> Void
 
+
 protocol NftService {
-    func loadNft(id: String, completion: @escaping NftCompletion)
+    func loadNft(id: NftID, completion: @escaping NftCompletion)
 }
 
 final class NftServiceImpl: NftService {
@@ -16,7 +17,7 @@ final class NftServiceImpl: NftService {
         self.networkClient = networkClient
     }
 
-    func loadNft(id: String, completion: @escaping NftCompletion) {
+    func loadNft(id: NftID, completion: @escaping NftCompletion) {
         if let nft = storage.getNft(with: id) {
             completion(.success(nft))
             return

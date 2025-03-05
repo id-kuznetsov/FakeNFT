@@ -1,6 +1,30 @@
 import Foundation
 
-struct Nft: Decodable {
-    let id: String
-    let images: [URL]
+struct Nft: Decodable, Hashable {
+    let id: NftID
+    let name: String
+    let images: [String]
+    let rating: Int
+    let description: String
+    let price: Double
+    let author: String
+    let createdAt: String
 }
+
+extension Nft {
+    var authorName: String {
+        if let url = URL(string: author),
+           let host = url.host {
+            let components = host.components(separatedBy: ".")
+            return components.first ?? ""
+        } else {
+            return ""
+        }
+    }
+    
+    var previewImage: String? {
+        images.first
+    }
+}
+
+typealias NftID = String

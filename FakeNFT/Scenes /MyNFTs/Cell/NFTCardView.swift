@@ -1,10 +1,14 @@
 import UIKit
+import Kingfisher
 
 protocol NFTCardDelegate: AnyObject {
     func didTapFavouriteButton(on view: NFTCardView)
 }
 
 final class NFTCardView: UIView {
+    
+    // MARK: - Public Properties
+    
     weak var delegate: NFTCardDelegate?
     
     var isFavouriteButtonActive: Bool = false {
@@ -16,10 +20,13 @@ final class NFTCardView: UIView {
         }
     }
     
+    // MARK: - Private Properties
+    
     private lazy var nftImageView: UIImageView = {
         let imageView = UIImageView()
-        imageView.backgroundColor = .ypBlack
+        imageView.backgroundColor = .ypLightGrey
         imageView.layer.cornerRadius = 12
+        imageView.layer.masksToBounds = true
         imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
     }()
@@ -28,9 +35,12 @@ final class NFTCardView: UIView {
         let button = UIButton()
         button.addTarget(self, action: #selector(favouriteButtonDidTap), for: .touchUpInside)
         button.setImage(.icFavouriteInactive, for: .normal)
+        button.isHidden = true
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
+    
+    // MARK: - Init
     
     init() {
         super.init(frame: .zero)
@@ -43,9 +53,24 @@ final class NFTCardView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func setImage(_ image: UIImage) {
-        nftImageView.image = image
+    // MARK: - Public Methods
+    
+    func setImage(url: String?) {
+        guard let url = URL(string: url!) else { return }
+        let options: KingfisherOptionsInfo = [.transition(.fade(1)), .cacheOriginalImage ]
+        nftImageView.kf.indicatorType = .activity
+        
+        nftImageView.kf.setImage(with: url, options: options) { [weak self] result in
+            switch result {
+            case .success(_):
+                self?.favouriteButton.isHidden = false
+            case .failure(_):
+                self?.favouriteButton.isHidden = true
+            }
+        }
     }
+    
+    // MARK: - Private Methods
     
     private func setupView() {
         backgroundColor = .clear
@@ -65,6 +90,8 @@ final class NFTCardView: UIView {
             favouriteButton.trailingAnchor.constraint(equalTo: trailingAnchor),
         ])
     }
+    
+    // MARK: - Actions
     
     @objc private func favouriteButtonDidTap() {
         delegate?.didTapFavouriteButton(on: self)

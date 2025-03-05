@@ -1,6 +1,14 @@
 import UIKit
 
+protocol MyNFTCellDelegate: AnyObject {
+    func didTapFavouriteButton(on cell: MyNFTCell)
+}
+
 final class MyNFTCell: UITableViewCell, ReuseIdentifying {
+    
+    // MARK: - Public Properties
+    
+    weak var delegate: MyNFTCellDelegate?
     
     // MARK: - Private Properties
     
@@ -13,7 +21,6 @@ final class MyNFTCell: UITableViewCell, ReuseIdentifying {
     
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
-        label.text = "Lilo"
         label.font = .bodyBold
         label.textColor = .ypBlack
         label.adjustsFontSizeToFitWidth = true
@@ -38,7 +45,6 @@ final class MyNFTCell: UITableViewCell, ReuseIdentifying {
     
     private lazy var authorLabel: UILabel = {
         let label = UILabel()
-        label.text = "John Doe"
         label.textColor = .ypBlack
         label.font = .caption2
         label.setContentHuggingPriority(.defaultLow, for: .horizontal)
@@ -74,7 +80,6 @@ final class MyNFTCell: UITableViewCell, ReuseIdentifying {
     
     private lazy var priceValueLabel: UILabel = {
         let label = UILabel()
-        label.text = "1,78 ETH"
         label.textColor = .ypBlack
         label.font = .bodyBold
         label.adjustsFontSizeToFitWidth = true
@@ -111,6 +116,15 @@ final class MyNFTCell: UITableViewCell, ReuseIdentifying {
     }
     
     // MARK: - Public Methods
+    
+    func setupCell(nft: Nft, isLiked: Bool) {
+        nftCardView.isFavouriteButtonActive = isLiked
+        nftCardView.setImage(url: nft.previewImage)
+        titleLabel.text = nft.name
+        ratingStackView.setRating(nft.rating)
+        authorLabel.text = nft.authorName
+        priceValueLabel.text = nft.price.description
+    }
     
     // MARK: - Private Methods
     
@@ -151,6 +165,6 @@ final class MyNFTCell: UITableViewCell, ReuseIdentifying {
 
 extension MyNFTCell: NFTCardDelegate {
     func didTapFavouriteButton(on view: NFTCardView) {
-        
+        delegate?.didTapFavouriteButton(on: self)
     }
 }
