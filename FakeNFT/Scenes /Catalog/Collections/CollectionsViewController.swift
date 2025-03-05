@@ -11,8 +11,25 @@ import Combine
 final class CollectionsViewController: UIViewController, FilterView, ErrorView, LoadingView {
     // MARK: - Properties
     private let viewModel: CollectionsViewModelProtocol
-    private var dataSource: UITableViewDiffableDataSource<Int, CollectionUI>!
     private var subscribers = Set<AnyCancellable>()
+
+    // MARK: - DataSource
+    private lazy var dataSource: UITableViewDiffableDataSource<Int, CollectionUI> = {
+        let dataSource = UITableViewDiffableDataSource<Int, CollectionUI>(
+            tableView: tableView,
+            cellProvider: { [weak self] tableView, indexPath, collection in
+                guard let self = self else { return UITableViewCell() }
+                let cell: CollectionsTableViewCell = tableView.dequeueReusableCell()
+                cell.selectionStyle = .none
+                cell.configure(
+                    with: collection,
+                    imageLoaderService: self.viewModel.imageLoaderService
+                )
+                return cell
+            }
+        )
+        return dataSource
+    }()
 
     // MARK: - UI
     private lazy var tableView: UITableView = {
@@ -59,7 +76,6 @@ final class CollectionsViewController: UIViewController, FilterView, ErrorView, 
         super.viewDidLoad()
 
         setupLayout()
-        setupDataSource()
         bindViewModel()
         viewModel.loadData(skipCache: false)
     }
@@ -126,23 +142,6 @@ final class CollectionsViewController: UIViewController, FilterView, ErrorView, 
         snapshot.appendSections([0])
         snapshot.appendItems(collections, toSection: 0)
         dataSource.apply(snapshot, animatingDifferences: animating)
-    }
-
-    // MARK: - DataSource
-    private func setupDataSource() {
-        dataSource = UITableViewDiffableDataSource<Int, CollectionUI>(
-            tableView: tableView
-        ) { [weak self] tableView, indexPath, collection in
-            guard let self = self else { return UITableViewCell() }
-
-            let cell: CollectionsTableViewCell = self.tableView.dequeueReusableCell()
-            cell.selectionStyle = .none
-            cell.configure(
-                with: collection,
-                imageLoaderService: self.viewModel.imageLoaderService
-            )
-            return cell
-        }
     }
 
     // MARK: - Navigation
