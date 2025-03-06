@@ -34,7 +34,7 @@ class CustomLoadingView: UIView {
         let rotation = CABasicAnimation(keyPath: "transform.rotation")
         rotation.fromValue = 0.0
         rotation.toValue = Double.pi * 2
-        rotation.duration = 1.0
+        rotation.duration = 1.5
         rotation.repeatCount = .infinity
         imageView.layer.add(rotation, forKey: "rotationAnimation")
     }
