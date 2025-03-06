@@ -13,27 +13,30 @@ final class TabBarController: UITabBarController {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
+    // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        view.backgroundColor = .systemBackground
-        configure()
+        setupTabBarAppearance()
+        setupTabs()
     }
-    
-    private func configure() {
+
+    // MARK: - Tabs
+    private func setupTabs() {
         let profileVC = UINavigationController(rootViewController: ProfileViewController(servicesAssembly: servicesAssembly))
         profileVC.tabBarItem = UITabBarItem(
             title: NSLocalizedString("Tab.profile", comment: ""),
             image: UIImage(systemName: "person.circle"),
             selectedImage: UIImage(systemName: "person.circle.fill")
         )
-        
-        let catalogVC = UINavigationController(rootViewController: CatalogViewController(servicesAssembly: servicesAssembly))
-        catalogVC.tabBarItem = UITabBarItem(
-            title: NSLocalizedString("Tab.catalog", comment: ""),
-            image: UIImage(systemName: "square.stack.3d.up"),
-            selectedImage: UIImage(systemName: "square.stack.3d.up.fill")
+
+        let catalogViewController = TestCatalogViewController(servicesAssembly: servicesAssembly)
+        let catalogNavigationController = CustomNavigationController(rootViewController: catalogViewController)
+        catalogNavigationController.tabBarItem = UITabBarItem(
+            title: L10n.Tab.catalog,
+            image: .catalogTab,
+            tag: 2
         )
         
         let cartViewModel = CartViewModel(
@@ -46,23 +49,39 @@ final class TabBarController: UITabBarController {
             image: .icCart,
             selectedImage: .icCartFill
         )
-        
+
         let statisticsVC = UINavigationController(rootViewController: StatisticsViewController(servicesAssembly: servicesAssembly))
         statisticsVC.tabBarItem = UITabBarItem(
             title: NSLocalizedString("Tab.statistic", comment: ""),
             image: UIImage(systemName: "chart.bar"),
             selectedImage: UIImage(systemName: "chart.bar.fill")
         )
-        
-        setViewControllers([profileVC, catalogVC, cartViewController, statisticsVC], animated: false)
-        self.selectedIndex = 2
-        
-        tabBarAppearance()
+
+        setViewControllers(
+            [
+                profileVC,
+                catalogNavigationController,
+                cartVC,
+                statisticsVC
+            ],
+            animated: false
+        )
+        self.selectedIndex = 1
     }
     
-    private func tabBarAppearance() {
-        tabBar.tintColor = .ypBlueUniversal
-        tabBar.unselectedItemTintColor = .ypBlack
-        tabBar.backgroundColor = .ypWhite
+    // MARK: - Appearance
+    private func setupTabBarAppearance() {
+        let appearance = UITabBarAppearance()
+        appearance.configureWithOpaqueBackground()
+        appearance.backgroundColor = .ypWhite
+        appearance.stackedLayoutAppearance.selected.iconColor = .ypBlueUniversal
+        appearance.stackedLayoutAppearance.normal.iconColor = .ypBlack
+        appearance.shadowImage = nil
+        appearance.shadowColor = nil
+
+        tabBar.standardAppearance = appearance
+        if #available(iOS 15.0, *) {
+            tabBar.scrollEdgeAppearance = appearance
+        }
     }
 }
