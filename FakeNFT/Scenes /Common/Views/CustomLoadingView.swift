@@ -14,6 +14,7 @@ class CustomLoadingView: UIView {
         setupLayout()
     }
 
+    @available(*, unavailable)
     required init?(coder: NSCoder) {
         super.init(coder: coder)
         setupLayout()
