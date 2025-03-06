@@ -2,13 +2,6 @@ import UIKit
 
 final class TestCatalogViewController: UIViewController {
 
-    private lazy var ratingButton: RatingButton = {
-        let view = RatingButton()
-
-        view.translatesAutoresizingMaskIntoConstraints = false
-        return view
-    }()
-
     let servicesAssembly: ServicesAssembly
     let testNftButton = UIButton()
 
@@ -27,11 +20,11 @@ final class TestCatalogViewController: UIViewController {
 
         view.backgroundColor = .systemBackground
 
-        view.addSubview(ratingButton)
-        ratingButton.constraintCenters(to: view)
-        ratingButton.setTitle(Constants.openNftTitle, for: .normal)
-        ratingButton.addTarget(self, action: #selector(showNft), for: .touchUpInside)
-        ratingButton.configure(rating: 3)
+        view.addSubview(testNftButton)
+        testNftButton.constraintCenters(to: view)
+        testNftButton.setTitle(Constants.openNftTitle, for: .normal)
+        testNftButton.addTarget(self, action: #selector(showNft), for: .touchUpInside)
+        testNftButton.setTitleColor(.systemBlue, for: .normal)
     }
 
     @objc
