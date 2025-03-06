@@ -153,16 +153,16 @@ final class CollectionsViewController: UIViewController, FilterView, ErrorView, 
     private func presentCollectionViewController(
         for collection: CollectionUI
     ) {
-        let viewModel = CollectionViewModel(
+        let collectionServiceAssembler = CollectionServiceAssembly(
             imageLoaderService: viewModel.imageLoaderService,
-            nftsService: viewModel.nftsService,
-            collection: collection,
-            userService: viewModel.userService
+            nftService: viewModel.nftService,
+            collectionUI: collection
         )
-        let viewController = CollectionViewController(viewModel: viewModel)
-        viewController.hidesBottomBarWhenPushed = true
 
-        navigationController?.pushViewController(viewController, animated: true)
+        let collectionViewController = collectionServiceAssembler.build()
+        collectionViewController.hidesBottomBarWhenPushed = true
+
+        navigationController?.pushViewController(collectionViewController, animated: true)
     }
 
     // MARK: - Alert

@@ -29,19 +29,15 @@ final class ServicesAssembly {
         )
     }
 
-    var collectionsSortOptionService: CollectionsSortOptionStorageService {
-        CollectionsSortOptionStorageServiceImpl()
-    }
-
-    var nftsService: NftsService {
-        NftsServiceImpl()
+    var collectionsSortOptionService: CatalogSortOptionStorage {
+        CatalogSortOptionStorageImpl()
     }
 
     var imageLoaderService: ImageLoaderService {
         ImageLoaderServiceImpl()
     }
 
-    var userService: UserService {
-        UserServiceImpl()
-    }
+//    var userService: UserService {
+//        UserServiceImpl()
+//    }
 }

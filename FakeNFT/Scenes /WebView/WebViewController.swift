@@ -64,8 +64,8 @@ final class WebViewController: UIViewController, ErrorView {
 
     private func loadWebView() async {
         do {
-            let request = try await viewModel.authorRequest()
-            webView.load(request)
+//            let request = try await viewModel.authorRequest()
+//            webView.load(request)
             updateProgress()
         } catch {
             showWKWebViewError(error)
@@ -74,8 +74,8 @@ final class WebViewController: UIViewController, ErrorView {
 
     private func reloadWebView() async {
         do {
-            let request =  try await viewModel.authorRequest()
-            webView.load(request)
+//            let request =  try await viewModel.authorRequest()
+//            webView.load(request)
             webView.reload()
             webView.scrollView.refreshControl?.endRefreshing()
         } catch {

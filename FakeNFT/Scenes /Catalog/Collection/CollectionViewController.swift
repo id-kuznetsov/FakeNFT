@@ -34,7 +34,9 @@ final class CollectionViewController: UIViewController, ErrorView, RatingView {
     }()
 
     // MARK: - Init
-    init(viewModel: CollectionViewModelProtocol) {
+    init(
+        viewModel: CollectionViewModelProtocol
+    ) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
@@ -82,7 +84,6 @@ final class CollectionViewController: UIViewController, ErrorView, RatingView {
     // MARK: - Navigation
     private func presentWebViewController(with authorName: String) {
         let viewModel = WebViewViewModel(
-            userService: viewModel.userService,
             authorName: authorName
         )
         let viewController = WebViewController(viewModel: viewModel)
@@ -142,7 +143,7 @@ extension CollectionViewController: UICollectionViewDataSource {
                 indexPath: indexPath
             )
             header.configure(
-                with: viewModel.collection,
+                with: viewModel.collectionUI,
                 imageLoaderService: viewModel.imageLoaderService
             )
             header.delegate = self
@@ -206,7 +207,7 @@ extension CollectionViewController: UICollectionViewDelegateFlowLayout {
     ) -> CGSize {
         let headerView = CollectionHeaderView(frame: .zero)
         headerView.configure(
-            with: viewModel.collection,
+            with: viewModel.collectionUI,
             imageLoaderService: viewModel.imageLoaderService
         )
 

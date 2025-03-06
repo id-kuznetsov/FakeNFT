@@ -9,50 +9,56 @@ import Foundation
 import Combine
 
 protocol CollectionViewModelProtocol {
-    var collection: CollectionUI { get }
+    var collectionUI: CollectionUI { get }
     var imageLoaderService: ImageLoaderService { get }
-    var userService: UserService { get }
+//    var userService: UserService { get }
     var nfts: [NftUI] { get set }
     var nftsPublisher: Published<[NftUI]>.Publisher { get }
     func numberOfItems() -> Int
-    func getCollection(at indexPath: IndexPath) -> NftUI
+//    func getCollection(at indexPath: IndexPath) -> NftUI
 }
 
 final class CollectionViewModel: CollectionViewModelProtocol {
     let imageLoaderService: ImageLoaderService
-    let userService: UserService
-    private let nftsService: NftsService
+//    let userService: UserService
+    private let nftService: NftService
 
-    var collection: CollectionUI
+    var collectionUI: CollectionUI
 
-    @Published var nfts: [NftUI]
+    @Published var nfts = [NftUI]()
     var nftsPublisher: Published<[NftUI]>.Publisher { $nfts }
 
-    private var collectionAuthors = [UserUI]()
+//    private var collectionAuthors = [UserUI]()
 
     // MARK: - Init
     init(
         imageLoaderService: ImageLoaderService,
-        nftsService: NftsService,
-        collection: CollectionUI,
-        userService: UserService
+        nftService: NftService,
+        collectionUI: CollectionUI
     ) {
         self.imageLoaderService = imageLoaderService
-        self.nftsService = nftsService
-        self.collection = collection
-        self.nfts = []
-        self.userService = userService
-
-        nftsService.loadNfts { nfts in
-            self.nfts = nfts
-        }
+        self.nftService = nftService
+        self.collectionUI = collectionUI
     }
+
+//    func loadNftsForCollection() {
+//        for nftId in collectionUI.nfts {
+//            nftService.getNft(for: nftId) { [weak self] result in
+//                switch result {
+//                case .success(let nft):
+//                    self?.nfts.append(nft)
+//                case .failure(let error):
+//                    print(error)
+//                }
+//            }
+//        }
+//    }
 
     func numberOfItems() -> Int {
         nfts.count
     }
 
-    func getCollection(at indexPath: IndexPath) -> NftUI {
-        nfts[indexPath.row]
-    }
+//    func getCollection(at indexPath: IndexPath) -> NftUI {
+//        nfts[indexPath.row]
+//    }
 }

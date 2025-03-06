@@ -12,8 +12,8 @@ import Combine
 protocol CollectionsViewModelProtocol {
     var imageLoaderService: ImageLoaderService { get }
     var collectionsService: CollectionService { get }
-    var nftsService: NftsService { get }
-    var userService: UserService { get }
+    var nftService: NftService { get }
+//    var userService: UserService { get }
     var collections: AnyPublisher<[CollectionUI], Never> { get }
     var state: AnyPublisher<CollectionsState, Never> { get }
     func loadData(skipCache: Bool)
@@ -36,8 +36,8 @@ enum CollectionSortOptions: String {
 
 final class CollectionsViewModel: CollectionsViewModelProtocol {
     let imageLoaderService: ImageLoaderService
-    let nftsService: NftsService
-    let userService: UserService
+    let nftService: NftService
+//    let userService: UserService
     let collectionsService: CollectionService
 
     @Published private var _state: CollectionsState = .initial
@@ -45,7 +45,7 @@ final class CollectionsViewModel: CollectionsViewModelProtocol {
     @Published private var _collections: [CollectionUI] = []
     var collections: AnyPublisher<[CollectionUI], Never> { $_collections.eraseToAnyPublisher() }
 
-    private let collectionsSortOptionStorageService: CollectionsSortOptionStorageService
+    private let collectionsSortOptionStorageService: CatalogSortOptionStorage
     private var cancellables = Set<AnyCancellable>()
     private var currentPage = 0
     private var sortBy: CollectionSortOptions
@@ -56,14 +56,14 @@ final class CollectionsViewModel: CollectionsViewModelProtocol {
     init(
         imageLoaderService: ImageLoaderService,
         collectionsService: CollectionService,
-        nftsService: NftsService,
-        userService: UserService,
-        collectionsSortOptionStorageService: CollectionsSortOptionStorageService
+        nftService: NftService,
+//        userService: UserService,
+        collectionsSortOptionStorageService: CatalogSortOptionStorage
     ) {
         self.imageLoaderService = imageLoaderService
-        self.nftsService = nftsService
+        self.nftService = nftService
         self.collectionsService = collectionsService
-        self.userService = userService
+//        self.userService = userService
         self.collectionsSortOptionStorageService = collectionsSortOptionStorageService
         self.sortBy = collectionsSortOptionStorageService.loadSortOption()
     }
