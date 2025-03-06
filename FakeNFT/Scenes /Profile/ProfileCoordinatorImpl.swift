@@ -30,7 +30,14 @@ final class ProfileCoordinatorImpl: ProfileCoordinator {
     func myNFTsScene(nfts: [String], favourites: [String]) {
         let nftService = servicesAssembly.nftService
         let profileService = servicesAssembly.profileService
-        let viewModel = MyNFTsViewModelImpl(nftIds: nfts, nftService: nftService, profileService: profileService)
+        
+        let viewModel = MyNFTsViewModelImpl(
+            nftIds: nfts, 
+            favourites: favourites,
+            nftService: nftService,
+            profileService: profileService
+        )
+        
         let myNFTsViewController = MyNFTsViewController(viewModel: viewModel)
         navigationController.pushViewController(myNFTsViewController, animated: true)
     }

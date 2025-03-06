@@ -9,12 +9,18 @@ final class MyNFTCell: UITableViewCell, ReuseIdentifying {
     // MARK: - Public Properties
     
     weak var delegate: MyNFTCellDelegate?
+    var isLiked = false {
+        didSet {
+            nftCardView.isFavouriteButtonActive = isLiked
+        }
+    }
     
     // MARK: - Private Properties
     
     private lazy var nftCardView: NFTCardView = {
         let nftCard = NFTCardView()
         nftCard.delegate = self
+        nftCard.isFavouriteButtonActive = false
         nftCard.translatesAutoresizingMaskIntoConstraints = false
         return nftCard
     }()
@@ -117,8 +123,7 @@ final class MyNFTCell: UITableViewCell, ReuseIdentifying {
     
     // MARK: - Public Methods
     
-    func setupCell(nft: Nft, isLiked: Bool) {
-        nftCardView.isFavouriteButtonActive = isLiked
+    func setupCell(nft: Nft) {
         nftCardView.setImage(url: nft.previewImage)
         titleLabel.text = nft.name
         ratingStackView.setRating(nft.rating)
@@ -129,7 +134,7 @@ final class MyNFTCell: UITableViewCell, ReuseIdentifying {
     // MARK: - Private Methods
     
     private func setupContentView() {
-        contentView.backgroundColor = .clear
+        backgroundColor = .clear
         containerView.addSubviews(nftCardView, infoStackView, priceStackView)
         contentView.addSubview(containerView)
     }

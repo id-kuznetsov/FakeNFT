@@ -2,11 +2,9 @@ import Foundation
 
 protocol MyNFTsViewModel {
     var nfts: Observable<[Nft]> { get }
+    var isRefreshing: Observable<Bool> { get }
     
-    func didTapFavouriteButtonOnCell(
-        at indexPath: IndexPath,
-        _ completion: @escaping (Result<Bool, Error>) -> Void
-    )
-    
-    func didRefresh()
+    func isLikedNft(at indexPath: IndexPath) -> Bool
+    func didTapFavouriteButtonOnCell(at indexPath: IndexPath)
+    func refreshNfts()
 }

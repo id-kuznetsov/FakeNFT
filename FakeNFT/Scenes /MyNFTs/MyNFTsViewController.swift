@@ -17,11 +17,18 @@ final class MyNFTsViewController: UIViewController {
     
     private let viewModel: MyNFTsViewModel
     
+    private lazy var refreshControl: UIRefreshControl = {
+        let control = UIRefreshControl()
+        control.addTarget(self, action: #selector(refreshMyNfts), for: .valueChanged)
+        return control
+    }()
+    
     private lazy var tableView: UITableView = {
         let tableView = UITableView()
         tableView.register(MyNFTCell.self)
         tableView.delegate = self
         
+        tableView.refreshControl = refreshControl
         tableView.backgroundColor = .clear
         tableView.separatorColor = .clear
         tableView.allowsSelection = false
@@ -36,7 +43,9 @@ final class MyNFTsViewController: UIViewController {
                 return UITableViewCell()
             }
             
-            myNFTCell.setupCell(nft: nft, isLiked: false)
+            myNFTCell.delegate = self
+            myNFTCell.setupCell(nft: nft)
+            myNFTCell.isLiked = self?.viewModel.isLikedNft(at: indexPath) ?? false
             return myNFTCell
         }
     }()
@@ -76,7 +85,7 @@ final class MyNFTsViewController: UIViewController {
             tableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            tableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
         ])
     }
     
@@ -84,13 +93,29 @@ final class MyNFTsViewController: UIViewController {
         viewModel.nfts.bind { [weak self] nfts in
             self?.applySnapshot(nfts: nfts)
         }
+        
+        viewModel.isRefreshing.bind { [weak self] isRefreshing in
+            if !isRefreshing {
+                self?.stopRefresh()
+            }
+        }
     }
     
     private func applySnapshot(nfts: [Nft]) {
         var snapshot = Snapshot()
         snapshot.appendSections([.main])
         snapshot.appendItems(nfts)
-        dataSource.apply(snapshot, animatingDifferences: false)
+        dataSource.apply(snapshot, animatingDifferences: true)
+    }
+    
+    private func stopRefresh() {
+        refreshControl.endRefreshing()
+    }
+    
+    // MARK: - Actions
+    
+    @objc private func refreshMyNfts(_ sender: Any) {
+        viewModel.refreshNfts()
     }
 }
 
@@ -102,8 +127,11 @@ extension MyNFTsViewController: UITableViewDelegate {
     }
 }
 
+// MARK: - MyNFTCellDelegate
+
 extension MyNFTsViewController: MyNFTCellDelegate {
     func didTapFavouriteButton(on cell: MyNFTCell) {
-        
+        guard let indexPath = tableView.indexPath(for: cell) else { return }
+        viewModel.didTapFavouriteButtonOnCell(at: indexPath)
     }
 }

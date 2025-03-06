@@ -98,3 +98,4 @@ final class NFTCardView: UIView {
         isFavouriteButtonActive.toggle()
     }
 }
+

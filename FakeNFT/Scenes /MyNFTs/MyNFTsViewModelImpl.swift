@@ -5,49 +5,75 @@ final class MyNFTsViewModelImpl: MyNFTsViewModel {
     // MARK: - Public Properties
     
     let nfts: Observable<[Nft]> = Observable(value: [])
+    let isRefreshing: Observable<Bool> = Observable(value: false)
     
     // MARK: - Private Properties
     
+    private var favourites: [String] = []
     private let nftService: NftService
     private let profileService: ProfileService
     
     // MARK: - Init
     
-    init(nftIds: [NftID], nftService: NftService, profileService: ProfileService) {
+    init(nftIds: [NftID], favourites: [String], nftService: NftService, profileService: ProfileService) {
         self.nftService = nftService
         self.profileService = profileService
+        self.favourites = favourites
         fetchNfts(ids: nftIds)
     }
     
     // MARK: - Public Methods
     
-    func didTapFavouriteButtonOnCell(at indexPath: IndexPath, _ completion: @escaping (Result<Bool, Error>) -> Void) {
+    func isLikedNft(at indexPath: IndexPath) -> Bool {
+        guard indexPath.item < nfts.value.count else {
+            return false
+        }
         
+        let nftId = nfts.value[indexPath.item].id
+        return favourites.contains(where: { $0 == nftId })
     }
     
-    func didRefresh() {
-        profileService.fetchProfile { [weak self] result in
+    func didTapFavouriteButtonOnCell(at indexPath: IndexPath) {
+        if isLikedNft(at: indexPath) {
+            favourites = favourites.filter { $0 != nfts.value[indexPath.item].id }
+        } else {
+            favourites = favourites + [nfts.value[indexPath.item].id]
+        }
+        
+        profileService.updateFavouritesNft(favourites: favourites) { [weak self] result in
             switch result {
             case .success(let profile):
-                self?.nfts.value = []
-                self?.fetchNfts(ids: profile.nfts)
+                self?.favourites = profile.likes
             case .failure(_):
                 break
             }
         }
     }
     
+    func refreshNfts() {
+        isRefreshing.value = true
+        profileService.fetchProfile { [weak self] result in
+            switch result {
+            case .success(let profile):
+                self?.nfts.value = []
+                self?.favourites = profile.likes
+                self?.fetchNfts(ids: profile.nfts)
+            case .failure:
+                break
+            }
+            self?.isRefreshing.value = false
+        }
+    }
+    
     // MARK: - Private Methods
     
     private func fetchNfts(ids: [NftID]) {
-        for id in ids {
-            nftService.loadNft(id: id) { [weak self] result in
-                switch result {
-                case .success(let nft):
-                    self?.nfts.value += [nft]
-                case .failure:
-                    assertionFailure("Failed to load nft with id: \(id)")
-                }
+        nftService.loadNfts(ids: ids) { [weak self] result in
+            switch result {
+            case .success(let nfts):
+                self?.nfts.value = nfts
+            case .failure:
+                break
             }
         }
     }
