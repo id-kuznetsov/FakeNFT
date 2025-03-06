@@ -56,6 +56,13 @@ final class CollectionsTableViewCell: UITableViewCell, ReuseIdentifying {
         fatalError("init(coder:) has not been implemented")
     }
 
+    override func didMoveToWindow() {
+        super.didMoveToWindow()
+        if window != nil {
+            coverImageView.showShimmerAnimation()
+        }
+    }
+
     // MARK: - Config
     func configure(with model: CollectionUI, imageLoaderService: ImageLoaderService) {
         if model.isPlaceholder {

@@ -85,13 +85,13 @@ final class CollectionsViewModel: CollectionsViewModelProtocol {
     func loadData(skipCache: Bool = false) {
         currentPage = 0
         hasMorePages = true
+        _state = .loading
         loadNextPage(reset: true)
     }
 
     func loadNextPage(reset: Bool = false, skipCache: Bool = false) {
         guard !isLoadingPage, hasMorePages else { return }
 
-        _state = .loading
         isLoadingPage = true
 
         if reset {

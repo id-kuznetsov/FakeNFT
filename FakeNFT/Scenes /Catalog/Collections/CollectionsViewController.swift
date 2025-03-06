@@ -77,6 +77,11 @@ final class CollectionsViewController: UIViewController, FilterView, ErrorView, 
 
         setupLayout()
         bindViewModel()
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+
         viewModel.loadData(skipCache: false)
     }
 
