@@ -30,18 +30,13 @@ final class TabBarController: UITabBarController {
             selectedImage: UIImage(systemName: "person.circle.fill")
         )
 
-        let catalogViewModel = CollectionsViewModel(
-            imageLoaderService: servicesAssembly.imageLoaderService,
-            collectionsService: servicesAssembly.collectionsService,
-            nftsService: servicesAssembly.nftsService,
-            userService: servicesAssembly.userService
-        )
-        let catalogViewController = CollectionsViewController(viewModel: catalogViewModel)
+        let collectionsServiceAssembly = CollectionsServiceAssembly(servicesAssembler: servicesAssembly)
+        let catalogViewController = collectionsServiceAssembly.build()
         let catalogNavigationController = CustomNavigationController(rootViewController: catalogViewController)
         catalogNavigationController.tabBarItem = UITabBarItem(
             title: L10n.Tab.catalog,
             image: .catalogTab,
-            tag: 1
+            tag: 2
         )
 
         let cartVC = UINavigationController(rootViewController: CartViewController(servicesAssembly: servicesAssembly))

@@ -56,12 +56,27 @@ final class CollectionViewController: UIViewController, ErrorView, RatingView {
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+
         viewModel.nftsPublisher
             .receive(on: DispatchQueue.main)
-            .sink( receiveValue: { [weak self] _ in
-                self?.collectionView.reloadData()
-            })
+            .sink(
+                receiveValue: { [weak self] _ in
+                    guard let self = self else { return }
+                    self.reloadSectionCells(collectionView: self.collectionView, section: 0)
+                }
+            )
             .store(in: &subscribers)
+    }
+
+    private func reloadSectionCells(collectionView: UICollectionView, section: Int) {
+        let itemCount = collectionView.numberOfItems(inSection: section)
+        guard itemCount > 0 else { return }
+
+        let indexPaths = (0..<itemCount).map { IndexPath(item: $0, section: section) }
+
+        collectionView.performBatchUpdates({
+            collectionView.reloadItems(at: indexPaths)
+        }, completion: nil)
     }
 
     // MARK: - Navigation

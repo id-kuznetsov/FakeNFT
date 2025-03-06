@@ -75,7 +75,7 @@ struct AlertPresenter {
             let action = UIAlertAction(
                 title: button.title,
                 style: UIAlertAction.Style(from: button.style),
-                handler: { _ in button.action?() }
+                handler: { _ in button.action() }
             )
             alert.addAction(action)
         }

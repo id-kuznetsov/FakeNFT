@@ -8,10 +8,28 @@
 import UIKit
 import Combine
 
-final class CollectionsViewController: UIViewController, FilterView {
+final class CollectionsViewController: UIViewController, FilterView, ErrorView, LoadingView {
     // MARK: - Properties
     private let viewModel: CollectionsViewModelProtocol
     private var subscribers = Set<AnyCancellable>()
+
+    // MARK: - DataSource
+    private lazy var dataSource: UITableViewDiffableDataSource<Int, CollectionUI> = {
+        let dataSource = UITableViewDiffableDataSource<Int, CollectionUI>(
+            tableView: tableView,
+            cellProvider: { [weak self] tableView, indexPath, collection in
+                guard let self = self else { return UITableViewCell() }
+                let cell: CollectionsTableViewCell = tableView.dequeueReusableCell()
+                cell.selectionStyle = .none
+                cell.configure(
+                    with: collection,
+                    imageLoaderService: self.viewModel.imageLoaderService
+                )
+                return cell
+            }
+        )
+        return dataSource
+    }()
 
     // MARK: - UI
     private lazy var tableView: UITableView = {
@@ -20,9 +38,25 @@ final class CollectionsViewController: UIViewController, FilterView {
         view.register(CollectionsTableViewCell.self)
         view.rowHeight = LayoutConstants.CollectionsScreen.rowHeight
         view.separatorStyle = .none
+        view.refreshControl = refreshControlView
         view.delegate = self
-        view.dataSource = self
         view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+
+    private lazy var filterButton: UIBarButtonItem = {
+        let view = UIBarButtonItem()
+        view.style = .plain
+        view.image = .icSort
+        view.tintColor = .ypBlack
+        view.target = self
+        view.action = #selector(presentFilterActionSheet)
+        return view
+    }()
+
+    private lazy var refreshControlView: UIRefreshControl = {
+        let view = UIRefreshControl()
+        view.addTarget(self, action: #selector(didPullToRefresh), for: .valueChanged)
         return view
     }()
 
@@ -41,38 +75,73 @@ final class CollectionsViewController: UIViewController, FilterView {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        view.backgroundColor = .ypWhite
-        view.addSubview(tableView)
-        setupNavigationBar()
-        setupConstraints()
+        setupLayout()
+        bindViewModel()
+        viewModel.loadData(skipCache: false)
     }
 
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        viewModel.collectionsPublisher
+    // MARK: - Binding
+    private func bindViewModel() {
+        viewModel.collections
             .receive(on: DispatchQueue.main)
-            .sink( receiveValue: { [weak self] _ in
-                self?.tableView.reloadData()
+            .sink( receiveValue: { [weak self] collections in
+                self?.applySnapshot(collections)
             })
+            .store(in: &subscribers)
+
+        viewModel.state
+            .receive(on: DispatchQueue.main)
+            .dropFirst()
+            .sink( receiveValue: { [weak self] state in
+                guard let self = self else { return }
+
+                switch state {
+                case .loading:
+                    self.tableView.bounces = false
+                    self.tableView.isUserInteractionEnabled = false
+                    self.filterButton.isEnabled = false
+                    self.showLoading()
+                case .success:
+                    self.tableView.bounces = true
+                    self.tableView.isUserInteractionEnabled = true
+                    self.filterButton.isEnabled = true
+                    self.hideLoading()
+                case .failed(let error):
+                    self.hideLoading()
+                    self.showError(error)
+                    self.tableView.bounces = true
+                    self.tableView.isUserInteractionEnabled = true
+                    self.filterButton.isEnabled = true
+                default:
+                    break
+                }
+            })
+            .store(in: &subscribers)
+
+        tableView.publisher(for: \.contentOffset, options: [.new])
+            .sink { [weak self] contentOffset in
+                guard let self = self else { return }
+
+                let offsetY = contentOffset.y
+                let contentHeight = self.tableView.contentSize.height
+                let frameHeight = self.tableView.frame.size.height
+                let threshold: CGFloat = 10
+
+                guard contentHeight > frameHeight else { return }
+
+                if offsetY > contentHeight - frameHeight - threshold {
+                    self.viewModel.loadNextPage(reset: false, skipCache: false)
+                }
+            }
             .store(in: &subscribers)
     }
 
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
-        subscribers.forEach { $0.cancel() }
-        subscribers.removeAll()
-    }
-
-    // MARK: - Setup NavBar
-    private func setupNavigationBar() {
-        let filterButton = UIBarButtonItem(
-            image: .icSort,
-            style: .plain,
-            target: self,
-            action: #selector(presentFilterActionSheet)
-        )
-        filterButton.tintColor = .ypBlack
-        navigationItem.rightBarButtonItem = filterButton
+    private func applySnapshot(_ collections: [CollectionUI], animating: Bool = true) {
+        var snapshot = dataSource.snapshot()
+        snapshot.deleteAllItems()
+        snapshot.appendSections([0])
+        snapshot.appendItems(collections, toSection: 0)
+        dataSource.apply(snapshot, animatingDifferences: animating)
     }
 
     // MARK: - Navigation
@@ -91,21 +160,56 @@ final class CollectionsViewController: UIViewController, FilterView {
         navigationController?.pushViewController(viewController, animated: true)
     }
 
+    // MARK: - Alert
+    func showError(_ error: Error) {
+        showError(
+            error: error,
+            buttons: [
+                .cancel,
+                .reload(
+                    action: { [weak self] in
+                        guard let self else { return }
+
+                        self.viewModel.loadData(skipCache: false)
+                    }
+                )
+            ]
+        )
+    }
+
     // MARK: - Actions
     @objc
     private func presentFilterActionSheet() {
         showFilters(
             style: .actionSheet,
             buttons: [
-                .sortByName(action: viewModel.sortByCollectionName),
-                .sortByNftCount(action: viewModel.sortByNftCount),
+                .sortByName(action: { [weak self] in
+                    self?.viewModel.sortCollections(by: .name)
+                }),
+                .sortByNftCount(action: { [weak self] in
+                    self?.viewModel.sortCollections(by: .nfts)
+                }),
                 .close
             ]
         )
     }
 
+    @objc
+    private func didPullToRefresh() {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2) { [weak self] in
+            guard let self = self else { return }
+
+            self.refreshControlView.endRefreshing()
+            self.viewModel.loadData(skipCache: true)
+        }
+    }
+
     // MARK: - Constraints
-    private func setupConstraints() {
+    private func setupLayout() {
+        view.backgroundColor = .ypWhite
+        navigationItem.rightBarButtonItem = filterButton
+        view.addSubview(tableView)
+
         NSLayoutConstraint.activate([
             tableView.topAnchor.constraint(
                 equalTo: view.safeAreaLayoutGuide.topAnchor,
@@ -115,26 +219,6 @@ final class CollectionsViewController: UIViewController, FilterView {
             tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
         ])
-    }
-}
-
-// MARK: - UITableViewDataSource
-extension CollectionsViewController: UITableViewDataSource {
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        viewModel.collections.count
-    }
-
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell: CollectionsTableViewCell = tableView.dequeueReusableCell()
-        let collectionUI = viewModel.getCollection(at: indexPath)
-
-        cell.selectionStyle = .none
-        cell.configure(
-            with: collectionUI,
-            imageLoaderService: viewModel.imageLoaderService
-        )
-
-        return cell
     }
 }
 

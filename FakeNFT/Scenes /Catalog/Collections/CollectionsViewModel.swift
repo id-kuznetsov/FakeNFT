@@ -8,57 +8,128 @@
 import Foundation
 import Combine
 
+// MARK: - Protocol
 protocol CollectionsViewModelProtocol {
     var imageLoaderService: ImageLoaderService { get }
+    var collectionsService: CollectionService { get }
     var nftsService: NftsService { get }
     var userService: UserService { get }
-    var collections: [CollectionUI] { get }
-    var collectionsPublisher: Published<[CollectionUI]>.Publisher { get }
-    func numberOfRows() -> Int
+    var collections: AnyPublisher<[CollectionUI], Never> { get }
+    var state: AnyPublisher<CollectionsState, Never> { get }
+    func loadData(skipCache: Bool)
+    func loadNextPage(reset: Bool, skipCache: Bool)
+    func sortCollections(by option: CollectionSortOptions)
     func getCollection(at indexPath: IndexPath) -> CollectionUI
-    func sortByNftCount()
-    func sortByCollectionName()
+}
+
+// MARK: - State
+enum CollectionsState {
+    case initial, loading, failed(Error), success
+}
+
+// MARK: - Sort
+enum CollectionSortOptions: String {
+    case none
+    case name = "name"
+    case nfts = "nfts"
 }
 
 final class CollectionsViewModel: CollectionsViewModelProtocol {
     let imageLoaderService: ImageLoaderService
     let nftsService: NftsService
     let userService: UserService
-    private let collectionsService: CollectionsService
+    let collectionsService: CollectionService
 
-    @Published var collections: [CollectionUI]
-    var collectionsPublisher: Published<[CollectionUI]>.Publisher { $collections }
+    @Published private var _state: CollectionsState = .initial
+    var state: AnyPublisher<CollectionsState, Never> { $_state.eraseToAnyPublisher() }
+    @Published private var _collections: [CollectionUI] = []
+    var collections: AnyPublisher<[CollectionUI], Never> { $_collections.eraseToAnyPublisher() }
 
+    private let collectionsSortOptionStorageService: CollectionsSortOptionStorageService
+    private var cancellables = Set<AnyCancellable>()
+    private var currentPage = 0
+    private var sortBy: CollectionSortOptions
+    private var isLoadingPage = false
+    private var hasMorePages = true
+
+    // MARK: - Init
     init(
         imageLoaderService: ImageLoaderService,
-        collectionsService: CollectionsService,
+        collectionsService: CollectionService,
         nftsService: NftsService,
-        userService: UserService
+        userService: UserService,
+        collectionsSortOptionStorageService: CollectionsSortOptionStorageService
     ) {
-        self.collections = []
         self.imageLoaderService = imageLoaderService
         self.nftsService = nftsService
         self.collectionsService = collectionsService
         self.userService = userService
-
-        collectionsService.loadCollections { collections in
-            self.collections = collections
-        }
-    }
-
-    func numberOfRows() -> Int {
-        collections.count
+        self.collectionsSortOptionStorageService = collectionsSortOptionStorageService
+        self.sortBy = collectionsSortOptionStorageService.loadSortOption()
     }
 
     func getCollection(at indexPath: IndexPath) -> CollectionUI {
-        collections[indexPath.row]
+        guard _collections.indices.contains(indexPath.row) else {
+            fatalError("🔥 Index out of range: \(indexPath.row)")
+        }
+        return _collections[indexPath.row]
     }
 
-    func sortByNftCount() {
-        print("🎯 Сортировка по количеству NFT")
+    func sortCollections(by option: CollectionSortOptions) {
+        sortBy = option
+        collectionsSortOptionStorageService.saveSortOption(option)
+        loadData()
+
+    }
+    
+    func loadData(skipCache: Bool = false) {
+        currentPage = 0
+        hasMorePages = true
+        loadNextPage(reset: true)
     }
 
-    func sortByCollectionName() {
-        print("🎯 Сортировка по названию коллекции")
+    func loadNextPage(reset: Bool = false, skipCache: Bool = false) {
+        guard !isLoadingPage, hasMorePages else { return }
+
+        _state = .loading
+        isLoadingPage = true
+
+        if reset {
+            _collections = (0..<4).map { _ in CollectionUI.placeholder }
+        } else {
+            currentPage += 1
+        }
+
+        collectionsService.fetchCollections(
+            page: currentPage,
+            sortBy: sortBy,
+            skipCache: skipCache
+        )
+            .map { [weak self] newCollections -> CollectionsState in
+                guard let self = self else { return .failed(NSError(domain: "ViewModel", code: -1, userInfo: nil)) }
+
+                if newCollections.isEmpty {
+                    self.hasMorePages = false
+                }
+
+                if reset {
+                    self._collections = newCollections
+                } else {
+                    let uniqueNew = newCollections.filter { newItem in
+                        !self._collections.contains(where: { $0.id == newItem.id })
+                    }
+                    self._collections.append(contentsOf: uniqueNew)
+                }
+
+                return .success
+            }
+            .catch { error -> Just<CollectionsState> in
+                Just(.failed(error))
+            }
+            .sink { [weak self] newState in
+                self?.isLoadingPage = false
+                self?._state = newState
+            }
+            .store(in: &cancellables)
     }
 }
