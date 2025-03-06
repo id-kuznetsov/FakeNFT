@@ -20,7 +20,6 @@ final class RatingButton: UIButton {
     }
 
     private func setupView() {
-        setTitleColor(.ypYellowUniversal, for: .normal)
         titleLabel?.font = .caption2
     }
 
@@ -29,7 +28,12 @@ final class RatingButton: UIButton {
     }
 
     private func updateTitle() {
-        let stars = (0..<maxStars).map { $0 < rating ? "★" : "☆" }.joined(separator: "")
-        setTitle(stars, for: .normal)
+        let stars = String(repeating: "★", count: maxStars)
+        let attributedString = NSMutableAttributedString(string: stars)
+        for i in 0..<maxStars {
+            let starColor = i < rating ? UIColor.ypYellowUniversal : UIColor.ypLightGrey
+            attributedString.addAttribute(.foregroundColor, value: starColor, range: NSRange(location: i, length: 1))
+        }
+        setAttributedTitle(attributedString, for: .normal)
     }
 }
