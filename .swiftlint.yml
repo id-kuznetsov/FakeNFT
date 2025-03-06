@@ -1,0 +1,16 @@
+nesting:
+  type_level: 3
+
+disabled_rules:
+  - blanket_disable_command
+
+force_cast:
+  severity: warning
+
+force_try:
+  severity: warning
+
+function_parameter_count:
+  warning: 6
+  error: 8
+
