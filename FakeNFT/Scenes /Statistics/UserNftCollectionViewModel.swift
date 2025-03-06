@@ -13,6 +13,7 @@ protocol UserNftCollectionViewModelProtocol {
     var orderedNfts: Set<String> { get }
     var onNftCollectionUpdated: (() -> Void)? { get set }
     var onLoadingStateChanged: ((Bool) -> Void)? { get set }
+    var onErrorOccurred: ((String) -> Void)? { get set }
     func loadNftCollection()
     func toggleLike(for nfts: String)
     func toggleCart(for nftIds: String)
@@ -47,6 +48,7 @@ final class UserNftCollectionViewModel: UserNftCollectionViewModelProtocol {
     
     var onNftCollectionUpdated: (() -> Void)?
     var onLoadingStateChanged: ((Bool) -> Void)?
+    var onErrorOccurred: ((String) -> Void)?
     
     // MARK: - Initializers
     init(
@@ -85,9 +87,12 @@ final class UserNftCollectionViewModel: UserNftCollectionViewModelProtocol {
             likedNfts.insert(nftId)
         }
         
-        userService.updateUserLikes(likes: Array(likedNfts)) { result in
-            if case .failure(let error) = result {
-                print("Ошибка обновления лайков: \(error.localizedDescription)")
+        userService.updateUserLikes(likes: Array(likedNfts)) { [weak self] result in
+            switch result {
+            case .success:
+                self?.onNftCollectionUpdated?()
+            case .failure(let error):
+                self?.onErrorOccurred?("Ошибка обновления лайков: \(error.localizedDescription)")
             }
         }
     }
@@ -98,17 +103,17 @@ final class UserNftCollectionViewModel: UserNftCollectionViewModelProtocol {
         } else {
             orderedNfts.insert(nftId)
         }
-
-        orderService.updateOrder(nftIds: Array(orderedNfts)) { result in
+        
+        orderService.updateOrder(nftIds: Array(orderedNfts)) { [weak self] result in
             switch result {
             case .success:
-                print("Заказ успешно обновлен")
+                self?.onNftCollectionUpdated?()
             case .failure(let error):
-                print("Ошибка обновления заказа: \(error.localizedDescription)")
+                self?.onErrorOccurred?("Ошибка обновления заказа: \(error.localizedDescription)")
             }
         }
     }
-
+    
     
     private func loadOrder(using group: DispatchGroup) {
         group.enter()
@@ -118,7 +123,7 @@ final class UserNftCollectionViewModel: UserNftCollectionViewModelProtocol {
             case .success(let nftIds):
                 self?.orderedNfts = Set(nftIds)
             case .failure(let error):
-                print("Ошибка загрузки заказа: \(error.localizedDescription)")
+                self?.onErrorOccurred?("Ошибка загрузки заказа: \(error.localizedDescription)")
             }
         }
     }
@@ -131,7 +136,7 @@ final class UserNftCollectionViewModel: UserNftCollectionViewModelProtocol {
             case .success(let likes):
                 self?.likedNfts = Set(likes)
             case .failure(let error):
-                print("Ошибка загрузки лайков: \(error.localizedDescription)")
+                self?.onErrorOccurred?("Ошибка загрузки лайков: \(error.localizedDescription)")
             }
         }
     }
@@ -141,13 +146,13 @@ final class UserNftCollectionViewModel: UserNftCollectionViewModelProtocol {
         
         for nftId in nftIds {
             group.enter()
-            nftService.loadNft(id: nftId) { result in
+            nftService.loadNft(id: nftId) { [weak self] result in
                 defer { group.leave() }
                 switch result {
                 case .success(let nft):
                     loadedNfts.append(nft)
                 case .failure(let error):
-                    print("Ошибка при загрузке NFT \(nftId): \(error.localizedDescription)")
+                    self?.onErrorOccurred?("Ошибка при загрузке NFT \(error.localizedDescription)")
                 }
             }
         }

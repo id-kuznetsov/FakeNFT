@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class UserNftCollectionViewController: UIViewController {
+final class UserNftCollectionViewController: UIViewController, ErrorView {
     
     // MARK: - Private properties
     private var viewModel: UserNftCollectionViewModelProtocol
@@ -60,6 +60,17 @@ final class UserNftCollectionViewController: UIViewController {
         viewModel.onLoadingStateChanged = { [weak self] isLoading in
             DispatchQueue.main.async {
                 isLoading ? self?.showLoadingIndicator() : self?.hideLoadingIndicator()
+            }
+        }
+        
+        viewModel.onErrorOccurred = { [weak self] errorMessage in
+            DispatchQueue.main.async {
+                let errorModel = ErrorModel(
+                    message: errorMessage,
+                    actionText: "Повторить",
+                    action: { self?.viewModel.loadNftCollection() }
+                )
+                self?.showError(errorModel)
             }
         }
     }
