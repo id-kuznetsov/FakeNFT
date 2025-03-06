@@ -16,7 +16,7 @@ struct AlertModel {
     let message: String?
     let buttons: [AlertButton]
     let style: AlertStyle
-    
+
     init(
         title: String?,
         message: String?,

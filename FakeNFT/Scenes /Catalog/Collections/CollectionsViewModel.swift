@@ -30,8 +30,8 @@ enum CollectionsState {
 // MARK: - Sort
 enum CollectionSortOptions: String {
     case none
-    case name = "name"
-    case nfts = "nfts"
+    case name
+    case nfts
 }
 
 final class CollectionsViewModel: CollectionsViewModelProtocol {
@@ -81,7 +81,7 @@ final class CollectionsViewModel: CollectionsViewModelProtocol {
         loadData()
 
     }
-    
+
     func loadData(skipCache: Bool = false) {
         currentPage = 0
         hasMorePages = true

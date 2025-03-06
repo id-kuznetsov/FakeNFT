@@ -69,7 +69,9 @@ extension UICollectionView {
             withReuseIdentifier: T.defaultReuseIdentifier,
             for: indexPath
         ) as? T else {
-            assertionFailure("Could not dequeue ReusableView with identifier: \(T.defaultReuseIdentifier) for: \(indexPath)")
+            assertionFailure(
+                "Could not dequeue ReusableView with identifier: \(T.defaultReuseIdentifier) for: \(indexPath)"
+            )
             return T()
         }
         return reusableSupplementaryView

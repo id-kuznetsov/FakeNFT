@@ -46,7 +46,7 @@ extension NftUI {
                 images: [
                     URL(string: "https://exemple.net/1.png")!,
                     URL(string: "https://code.s3.yandex.net/Mobile/iOS/NFT/Beige/Finn/2.png")!,
-                    URL(string: "https://code.s3.yandex.net/Mobile/iOS/NFT/Beige/Finn/3.png")!,
+                    URL(string: "https://code.s3.yandex.net/Mobile/iOS/NFT/Beige/Finn/3.png")!
                 ],
                 rating: 2,
                 description: "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.",

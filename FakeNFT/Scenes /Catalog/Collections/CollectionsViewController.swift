@@ -17,7 +17,7 @@ final class CollectionsViewController: UIViewController, FilterView, ErrorView, 
     private lazy var dataSource: UITableViewDiffableDataSource<Int, CollectionUI> = {
         let dataSource = UITableViewDiffableDataSource<Int, CollectionUI>(
             tableView: tableView,
-            cellProvider: { [weak self] tableView, indexPath, collection in
+            cellProvider: { [weak self] tableView, _, collection in
                 guard let self = self else { return UITableViewCell() }
                 let cell: CollectionsTableViewCell = tableView.dequeueReusableCell()
                 cell.selectionStyle = .none

@@ -16,14 +16,16 @@ final class TabBarController: UITabBarController {
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
         setupTabBarAppearance()
         setupTabs()
     }
 
     // MARK: - Tabs
     private func setupTabs() {
-        let profileVC = UINavigationController(rootViewController: ProfileViewController(servicesAssembly: servicesAssembly))
+        let profileVC = UINavigationController(
+            rootViewController: ProfileViewController(servicesAssembly: servicesAssembly)
+        )
         profileVC.tabBarItem = UITabBarItem(
             title: NSLocalizedString("Tab.profile", comment: ""),
             image: UIImage(systemName: "person.circle"),
@@ -46,7 +48,9 @@ final class TabBarController: UITabBarController {
             selectedImage: UIImage(systemName: "bag.fill")
         )
 
-        let statisticsVC = UINavigationController(rootViewController: StatisticsViewController(servicesAssembly: servicesAssembly))
+        let statisticsVC = UINavigationController(
+            rootViewController: StatisticsViewController(servicesAssembly: servicesAssembly)
+        )
         statisticsVC.tabBarItem = UITabBarItem(
             title: NSLocalizedString("Tab.statistic", comment: ""),
             image: UIImage(systemName: "chart.bar"),
@@ -64,7 +68,7 @@ final class TabBarController: UITabBarController {
         )
         self.selectedIndex = 1
     }
-    
+
     // MARK: - Appearance
     private func setupTabBarAppearance() {
         let appearance = UITabBarAppearance()

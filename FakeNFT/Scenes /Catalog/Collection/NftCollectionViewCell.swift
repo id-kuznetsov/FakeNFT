@@ -125,8 +125,7 @@ final class NftCollectionViewCell: UICollectionViewCell, ReuseIdentifying {
         imageLoaderService.loadImage(
             into: nftImageView,
             from: url
-        )
-        { [weak self] result in
+        ) { [weak self] result in
             guard let self else { return }
 
             self.hideLoadingAnimation()

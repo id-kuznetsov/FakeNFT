@@ -137,7 +137,10 @@ extension CollectionViewController: UICollectionViewDataSource {
         at indexPath: IndexPath
     ) -> UICollectionReusableView {
         if kind == UICollectionView.elementKindSectionHeader {
-            let header: CollectionHeaderView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, indexPath: indexPath)
+            let header: CollectionHeaderView = collectionView.dequeueReusableSupplementaryView(
+                ofKind: kind,
+                indexPath: indexPath
+            )
             header.configure(
                 with: viewModel.collection,
                 imageLoaderService: viewModel.imageLoaderService
@@ -248,7 +251,7 @@ extension CollectionViewController: NftCollectionViewCellDelegate {
 
         showChangeRating(image)
     }
-    
+
     func nftCollectionViewCellDidTapFavorite(_ cell: NftCollectionViewCell) {
         if cell.favoriteButton.tintColor == .ypWhiteUniversal {
             cell.favoriteButton.tintColor = .ypRedUniversal
@@ -256,7 +259,7 @@ extension CollectionViewController: NftCollectionViewCellDelegate {
             cell.favoriteButton.tintColor = .ypWhiteUniversal
         }
     }
-    
+
     func nftCollectionViewCellDidTapCart(_ cell: NftCollectionViewCell) {
         if cell.cartButton.image(for: .normal) == .icCart {
             cell.cartButton.setImage(.icCartDelete, for: .normal)

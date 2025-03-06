@@ -24,7 +24,7 @@ public final class CollectionsServiceAssembly {
             collectionsSortOptionStorageService: servicesAssembler.collectionsSortOptionService
         )
         let viewController = CollectionsViewController(viewModel: viewModel)
-        
+
         return viewController
     }
 }

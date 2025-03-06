@@ -30,11 +30,11 @@ class CacheServiceImpl: CacheService {
                 try fileManager.createDirectory(at: cacheURL, withIntermediateDirectories: true)
                 self.cacheDirectory = cacheURL
             } catch {
-                print("⚠️ Ошибка создания папки кэша: \(error.localizedDescription)")
+                print("⚠️ CacheService - Ошибка создания папки кэша: \(error.localizedDescription)")
                 self.cacheDirectory = nil
             }
         } else {
-            print("⚠️ Не удалось получить путь к папки кэша")
+            print("⚠️  CacheService -Не удалось получить путь к папки кэша")
             self.cacheDirectory = nil
         }
     }
@@ -102,7 +102,7 @@ class CacheServiceImpl: CacheService {
         memoryCache.removeObject(forKey: key as NSString)
 
         guard let cacheDirectory = cacheDirectory else { return }
-        
+
         let cacheFile = cacheDirectory.appendingPathComponent("\(key).json")
         try? fileManager.removeItem(at: cacheFile)
     }
