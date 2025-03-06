@@ -43,9 +43,7 @@ final class ProfileCoordinatorImpl: ProfileCoordinator {
     }
     
     func favouritesScene(likes: [String]) {
-        let vc = UIViewController()
-        vc.view.backgroundColor = .ypWhite
-        vc.hidesBottomBarWhenPushed = true
+        let vc = FavouriteNFTsViewController(service: servicesAssembly.nftService, favourites: likes)
         navigationController.pushViewController(vc, animated: true)
     }
     
