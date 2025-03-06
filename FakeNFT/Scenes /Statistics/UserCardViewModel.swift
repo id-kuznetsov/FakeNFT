@@ -53,7 +53,12 @@ final class UserCardViewModel: UserCardViewModelProtocol {
     }
     
     func createUserCollectionViewModel() -> UserNftCollectionViewModelProtocol {
-        return UserNftCollectionViewModel(nftService: nftService, nftIds: nftIds)
+        return UserNftCollectionViewModel(
+            nftService: nftService,
+            userService: userService,
+            userId: userId,
+            nftIds: nftIds
+        )
     }
     
     func checkUserWebsite(completion: @escaping (Bool) -> Void) {

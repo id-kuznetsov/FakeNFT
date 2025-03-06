@@ -109,7 +109,12 @@ extension UserNftCollectionViewController: UICollectionViewDataSource {
         }
         
         let nft = viewModel.nftCollection[indexPath.row]
-        cell.configure(with: nft)
+        let isLiked = viewModel.likedNfts.contains(nft.id)
+        
+        cell.configure(with: nft, isLiked: isLiked)
+        cell.onLikeTapped = { [weak self] nftId in
+            self?.viewModel.toggleLike(for: nftId)
+        }
         
         return cell
     }

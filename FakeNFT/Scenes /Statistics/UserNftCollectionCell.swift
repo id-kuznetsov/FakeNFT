@@ -27,6 +27,7 @@ final class UserNftCollectionCell: UICollectionViewCell {
         button.setImage(heartImage, for: .normal)
         button.tintColor = .ypWhite
         button.backgroundColor = .clear
+        button.addTarget(self, action: #selector(likeTapped), for: .touchUpInside)
         return button
     }()
     
@@ -54,6 +55,9 @@ final class UserNftCollectionCell: UICollectionViewCell {
     
     private lazy var backView = UIImageView()
     private lazy var ratingStackView = RatingStackView()
+    private var nftId: String = ""
+    
+    var onLikeTapped: ((String) -> Void)?
     
     // MARK: - Initializers
     override init(frame: CGRect) {
@@ -70,7 +74,7 @@ final class UserNftCollectionCell: UICollectionViewCell {
     // MARK: - Private methods
     private func setupUI() {
         contentView.backgroundColor = .ypWhite
-
+        
         [nftImageView, likeButton, backView].forEach { element in
             contentView.addSubview(element)
             element.translatesAutoresizingMaskIntoConstraints = false
@@ -120,17 +124,22 @@ final class UserNftCollectionCell: UICollectionViewCell {
         ])
     }
     
+    @objc private func likeTapped() {
+        onLikeTapped?(nftId)
+    }
+    
     // MARK: - Public methods
-    func configure(with model: Nft) {
+    func configure(with model: Nft, isLiked: Bool) {
         if let imageUrl = model.images.first {
             nftImageView.kf.setImage(with: imageUrl)
         } else {
             nftImageView.image = UIImage(named: "ic.close")
         }
-
+        
         nftNameLabel.text = model.name
         ratingStackView.setRating(model.rating)
         priceLabel.text = "\(model.price) ETH"
-        likeButton.tintColor = (model.isFavorite ?? false) ? .ypRedUniversal : .ypWhite
+        nftId = model.id
+        likeButton.tintColor = isLiked ? .ypRedUniversal : .ypWhite
     }
 }

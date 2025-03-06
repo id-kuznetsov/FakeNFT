@@ -11,6 +11,8 @@ protocol UserService {
     func fetchUsers(page: Int, size: Int, completion: @escaping (Result<[User], Error>) -> Void)
     func fetchUser(by id: String, completion: @escaping (Result<User, Error>) -> Void)
     func checkUserWebsite(url: URL, completion: @escaping (Bool) -> Void)
+    func fetchUserLikes(completion: @escaping (Result<[String], Error>) -> Void)
+    func updateUserLikes(likes: [String], completion: @escaping (Result<Void, Error>) -> Void)
 }
 
 final class UserServiceImpl: UserService {
@@ -65,6 +67,37 @@ final class UserServiceImpl: UserService {
                 completion(true)
             case .failure:
                 completion(false)
+            }
+        }
+    }
+    
+    func fetchUserLikes(
+        completion: @escaping (Result<[String], Error>
+        ) -> Void) {
+        let request = UserLikesRequest()
+        
+        networkClient.send(request: request, type: UserLikesResponse.self) { result in
+            switch result {
+            case .success(let response):
+                completion(.success(response.likes))
+            case .failure(let error):
+                completion(.failure(error))
+            }
+        }
+    }
+    
+    func updateUserLikes(
+        likes: [String],
+        completion: @escaping (Result<Void, Error>
+        ) -> Void) {
+        let request = UpdateUserLikesRequest(likes: likes)
+        
+        networkClient.send(request: request) { result in
+            switch result {
+            case .success:
+                completion(.success(()))
+            case .failure(let error):
+                completion(.failure(error))
             }
         }
     }
