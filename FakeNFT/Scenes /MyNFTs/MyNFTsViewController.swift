@@ -50,6 +50,27 @@ final class MyNFTsViewController: UIViewController {
         }
     }()
     
+    private lazy var sortBarButtonItem: UIBarButtonItem = {
+        let button = UIBarButtonItem(
+            image: .icSort,
+            style: .done,
+            target: self,
+            action: #selector(sortButtonDidTap)
+        )
+        button.tintColor = .ypBlack
+        return button
+    }()
+    
+    private lazy var placeholderLabel: UILabel = {
+        let label = UILabel()
+        label.text = "У Вас еще нет NFT"
+        label.font = .bodyBold
+        label.textColor = .ypBlack
+        label.isHidden = true
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
     // MARK: - Init
     
     init(viewModel: MyNFTsViewModel) {
@@ -77,7 +98,8 @@ final class MyNFTsViewController: UIViewController {
     
     private func setupView() {
         view.backgroundColor = .ypWhite
-        view.addSubviews(tableView)
+        view.addSubviews(tableView, placeholderLabel)
+        navigationItem.rightBarButtonItem = sortBarButtonItem
     }
     
     private func setupLayout() {
@@ -86,11 +108,17 @@ final class MyNFTsViewController: UIViewController {
             tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            
+            placeholderLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            placeholderLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor),
         ])
     }
     
     private func setupDataBindings() {
         viewModel.nfts.bind { [weak self] nfts in
+            self?.tableView.isHidden = nfts.isEmpty
+            self?.placeholderLabel.isHidden = !nfts.isEmpty
+            
             self?.applySnapshot(nfts: nfts)
         }
         
@@ -116,6 +144,12 @@ final class MyNFTsViewController: UIViewController {
     
     @objc private func refreshMyNfts(_ sender: Any) {
         viewModel.refreshNfts()
+    }
+    
+    @objc private func sortButtonDidTap() {
+        AlertPresenter.presentSortAlert(on: self, sortOptions: [.price, .rating, .name]) { [weak self] option in
+            self?.viewModel.sortNfts(by: option)
+        }
     }
 }
 

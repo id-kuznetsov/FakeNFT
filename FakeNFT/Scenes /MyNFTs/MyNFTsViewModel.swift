@@ -7,4 +7,5 @@ protocol MyNFTsViewModel {
     func isLikedNft(at indexPath: IndexPath) -> Bool
     func didTapFavouriteButtonOnCell(at indexPath: IndexPath)
     func refreshNfts()
+    func sortNfts(by option: SortOption)
 }
