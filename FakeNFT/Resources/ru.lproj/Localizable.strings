@@ -20,6 +20,7 @@
 "Cart.delete.conformText" = "Вы уверены, что хотите удалить объект из корзины?";
 "Cart.delete.buttonDelete" = "Удалить";
 "Cart.delete.buttonReturn" = "Вернуться";
+"Cart.errorAlert.somethingGoesWrong" = "Что-то пошло не так(";
 
 "Payment.title" = "Выберите способ оплаты";
 "Payment.button.pay" = "Оплатить";

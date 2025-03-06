@@ -220,7 +220,8 @@ final class CartViewController: UIViewController {
     private func showErrorAlert(message: String) {
         AlertPresenter.presentAlertWithTwoSelections(
             on: self,
-            title: L10n.Payment.ErrorAlert.title,
+            title: L10n.Cart.ErrorAlert.somethingGoesWrong,
+            message: message,
             firstActionTitle: L10n.Payment.ErrorAlert.cancelTitle,
             secondActionTitle: L10n.Payment.ErrorAlert.repeatTitle) { [weak self] in
                 self?.viewModel.loadData()

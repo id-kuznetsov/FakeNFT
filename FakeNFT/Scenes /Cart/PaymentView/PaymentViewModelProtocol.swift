@@ -10,7 +10,7 @@ import Foundation
 protocol PaymentViewModelProtocol {
     var onItemsUpdate: (() -> Void)? { get set }
     var onPaymentProcessingStart: (() -> Void)? { get set }
-    var onError: (() -> Void)? { get set }
+    var onPaymentError: (() -> Void)? { get set }
 
     var paymentMethodCount: Int { get }
     

@@ -157,7 +157,7 @@ final class PaymentViewController: UIViewController {
             
         }
         
-        viewModel.onError = { [weak self] in
+        viewModel.onPaymentError = { [weak self] in
             self?.showPaymentErrorAlert()
         }
     }
@@ -200,7 +200,11 @@ final class PaymentViewController: UIViewController {
     private func setLoadingStateForPayment(isLoading: Bool) {
         isLoading ? activityIndicator.startAnimating() : activityIndicator.stopAnimating()
         
-        view.isUserInteractionEnabled = !isLoading
+        setInteractionEnabled(!isLoading)
+    }
+    
+    private func setInteractionEnabled(_ isEnabled: Bool) {
+        UIApplication.shared.windows.first?.isUserInteractionEnabled = isEnabled
     }
     
     private func showSuccessScreen() {
@@ -212,6 +216,7 @@ final class PaymentViewController: UIViewController {
     }
     
     private func showPaymentErrorAlert() {
+        setInteractionEnabled(true)
         let cancelPaymentAction: () -> Void = { [weak self] in
             self?.setLoadingState(isLoading: false)
         }
@@ -230,7 +235,7 @@ final class PaymentViewController: UIViewController {
             on: self,
             title: L10n.Payment.Alert.title,
             message: L10n.Payment.Alert.message,
-            actionTitle: "Ok"
+            actionTitle: L10n.Payment.Alert.buttonTextOk
         )
     }
     
@@ -314,7 +319,7 @@ extension PaymentViewController: UICollectionViewDelegate {
         guard let item = collectionView.cellForItem(at: indexPath) as? PaymentCollectionViewCell else { return }
         
         if let prevIndex = viewModel.getSelectedCurrencyIndex(),
-           let prevCell = collectionView.cellForItem(at: IndexPath(row: prevIndex, section: 0)) as? PaymentCollectionViewCell { 
+           let prevCell = collectionView.cellForItem(at: IndexPath(row: prevIndex, section: 0)) as? PaymentCollectionViewCell {
             prevCell.makeCellSelected(isSelected: false)
         }
         viewModel.setSelectedCurrencyIndex(indexPath.item)

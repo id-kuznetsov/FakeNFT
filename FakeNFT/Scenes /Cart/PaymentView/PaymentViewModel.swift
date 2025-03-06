@@ -13,7 +13,7 @@ final class PaymentViewModel: PaymentViewModelProtocol {
     
     var onItemsUpdate: (() -> Void)?
     var onPaymentProcessingStart: (() -> Void)?
-    var onError: (() -> Void)?
+    var onPaymentError: (() -> Void)?
     
     var paymentMethodCount: Int {
         currencyCards.count
@@ -51,7 +51,7 @@ final class PaymentViewModel: PaymentViewModelProtocol {
                 self?.onItemsUpdate?()
             case .failure(let error):
                 assertionFailure("Error: \(error) in \(#function) \(#file)")
-                self?.onError?()
+                self?.onPaymentError?()
             }
         }
     }
@@ -79,11 +79,11 @@ final class PaymentViewModel: PaymentViewModelProtocol {
                 if response.success == true {
                     self?.onPaymentProcessingStart?()
                 } else {
-                    self?.onError?()
+                    self?.onPaymentError?()
                 }
             case .failure(let error):
                 print("Error: \(error) in \(#function) \(#file)")
-                self?.onError?()
+                self?.onPaymentError?()
             }
         }
     }
