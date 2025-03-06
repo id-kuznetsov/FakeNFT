@@ -49,6 +49,7 @@ final class TabBarController: UITabBarController {
         let statisticsViewModel = StatisticsViewModel(
             userService: servicesAssembly.userService,
             nftService: servicesAssembly.nftService,
+            orderService: servicesAssembly.orderService,
             userDefaultsStorage: StatisticsUserDefaultsStorage(),
             cacheStorage: StatisticsCacheStorage()
         )

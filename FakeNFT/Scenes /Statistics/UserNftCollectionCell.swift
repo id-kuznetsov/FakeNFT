@@ -50,6 +50,7 @@ final class UserNftCollectionCell: UICollectionViewCell {
         let cartImage = UIImage(named: "ic.cart")
         button.setImage(cartImage, for: .normal)
         button.tintColor = .ypBlack
+        button.addTarget(self, action: #selector(cartTapped), for: .touchUpInside)
         return button
     }()
     
@@ -58,6 +59,7 @@ final class UserNftCollectionCell: UICollectionViewCell {
     private var nftId: String = ""
     
     var onLikeTapped: ((String) -> Void)?
+    var onCartTapped: ((String) -> Void)?
     
     // MARK: - Initializers
     override init(frame: CGRect) {
@@ -122,14 +124,19 @@ final class UserNftCollectionCell: UICollectionViewCell {
             cartButton.widthAnchor.constraint(equalToConstant: 40),
             cartButton.heightAnchor.constraint(equalTo: cartButton.widthAnchor)
         ])
+        backView.isUserInteractionEnabled = true
     }
     
     @objc private func likeTapped() {
         onLikeTapped?(nftId)
     }
     
+    @objc private func cartTapped() {
+        onCartTapped?(nftId)
+    }
+    
     // MARK: - Public methods
-    func configure(with model: Nft, isLiked: Bool) {
+    func configure(with model: Nft, isLiked: Bool, isInCart: Bool) {
         if let imageUrl = model.images.first {
             nftImageView.kf.setImage(with: imageUrl)
         } else {
@@ -141,5 +148,8 @@ final class UserNftCollectionCell: UICollectionViewCell {
         priceLabel.text = "\(model.price) ETH"
         nftId = model.id
         likeButton.tintColor = isLiked ? .ypRedUniversal : .ypWhite
+        
+        let cartImage = isInCart ? UIImage(named: "ic.cart.fill") : UIImage(named: "ic.cart")
+        cartButton.setImage(cartImage, for: .normal)
     }
 }

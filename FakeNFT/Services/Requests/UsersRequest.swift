@@ -12,7 +12,7 @@ struct UsersRequest: NetworkRequest {
     let size: Int
     
     var endpoint: URL? {
-        URL(string: "\(RequestConstants.baseURL)/api/v1/users?page=\(page)&size=\(size)")
+        URL(string: "\(RequestConstants.baseURL)/\(RequestConstants.users)?page=\(page)&size=\(size)")
     }
     
     var dto: Dto? { nil }

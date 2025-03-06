@@ -29,6 +29,7 @@ final class UserCardViewModel: UserCardViewModelProtocol {
     // MARK: - Private properties
     private let userService: UserService
     private let nftService: NftService
+    private let orderService: OrderService
     private let userId: String
     private var nftIds: [String] = []
     
@@ -41,10 +42,18 @@ final class UserCardViewModel: UserCardViewModelProtocol {
     }
     
     // MARK: - Initializers
-    init(userService: UserService, nftService: NftService, userId: String) {
+    init(
+        userService: UserService,
+        nftService: NftService,
+        orderService: OrderService,
+        userId: String,
+        nftIds: [String]
+    ) {
         self.userService = userService
         self.nftService = nftService
+        self.orderService = orderService
         self.userId = userId
+        self.nftIds = nftIds
     }
     
     // MARK: Public methods
@@ -56,6 +65,7 @@ final class UserCardViewModel: UserCardViewModelProtocol {
         return UserNftCollectionViewModel(
             nftService: nftService,
             userService: userService,
+            orderService: orderService,
             userId: userId,
             nftIds: nftIds
         )

@@ -11,7 +11,7 @@ struct UpdateUserLikesRequest: NetworkRequest {
     let likes: [String]
     
     var endpoint: URL? {
-        URL(string: "\(RequestConstants.baseURL)/api/v1/profile/1")
+        URL(string: "\(RequestConstants.baseURL)/\(RequestConstants.profile)")
     }
     
     var httpMethod: HttpMethod { .put }

@@ -110,10 +110,14 @@ extension UserNftCollectionViewController: UICollectionViewDataSource {
         
         let nft = viewModel.nftCollection[indexPath.row]
         let isLiked = viewModel.likedNfts.contains(nft.id)
+        let isInCart = viewModel.orderedNfts.contains(nft.id)
         
-        cell.configure(with: nft, isLiked: isLiked)
+        cell.configure(with: nft, isLiked: isLiked, isInCart: isInCart)
         cell.onLikeTapped = { [weak self] nftId in
             self?.viewModel.toggleLike(for: nftId)
+        }
+        cell.onCartTapped = { [weak self] nftId in
+            self?.viewModel.toggleCart(for: nftId)
         }
         
         return cell
@@ -146,6 +150,6 @@ extension UserNftCollectionViewController: UICollectionViewDelegateFlowLayout {
         layout collectionViewLayout: UICollectionViewLayout,
         minimumLineSpacingForSectionAt section: Int
     ) -> CGFloat {
-        8
+        28
     }
 }

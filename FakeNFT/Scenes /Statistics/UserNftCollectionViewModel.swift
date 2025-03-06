@@ -10,10 +10,12 @@ import UIKit
 protocol UserNftCollectionViewModelProtocol {
     var nftCollection: [Nft] { get }
     var likedNfts: Set<String> { get }
+    var orderedNfts: Set<String> { get }
     var onNftCollectionUpdated: (() -> Void)? { get set }
     var onLoadingStateChanged: ((Bool) -> Void)? { get set }
     func loadNftCollection()
     func toggleLike(for nfts: String)
+    func toggleCart(for nftIds: String)
 }
 
 final class UserNftCollectionViewModel: UserNftCollectionViewModelProtocol {
@@ -21,6 +23,7 @@ final class UserNftCollectionViewModel: UserNftCollectionViewModelProtocol {
     // MARK: - Private properties
     private let nftService: NftService
     private let userService: UserService
+    private let orderService: OrderService
     private let userId: String
     private let nftIds: [String]
     
@@ -36,13 +39,26 @@ final class UserNftCollectionViewModel: UserNftCollectionViewModelProtocol {
         }
     }
     
+    private(set) var orderedNfts: Set<String> = [] {
+        didSet {
+            onNftCollectionUpdated?()
+        }
+    }
+    
     var onNftCollectionUpdated: (() -> Void)?
     var onLoadingStateChanged: ((Bool) -> Void)?
     
     // MARK: - Initializers
-    init(nftService: NftService, userService: UserService, userId: String, nftIds: [String]) {
+    init(
+        nftService: NftService,
+        userService: UserService,
+        orderService: OrderService,
+        userId: String,
+        nftIds: [String]
+    ) {
         self.nftService = nftService
         self.userService = userService
+        self.orderService = orderService
         self.userId = userId
         self.nftIds = nftIds
     }
@@ -55,6 +71,7 @@ final class UserNftCollectionViewModel: UserNftCollectionViewModelProtocol {
         
         loadUserLikes(using: group)
         loadNfts(using: group)
+        loadOrder(using: group)
         
         group.notify(queue: .main) {
             self.onLoadingStateChanged?(false)
@@ -71,6 +88,37 @@ final class UserNftCollectionViewModel: UserNftCollectionViewModelProtocol {
         userService.updateUserLikes(likes: Array(likedNfts)) { result in
             if case .failure(let error) = result {
                 print("Ошибка обновления лайков: \(error.localizedDescription)")
+            }
+        }
+    }
+    
+    func toggleCart(for nftId: String) {
+        if orderedNfts.contains(nftId) {
+            orderedNfts.remove(nftId)
+        } else {
+            orderedNfts.insert(nftId)
+        }
+
+        orderService.updateOrder(nftIds: Array(orderedNfts)) { result in
+            switch result {
+            case .success:
+                print("Заказ успешно обновлен")
+            case .failure(let error):
+                print("Ошибка обновления заказа: \(error.localizedDescription)")
+            }
+        }
+    }
+
+    
+    private func loadOrder(using group: DispatchGroup) {
+        group.enter()
+        orderService.fetchOrder { [weak self] result in
+            defer { group.leave() }
+            switch result {
+            case .success(let nftIds):
+                self?.orderedNfts = Set(nftIds)
+            case .failure(let error):
+                print("Ошибка загрузки заказа: \(error.localizedDescription)")
             }
         }
     }
