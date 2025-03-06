@@ -3,9 +3,16 @@ import UIKit
 protocol LoadingView {
     func showLoading()
     func hideLoading()
+    func showLoadingWithBlocking() 
+    func hideLoadingEnableInteraction()
 }
 
 extension LoadingView where Self: UIViewController {
+    
+    private static var window: UIWindow? {
+        UIApplication.shared.windows.first
+    }
+    
     var activityIndicator: CustomLoadingView {
         let tag = 9999
         if let existingIndicator = view.viewWithTag(tag) as? CustomLoadingView {
@@ -33,10 +40,20 @@ extension LoadingView where Self: UIViewController {
     func showLoading() {
         activityIndicator.startAnimating()
     }
+    
+    func showLoadingWithBlocking() {
+        activityIndicator.startAnimating()
+        Self.window?.isUserInteractionEnabled = false
+    }
 
     func hideLoading() {
         activityIndicator.stopAnimating()
         activityIndicator.removeFromSuperview()
+    }
+    
+    func hideLoadingEnableInteraction() {
+        activityIndicator.startAnimating()
+        Self.window?.isUserInteractionEnabled = true
     }
 }
 
