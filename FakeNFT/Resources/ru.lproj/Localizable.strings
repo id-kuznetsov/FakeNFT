@@ -1,10 +1,28 @@
 "Catalog.openNft" = "Открыть Nft";
-"Error.network" = "Произошла ошибка сети";
-"Error.unknown" = "Произошла неизвестная ошибка";
-"Error.repeat" = "Повторить";
-"Error.title" = "Ошибка";
-"Button.cancel" = "Отмена";
-"Button.close" = "Закрыть";
+
+"Alert.Title.networkError" = "Ошибка";
+"Alert.Title.sort" = "Сортировка";
+"Alert.Title.rateNft" = "Оценить?";
+
+"Alert.Message.network" = "Произошла ошибка сети";
+"Alert.Message.unknown" = "Произошла неизвестная ошибка";
+"Alert.Message.networkError" = "Проблемы с интернет-соединением. Проверьте подключение.";
+"Alert.Message.timeoutError" = "Время ожидания запроса истекло.";
+"Alert.Message.sslError" = "Не удалось установить безопасное соединение. Попробуйте позже.";
+"Alert.Message.serverNotFound" = "Не удается найти сервер.";
+"Alert.Message.rateNft" = "Нажмите на звезду, чтобы оценить.";
+
+"Alert.Button.cancel" = "Отмена";
+"Alert.Button.close" = "Закрыть";
+"Alert.Button.repeat" = "Повторить";
+"Alert.Button.notNow" = "Не сейчас";
+"Alert.Button.rate" = "Оценить";
+"Alert.Button.back" = "Назад";
+"Alert.Button.sortByNftCount" = "По количеству NFT";
+"Alert.Button.sortByPrice" = "По цене";
+"Alert.Button.sortByRating" = "По рейтингу";
+"Alert.Button.sortByCollectionName" = "По названию";
+"Alert.Button.sortByUserName" = "По имени";
 
 "Tab.profile" = "Профиль";
 
@@ -15,10 +33,3 @@
 "Tab.statistic" = "Статистика";
 
 "Cart.button.toPay" = "К Оплате";
-
-"Sort.title" = "Сортировка";
-"SortOption.nftCount" = "По количеству NFT";
-"SortOption.price" = "По цене";
-"SortOption.rating" = "По рейтингу";
-"SortOption.title" = "По названию";
-"SortOption.name" = "По имени";

@@ -3,6 +3,7 @@ import Kingfisher
 
 protocol NftDetailView: AnyObject, ErrorView, LoadingView {
     func displayCells(_ cellModels: [NftDetailCellModel])
+    func showError(_ error: Error)
 }
 
 final class NftDetailViewController: UIViewController {
@@ -56,6 +57,19 @@ final class NftDetailViewController: UIViewController {
         view.backgroundColor = .white
         setupLayout()
         presenter.viewDidLoad()
+    }
+
+    func showError(_ error: Error) {
+        showError(
+            error: error,
+            buttons: [
+                .reload(
+                    action: { [weak self] in
+                        self?.presenter.viewDidLoad()
+                    }
+                )
+            ]
+        )
     }
 
     // MARK: - private functions

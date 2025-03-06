@@ -1,28 +1,38 @@
 import UIKit
 
-struct ErrorModel {
-    let message: String
-    let actionText: String
-    let action: () -> Void
-}
-
-protocol ErrorView {
-    func showError(_ model: ErrorModel)
-}
+protocol ErrorView {}
 
 extension ErrorView where Self: UIViewController {
+    func showError(
+        style: UIAlertController.Style = .alert,
+        title: String? = L10n.Alert.Title.networkError,
+        error: Error,
+        buttons: [AlertButton]
+    ) {
+        let message: String
 
-    func showError(_ model: ErrorModel) {
-        let title = NSLocalizedString("Error.title", comment: "")
-        let alert = UIAlertController(
-            title: title,
-            message: model.message,
-            preferredStyle: .alert
-        )
-        let action = UIAlertAction(title: model.actionText, style: UIAlertAction.Style.default) {_ in
-            model.action()
+        switch error {
+        case let networkClientError as NetworkClientError:
+            switch networkClientError {
+            case .httpStatusCode(404):
+                message = L10n.Alert.Message.serverNotFound
+            case .httpStatusCode(403):
+                message = L10n.Alert.Message.sslError
+            case .urlSessionError:
+                message = L10n.Alert.Message.timeoutError
+            default:
+                message = L10n.Alert.Message.network
+            }
+        default:
+            message = L10n.Alert.Message.unknown
         }
-        alert.addAction(action)
-        present(alert, animated: true)
+
+        let model = AlertModel(
+            title: title,
+            message: message,
+            buttons: buttons,
+            style: .alert
+        )
+        AlertPresenter.showAlert(on: self, model: model)
     }
 }
