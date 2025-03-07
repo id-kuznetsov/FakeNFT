@@ -77,9 +77,9 @@ final class StatisticsViewController: UIViewController {
             tableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
         ])
         tableView.scrollIndicatorInsets = UIEdgeInsets(
-            top: 0,
-            left: 0,
-            bottom: 0,
+            top: StatisticsConstants.StatisticsVc.TableViewParams.containerViewtopInset,
+            left: StatisticsConstants.StatisticsVc.TableViewParams.containerViewleftInset,
+            bottom: StatisticsConstants.StatisticsVc.TableViewParams.containerViewbottomInset,
             right: -StatisticsConstants.StatisticsVc.TableViewParams.containerViewRightInset
         )
     }

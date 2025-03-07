@@ -48,6 +48,12 @@ final class UserNftCollectionViewController: UIViewController, ErrorView {
             UserNftCollectionCell.self,
             forCellWithReuseIdentifier: UserNftCollectionCell.identifier
         )
+        collectionView.contentInset = UIEdgeInsets(
+            top: StatisticsConstants.UserNftVc.MainScreen.topEdgeInset,
+            left: StatisticsConstants.UserNftVc.MainScreen.leftEdgeInset,
+            bottom: StatisticsConstants.UserNftVc.MainScreen.bottomEdgeInset,
+            right: StatisticsConstants.UserNftVc.MainScreen.rightEdgeInset
+        )
     }
     
     private func setupBindings() {
@@ -161,7 +167,7 @@ extension UserNftCollectionViewController: UICollectionViewDelegateFlowLayout {
         sizeForItemAt indexPath: IndexPath
     ) -> CGSize {
         return CGSize(
-            width: (collectionView.bounds.width - StatisticsConstants.Common.Margin.xxSmall * StatisticsConstants.UserNftVc.MainScreen.sideMargin - StatisticsConstants.Common.Margin.xxSmall *  StatisticsConstants.UserNftVc.MainScreen.horizontalCellsSpacing) / StatisticsConstants.UserNftVc.MainScreen.cellsInRow,
+            width: (collectionView.bounds.width - StatisticsConstants.Common.Margin.xxSmall * StatisticsConstants.UserNftVc.MainScreen.sideCollectionMargin - StatisticsConstants.Common.Margin.xxSmall *  StatisticsConstants.UserNftVc.MainScreen.horizontalCellsSpacing) / StatisticsConstants.UserNftVc.MainScreen.cellsInRow,
             height: StatisticsConstants.UserNftVc.MainScreen.cellHeight
         )
     }
@@ -173,9 +179,9 @@ extension UserNftCollectionViewController: UICollectionViewDelegateFlowLayout {
     ) -> UIEdgeInsets {
         UIEdgeInsets(
             top: StatisticsConstants.UserNftVc.MainScreen.verticalCollectionSpacing,
-            left: StatisticsConstants.UserNftVc.MainScreen.sideMargin,
+            left: StatisticsConstants.UserNftVc.MainScreen.sideCollectionMargin,
             bottom: StatisticsConstants.UserNftVc.MainScreen.verticalCollectionSpacing,
-            right: StatisticsConstants.UserNftVc.MainScreen.sideMargin)
+            right: StatisticsConstants.UserNftVc.MainScreen.sideCollectionMargin)
     }
     
     func collectionView(

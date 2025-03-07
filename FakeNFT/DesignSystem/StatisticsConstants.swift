@@ -44,6 +44,9 @@ enum StatisticsConstants {
             static let containerViewBottom = Common.Margin.xSmall
             static let containerViewHight: CGFloat = 80
             static let containerViewRightInset: CGFloat = 3
+            static let containerViewtopInset = Common.zeroConstant
+            static let containerViewleftInset = Common.zeroConstant
+            static let containerViewbottomInset = Common.zeroConstant
         }
     }
     
@@ -64,8 +67,12 @@ enum StatisticsConstants {
     enum UserNftVc {
         enum MainScreen {
             static let cellHeight: CGFloat = 192
+            static let topEdgeInset: CGFloat = 20
+            static let rightEdgeInset = Common.zeroConstant
+            static let leftEdgeInset = Common.zeroConstant
+            static let bottomEdgeInset = Common.zeroConstant
             static let verticalCollectionSpacing = Common.zeroConstant
-            static let sideMargin = Common.Margin.medium
+            static let sideCollectionMargin = Common.Margin.medium
             static let verticalCellsSpacing: CGFloat = 28
             static let horizontalCellsSpacing = Common.Margin.regular
             static let cellsInRow: CGFloat = 3

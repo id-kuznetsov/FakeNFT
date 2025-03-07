@@ -13,7 +13,5 @@ struct OrderRequest: NetworkRequest {
         URL(string: "\(RequestConstants.baseURL)/\(RequestConstants.order)")
     }
     
-    var httpMethod: HttpMethod { .get }
-    
     var dto: Dto? { nil }
 }
