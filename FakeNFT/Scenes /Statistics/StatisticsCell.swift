@@ -7,10 +7,7 @@
 
 import UIKit
 
-final class StatisticsCell: UITableViewCell {
-    
-    // MARK: - Static properties
-    static let identifier = "StatisticsCell"
+final class StatisticsCell: UITableViewCell, ReuseIdentifying {
     
     // MARK: - Private properties
     private lazy var indexLabel: UILabel = {

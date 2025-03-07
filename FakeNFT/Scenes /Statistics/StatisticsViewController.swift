@@ -25,7 +25,7 @@ final class StatisticsViewController: UIViewController {
     
     private lazy var tableView: UITableView = {
         let tableView = UITableView()
-        tableView.register(StatisticsCell.self, forCellReuseIdentifier: StatisticsCell.identifier)
+        tableView.register(StatisticsCell.self)
         tableView.dataSource = self
         tableView.delegate = self
         tableView.separatorStyle = .none
@@ -153,12 +153,7 @@ extension StatisticsViewController: UITableViewDataSource {
             return UITableViewCell()
         }
         
-        guard let cell = tableView.dequeueReusableCell(
-            withIdentifier: StatisticsCell.identifier,
-            for: indexPath
-        ) as? StatisticsCell else {
-            return UITableViewCell()
-        }
+        let cell: StatisticsCell = tableView.dequeueReusableCell()
         
         let user = viewModel.users[indexPath.row]
         cell.configure(with: user, index: indexPath.row)

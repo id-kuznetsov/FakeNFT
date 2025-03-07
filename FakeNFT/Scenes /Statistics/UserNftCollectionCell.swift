@@ -7,10 +7,7 @@
 
 import UIKit
 
-final class UserNftCollectionCell: UICollectionViewCell {
-    
-    // MARK: - Static properties
-    static let identifier = "UserNftCollectionCell"
+final class UserNftCollectionCell: UICollectionViewCell, ReuseIdentifying {
     
     // MARK: - Private properties
     private lazy var nftImageView: UIImageView = {

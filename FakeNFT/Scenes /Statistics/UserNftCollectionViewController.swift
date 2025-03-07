@@ -44,10 +44,7 @@ final class UserNftCollectionViewController: UIViewController, ErrorView {
     private func setupCollectionView() {
         collectionView.dataSource = self
         collectionView.delegate = self
-        collectionView.register(
-            UserNftCollectionCell.self,
-            forCellWithReuseIdentifier: UserNftCollectionCell.identifier
-        )
+        collectionView.register(UserNftCollectionCell.self)
         collectionView.contentInset = UIEdgeInsets(
             top: StatisticsConstants.UserNftVc.MainScreen.topEdgeInset,
             left: StatisticsConstants.UserNftVc.MainScreen.leftEdgeInset,
@@ -136,12 +133,7 @@ extension UserNftCollectionViewController: UICollectionViewDataSource {
         _ collectionView: UICollectionView,
         cellForItemAt indexPath: IndexPath
     ) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(
-            withReuseIdentifier: UserNftCollectionCell.identifier,
-            for: indexPath
-        ) as? UserNftCollectionCell else {
-            return UICollectionViewCell()
-        }
+        let cell: UserNftCollectionCell = collectionView.dequeueReusableCell(indexPath: indexPath)
         
         let nft = viewModel.nftCollection[indexPath.row]
         let isLiked = viewModel.likedNfts.contains(nft.id)
