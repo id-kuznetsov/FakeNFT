@@ -10,6 +10,7 @@ import Foundation
 enum StatisticsConstants {
     // General constants for Statistics
     enum Common {
+        static let zeroConstant: CGFloat = 0
         static let baseWidth: CGFloat = 375
         static let cornerRadiusRegular: CGFloat = 10
         static let cornerRadiusMedium: CGFloat = 12
@@ -18,9 +19,11 @@ enum StatisticsConstants {
         static let cornerRadiusBig: CGFloat = 34
         
         enum Margin {
+            static let xxSmall: CGFloat = 2
             static let xSmall: CGFloat = 4
             static let small: CGFloat = 8
             static let regular: CGFloat = 10
+            static let xRegular: CGFloat = 12
             static let medium: CGFloat = 16
             static let large: CGFloat = 24
         }
@@ -57,4 +60,29 @@ enum StatisticsConstants {
             static let nftButtonTopInset: CGFloat = 56
         }
     }
+    
+    enum UserNftVc {
+        enum MainScreen {
+            static let cellHeight: CGFloat = 192
+            static let verticalCollectionSpacing = Common.zeroConstant
+            static let sideMargin = Common.Margin.medium
+            static let verticalCellsSpacing: CGFloat = 28
+            static let horizontalCellsSpacing = Common.Margin.regular
+            static let cellsInRow: CGFloat = 3
+            static let nftImageWidth: CGFloat = 108
+            static let likeButtonTop = Common.Margin.xRegular
+            static let likeButtonRight = Common.Margin.xRegular
+            static let likeButtonWidth: CGFloat = 18
+            static let likeButtonHeight: CGFloat = 16
+            static let backViewTop = Common.Spacing.regular
+            static let ratingViewWidth: CGFloat = 68
+            static let ratingViewHeight: CGFloat = 12
+            static let nftNameLabelTop: CGFloat = 5
+            static let nameLabelHeight: CGFloat = 22
+            static let priceLabelTop: CGFloat = 4
+            static let priceLabelHeight: CGFloat = 12
+            static let cartButtonWidth: CGFloat = 40
+        }
+    }
 }
+

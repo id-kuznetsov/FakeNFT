@@ -53,7 +53,8 @@ final class UserNftCollectionViewController: UIViewController, ErrorView {
     private func setupBindings() {
         viewModel.onNftCollectionUpdated = { [weak self] in
             DispatchQueue.main.async {
-                self?.collectionView.reloadData()
+                guard let self else { return }
+                self.collectionView.reloadData()
             }
         }
         
@@ -67,10 +68,16 @@ final class UserNftCollectionViewController: UIViewController, ErrorView {
             DispatchQueue.main.async {
                 let errorModel = ErrorModel(
                     message: errorMessage,
-                    actionText: "Повторить",
+                    actionText: L10n.Error.repeat,
                     action: { self?.viewModel.loadNftCollection() }
                 )
                 self?.showError(errorModel)
+            }
+        }
+        
+        viewModel.onNoNftAvailable = { [weak self] in
+            DispatchQueue.main.async {
+                self?.showNoNftAlert()
             }
         }
     }
@@ -83,9 +90,20 @@ final class UserNftCollectionViewController: UIViewController, ErrorView {
         UIBlockingProgressIndicator.dismiss()
     }
     
+    private func showNoNftAlert() {
+        AlertPresenter.presentAlertWithOneSelection(
+            on: self,
+            title: L10n.User.emptyCollection,
+            message: L10n.User.noNft,
+            actionTitle: L10n.Button.ok
+        ) { [weak self] in
+            self?.navigationController?.popViewController(animated: true)
+        }
+    }
+    
     private func setupUI() {
         view.backgroundColor = .white
-        title = "Коллекция NFT"
+        title = L10n.User.nftCollection
         
         view.addSubview(collectionView)
         setupCollectionView()
@@ -143,8 +161,8 @@ extension UserNftCollectionViewController: UICollectionViewDelegateFlowLayout {
         sizeForItemAt indexPath: IndexPath
     ) -> CGSize {
         return CGSize(
-            width: (collectionView.bounds.width - 2 * 16 - 2 * 10) / 3,
-            height: 192
+            width: (collectionView.bounds.width - StatisticsConstants.Common.Margin.xxSmall * StatisticsConstants.UserNftVc.MainScreen.sideMargin - StatisticsConstants.Common.Margin.xxSmall *  StatisticsConstants.UserNftVc.MainScreen.horizontalCellsSpacing) / StatisticsConstants.UserNftVc.MainScreen.cellsInRow,
+            height: StatisticsConstants.UserNftVc.MainScreen.cellHeight
         )
     }
     
@@ -153,7 +171,11 @@ extension UserNftCollectionViewController: UICollectionViewDelegateFlowLayout {
         layout collectionViewLayout: UICollectionViewLayout,
         insetForSectionAt section: Int
     ) -> UIEdgeInsets {
-        UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
+        UIEdgeInsets(
+            top: StatisticsConstants.UserNftVc.MainScreen.verticalCollectionSpacing,
+            left: StatisticsConstants.UserNftVc.MainScreen.sideMargin,
+            bottom: StatisticsConstants.UserNftVc.MainScreen.verticalCollectionSpacing,
+            right: StatisticsConstants.UserNftVc.MainScreen.sideMargin)
     }
     
     func collectionView(
@@ -161,6 +183,6 @@ extension UserNftCollectionViewController: UICollectionViewDelegateFlowLayout {
         layout collectionViewLayout: UICollectionViewLayout,
         minimumLineSpacingForSectionAt section: Int
     ) -> CGFloat {
-        28
+        StatisticsConstants.UserNftVc.MainScreen.verticalCellsSpacing
     }
 }

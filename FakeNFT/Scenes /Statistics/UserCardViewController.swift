@@ -46,7 +46,7 @@ final class UserCardViewController: UIViewController {
     
     private lazy var webViewButton: UIButton = {
         let button = UIButton()
-        button.setTitle(L10n.UserCard.websiteButton, for: .normal)
+        button.setTitle(L10n.User.websiteButton, for: .normal)
         button.setTitleColor(.ypBlack, for: .normal)
         button.titleLabel?.font = .caption1
         button.layer.cornerRadius = StatisticsConstants.Common.cornerRadiusXHight
@@ -58,7 +58,7 @@ final class UserCardViewController: UIViewController {
     
     private lazy var nftLabel: UILabel = {
         let label = UILabel()
-        label.text = L10n.UserCard.nftCollectionLabel
+        label.text = L10n.User.nftCollection
         label.textColor = .ypBlack
         label.font = .bodyBold
         return label
@@ -233,7 +233,7 @@ final class UserCardViewController: UIViewController {
         AlertPresenter.presentAlertWithOneSelection(
             on: self,
             title: L10n.Error.title,
-            message: L10n.UserCard.websiteInaccessible,
+            message: L10n.User.websiteInaccessible,
             actionTitle: L10n.Button.ok
         )
     }

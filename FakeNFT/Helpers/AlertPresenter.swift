@@ -12,9 +12,13 @@ final class AlertPresenter {
                                              title: String,
                                              message: String,
                                              actionTitle: String,
-                                             preferredStyle: UIAlertController.Style = .alert) {
+                                             preferredStyle: UIAlertController.Style = .alert,
+                                             actionCompletion: (() -> Void)? = nil
+    ) {
         let alertController = UIAlertController(title: title, message: message, preferredStyle: preferredStyle)
-        let action = UIAlertAction(title: actionTitle, style: .default)
+        let action = UIAlertAction(title: actionTitle, style: .default) { _ in
+            actionCompletion?()
+        }
         alertController.addAction(action)
         viewController.present(alertController, animated: true)
     }

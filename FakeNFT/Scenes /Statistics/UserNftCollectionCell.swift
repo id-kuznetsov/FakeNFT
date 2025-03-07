@@ -15,7 +15,7 @@ final class UserNftCollectionCell: UICollectionViewCell {
     // MARK: - Private properties
     private lazy var nftImageView: UIImageView = {
         let imageView = UIImageView()
-        imageView.layer.cornerRadius = 12
+        imageView.layer.cornerRadius = StatisticsConstants.Common.cornerRadiusMedium
         imageView.clipsToBounds = true
         imageView.contentMode = .scaleAspectFill
         return imageView
@@ -91,37 +91,68 @@ final class UserNftCollectionCell: UICollectionViewCell {
             nftImageView.topAnchor.constraint(equalTo: contentView.topAnchor),
             nftImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             nftImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            nftImageView.widthAnchor.constraint(equalToConstant: 108),
+            nftImageView.widthAnchor.constraint(
+                equalToConstant: StatisticsConstants.UserNftVc.MainScreen.nftImageWidth
+            ),
             nftImageView.heightAnchor.constraint(equalTo: nftImageView.widthAnchor),
             
-            likeButton.topAnchor.constraint(equalTo: nftImageView.topAnchor, constant: 12),
-            likeButton.trailingAnchor.constraint(equalTo: nftImageView.trailingAnchor, constant: -12),
-            likeButton.widthAnchor.constraint(equalToConstant: 18),
-            likeButton.heightAnchor.constraint(equalToConstant: 16),
+            likeButton.topAnchor.constraint(
+                equalTo: nftImageView.topAnchor,
+                constant: StatisticsConstants.UserNftVc.MainScreen.likeButtonTop
+            ),
+            likeButton.trailingAnchor.constraint(
+                equalTo: nftImageView.trailingAnchor,
+                constant: -StatisticsConstants.UserNftVc.MainScreen.likeButtonRight
+            ),
+            likeButton.widthAnchor.constraint(
+                equalToConstant: StatisticsConstants.UserNftVc.MainScreen.likeButtonWidth
+            ),
+            likeButton.heightAnchor.constraint(
+                equalToConstant: StatisticsConstants.UserNftVc.MainScreen.likeButtonHeight
+            ),
             
-            backView.topAnchor.constraint(equalTo: nftImageView.bottomAnchor, constant: 8),
+            backView.topAnchor.constraint(
+                equalTo: nftImageView.bottomAnchor,
+                constant: StatisticsConstants.UserNftVc.MainScreen.backViewTop
+            ),
             backView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             backView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             backView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
             
             ratingStackView.topAnchor.constraint(equalTo: backView.topAnchor),
             ratingStackView.leadingAnchor.constraint(equalTo: backView.leadingAnchor),
-            ratingStackView.heightAnchor.constraint(equalToConstant: 12),
-            ratingStackView.widthAnchor.constraint(equalToConstant: 68),
+            ratingStackView.heightAnchor.constraint(
+                equalToConstant: StatisticsConstants.UserNftVc.MainScreen.ratingViewHeight
+            ),
+            ratingStackView.widthAnchor.constraint(
+                equalToConstant: StatisticsConstants.UserNftVc.MainScreen.ratingViewWidth
+            ),
             
-            nftNameLabel.topAnchor.constraint(equalTo: ratingStackView.bottomAnchor, constant: 5),
+            nftNameLabel.topAnchor.constraint(
+                equalTo: ratingStackView.bottomAnchor,
+                constant: StatisticsConstants.UserNftVc.MainScreen.nftNameLabelTop
+            ),
             nftNameLabel.leadingAnchor.constraint(equalTo: backView.leadingAnchor),
-            nftNameLabel.heightAnchor.constraint(equalToConstant: 22),
+            nftNameLabel.heightAnchor.constraint(
+                equalToConstant: StatisticsConstants.UserNftVc.MainScreen.nameLabelHeight
+            ),
             
-            priceLabel.topAnchor.constraint(equalTo: nftNameLabel.bottomAnchor, constant: 4),
+            priceLabel.topAnchor.constraint(
+                equalTo: nftNameLabel.bottomAnchor,
+                constant: StatisticsConstants.UserNftVc.MainScreen.priceLabelTop
+            ),
             priceLabel.leadingAnchor.constraint(equalTo: backView.leadingAnchor),
             priceLabel.bottomAnchor.constraint(equalTo: backView.bottomAnchor),
-            priceLabel.heightAnchor.constraint(equalToConstant: 12),
+            priceLabel.heightAnchor.constraint(
+                equalToConstant: StatisticsConstants.UserNftVc.MainScreen.priceLabelHeight
+            ),
             
             cartButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             cartButton.leadingAnchor.constraint(equalTo: nftNameLabel.trailingAnchor),
             cartButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
-            cartButton.widthAnchor.constraint(equalToConstant: 40),
+            cartButton.widthAnchor.constraint(
+                equalToConstant: StatisticsConstants.UserNftVc.MainScreen.cartButtonWidth
+            ),
             cartButton.heightAnchor.constraint(equalTo: cartButton.widthAnchor)
         ])
         backView.isUserInteractionEnabled = true

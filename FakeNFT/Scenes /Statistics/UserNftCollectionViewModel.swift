@@ -14,6 +14,7 @@ protocol UserNftCollectionViewModelProtocol {
     var onNftCollectionUpdated: (() -> Void)? { get set }
     var onLoadingStateChanged: ((Bool) -> Void)? { get set }
     var onErrorOccurred: ((String) -> Void)? { get set }
+    var onNoNftAvailable: (() -> Void)? { get set }
     func loadNftCollection()
     func toggleLike(for nfts: String)
     func toggleCart(for nftIds: String)
@@ -49,6 +50,7 @@ final class UserNftCollectionViewModel: UserNftCollectionViewModelProtocol {
     var onNftCollectionUpdated: (() -> Void)?
     var onLoadingStateChanged: ((Bool) -> Void)?
     var onErrorOccurred: ((String) -> Void)?
+    var onNoNftAvailable: (() -> Void)?
     
     // MARK: - Initializers
     init(
@@ -158,7 +160,14 @@ final class UserNftCollectionViewModel: UserNftCollectionViewModelProtocol {
         }
         
         group.notify(queue: .main) { [weak self] in
-            self?.nftCollection = self?.sortNftCollection(loadedNfts) ?? []
+            guard let self else { return }
+            self.nftCollection = self.sortNftCollection(loadedNfts)
+            
+            if self.nftCollection.isEmpty {
+                self.onNoNftAvailable?()
+            }
+            
+            self.onLoadingStateChanged?(false)
         }
     }
     

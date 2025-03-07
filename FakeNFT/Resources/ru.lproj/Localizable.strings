@@ -25,6 +25,8 @@
 "SortOption.title" = "По названию";
 "SortOption.name" = "По имени";
 
-"UserCard.websiteButton" = "Перейти на сайт пользователя";
-"UserCard.nftCollectionLabel" = "Коллекция NFT";
-"UserCard.websiteInaccessible" = "Не удалось открыть сайт";
+"User.websiteButton" = "Перейти на сайт пользователя";
+"User.nftCollection" = "Коллекция NFT";
+"User.websiteInaccessible" = "Не удалось открыть сайт";
+"User.emptyCollection" = "Коллекция пуста";
+"User.noNft" = "Пользователь ещё не добавил NFT";

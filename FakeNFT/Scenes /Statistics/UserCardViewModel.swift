@@ -13,6 +13,7 @@ protocol UserCardViewModelProtocol {
     var onLoadingStateChanged: ((Bool) -> Void)? { get set }
     var onErrorOccurred: ((String) -> Void)? { get set }
     var userWebsite: String? { get }
+    var nftIds: [String] { get }
     func loadUserData()
     func checkUserWebsite(completion: @escaping (Bool) -> Void)
     func createUserCollectionViewModel() -> UserNftCollectionViewModelProtocol
@@ -25,13 +26,13 @@ final class UserCardViewModel: UserCardViewModelProtocol {
     var onUserLoaded: ((User) -> Void)?
     var onLoadingStateChanged: ((Bool) -> Void)?
     var onErrorOccurred: ((String) -> Void)?
+    var nftIds: [String] = []
     
     // MARK: - Private properties
     private let userService: UserService
     private let nftService: NftService
     private let orderService: OrderService
     private let userId: String
-    private var nftIds: [String] = []
     
     private var user: User? {
         didSet {
@@ -91,8 +92,7 @@ final class UserCardViewModel: UserCardViewModelProtocol {
             case .success(let user):
                 self.user = user
             case .failure(let error):
-                self.onErrorOccurred?("Не удалось получить данные")
-                print("Ошибка загрузки пользователя: \(error.localizedDescription)")
+                self.onErrorOccurred?("Не удалось получить данные \(error.localizedDescription)")
             }
         }
     }
