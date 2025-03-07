@@ -43,7 +43,7 @@ final class TabBarController: UITabBarController {
             orderService: servicesAssembly.orderService,
             nftService: servicesAssembly.nftService
             )
-        let cartViewController = UINavigationController(rootViewController: CartViewController(viewModel: cartViewModel))
+        let cartViewController = CustomNavigationController(rootViewController: CartViewController(viewModel: cartViewModel))
         cartViewController.tabBarItem = UITabBarItem(
             title: L10n.Tab.cart,
             image: .icCart,
@@ -61,7 +61,7 @@ final class TabBarController: UITabBarController {
             [
                 profileVC,
                 catalogNavigationController,
-                cartVC,
+                cartViewController,
                 statisticsVC
             ],
             animated: false
