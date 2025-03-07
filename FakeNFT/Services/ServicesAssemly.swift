@@ -3,15 +3,18 @@ final class ServicesAssembly {
     private let networkClient: NetworkClient
     private let nftStorage: NftStorage
     private let cacheService: CacheService
+    private let networkMonitor: NetworkMonitor
 
     init(
         networkClient: NetworkClient,
         nftStorage: NftStorage,
-        cacheService: CacheService
+        cacheService: CacheService,
+        networkMonitor: NetworkMonitor
     ) {
         self.networkClient = networkClient
         self.nftStorage = nftStorage
         self.cacheService = cacheService
+        self.networkMonitor = networkMonitor
     }
 
     var nftService: NftService {
@@ -25,7 +28,15 @@ final class ServicesAssembly {
         CollectionServiceImpl(
             networkClient: networkClient,
             cacheService: cacheService,
-            networkMonitor: NetworkMonitorImpl()
+            networkMonitor: networkMonitor
+        )
+    }
+
+    var collectionNftService: CollectionNftService {
+        CollectionNftServiceImpl(
+            networkClient: networkClient,
+            cacheService: cacheService,
+            networkMonitor: networkMonitor
         )
     }
 
@@ -36,8 +47,4 @@ final class ServicesAssembly {
     var imageLoaderService: ImageLoaderService {
         ImageLoaderServiceImpl()
     }
-
-//    var userService: UserService {
-//        UserServiceImpl()
-//    }
 }

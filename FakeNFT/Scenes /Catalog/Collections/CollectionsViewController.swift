@@ -155,7 +155,7 @@ final class CollectionsViewController: UIViewController, FilterView, ErrorView, 
     ) {
         let collectionServiceAssembler = CollectionServiceAssembly(
             imageLoaderService: viewModel.imageLoaderService,
-            nftService: viewModel.nftService,
+            collectionNftService: viewModel.collectionNftService,
             collectionUI: collection
         )
 

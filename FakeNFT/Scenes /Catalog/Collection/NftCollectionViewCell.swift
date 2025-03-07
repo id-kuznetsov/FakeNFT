@@ -107,15 +107,22 @@ final class NftCollectionViewCell: UICollectionViewCell, ReuseIdentifying {
     }
 
     // MARK: - Config
-    func configure(nftUI: NftUI, imageLoaderService: ImageLoaderService) {
-        ratingButton.configure(rating: nftUI.rating)
-        nameLabel.text = nftUI.name
-        priceLabel.text = nftUI.formattedPrice
+    func configure(model: NftUI, imageLoaderService: ImageLoaderService) {
+        if model.isPlaceholder {
+            showLoadingAnimation()
+        }
 
-        loadNftImage(
-            from: nftUI.images.first,
-            imageLoaderService: imageLoaderService
-        )
+        ratingButton.configure(rating: model.rating)
+        nameLabel.text = model.name
+        priceLabel.text = model.formattedPrice
+
+        if let firstImageUrl = model.images.first {
+            loadNftImage(
+                from: firstImageUrl,
+                imageLoaderService: imageLoaderService
+            )
+        }
+
     }
 
     // MARK: - Load Image

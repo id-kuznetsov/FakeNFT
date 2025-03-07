@@ -12,8 +12,7 @@ import Combine
 protocol CollectionsViewModelProtocol {
     var imageLoaderService: ImageLoaderService { get }
     var collectionsService: CollectionService { get }
-    var nftService: NftService { get }
-//    var userService: UserService { get }
+    var collectionNftService: CollectionNftService { get }
     var collections: AnyPublisher<[CollectionUI], Never> { get }
     var state: AnyPublisher<CollectionsState, Never> { get }
     func loadData(skipCache: Bool)
@@ -36,16 +35,16 @@ enum CollectionSortOptions: String {
 
 final class CollectionsViewModel: CollectionsViewModelProtocol {
     let imageLoaderService: ImageLoaderService
-    let nftService: NftService
-//    let userService: UserService
     let collectionsService: CollectionService
+    let collectionNftService: CollectionNftService
 
     @Published private var _state: CollectionsState = .initial
     var state: AnyPublisher<CollectionsState, Never> { $_state.eraseToAnyPublisher() }
+
     @Published private var _collections: [CollectionUI] = []
     var collections: AnyPublisher<[CollectionUI], Never> { $_collections.eraseToAnyPublisher() }
 
-    private let collectionsSortOptionStorageService: CatalogSortOptionStorage
+    private let catalogSortOptionStorage: CatalogSortOptionStorage
     private var cancellables = Set<AnyCancellable>()
     private var currentPage = 0
     private var sortBy: CollectionSortOptions
@@ -56,16 +55,14 @@ final class CollectionsViewModel: CollectionsViewModelProtocol {
     init(
         imageLoaderService: ImageLoaderService,
         collectionsService: CollectionService,
-        nftService: NftService,
-//        userService: UserService,
-        collectionsSortOptionStorageService: CatalogSortOptionStorage
+        collectionNftService: CollectionNftService,
+        catalogSortOptionStorage: CatalogSortOptionStorage
     ) {
         self.imageLoaderService = imageLoaderService
-        self.nftService = nftService
         self.collectionsService = collectionsService
-//        self.userService = userService
-        self.collectionsSortOptionStorageService = collectionsSortOptionStorageService
-        self.sortBy = collectionsSortOptionStorageService.loadSortOption()
+        self.collectionNftService = collectionNftService
+        self.catalogSortOptionStorage = catalogSortOptionStorage
+        self.sortBy = catalogSortOptionStorage.loadSortOption()
     }
 
     func getCollection(at indexPath: IndexPath) -> CollectionUI {
@@ -77,7 +74,7 @@ final class CollectionsViewModel: CollectionsViewModelProtocol {
 
     func sortCollections(by option: CollectionSortOptions) {
         sortBy = option
-        collectionsSortOptionStorageService.saveSortOption(option)
+        catalogSortOptionStorage.saveSortOption(option)
         loadData()
 
     }
@@ -105,31 +102,31 @@ final class CollectionsViewModel: CollectionsViewModelProtocol {
             sortBy: sortBy,
             skipCache: skipCache
         )
-            .map { [weak self] newCollections -> CollectionsState in
-                guard let self = self else { return .failed(NSError(domain: "ViewModel", code: -1, userInfo: nil)) }
+        .map { [weak self] newCollections -> CollectionsState in
+            guard let self = self else { return .failed(NSError(domain: "ViewModel", code: -1, userInfo: nil)) }
 
-                if newCollections.isEmpty {
-                    self.hasMorePages = false
+            if newCollections.isEmpty {
+                self.hasMorePages = false
+            }
+
+            if reset {
+                self._collections = newCollections
+            } else {
+                let uniqueNew = newCollections.filter { newItem in
+                    !self._collections.contains(where: { $0.id == newItem.id })
                 }
+                self._collections.append(contentsOf: uniqueNew)
+            }
 
-                if reset {
-                    self._collections = newCollections
-                } else {
-                    let uniqueNew = newCollections.filter { newItem in
-                        !self._collections.contains(where: { $0.id == newItem.id })
-                    }
-                    self._collections.append(contentsOf: uniqueNew)
-                }
-
-                return .success
-            }
-            .catch { error -> Just<CollectionsState> in
-                Just(.failed(error))
-            }
-            .sink { [weak self] newState in
-                self?.isLoadingPage = false
-                self?._state = newState
-            }
-            .store(in: &cancellables)
+            return .success
+        }
+        .catch { error -> Just<CollectionsState> in
+            Just(.failed(error))
+        }
+        .sink { [weak self] newState in
+            self?.isLoadingPage = false
+            self?._state = newState
+        }
+        .store(in: &cancellables)
     }
 }

@@ -11,54 +11,74 @@ import Combine
 protocol CollectionViewModelProtocol {
     var collectionUI: CollectionUI { get }
     var imageLoaderService: ImageLoaderService { get }
-//    var userService: UserService { get }
-    var nfts: [NftUI] { get set }
-    var nftsPublisher: Published<[NftUI]>.Publisher { get }
-    func numberOfItems() -> Int
-//    func getCollection(at indexPath: IndexPath) -> NftUI
+
+    var state: AnyPublisher<CollectionState, Never> { get }
+    var nfts: AnyPublisher<[NftUI], Never> { get }
+
+    func loadData(skipCache: Bool)
+}
+
+// MARK: - State
+enum CollectionState {
+    case initial, loading, failed(Error), success
 }
 
 final class CollectionViewModel: CollectionViewModelProtocol {
     let imageLoaderService: ImageLoaderService
-//    let userService: UserService
-    private let nftService: NftService
-
     var collectionUI: CollectionUI
 
-    @Published var nfts = [NftUI]()
-    var nftsPublisher: Published<[NftUI]>.Publisher { $nfts }
+    @Published private var _state: CollectionState = .initial
+    var state: AnyPublisher<CollectionState, Never> { $_state.eraseToAnyPublisher() }
 
-//    private var collectionAuthors = [UserUI]()
+    @Published private var _nfts: [NftUI] = []
+    var nfts: AnyPublisher<[NftUI], Never> { $_nfts.eraseToAnyPublisher() }
+
+    private let collectionNftService: CollectionNftService
+    private var cancellables = Set<AnyCancellable>()
 
     // MARK: - Init
     init(
         imageLoaderService: ImageLoaderService,
-        nftService: NftService,
+        collectionNftService: CollectionNftService,
         collectionUI: CollectionUI
     ) {
         self.imageLoaderService = imageLoaderService
-        self.nftService = nftService
+        self.collectionNftService = collectionNftService
         self.collectionUI = collectionUI
     }
 
-//    func loadNftsForCollection() {
-//        for nftId in collectionUI.nfts {
-//            nftService.getNft(for: nftId) { [weak self] result in
-//                switch result {
-//                case .success(let nft):
-//                    self?.nfts.append(nft)
-//                case .failure(let error):
-//                    print(error)
-//                }
-//            }
-//        }
-//    }
+    func loadData(skipCache: Bool = false) {
+        _state = .loading
 
-    func numberOfItems() -> Int {
-        nfts.count
+        _nfts = (0..<3).map { _ in NftUI.placeholder }
+
+        collectionNftService.fetchNfts(
+            collectionId: collectionUI.id,
+            nftIds: collectionUI.nfts,
+            skipCache: skipCache
+        )
+        .map { [weak self] newNfts -> CollectionState in
+            guard
+                let self = self
+            else {
+                return .failed(NSError(domain: "ViewModel", code: -1, userInfo: nil))
+            }
+
+            self._nfts = newNfts
+
+            return .success
+        }
+        .catch { error -> Just<CollectionState> in
+            Just(.failed(error))
+        }
+        .sink { [weak self] newState in
+            self?._state = newState
+        }
+        .store(in: &cancellables)
     }
 
-//    func getCollection(at indexPath: IndexPath) -> NftUI {
-//        nfts[indexPath.row]
+//    func numberOfItems() -> Int {
+//        nfts.count
 //    }
+
 }

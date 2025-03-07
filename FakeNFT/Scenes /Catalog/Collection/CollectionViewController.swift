@@ -8,10 +8,50 @@
 import UIKit
 import Combine
 
-final class CollectionViewController: UIViewController, ErrorView, RatingView {
+final class CollectionViewController: UIViewController, ErrorView, RatingView, LoadingView {
     // MARK: - Properties
     private var subscribers = Set<AnyCancellable>()
     private let viewModel: CollectionViewModelProtocol
+
+    // MARK: - DataSource
+    private lazy var dataSource: UICollectionViewDiffableDataSource<Int, NftUI> = {
+        let dataSource = UICollectionViewDiffableDataSource<Int, NftUI>(
+            collectionView: collectionView,
+            cellProvider: { [weak self] collectionView, indexPath, nftUI in
+                guard let self = self else { return UICollectionViewCell() }
+
+                let cell: NftCollectionViewCell = collectionView.dequeueReusableCell(indexPath: indexPath)
+                cell.backgroundColor = .clear
+                cell.delegate = self
+                cell.configure(
+                    model: nftUI,
+                    imageLoaderService: viewModel.imageLoaderService
+                )
+                return cell
+            }
+        )
+
+        dataSource
+            .supplementaryViewProvider = { [weak self] (collectionView, kind, indexPath) -> UICollectionReusableView? in
+                guard let self = self else { return nil }
+
+                if kind == UICollectionView.elementKindSectionHeader {
+                    let header: CollectionHeaderView = collectionView.dequeueReusableSupplementaryView(
+                        ofKind: kind,
+                        indexPath: indexPath
+                    )
+                    header.configure(
+                        with: self.viewModel.collectionUI,
+                        imageLoaderService: self.viewModel.imageLoaderService
+                    )
+                    header.delegate = self
+                    return header
+                }
+                return nil
+            }
+
+        return dataSource
+    }()
 
     // MARK: - UI
     private lazy var collectionView: UICollectionView = {
@@ -27,9 +67,14 @@ final class CollectionViewController: UIViewController, ErrorView, RatingView {
         view.contentInsetAdjustmentBehavior = .never
         view.alwaysBounceVertical = true
         view.allowsMultipleSelection = false
-        view.dataSource = self
         view.delegate = self
         view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+
+    private lazy var refreshControlView: UIRefreshControl = {
+        let view = UIRefreshControl()
+        view.addTarget(self, action: #selector(didPullToRefresh), for: .valueChanged)
         return view
     }()
 
@@ -50,36 +95,87 @@ final class CollectionViewController: UIViewController, ErrorView, RatingView {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        view.backgroundColor = .ypWhite
-        view.addSubview(collectionView)
-
-        setupConstraints()
+        setupLayout()
+        bindViewModel()
     }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
-        viewModel.nftsPublisher
+        viewModel.loadData(skipCache: false)
+    }
+
+    // MARK: - Binding
+    private func bindViewModel() {
+        viewModel.nfts
             .receive(on: DispatchQueue.main)
-            .sink(
-                receiveValue: { [weak self] _ in
-                    guard let self = self else { return }
-                    self.reloadSectionCells(collectionView: self.collectionView, section: 0)
+            .sink( receiveValue: { [weak self] nfts in
+                self?.applySnapshot(nfts)
+            })
+            .store(in: &subscribers)
+
+        viewModel.state
+            .receive(on: DispatchQueue.main)
+            .dropFirst()
+            .sink( receiveValue: { [weak self] state in
+                guard let self = self else { return }
+
+                switch state {
+                case .loading:
+                    self.collectionView.bounces = false
+                    self.collectionView.isUserInteractionEnabled = false
+                    self.showLoading()
+                case .success:
+                    self.collectionView.bounces = true
+                    self.collectionView.isUserInteractionEnabled = true
+                    self.hideLoading()
+                case .failed(let error):
+                    self.hideLoading()
+                    self.showError(error)
+                    self.collectionView.bounces = true
+                    self.collectionView.isUserInteractionEnabled = true
+                default:
+                    break
                 }
-            )
+            })
             .store(in: &subscribers)
     }
 
-    private func reloadSectionCells(collectionView: UICollectionView, section: Int) {
-        let itemCount = collectionView.numberOfItems(inSection: section)
-        guard itemCount > 0 else { return }
-
-        let indexPaths = (0..<itemCount).map { IndexPath(item: $0, section: section) }
-
-        collectionView.performBatchUpdates({
-            collectionView.reloadItems(at: indexPaths)
-        }, completion: nil)
+    private func applySnapshot(_ nfts: [NftUI], animating: Bool = true) {
+        var snapshot = dataSource.snapshot()
+        snapshot.deleteAllItems()
+        snapshot.appendSections([0])
+        snapshot.appendItems(nfts, toSection: 0)
+        dataSource.apply(snapshot, animatingDifferences: animating)
     }
+
+    // MARK: - Alert
+    func showError(_ error: Error) {
+        showError(
+            error: error,
+            buttons: [
+                .cancel,
+                .reload(
+                    action: { [weak self] in
+                        guard let self else { return }
+
+                        self.viewModel.loadData(skipCache: false)
+                    }
+                )
+            ]
+        )
+    }
+
+//    private func reloadSectionCells(collectionView: UICollectionView, section: Int) {
+//        let itemCount = collectionView.numberOfItems(inSection: section)
+//        guard itemCount > 0 else { return }
+//
+//        let indexPaths = (0..<itemCount).map { IndexPath(item: $0, section: section) }
+//
+//        collectionView.performBatchUpdates({
+//            collectionView.reloadItems(at: indexPaths)
+//        }, completion: nil)
+//    }
 
     // MARK: - Navigation
     private func presentWebViewController(with authorName: String) {
@@ -92,64 +188,28 @@ final class CollectionViewController: UIViewController, ErrorView, RatingView {
         navigationController?.pushViewController(viewController, animated: true)
     }
 
+    // MARK: - Actions
+    @objc
+    private func didPullToRefresh() {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2) { [weak self] in
+            guard let self = self else { return }
+
+            self.refreshControlView.endRefreshing()
+            self.viewModel.loadData(skipCache: true)
+        }
+    }
+
     // MARK: - Constraints
-    private func setupConstraints() {
+    private func setupLayout() {
+        view.backgroundColor = .ypWhite
+        view.addSubview(collectionView)
+
         NSLayoutConstraint.activate([
             collectionView.topAnchor.constraint(equalTo: view.topAnchor),
             collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
-    }
-}
-
-// MARK: - UICollectionViewDataSource
-extension CollectionViewController: UICollectionViewDataSource {
-    func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return LayoutConstants.CollectionScreen.numberOfSections
-    }
-
-    func collectionView(
-        _ collectionView: UICollectionView,
-        numberOfItemsInSection section: Int
-    ) -> Int {
-        viewModel.nfts.count
-    }
-
-    func collectionView(
-        _ collectionView: UICollectionView,
-        cellForItemAt indexPath: IndexPath
-    ) -> UICollectionViewCell {
-        let cell: NftCollectionViewCell = collectionView.dequeueReusableCell(indexPath: indexPath)
-        let nftUI = viewModel.nfts[indexPath.item]
-
-        cell.backgroundColor = .clear
-        cell.delegate = self
-        cell.configure(
-            nftUI: nftUI,
-            imageLoaderService: viewModel.imageLoaderService
-        )
-        return cell
-    }
-
-    func collectionView(
-        _ collectionView: UICollectionView,
-        viewForSupplementaryElementOfKind kind: String,
-        at indexPath: IndexPath
-    ) -> UICollectionReusableView {
-        if kind == UICollectionView.elementKindSectionHeader {
-            let header: CollectionHeaderView = collectionView.dequeueReusableSupplementaryView(
-                ofKind: kind,
-                indexPath: indexPath
-            )
-            header.configure(
-                with: viewModel.collectionUI,
-                imageLoaderService: viewModel.imageLoaderService
-            )
-            header.delegate = self
-            return header
-        }
-        return UICollectionReusableView()
     }
 }
 
@@ -223,8 +283,7 @@ extension CollectionViewController: UICollectionViewDelegateFlowLayout {
         _ collectionView: UICollectionView,
         didSelectItemAt indexPath: IndexPath
     ) {
-        let nftUI = viewModel.nfts[indexPath.item]
-        print("nft cell tapped - \(nftUI.name)")
+        print("nft cell tapped")
     }
 }
 

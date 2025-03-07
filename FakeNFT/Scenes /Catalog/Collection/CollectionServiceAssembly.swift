@@ -9,23 +9,23 @@ import UIKit
 
 public final class CollectionServiceAssembly {
     private let imageLoaderService: ImageLoaderService
-    private let nftService: NftService
+    private let collectionNftService: CollectionNftService
     private let collectionUI: CollectionUI
 
     init(
         imageLoaderService: ImageLoaderService,
-        nftService: NftService,
+        collectionNftService: CollectionNftService,
         collectionUI: CollectionUI,
     ) {
         self.imageLoaderService = imageLoaderService
-        self.nftService = nftService
+        self.collectionNftService = collectionNftService
         self.collectionUI = collectionUI
     }
 
     public func build() -> UIViewController {
         let viewModel = CollectionViewModel(
             imageLoaderService: imageLoaderService,
-            nftService: nftService,
+            collectionNftService: collectionNftService,
             collectionUI: collectionUI
         )
         let viewController = CollectionViewController(viewModel: viewModel)
