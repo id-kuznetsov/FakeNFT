@@ -110,9 +110,13 @@ final class NftCollectionViewCell: UICollectionViewCell, ReuseIdentifying {
     func configure(model: NftUI, imageLoaderService: ImageLoaderService) {
         if model.isPlaceholder {
             showLoadingAnimation()
+            ratingButton.isHidden = true
+            favoriteButton.isHidden = true
+            cartButton.isHidden = true
         }
 
         ratingButton.configure(rating: model.rating)
+        favoriteButton.tintColor = model.isLiked ? .ypRedUniversal : .ypWhiteUniversal
         nameLabel.text = model.name
         priceLabel.text = model.formattedPrice
 

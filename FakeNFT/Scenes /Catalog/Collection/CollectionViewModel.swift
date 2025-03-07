@@ -25,6 +25,8 @@ enum CollectionState {
 
 final class CollectionViewModel: CollectionViewModelProtocol {
     let imageLoaderService: ImageLoaderService
+    let orderService: OrderService
+    let profileService: ProfileService
     var collectionUI: CollectionUI
 
     @Published private var _state: CollectionState = .initial
@@ -35,37 +37,50 @@ final class CollectionViewModel: CollectionViewModelProtocol {
 
     private let collectionNftService: CollectionNftService
     private var cancellables = Set<AnyCancellable>()
+    private var isLoading = false
+    private var profile: ProfileUI = .placeholder
 
     // MARK: - Init
     init(
         imageLoaderService: ImageLoaderService,
         collectionNftService: CollectionNftService,
+        orderService: OrderService,
+        profileService: ProfileService,
         collectionUI: CollectionUI
     ) {
         self.imageLoaderService = imageLoaderService
         self.collectionNftService = collectionNftService
+        self.orderService = orderService
+        self.profileService = profileService
         self.collectionUI = collectionUI
     }
 
     func loadData(skipCache: Bool = false) {
         _state = .loading
-
         _nfts = (0..<3).map { _ in NftUI.placeholder }
 
-        collectionNftService.fetchNfts(
-            collectionId: collectionUI.id,
-            nftIds: collectionUI.nfts,
-            skipCache: skipCache
+        Publishers.Zip(
+            collectionNftService.fetchNfts(
+                collectionId: collectionUI.id,
+                nftIds: collectionUI.nfts,
+                skipCache: skipCache
+            ),
+            profileService.fetchProfileCombine()
         )
-        .map { [weak self] newNfts -> CollectionState in
-            guard
-                let self = self
-            else {
+        .map { [weak self] nfts, profile -> CollectionState in
+            guard let self = self else {
                 return .failed(NSError(domain: "ViewModel", code: -1, userInfo: nil))
             }
+            self.profile = profile
 
-            self._nfts = newNfts
+            let updatedNfts = nfts.map { nft in
+                var nftWithLike = nft
+                nftWithLike.isLiked = profile.likes.contains(nft.id)
+                return nftWithLike
+            }
+            .sorted { $0.isLiked && !$1.isLiked }
 
+            self._nfts = updatedNfts
             return .success
         }
         .catch { error -> Just<CollectionState> in
@@ -76,9 +91,4 @@ final class CollectionViewModel: CollectionViewModelProtocol {
         }
         .store(in: &cancellables)
     }
-
-//    func numberOfItems() -> Int {
-//        nfts.count
-//    }
-
 }

@@ -83,9 +83,6 @@ final class CollectionNftServiceImpl: CollectionNftService {
                 case .success(let (cachedNfts, lastUpdated)):
                     let cacheIsFresh = (Date().timeIntervalSince(lastUpdated) < self.cacheLifetime)
                     promise(.success(cacheIsFresh ? cachedNfts : []))
-                    print(
-                        "DEBUG: CollectionNftService - loaded from cache with key: \(key), items count: \(cachedNfts.count)"
-                    )
                 case .failure:
                     promise(.success([]))
                 }
@@ -99,9 +96,6 @@ final class CollectionNftServiceImpl: CollectionNftService {
         nftIds: [String]
     ) -> AnyPublisher<[NftUI], Error> {
         return Future<[NftUI], Error> { promise in
-            print(
-                "DEBUG: CollectionNftService - fetching nfts for collection id: \(id) from network items count: \(nftIds.count)"
-            )
             if !self.networkMonitor.isConnected {
                 promise(.failure(NetworkMonitorError.noInternetConnection))
                 return
@@ -109,10 +103,10 @@ final class CollectionNftServiceImpl: CollectionNftService {
 
             let key = self.cacheKey(forCollectionId: id)
 
-            let uniqueNftIds = Array(Set(nftIds))
+            let uniqueNftIds = (NSOrderedSet(array: nftIds).array as? [String]) ?? []
             var convertedModels: [NftUI] = []
 
-            for nftId in nftIds {
+            for nftId in uniqueNftIds {
                 let request = NFTRequest(id: nftId)
 
                 self.networkClient.send(
@@ -127,9 +121,6 @@ final class CollectionNftServiceImpl: CollectionNftService {
 
                         if convertedModels.count == uniqueNftIds.count {
                             self.cacheService.save(data: convertedModels, forKey: key)
-                            print(
-                                "DEBUG: CollectionNftService - saved to cache with key: \(key), items count: \(convertedModels.count)"
-                            )
                             promise(.success(convertedModels))
                         }
                     case .failure(let error):

@@ -21,7 +21,7 @@ extension CollectionUI {
     static var placeholder: CollectionUI {
         return CollectionUI(
             name: "",
-            cover: nil,
+            cover: URL(string: ""),
             nfts: [],
             description: "",
             author: "",

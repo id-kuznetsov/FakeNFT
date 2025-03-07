@@ -20,6 +20,7 @@ final class RatingButton: UIButton {
         setupView()
     }
 
+    @available(*, unavailable)
     required init?(coder: NSCoder) {
         super.init(coder: coder)
         setupView()

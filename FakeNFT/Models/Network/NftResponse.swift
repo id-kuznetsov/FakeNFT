@@ -28,6 +28,8 @@ extension NftResponse {
             formattedPrice: String(self.price),
             author: URL(string: self.author),
             id: self.id,
+            isLiked: false,
+            isInCart: false,
             isPlaceholder: false
         )
     }

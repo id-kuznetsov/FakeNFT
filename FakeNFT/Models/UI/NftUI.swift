@@ -15,6 +15,8 @@ struct NftUI: Codable, Hashable {
     let formattedPrice: String
     let author: URL?
     let id: String
+    var isLiked: Bool
+    var isInCart: Bool
     let isPlaceholder: Bool
 }
 
@@ -28,6 +30,8 @@ extension NftUI {
             formattedPrice: "",
             author: URL(string: ""),
             id: UUID().uuidString,
+            isLiked: false,
+            isInCart: false,
             isPlaceholder: true
         )
     }

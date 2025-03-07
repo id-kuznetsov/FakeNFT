@@ -20,7 +20,9 @@ public final class CollectionsServiceAssembly {
             imageLoaderService: servicesAssembler.imageLoaderService,
             collectionsService: servicesAssembler.collectionsService,
             collectionNftService: servicesAssembler.collectionNftService,
-            catalogSortOptionStorage: servicesAssembler.collectionsSortOptionService
+            catalogSortOptionStorage: servicesAssembler.collectionsSortOptionService,
+            orderService: servicesAssembler.orderService,
+            profileService: servicesAssembler.profileService
         )
         let viewController = CollectionsViewController(viewModel: viewModel)
 

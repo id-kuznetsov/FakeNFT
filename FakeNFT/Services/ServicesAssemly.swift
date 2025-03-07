@@ -40,6 +40,20 @@ final class ServicesAssembly {
         )
     }
 
+    var orderService: OrderService {
+        OrderServiceImpl(
+            networkClient: networkClient
+        )
+    }
+
+    var profileService: ProfileService {
+        ProfileServiceImpl(
+            networkClient: networkClient,
+            cacheService: cacheService,
+            networkMonitor: networkMonitor
+        )
+    }
+
     var collectionsSortOptionService: CatalogSortOptionStorage {
         CatalogSortOptionStorageImpl()
     }

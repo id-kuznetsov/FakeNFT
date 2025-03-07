@@ -17,6 +17,10 @@ protocol CacheService {
     func clearCache(forKey key: String)
 }
 
+enum CacheError: Error {
+    case emptyOrStale
+}
+
 class CacheServiceImpl: CacheService {
     private let memoryCache = NSCache<NSString, CacheWrapper>()
     private let fileManager = FileManager.default
