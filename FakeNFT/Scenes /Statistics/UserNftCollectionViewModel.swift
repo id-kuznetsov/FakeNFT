@@ -83,6 +83,8 @@ final class UserNftCollectionViewModel: UserNftCollectionViewModelProtocol {
     }
     
     func toggleLike(for nftId: String) {
+        onLoadingStateChanged?(true)
+        
         if likedNfts.contains(nftId) {
             likedNfts.remove(nftId)
         } else {
@@ -90,6 +92,8 @@ final class UserNftCollectionViewModel: UserNftCollectionViewModelProtocol {
         }
         
         userService.updateUserLikes(likes: Array(likedNfts)) { [weak self] result in
+            self?.onLoadingStateChanged?(false)
+            
             switch result {
             case .success:
                 self?.onNftCollectionUpdated?()
@@ -100,6 +104,8 @@ final class UserNftCollectionViewModel: UserNftCollectionViewModelProtocol {
     }
     
     func toggleCart(for nftId: String) {
+        onLoadingStateChanged?(true)
+        
         if orderedNfts.contains(nftId) {
             orderedNfts.remove(nftId)
         } else {
@@ -107,6 +113,8 @@ final class UserNftCollectionViewModel: UserNftCollectionViewModelProtocol {
         }
         
         orderService.updateOrder(nftIds: Array(orderedNfts)) { [weak self] result in
+            self?.onLoadingStateChanged?(false)
+            
             switch result {
             case .success:
                 self?.onNftCollectionUpdated?()
