@@ -66,7 +66,7 @@ enum StatisticsConstants {
     
     enum UserNftVc {
         enum MainScreen {
-            static let cellHeight: CGFloat = 192
+            static let cellHeight: CGFloat = 172
             static let topEdgeInset: CGFloat = 20
             static let rightEdgeInset = Common.zeroConstant
             static let leftEdgeInset = Common.zeroConstant
@@ -77,14 +77,12 @@ enum StatisticsConstants {
             static let horizontalCellsSpacing = Common.Margin.regular
             static let cellsInRow: CGFloat = 3
             static let nftImageWidth: CGFloat = 108
-            static let likeButtonTop = Common.Margin.xRegular
-            static let likeButtonRight = Common.Margin.xRegular
-            static let likeButtonWidth: CGFloat = 18
-            static let likeButtonHeight: CGFloat = 16
-            static let backViewTop = Common.Spacing.regular
+            static let likeButtonWidth: CGFloat = 40
+            static let likeButtonHeight: CGFloat = 40
+            static let bottomStackViewTop: CGFloat = 4
+            static let bottomStackViewHeigh: CGFloat = 40
             static let ratingViewWidth: CGFloat = 68
             static let ratingViewHeight: CGFloat = 12
-            static let nftNameLabelTop: CGFloat = 5
             static let nameLabelHeight: CGFloat = 22
             static let priceLabelTop: CGFloat = 4
             static let priceLabelHeight: CGFloat = 12

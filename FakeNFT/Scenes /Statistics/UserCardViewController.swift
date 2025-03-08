@@ -256,7 +256,6 @@ final class UserCardViewController: UIViewController {
                 let safariVC = SFSafariViewController(url: url)
                 safariVC.preferredControlTintColor = .ypBlack
                 safariVC.preferredBarTintColor = .ypWhite
-                safariVC.modalPresentationStyle = .overFullScreen
                 safariVC.delegate = self
                 
                 present(safariVC, animated: true)

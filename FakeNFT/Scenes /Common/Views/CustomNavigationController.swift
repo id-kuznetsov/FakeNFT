@@ -7,7 +7,7 @@
 
 import UIKit
 
-class CustomNavigationController: UINavigationController {
+final class CustomNavigationController: UINavigationController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -31,15 +31,15 @@ class CustomNavigationController: UINavigationController {
 
     private func setupNavigationBar() {
         let transparentAppearance = UINavigationBarAppearance()
-        transparentAppearance.configureWithTransparentBackground() // Полностью прозрачный фон
+        transparentAppearance.configureWithTransparentBackground()
         transparentAppearance.backgroundColor = .clear
-        transparentAppearance.shadowColor = .clear // Убираем тень под баром
+        transparentAppearance.shadowColor = .clear
 
         navigationBar.standardAppearance = transparentAppearance
         navigationBar.scrollEdgeAppearance = transparentAppearance
     }
 
-    @objc func goBack() {
+    @objc private func goBack() {
         popViewController(animated: true)
     }
 }
