@@ -14,8 +14,8 @@ final class CollectionsViewController: UIViewController, FilterView, ErrorView, 
     private var subscribers = Set<AnyCancellable>()
 
     // MARK: - DataSource
-    private lazy var dataSource: UITableViewDiffableDataSource<Int, CollectionUI> = {
-        let dataSource = UITableViewDiffableDataSource<Int, CollectionUI>(
+    private lazy var dataSource: UITableViewDiffableDataSource<Int, Collection> = {
+        let dataSource = UITableViewDiffableDataSource<Int, Collection>(
             tableView: tableView,
             cellProvider: { [weak self] tableView, _, collection in
                 guard let self = self else { return UITableViewCell() }
@@ -107,10 +107,12 @@ final class CollectionsViewController: UIViewController, FilterView, ErrorView, 
                     self.filterButton.isEnabled = false
                     self.showLoading()
                 case .success:
-                    self.tableView.bounces = true
-                    self.tableView.isUserInteractionEnabled = true
-                    self.filterButton.isEnabled = true
-                    self.hideLoading()
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 1) { [weak self] in
+                        self?.tableView.bounces = true
+                        self?.tableView.isUserInteractionEnabled = true
+                        self?.filterButton.isEnabled = true
+                        self?.hideLoading()
+                    }
                 case .failed(let error):
                     self.hideLoading()
                     self.showError(error)
@@ -141,7 +143,7 @@ final class CollectionsViewController: UIViewController, FilterView, ErrorView, 
             .store(in: &subscribers)
     }
 
-    private func applySnapshot(_ collections: [CollectionUI], animating: Bool = true) {
+    private func applySnapshot(_ collections: [Collection], animating: Bool = true) {
         var snapshot = dataSource.snapshot()
         snapshot.deleteAllItems()
         snapshot.appendSections([0])
@@ -151,7 +153,7 @@ final class CollectionsViewController: UIViewController, FilterView, ErrorView, 
 
     // MARK: - Navigation
     private func presentCollectionViewController(
-        for collection: CollectionUI
+        for collection: Collection
     ) {
         let collectionServiceAssembler = CollectionServiceAssembly(
             imageLoaderService: viewModel.imageLoaderService,
@@ -232,7 +234,7 @@ final class CollectionsViewController: UIViewController, FilterView, ErrorView, 
 // MARK: - UITableViewDelegate
 extension CollectionsViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let collectionUI = viewModel.getCollection(at: indexPath)
-        presentCollectionViewController(for: collectionUI)
+        let collection = viewModel.getCollection(at: indexPath)
+        presentCollectionViewController(for: collection)
     }
 }

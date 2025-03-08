@@ -125,11 +125,11 @@ final class CollectionHeaderView: UICollectionReusableView, ReuseIdentifying {
     }
 
     func configure(
-        with model: CollectionUI,
+        with model: Collection,
         imageLoaderService: ImageLoaderService
     ) {
         loadCoverImage(
-            from: model.cover,
+            from: model.coverImageUrl,
             imageLoaderService: imageLoaderService
         )
         nameLabel.text = model.name

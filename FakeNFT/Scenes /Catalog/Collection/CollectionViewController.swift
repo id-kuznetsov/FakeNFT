@@ -14,8 +14,8 @@ final class CollectionViewController: UIViewController, ErrorView, RatingView, L
     private let viewModel: CollectionViewModelProtocol
 
     // MARK: - DataSource
-    private lazy var dataSource: UICollectionViewDiffableDataSource<Int, NftUI> = {
-        let dataSource = UICollectionViewDiffableDataSource<Int, NftUI>(
+    private lazy var dataSource: UICollectionViewDiffableDataSource<Int, Nft> = {
+        let dataSource = UICollectionViewDiffableDataSource<Int, Nft>(
             collectionView: collectionView,
             cellProvider: { [weak self] collectionView, indexPath, nftUI in
                 guard let self = self else { return UICollectionViewCell() }
@@ -126,9 +126,11 @@ final class CollectionViewController: UIViewController, ErrorView, RatingView, L
                     self.collectionView.isUserInteractionEnabled = false
                     self.showLoading()
                 case .success:
-                    self.collectionView.bounces = true
-                    self.collectionView.isUserInteractionEnabled = true
-                    self.hideLoading()
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 1) { [weak self] in
+                        self?.collectionView.bounces = true
+                        self?.collectionView.isUserInteractionEnabled = true
+                        self?.hideLoading()
+                    }
                 case .failed(let error):
                     self.hideLoading()
                     self.showError(error)
@@ -141,7 +143,7 @@ final class CollectionViewController: UIViewController, ErrorView, RatingView, L
             .store(in: &subscribers)
     }
 
-    private func applySnapshot(_ nfts: [NftUI], animating: Bool = true) {
+    private func applySnapshot(_ nfts: [Nft], animating: Bool = true) {
         var snapshot = dataSource.snapshot()
         snapshot.deleteAllItems()
         snapshot.appendSections([0])

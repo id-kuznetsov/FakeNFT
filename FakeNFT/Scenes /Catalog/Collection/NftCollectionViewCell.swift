@@ -107,12 +107,13 @@ final class NftCollectionViewCell: UICollectionViewCell, ReuseIdentifying {
     }
 
     // MARK: - Config
-    func configure(model: NftUI, imageLoaderService: ImageLoaderService) {
+    func configure(model: Nft, imageLoaderService: ImageLoaderService) {
         if model.isPlaceholder {
             showLoadingAnimation()
             ratingButton.isHidden = true
             favoriteButton.isHidden = true
             cartButton.isHidden = true
+            priceLabel.isHidden = true
         }
 
         ratingButton.configure(rating: model.rating)
@@ -120,7 +121,7 @@ final class NftCollectionViewCell: UICollectionViewCell, ReuseIdentifying {
         nameLabel.text = model.name
         priceLabel.text = model.formattedPrice
 
-        if let firstImageUrl = model.images.first {
+        if let firstImageUrl = model.imagesUrl.first {
             loadNftImage(
                 from: firstImageUrl,
                 imageLoaderService: imageLoaderService

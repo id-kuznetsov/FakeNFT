@@ -1,5 +1,5 @@
 //
-//  CollectionResponse.swift
+//  CollectionDTO.swift
 //  FakeNFT
 //
 //  Created by Nikolai Eremenko on 28.02.2025.
@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct CollectionResponse: Decodable {
+struct CollectionDTO: Decodable {
     let createdAt: String
     let name: String
     let cover: String
@@ -17,11 +17,13 @@ struct CollectionResponse: Decodable {
     let id: String
 }
 
-extension CollectionResponse {
-    func toUIModel() -> CollectionUI? {
-        return CollectionUI(
+extension CollectionDTO {
+    func toDomainModel() -> Collection? {
+        guard let coverImageUrl = URL(string: self.cover) else { return nil }
+
+        return Collection(
             name: self.name,
-            cover: URL(string: self.cover),
+            coverImageUrl: coverImageUrl,
             nfts: self.nfts,
             description: self.description,
             author: self.author,

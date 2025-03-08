@@ -13,7 +13,7 @@ protocol CollectionService {
         page: Int,
         sortBy: CollectionSortOptions,
         skipCache: Bool
-    ) -> AnyPublisher<[CollectionUI], Error>
+    ) -> AnyPublisher<[Collection], Error>
 }
 
 final class CollectionServiceImpl: CollectionService {
@@ -43,7 +43,7 @@ final class CollectionServiceImpl: CollectionService {
         page: Int,
         sortBy: CollectionSortOptions,
         skipCache: Bool = false
-    ) -> AnyPublisher<[CollectionUI], Error> {
+    ) -> AnyPublisher<[Collection], Error> {
         let cachePublisher = cachePublisher(forPage: page, sortBy: sortBy)
         let networkPublisher = networkPublisher(forPage: page, sortBy: sortBy)
 
@@ -53,7 +53,7 @@ final class CollectionServiceImpl: CollectionService {
                 .eraseToAnyPublisher()
         } else {
             return cachePublisher
-                .flatMap { cached -> AnyPublisher<[CollectionUI], Error> in
+                .flatMap { cached -> AnyPublisher<[Collection], Error> in
                     if cached.isEmpty {
                         return networkPublisher
                     } else {
@@ -78,11 +78,11 @@ final class CollectionServiceImpl: CollectionService {
     private func cachePublisher(
         forPage page: Int,
         sortBy: CollectionSortOptions
-    ) -> AnyPublisher<[CollectionUI], Error> {
+    ) -> AnyPublisher<[Collection], Error> {
         let key = cacheKey(forPage: page, sortBy: sortBy)
 
-        return Future<[CollectionUI], Error> { promise in
-            self.cacheService.load(type: [CollectionUI].self, forKey: key) { result in
+        return Future<[Collection], Error> { promise in
+            self.cacheService.load(type: [Collection].self, forKey: key) { result in
                 switch result {
                 case .success(let (cachedCollections, lastUpdated)):
                     let cacheIsFresh = (Date().timeIntervalSince(lastUpdated) < self.cacheLifetime)
@@ -98,8 +98,8 @@ final class CollectionServiceImpl: CollectionService {
     private func networkPublisher(
         forPage page: Int,
         sortBy: CollectionSortOptions
-    ) -> AnyPublisher<[CollectionUI], Error> {
-        return Future<[CollectionUI], Error> { promise in
+    ) -> AnyPublisher<[Collection], Error> {
+        return Future<[Collection], Error> { promise in
             if !self.networkMonitor.isConnected {
                 promise(.failure(NetworkMonitorError.noInternetConnection))
                 return
@@ -110,11 +110,11 @@ final class CollectionServiceImpl: CollectionService {
 
             self.networkClient.send(
                 request: request,
-                type: [CollectionResponse].self
+                type: [CollectionDTO].self
             ) { result in
                 switch result {
                 case .success(let response):
-                    let convertedModels = response.compactMap { $0.toUIModel() }
+                    let convertedModels = response.compactMap { $0.toDomainModel() }
                     self.cacheService.save(data: convertedModels, forKey: key)
                     promise(.success(convertedModels))
                 case .failure(let error):

@@ -13,7 +13,7 @@ protocol CollectionNftService {
         collectionId: String,
         nftIds: [String],
         skipCache: Bool
-    ) -> AnyPublisher<[NftUI], Error>
+    ) -> AnyPublisher<[Nft], Error>
 }
 
 final class CollectionNftServiceImpl: CollectionNftService {
@@ -43,7 +43,7 @@ final class CollectionNftServiceImpl: CollectionNftService {
         collectionId: String,
         nftIds: [String],
         skipCache: Bool = false
-    ) -> AnyPublisher<[NftUI], Error> {
+    ) -> AnyPublisher<[Nft], Error> {
         let cachePublisher = cachePublisher(forCollectionId: collectionId)
         let networkPublisher = networkPublisher(forCollectionId: collectionId, nftIds: nftIds)
 
@@ -53,7 +53,7 @@ final class CollectionNftServiceImpl: CollectionNftService {
                 .eraseToAnyPublisher()
         } else {
             return cachePublisher
-                .flatMap { cached -> AnyPublisher<[NftUI], Error> in
+                .flatMap { cached -> AnyPublisher<[Nft], Error> in
                     if cached.isEmpty {
                         return networkPublisher
                     } else {
@@ -74,11 +74,11 @@ final class CollectionNftServiceImpl: CollectionNftService {
 
     private func cachePublisher(
         forCollectionId id: String
-    ) -> AnyPublisher<[NftUI], Error> {
+    ) -> AnyPublisher<[Nft], Error> {
         let key = self.cacheKey(forCollectionId: id)
 
-        return Future<[NftUI], Error> { promise in
-            self.cacheService.load(type: [NftUI].self, forKey: key) { result in
+        return Future<[Nft], Error> { promise in
+            self.cacheService.load(type: [Nft].self, forKey: key) { result in
                 switch result {
                 case .success(let (cachedNfts, lastUpdated)):
                     let cacheIsFresh = (Date().timeIntervalSince(lastUpdated) < self.cacheLifetime)
@@ -94,8 +94,8 @@ final class CollectionNftServiceImpl: CollectionNftService {
     private func networkPublisher(
         forCollectionId id: String,
         nftIds: [String]
-    ) -> AnyPublisher<[NftUI], Error> {
-        return Future<[NftUI], Error> { promise in
+    ) -> AnyPublisher<[Nft], Error> {
+        return Future<[Nft], Error> { promise in
             if !self.networkMonitor.isConnected {
                 promise(.failure(NetworkMonitorError.noInternetConnection))
                 return
@@ -104,18 +104,18 @@ final class CollectionNftServiceImpl: CollectionNftService {
             let key = self.cacheKey(forCollectionId: id)
 
             let uniqueNftIds = (NSOrderedSet(array: nftIds).array as? [String]) ?? []
-            var convertedModels: [NftUI] = []
+            var convertedModels: [Nft] = []
 
             for nftId in uniqueNftIds {
                 let request = NFTRequest(id: nftId)
 
                 self.networkClient.send(
                     request: request,
-                    type: NftResponse.self
+                    type: NftDTO.self
                 ) { result in
                     switch result {
                     case .success(let response):
-                        if let convertedModel = response.toUIModel() {
+                        if let convertedModel = response.toDomainModel() {
                             convertedModels.append(convertedModel)
                         }
 

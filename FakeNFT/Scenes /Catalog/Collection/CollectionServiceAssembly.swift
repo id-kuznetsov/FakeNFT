@@ -12,14 +12,14 @@ public final class CollectionServiceAssembly {
     private let collectionNftService: CollectionNftService
     private let orderService: OrderService
     private let profileService: ProfileService
-    private let collectionUI: CollectionUI
+    private let collectionUI: Collection
 
     init(
         imageLoaderService: ImageLoaderService,
         collectionNftService: CollectionNftService,
         orderService: OrderService,
         profileService: ProfileService,
-        collectionUI: CollectionUI,
+        collectionUI: Collection,
     ) {
         self.imageLoaderService = imageLoaderService
         self.collectionNftService = collectionNftService

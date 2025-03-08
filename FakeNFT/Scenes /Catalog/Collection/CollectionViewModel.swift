@@ -9,11 +9,11 @@ import Foundation
 import Combine
 
 protocol CollectionViewModelProtocol {
-    var collectionUI: CollectionUI { get }
+    var collectionUI: Collection { get }
     var imageLoaderService: ImageLoaderService { get }
 
     var state: AnyPublisher<CollectionState, Never> { get }
-    var nfts: AnyPublisher<[NftUI], Never> { get }
+    var nfts: AnyPublisher<[Nft], Never> { get }
 
     func loadData(skipCache: Bool)
 }
@@ -27,18 +27,18 @@ final class CollectionViewModel: CollectionViewModelProtocol {
     let imageLoaderService: ImageLoaderService
     let orderService: OrderService
     let profileService: ProfileService
-    var collectionUI: CollectionUI
+    var collectionUI: Collection
 
     @Published private var _state: CollectionState = .initial
     var state: AnyPublisher<CollectionState, Never> { $_state.eraseToAnyPublisher() }
 
-    @Published private var _nfts: [NftUI] = []
-    var nfts: AnyPublisher<[NftUI], Never> { $_nfts.eraseToAnyPublisher() }
+    @Published private var _nfts: [Nft] = []
+    var nfts: AnyPublisher<[Nft], Never> { $_nfts.eraseToAnyPublisher() }
 
     private let collectionNftService: CollectionNftService
     private var cancellables = Set<AnyCancellable>()
     private var isLoading = false
-    private var profile: ProfileUI = .placeholder
+    private var profile: Profile?
 
     // MARK: - Init
     init(
@@ -46,7 +46,7 @@ final class CollectionViewModel: CollectionViewModelProtocol {
         collectionNftService: CollectionNftService,
         orderService: OrderService,
         profileService: ProfileService,
-        collectionUI: CollectionUI
+        collectionUI: Collection
     ) {
         self.imageLoaderService = imageLoaderService
         self.collectionNftService = collectionNftService
@@ -56,8 +56,13 @@ final class CollectionViewModel: CollectionViewModelProtocol {
     }
 
     func loadData(skipCache: Bool = false) {
+        guard let nftPlaceholder = Nft.placeholder else {
+            _state = .failed(NSError(domain: "ViewModel", code: -1, userInfo: nil))
+            return
+        }
+
         _state = .loading
-        _nfts = (0..<3).map { _ in NftUI.placeholder }
+        _nfts = (0..<3).map { _ in Nft.placeholder ?? nftPlaceholder }
 
         Publishers.Zip(
             collectionNftService.fetchNfts(

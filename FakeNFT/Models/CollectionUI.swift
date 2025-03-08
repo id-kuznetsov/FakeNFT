@@ -1,5 +1,5 @@
 //
-//  CollectionUI.swift
+//  Collection.swift
 //  FakeNFT
 //
 //  Created by Nikolai Eremenko on 17.02.2025.
@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct CollectionUI: Codable, Hashable {
+struct Collection: Codable, Hashable {
     let name: String
     let cover: URL?
     let nfts: [String]
@@ -17,9 +17,9 @@ struct CollectionUI: Codable, Hashable {
     let isPlaceholder: Bool
 }
 
-extension CollectionUI {
-    static var placeholder: CollectionUI {
-        return CollectionUI(
+extension Collection {
+    static var placeholder: Collection {
+        return Collection(
             name: "",
             cover: URL(string: ""),
             nfts: [],

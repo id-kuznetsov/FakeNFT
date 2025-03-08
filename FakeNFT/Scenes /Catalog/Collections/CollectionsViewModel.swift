@@ -15,12 +15,12 @@ protocol CollectionsViewModelProtocol {
     var collectionNftService: CollectionNftService { get }
     var orderService: OrderService { get }
     var profileService: ProfileService { get }
-    var collections: AnyPublisher<[CollectionUI], Never> { get }
+    var collections: AnyPublisher<[Collection], Never> { get }
     var state: AnyPublisher<CollectionsState, Never> { get }
     func loadData(skipCache: Bool)
     func loadNextPage(reset: Bool, skipCache: Bool)
     func sortCollections(by option: CollectionSortOptions)
-    func getCollection(at indexPath: IndexPath) -> CollectionUI
+    func getCollection(at indexPath: IndexPath) -> Collection
 }
 
 // MARK: - State
@@ -45,8 +45,8 @@ final class CollectionsViewModel: CollectionsViewModelProtocol {
     @Published private var _state: CollectionsState = .initial
     var state: AnyPublisher<CollectionsState, Never> { $_state.eraseToAnyPublisher() }
 
-    @Published private var _collections: [CollectionUI] = []
-    var collections: AnyPublisher<[CollectionUI], Never> { $_collections.eraseToAnyPublisher() }
+    @Published private var _collections: [Collection] = []
+    var collections: AnyPublisher<[Collection], Never> { $_collections.eraseToAnyPublisher() }
 
     private let catalogSortOptionStorage: CatalogSortOptionStorage
     private var cancellables = Set<AnyCancellable>()
@@ -73,7 +73,7 @@ final class CollectionsViewModel: CollectionsViewModelProtocol {
         self.profileService = profileService
     }
 
-    func getCollection(at indexPath: IndexPath) -> CollectionUI {
+    func getCollection(at indexPath: IndexPath) -> Collection {
         guard _collections.indices.contains(indexPath.row) else {
             fatalError("🔥 Index out of range: \(indexPath.row)")
         }
@@ -90,17 +90,24 @@ final class CollectionsViewModel: CollectionsViewModelProtocol {
     func loadData(skipCache: Bool = false) {
         currentPage = 0
         hasMorePages = true
-        _state = .loading
+
         loadNextPage(reset: true)
     }
 
     func loadNextPage(reset: Bool = false, skipCache: Bool = false) {
         guard !isLoadingPage, hasMorePages else { return }
 
+        _state = .loading
+
+        guard let collectionPlaceholder = Collection.placeholder else {
+            _state = .failed(NSError(domain: "ViewModel", code: -1, userInfo: nil))
+            return
+        }
+
         isLoadingPage = true
 
         if reset {
-            _collections = (0..<4).map { _ in CollectionUI.placeholder }
+            _collections = (0..<4).map { _ in Collection.placeholder ?? collectionPlaceholder }
         } else {
             currentPage += 1
         }
@@ -124,6 +131,11 @@ final class CollectionsViewModel: CollectionsViewModelProtocol {
                     !self._collections.contains(where: { $0.id == newItem.id })
                 }
                 self._collections.append(contentsOf: uniqueNew)
+                /// Доп. сортировка
+                /// В API есть баг, неправильно сортирует по nfts
+                if self.sortBy == .nfts {
+                    self._collections.sort { $0.nfts.count > $1.nfts.count }
+                }
             }
 
             return .success

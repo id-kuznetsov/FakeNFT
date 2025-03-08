@@ -1,25 +1,16 @@
 import Foundation
 import Combine
 
-typealias ProfileCompletion = (Result<Profile, Error>) -> Void
-
 protocol ProfileService {
-    func fetchProfile(_ completion: @escaping ProfileCompletion)
-    func updateProfile(with dto: ProfileEditingDto, _ completion: @escaping ProfileCompletion)
-
-    func fetchProfileCombine() -> AnyPublisher<ProfileUI, Error>
+    func fetchProfileCombine() -> AnyPublisher<Profile, Error>
 }
 
 enum ProfileServiceError: Error {
-    case profileFetchingFail
-    case profileUpdatingFail
     case invalidResponse
 }
 
 final class ProfileServiceImpl: ProfileService {
     private let networkClient: NetworkClient
-    private var fetchProfileTask: NetworkTask?
-    private var updateProfileTask: NetworkTask?
     private let cacheService: CacheService
     private let networkMonitor: NetworkMonitor
     private let cacheLifetime: TimeInterval = 10 * 60
@@ -41,38 +32,8 @@ final class ProfileServiceImpl: ProfileService {
             .store(in: &cancellables)
     }
 
-    func fetchProfile(_ completion: @escaping ProfileCompletion) {
-        fetchProfileTask?.cancel()
-        let request = ProfileRequest()
-
-        fetchProfileTask = networkClient.send(request: request, type: Profile.self) { [weak self] result in
-            self?.fetchProfileTask = nil
-            switch result {
-            case .success(let profile):
-                completion(.success(profile))
-            case .failure(let error):
-                completion(.failure(error))
-            }
-        }
-    }
-
-    func updateProfile(with dto: ProfileEditingDto, _ completion: @escaping ProfileCompletion) {
-        updateProfileTask?.cancel()
-        let request = ProfileEditingRequest(dto: dto)
-
-        updateProfileTask = networkClient.send(request: request, type: Profile.self) { [weak self] result in
-            self?.updateProfileTask = nil
-            switch result {
-            case .success(let profile):
-                completion(.success(profile))
-            case .failure(let error):
-                completion(.failure(error))
-            }
-        }
-    }
-
     // MARK: - Combine
-    func fetchProfileCombine() -> AnyPublisher<ProfileUI, Error> {
+    func fetchProfileCombine() -> AnyPublisher<Profile, Error> {
         let networkPub = networkPublisher()
 
         return cachePublisher()
@@ -90,16 +51,16 @@ final class ProfileServiceImpl: ProfileService {
 
     private func cacheKey() -> String { "profile" }
 
-    private func cachePublisher() -> AnyPublisher<ProfileUI, Error> {
+    private func cachePublisher() -> AnyPublisher<Profile, Error> {
         let key = cacheKey()
 
-        return Future<ProfileUI, Error> { [weak self] promise in
+        return Future<Profile, Error> { [weak self] promise in
             guard let self = self else {
                 promise(.failure(CacheError.emptyOrStale))
                 return
             }
 
-            self.cacheService.load(type: ProfileUI.self, forKey: key) { result in
+            self.cacheService.load(type: Profile.self, forKey: key) { result in
                 switch result {
                 case .success(let (cachedProfile, lastUpdated)):
                     let cacheIsFresh = Date().timeIntervalSince(lastUpdated) < self.cacheLifetime
@@ -116,8 +77,8 @@ final class ProfileServiceImpl: ProfileService {
         .eraseToAnyPublisher()
     }
 
-    private func networkPublisher() -> AnyPublisher<ProfileUI, Error> {
-        return Future<ProfileUI, Error> { [weak self] promise in
+    private func networkPublisher() -> AnyPublisher<Profile, Error> {
+        return Future<Profile, Error> { [weak self] promise in
             guard let self = self else {
                 promise(.failure(NSError(domain: "ProfileService", code: -1, userInfo: nil)))
                 print("DEBUG: ERROR ProfileService - no self")
@@ -135,7 +96,7 @@ final class ProfileServiceImpl: ProfileService {
 
             self.networkClient.send(
                 request: request,
-                type: ProfileResponse.self
+                type: ProfileDTO.self
             ) { result in
                 switch result {
                 case .success(let response):
