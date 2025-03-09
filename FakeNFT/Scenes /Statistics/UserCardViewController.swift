@@ -160,7 +160,7 @@ final class UserCardViewController: UIViewController {
         } else {
             avatarImageView.image = placeholderImage
         }
-        // Hide button if user doesn't have website
+        
         webViewButton.isHidden = viewModel.userWebsite == nil
     }
     

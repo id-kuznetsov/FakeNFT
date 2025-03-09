@@ -121,7 +121,6 @@ final class StatisticsViewModel: StatisticsViewModelProtocol {
         )
     }
     
-    // Calling this method on logout (when the authorization functionality will be implemented)
     func clearAllStatisticsData() {
         cacheStorage.clearStatisticsCache()
         userDefaultsStorage.clearStatisticsUserDefaults()

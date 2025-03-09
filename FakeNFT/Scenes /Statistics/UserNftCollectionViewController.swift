@@ -105,7 +105,7 @@ final class UserNftCollectionViewController: UIViewController, ErrorView {
     }
     
     private func setupUI() {
-        view.backgroundColor = .white
+        view.backgroundColor = .ypWhite
         title = L10n.User.nftCollection
         
         view.addSubview(collectionView)

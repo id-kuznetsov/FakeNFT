@@ -22,7 +22,7 @@ final class UserNftCollectionCell: UICollectionViewCell, ReuseIdentifying {
         let button = UIButton()
         let heartImage = UIImage.heart
         button.setImage(heartImage, for: .normal)
-        button.tintColor = .ypWhite
+        button.tintColor = .ypWhiteUniversal
         button.backgroundColor = .clear
         button.addTarget(self, action: #selector(likeTapped), for: .touchUpInside)
         return button
@@ -163,7 +163,7 @@ final class UserNftCollectionCell: UICollectionViewCell, ReuseIdentifying {
         ratingStackView.setRating(model.rating)
         priceLabel.text = "\(model.price) ETH"
         nftId = model.id
-        likeButton.tintColor = isLiked ? .ypRedUniversal : .ypWhite
+        likeButton.tintColor = isLiked ? .ypRedUniversal : .ypWhiteUniversal
         
         let cartImage = isInCart ? UIImage(named: "ic.cart.delete") : UIImage(named: "ic.cart")
         cartButton.setImage(cartImage, for: .normal)

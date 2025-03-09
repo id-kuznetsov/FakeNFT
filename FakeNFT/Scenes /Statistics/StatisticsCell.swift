@@ -76,11 +76,9 @@ final class StatisticsCell: UITableViewCell, ReuseIdentifying {
         }
         
         NSLayoutConstraint.activate([
-            // indexLabel constraints
             indexLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             indexLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
             
-            // containerView constraints
             containerView.leadingAnchor.constraint(
                 equalTo: indexLabel.trailingAnchor,
                 constant: StatisticsConstants.StatisticsVc.TableViewParams.sideMarginFromEdges
@@ -101,7 +99,6 @@ final class StatisticsCell: UITableViewCell, ReuseIdentifying {
                 equalToConstant: StatisticsConstants.StatisticsVc.TableViewParams.containerViewHight
             ),
             
-            // avatarImageView constraints
             avatarImageView.leadingAnchor.constraint(
                 equalTo: containerView.leadingAnchor,
                 constant: StatisticsConstants.StatisticsVc.TableViewParams.sideMarginFromEdges
@@ -114,7 +111,6 @@ final class StatisticsCell: UITableViewCell, ReuseIdentifying {
                 equalToConstant: StatisticsConstants.StatisticsVc.TableViewParams.avatarHeight
             ),
             
-            // nameLabel constraints
             nameLabel.leadingAnchor.constraint(
                 equalTo: avatarImageView.trailingAnchor,
                 constant: StatisticsConstants.StatisticsVc.TableViewParams.nameLabelLeftInset
@@ -125,7 +121,6 @@ final class StatisticsCell: UITableViewCell, ReuseIdentifying {
                 constant: -StatisticsConstants.StatisticsVc.TableViewParams.sideMarginFromEdges
             ),
             
-            // ratingLabel constraints
             ratingLabel.trailingAnchor.constraint(
                 equalTo: containerView.trailingAnchor,
                 constant: -StatisticsConstants.StatisticsVc.TableViewParams.sideMarginFromEdges

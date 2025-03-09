@@ -14,7 +14,7 @@ final class StatisticsViewController: UIViewController {
     
     private lazy var filterButton: UIBarButtonItem = {
         let button = UIBarButtonItem(
-            image: UIImage.icSort,
+            image: .icSort,
             style: .plain,
             target: self,
             action: #selector(filterButtonTapped)
@@ -29,6 +29,7 @@ final class StatisticsViewController: UIViewController {
         tableView.dataSource = self
         tableView.delegate = self
         tableView.separatorStyle = .none
+        tableView.backgroundColor = .ypWhite
         tableView.translatesAutoresizingMaskIntoConstraints = false
         return tableView
     }()
@@ -60,7 +61,7 @@ final class StatisticsViewController: UIViewController {
     
     // MARK: - Private methods
     private func setupUI() {
-        view.backgroundColor = .systemBackground
+        view.backgroundColor = .ypWhite
         
         view.addSubview(tableView)
         
@@ -157,6 +158,7 @@ extension StatisticsViewController: UITableViewDataSource {
         
         let user = viewModel.users[indexPath.row]
         cell.configure(with: user, index: indexPath.row)
+        cell.backgroundColor = .ypWhite
         cell.selectionStyle = .none
         
         return cell
