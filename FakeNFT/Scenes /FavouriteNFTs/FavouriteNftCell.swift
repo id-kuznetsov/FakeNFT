@@ -74,6 +74,7 @@ final class FavouriteNftCell: UICollectionViewCell, ReuseIdentifying {
         setupLayout()
     }
     
+    @available(*, unavailable)
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -81,7 +82,10 @@ final class FavouriteNftCell: UICollectionViewCell, ReuseIdentifying {
     // MARK: - Public Methods
     
     func setupCell(nft: Nft) {
-        nftCardView.setImage(url: nft.previewImage)
+        if let url = nft.previewImage {
+            nftCardView.setImage(url: url)
+        }
+        
         titleLabel.text = nft.name
         ratingStackView.setRating(nft.rating)
         priceLabel.text = "\(nft.price) ETH"

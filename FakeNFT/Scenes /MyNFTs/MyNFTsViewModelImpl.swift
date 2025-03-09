@@ -6,6 +6,7 @@ final class MyNFTsViewModelImpl: MyNFTsViewModel {
     
     let nfts = Observable<[Nft]>(value: [])
     let isRefreshing = Observable<Bool>(value: false)
+    var errorModel = Observable<ErrorModel?>(value: nil)
     var isLoading = true
     
     // MARK: - Private Properties
@@ -60,7 +61,7 @@ final class MyNFTsViewModelImpl: MyNFTsViewModel {
                 self.favourites = Set(profile.likes)
                 self.fetchNfts(ids: profile.nfts)
             case .failure(let error):
-                print("Failed to fetch profile: \(error)")
+                errorModel.value = createErrorModel(with: error)
             }
             
             self.isRefreshing.value = false
@@ -83,8 +84,31 @@ final class MyNFTsViewModelImpl: MyNFTsViewModel {
                 let sortedNfts = nfts.sorted(by: sortOption)
                 self.nfts.value = sortedNfts
             case .failure(let error):
-                print("Failed to load NFTs: \(error)")
+                errorModel.value = createErrorModel(with: error)
             }
+        }
+    }
+    
+    private func createErrorModel(with error: Error) -> ErrorModel {
+        switch error {
+        case ProfileServiceError.profileFetchingFail:
+            return ErrorModel(
+                message: L10n.Error.update,
+                actionText: L10n.Button.close,
+                action: { }
+            )
+        case is NetworkClientError:
+            return ErrorModel(
+                message: L10n.Error.network,
+                actionText: L10n.Button.close,
+                action: { }
+            )
+        default:
+            return ErrorModel(
+                message: L10n.Profile.unknownError,
+                actionText: L10n.Button.close,
+                action: { }
+            )
         }
     }
 }

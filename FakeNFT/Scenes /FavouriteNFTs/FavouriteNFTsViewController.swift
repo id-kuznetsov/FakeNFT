@@ -1,6 +1,6 @@
 import UIKit
 
-final class FavouriteNFTsViewController: UIViewController {
+final class FavouriteNFTsViewController: UIViewController, ErrorView {
     
     // MARK: - Section
     
@@ -20,8 +20,8 @@ final class FavouriteNFTsViewController: UIViewController {
         static let itemHeight: CGFloat = 80.0
         static let interItemSpacing: CGFloat = 7.0
         static let lineSpacing: CGFloat = 20.0
-        static let leadingInset: CGFloat = 6.0
-        static let trailingInset: CGFloat = 6.0
+        static let leadingInset: CGFloat = 16.0
+        static let trailingInset: CGFloat = 16.0
     }
     
     // MARK: - Private Properties
@@ -152,6 +152,11 @@ final class FavouriteNFTsViewController: UIViewController {
             if !isRefreshing {
                 self?.stopRefresh()
             }
+        }
+        
+        viewModel.errorModel.bind { [weak self] errorModel in
+            guard let errorModel else { return }
+            self?.showError(errorModel)
         }
     }
     

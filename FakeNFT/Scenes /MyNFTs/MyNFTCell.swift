@@ -54,15 +54,13 @@ final class MyNFTCell: UITableViewCell, ReuseIdentifying {
         label.textColor = .ypBlack
         label.font = .caption2
         label.setContentHuggingPriority(.defaultLow, for: .horizontal)
-        label.adjustsFontSizeToFitWidth = true
-        label.minimumScaleFactor = 0.85
         return label
     }()
     
     private lazy var authorStackView: UIStackView = {
         let stackView = UIStackView(arrangedSubviews: [fromLabel, authorLabel])
         stackView.axis = .horizontal
-        stackView.alignment = .center
+        stackView.alignment = .lastBaseline
         stackView.spacing = 4.0
         return stackView
     }()
@@ -117,6 +115,7 @@ final class MyNFTCell: UITableViewCell, ReuseIdentifying {
         setupLayout()
     }
     
+    @available(*, unavailable)
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -124,7 +123,10 @@ final class MyNFTCell: UITableViewCell, ReuseIdentifying {
     // MARK: - Public Methods
     
     func setupCell(nft: Nft) {
-        nftCardView.setImage(url: nft.previewImage)
+        if let url = nft.previewImage {
+            nftCardView.setImage(url: url)
+        }
+        
         titleLabel.text = nft.name
         ratingStackView.setRating(nft.rating)
         authorLabel.text = nft.authorName

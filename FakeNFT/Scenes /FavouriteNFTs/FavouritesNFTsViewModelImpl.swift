@@ -1,8 +1,9 @@
 import Foundation
 
-final class FavouritesNFTsViewModelImpl: FavouritesNFTsViewModel {    
+final class FavouritesNFTsViewModelImpl: FavouritesNFTsViewModel {
     var nfts: Observable<[Nft]>
     var isRefreshing: Observable<Bool>
+    var errorModel: Observable<ErrorModel?>
     var isLoading = true
     
     private let nftService: NftService
@@ -15,6 +16,7 @@ final class FavouritesNFTsViewModelImpl: FavouritesNFTsViewModel {
         self.favourites = Set(favourites)
         nfts = Observable(value: [])
         isRefreshing = Observable(value: false)
+        errorModel = Observable(value: nil)
         fetchFavourites()
     }
     
@@ -48,7 +50,7 @@ final class FavouritesNFTsViewModelImpl: FavouritesNFTsViewModel {
                 favourites = Set(profile.likes)
                 fetchFavourites()
             case .failure(let error):
-                print("Failed to fetch profile: \(error)")
+                errorModel.value = createErrorModel(with: error)
             }
             
             self.isRefreshing.value = false
@@ -63,9 +65,34 @@ final class FavouritesNFTsViewModelImpl: FavouritesNFTsViewModel {
                 
                 let sortedNfts = nfts.sorted(by: { $0.name < $1.name })
                 self?.nfts.value = sortedNfts
-            case .failure(_):
-                break
+            case .failure(let error):
+                self?.errorModel.value = self?.createErrorModel(with: error)
             }
+        }
+    }
+    
+    private func createErrorModel(with error: Error) -> ErrorModel {
+        switch error {
+        case ProfileServiceError.profileFetchingFail:
+            return ErrorModel(
+                message: L10n.Error.update,
+                actionText: L10n.Button.close,
+                action: { }
+            )
+            
+        case is NetworkClientError:
+            return ErrorModel(
+                message: L10n.Error.network,
+                actionText: L10n.Button.close,
+                action: { }
+            )
+            
+        default:
+            return ErrorModel(
+                message: L10n.Profile.unknownError,
+                actionText: L10n.Button.close,
+                action: { }
+            )
         }
     }
 }

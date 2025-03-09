@@ -1,6 +1,6 @@
 import UIKit
 
-final class MyNFTsViewController: UIViewController {
+final class MyNFTsViewController: UIViewController, ErrorView {
     
     // MARK: - Section
     
@@ -141,6 +141,11 @@ final class MyNFTsViewController: UIViewController {
             if !isRefreshing {
                 self?.stopRefresh()
             }
+        }
+        
+        viewModel.errorModel.bind { [weak self] errorModel in
+            guard let errorModel else { return }
+            self?.showError(errorModel)
         }
     }
     

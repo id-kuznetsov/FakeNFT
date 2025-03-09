@@ -55,8 +55,8 @@ final class NFTCardView: UIView {
     
     // MARK: - Public Methods
     
-    func setImage(url: String?) {
-        guard let url = URL(string: url!) else { return }
+    func setImage(url: String) {
+        guard let url = URL(string: url) else { return }
         let options: KingfisherOptionsInfo = [.transition(.fade(1)), .cacheOriginalImage ]
         nftImageView.kf.indicatorType = .activity
         
