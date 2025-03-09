@@ -54,3 +54,5 @@
 "MyNFTs.price" = "Цена";
 "MyNFTs.from" = "от";
 
+"FavouritesNFTs.title" = "Избранные NFT";
+"FavouritesNFTs.placeholder" = "У Вас ещё нет избранных NFT";

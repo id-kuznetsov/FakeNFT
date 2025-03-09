@@ -76,7 +76,7 @@ final class FavouriteNFTsViewController: UIViewController {
     
     private lazy var placeholderLabel: UILabel = {
         let label = UILabel()
-        label.text = "У Вас еще нет избранных NFT"
+        label.text = L10n.FavouritesNFTs.placeholder
         label.font = .bodyBold
         label.textColor = .ypBlack
         label.isHidden = true
@@ -97,7 +97,7 @@ final class FavouriteNFTsViewController: UIViewController {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
         hidesBottomBarWhenPushed = true
-        title = "Избранные NFT"
+        title = L10n.FavouritesNFTs.title
     }
     
     @available(*, unavailable)
@@ -119,7 +119,7 @@ final class FavouriteNFTsViewController: UIViewController {
     
     private func setupView() {
         view.backgroundColor = .ypWhite
-        view.addSubviews(collectionView, placeholderLabel)
+        view.addSubviews(collectionView, placeholderLabel, activityIndicator)
     }
     
     private func setupLayout() {
@@ -131,6 +131,9 @@ final class FavouriteNFTsViewController: UIViewController {
             
             placeholderLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             placeholderLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            
+            activityIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            activityIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor),
         ])
     }
     
