@@ -37,23 +37,21 @@
 
 ## Модуль 3:
 #### MyNft Screen
-- NftCardView (UIImageView + FavouriteButton) (est: 1 час; fact: x часов)
-- Верстка RaitingView (est: 1 час; fact: x часов)
-- MyNftCellModel (est: 30 мин; fact: x часов)
-- Верстка ячейки MyNftCell (est: 1 час; fact: x часов)
-- FavouritesNftService (Добавление в избранное) (est: 2 часа; fact: x часов)
-- MyNftViewModel (protocol) (est: 2 час; fact: x часов)
-- MyNftViewModelImpl (mock данные, потом прокинуть зависимость NftService) (est: 2 часа; fact: x часов)
-- Верстка MyNftViewController (UITableView + SortBarButtonItem) (est: 3 часа; fact: x часов)
-- Биндинг данных (est: 30 мин; fact: x часов)
-- Внедрение логики сортировки на экране MyNft Screen (Alert + ViewModel Methods) (est: 3 часа; fact: x часов)
+- NftCardView (UIImageView + FavouriteButton) (est: 1 час; fact: 1 час)
+- Верстка ячейки MyNftCell (est: 1 час; fact: 1 часа)
+- FavouritesNftService (Добавление в избранное) (est: 2 часа; fact: 2 часов)
+- MyNftViewModel (protocol) (est: 2 час; fact: 2 часов)
+- MyNftViewModelImpl (mock данные, потом прокинуть зависимость NftService) (est: 2 часа; fact: 3 часа)
+- Верстка MyNftViewController (UITableView + SortBarButtonItem) (est: 3 часа; fact: 3 часа)
+- Биндинг данных (est: 30 мин; fact: 1 час)
+- Внедрение логики сортировки на экране MyNft Screen (Alert + ViewModel Methods) (est: 3 часа; fact: 2 часа)
 
 #### Favourites Screen
-- Верстка ячейки FavouritesNftCell (est: 1 час; fact: x часов)
-- FavouritesNftViewModel (est: 2 часа; fact: x часов)
-- FavouritesNftViewModelImpl (NftService + FavoutitesService) (est: 2 часа; fact: x часов)
-- Верстка FavouriteNftViewController (UICollectionView) (est: 3 часа; fact: x часов)
-- Биндинг данных (est: 30 мин; fact: x часов)
+- Верстка ячейки FavouritesNftCell (est: 1 час; fact: 1 час)
+- FavouritesNftViewModel (est: 2 часа; fact: 2 часа)
+- FavouritesNftViewModelImpl (NftService + FavoutitesService) (est: 2 часа; fact: 2 часа)
+- Верстка FavouriteNftViewController (UICollectionView) (est: 3 часа; fact: 3 часа)
+- Биндинг данных (est: 30 мин; fact: 1 час)
 
 
 
