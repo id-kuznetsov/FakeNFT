@@ -6,6 +6,7 @@ final class MyNFTsViewModelImpl: MyNFTsViewModel {
     
     let nfts = Observable<[Nft]>(value: [])
     let isRefreshing = Observable<Bool>(value: false)
+    var isLoading = true
     
     // MARK: - Private Properties
     
@@ -78,6 +79,7 @@ final class MyNFTsViewModelImpl: MyNFTsViewModel {
             guard let self = self else { return }
             switch result {
             case .success(let nfts):
+                isLoading = false
                 let sortedNfts = nfts.sorted(by: sortOption)
                 self.nfts.value = sortedNfts
             case .failure(let error):

@@ -43,7 +43,15 @@ final class ProfileCoordinatorImpl: ProfileCoordinator {
     }
     
     func favouritesScene(likes: [String]) {
-        let vc = FavouriteNFTsViewController(service: servicesAssembly.nftService, favourites: likes)
+        let nftService = servicesAssembly.nftService
+        let profileService = servicesAssembly.profileService
+        
+        let viewModel = FavouritesNFTsViewModelImpl(
+            nftService: nftService,
+            profileService: profileService,
+            favourites: likes
+        )
+        let vc = FavouriteNFTsViewController(viewModel: viewModel)
         navigationController.pushViewController(vc, animated: true)
     }
     

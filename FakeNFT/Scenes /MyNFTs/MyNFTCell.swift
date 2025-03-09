@@ -44,7 +44,7 @@ final class MyNFTCell: UITableViewCell, ReuseIdentifying {
         let label = UILabel()
         label.textColor = .ypBlack
         label.font = .caption1
-        label.text = "от"
+        label.text = L10n.MyNFTs.from
         label.setContentHuggingPriority(.defaultHigh, for: .horizontal)
         return label
     }()
@@ -80,7 +80,7 @@ final class MyNFTCell: UITableViewCell, ReuseIdentifying {
         let label = UILabel()
         label.textColor = .ypBlack
         label.font = .caption2
-        label.text = "Цена"
+        label.text = L10n.MyNFTs.price
         return label
     }()
     
@@ -89,7 +89,7 @@ final class MyNFTCell: UITableViewCell, ReuseIdentifying {
         label.textColor = .ypBlack
         label.font = .bodyBold
         label.adjustsFontSizeToFitWidth = true
-        label.minimumScaleFactor = 0.85
+        label.minimumScaleFactor = 0.8
         return label
     }()
     
@@ -128,7 +128,7 @@ final class MyNFTCell: UITableViewCell, ReuseIdentifying {
         titleLabel.text = nft.name
         ratingStackView.setRating(nft.rating)
         authorLabel.text = nft.authorName
-        priceValueLabel.text = nft.price.description
+        priceValueLabel.text = "\(nft.price) ETH"
     }
     
     // MARK: - Private Methods

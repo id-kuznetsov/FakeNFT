@@ -48,3 +48,9 @@
 "ProfileEditingAlert.removeAction" = "Удалить";
 "ProfileEditingAlert.cancelAction" = "Отмена";
 "ProfileEditingAlert.imageLoadingError" = "Невозможно изменить изображение";
+
+"MyNFTs.title" = "Мои NFT";
+"MyNFTs.placeholder" = "У Вас еще нет NFT";
+"MyNFTs.price" = "Цена";
+"MyNFTs.from" = "от";
+

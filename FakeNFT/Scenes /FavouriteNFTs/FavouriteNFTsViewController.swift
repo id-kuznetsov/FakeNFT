@@ -26,8 +26,7 @@ final class FavouriteNFTsViewController: UIViewController {
     
     // MARK: - Private Properties
     
-    private let service: NftService
-    private var favourites: [NftID] = []
+    private let viewModel: FavouritesNFTsViewModel
     
     private lazy var refreshControl: UIRefreshControl = {
         let control = UIRefreshControl()
@@ -77,7 +76,7 @@ final class FavouriteNFTsViewController: UIViewController {
     
     private lazy var placeholderLabel: UILabel = {
         let label = UILabel()
-        label.text = "У Вас еще нет NFT"
+        label.text = "У Вас еще нет избранных NFT"
         label.font = .bodyBold
         label.textColor = .ypBlack
         label.isHidden = true
@@ -85,14 +84,20 @@ final class FavouriteNFTsViewController: UIViewController {
         return label
     }()
     
+    private lazy var activityIndicator: UIActivityIndicatorView = {
+        let activityIndicator = UIActivityIndicatorView()
+        activityIndicator.hidesWhenStopped = true
+        activityIndicator.translatesAutoresizingMaskIntoConstraints = false
+        return activityIndicator
+    }()
+    
     // MARK: - Init
     
-    init(service: NftService, favourites: [NftID]) {
-        self.service = service
-        self.favourites = favourites
+    init(viewModel: FavouritesNFTsViewModel) {
+        self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
         hidesBottomBarWhenPushed = true
-        title = "Мои NFT"
+        title = "Избранные NFT"
     }
     
     @available(*, unavailable)
@@ -106,16 +111,8 @@ final class FavouriteNFTsViewController: UIViewController {
         super.viewDidLoad()
         setupView()
         setupLayout()
+        startLoading()
         setupDataBindings()
-        
-        service.loadNfts(ids: favourites) { [weak self] result in
-            switch result {
-            case .success(let nfts):
-                self?.applySnapshot(nfts: nfts)
-            case .failure(_):
-                break
-            }
-        }
     }
     
     // MARK: - Private Methods
@@ -138,7 +135,21 @@ final class FavouriteNFTsViewController: UIViewController {
     }
     
     private func setupDataBindings() {
+        viewModel.nfts.bind { [weak self] nfts in
+            guard let self else { return }
+            guard !viewModel.isLoading else { return }
+            stopLoading()
+            collectionView.isHidden = nfts.isEmpty
+            placeholderLabel.isHidden = !nfts.isEmpty
+            
+            applySnapshot(nfts: nfts)
+        }
         
+        viewModel.isRefreshing.bind { [weak self] isRefreshing in
+            if !isRefreshing {
+                self?.stopRefresh()
+            }
+        }
     }
     
     private func applySnapshot(nfts: [Nft]) {
@@ -152,16 +163,29 @@ final class FavouriteNFTsViewController: UIViewController {
         refreshControl.endRefreshing()
     }
     
+    private func startLoading() {
+        collectionView.isHidden = true
+        placeholderLabel.isHidden = true
+        activityIndicator.isHidden = false
+        activityIndicator.startAnimating()
+    }
+    
+    private func stopLoading() {
+        activityIndicator.isHidden = true
+        activityIndicator.stopAnimating()
+    }
+    
     // MARK: - Actions
     
     @objc private func refreshFavouriteNfts(_ sender: Any) {
-        
+        viewModel.refreshNfts()
     }
 }
 
 extension FavouriteNFTsViewController: FavouriteNftCellDelegate {
     func didTapFavouriteButton(on cell: FavouriteNftCell) {
-        
+        guard let indexPath = collectionView.indexPath(for: cell) else { return }
+        viewModel.didTapFavouriteButtonOnCell(at: indexPath)
     }
 }
 

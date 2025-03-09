@@ -84,6 +84,7 @@ final class FavouriteNftCell: UICollectionViewCell, ReuseIdentifying {
         nftCardView.setImage(url: nft.previewImage)
         titleLabel.text = nft.name
         ratingStackView.setRating(nft.rating)
+        priceLabel.text = "\(nft.price) ETH"
     }
     
     // MARK: - Private Methods

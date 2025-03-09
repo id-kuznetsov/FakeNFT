@@ -28,6 +28,7 @@ final class MyNFTsViewController: UIViewController {
         tableView.register(MyNFTCell.self)
         tableView.delegate = self
         
+        tableView.isHidden = true
         tableView.refreshControl = refreshControl
         tableView.backgroundColor = .clear
         tableView.separatorColor = .clear
@@ -63,12 +64,19 @@ final class MyNFTsViewController: UIViewController {
     
     private lazy var placeholderLabel: UILabel = {
         let label = UILabel()
-        label.text = "У Вас еще нет NFT"
+        label.text = L10n.MyNFTs.placeholder
+        label.isHidden = true
         label.font = .bodyBold
         label.textColor = .ypBlack
-        label.isHidden = true
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
+    }()
+    
+    private lazy var activityIndicator: UIActivityIndicatorView = {
+        let activityIndicator = UIActivityIndicatorView()
+        activityIndicator.hidesWhenStopped = true
+        activityIndicator.translatesAutoresizingMaskIntoConstraints = false
+        return activityIndicator
     }()
     
     // MARK: - Init
@@ -77,7 +85,7 @@ final class MyNFTsViewController: UIViewController {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
         hidesBottomBarWhenPushed = true
-        title = "Мои NFT"
+        title = L10n.MyNFTs.title
     }
     
     @available(*, unavailable)
@@ -91,6 +99,7 @@ final class MyNFTsViewController: UIViewController {
         super.viewDidLoad()
         setupView()
         setupLayout()
+        startLoading()
         setupDataBindings()
     }
     
@@ -98,7 +107,7 @@ final class MyNFTsViewController: UIViewController {
     
     private func setupView() {
         view.backgroundColor = .ypWhite
-        view.addSubviews(tableView, placeholderLabel)
+        view.addSubviews(tableView, placeholderLabel, activityIndicator)
         navigationItem.rightBarButtonItem = sortBarButtonItem
     }
     
@@ -111,15 +120,21 @@ final class MyNFTsViewController: UIViewController {
             
             placeholderLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             placeholderLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            
+            activityIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            activityIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor),
         ])
     }
     
     private func setupDataBindings() {
         viewModel.nfts.bind { [weak self] nfts in
-            self?.tableView.isHidden = nfts.isEmpty
-            self?.placeholderLabel.isHidden = !nfts.isEmpty
+            guard let self else { return }
+            guard !viewModel.isLoading else { return }
+            stopLoading()
+            tableView.isHidden = nfts.isEmpty
+            placeholderLabel.isHidden = !nfts.isEmpty
             
-            self?.applySnapshot(nfts: nfts)
+            applySnapshot(nfts: nfts)
         }
         
         viewModel.isRefreshing.bind { [weak self] isRefreshing in
@@ -138,6 +153,18 @@ final class MyNFTsViewController: UIViewController {
     
     private func stopRefresh() {
         refreshControl.endRefreshing()
+    }
+    
+    private func startLoading() {
+        tableView.isHidden = true
+        placeholderLabel.isHidden = true
+        activityIndicator.isHidden = false
+        activityIndicator.startAnimating()
+    }
+    
+    private func stopLoading() {
+        activityIndicator.isHidden = true
+        activityIndicator.stopAnimating()
     }
     
     // MARK: - Actions

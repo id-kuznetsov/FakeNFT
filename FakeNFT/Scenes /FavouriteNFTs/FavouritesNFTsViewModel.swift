@@ -1,12 +1,10 @@
 import Foundation
 
-protocol MyNFTsViewModel {
+protocol FavouritesNFTsViewModel {
     var nfts: Observable<[Nft]> { get }
     var isRefreshing: Observable<Bool> { get }
     var isLoading: Bool { get }
     
-    func isLikedNft(at indexPath: IndexPath) -> Bool
     func didTapFavouriteButtonOnCell(at indexPath: IndexPath)
     func refreshNfts()
-    func sortNfts(by option: SortOption)
 }
