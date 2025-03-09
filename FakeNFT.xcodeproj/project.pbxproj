@@ -83,7 +83,6 @@
 		91B3C3362D6C390500455990 /* TopAlignedImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91B3C3352D6C390500455990 /* TopAlignedImageView.swift */; };
 		91B3C33D2D6C5BFE00455990 /* WebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91B3C33C2D6C5BFE00455990 /* WebViewController.swift */; };
 		91B3C33F2D6C673C00455990 /* WebViewViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91B3C33E2D6C673C00455990 /* WebViewViewModel.swift */; };
-		91E038E22D7C6CE000FF8505 /* UpdateProfileRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91E038E12D7C6CE000FF8505 /* UpdateProfileRequest.swift */; };
 		91EBBFA72D738C8D00955730 /* CollectionsRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91EBBFA62D738C8D00955730 /* CollectionsRequest.swift */; };
 		91EBBFA92D738E7D00955730 /* CollectionDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91EBBFA82D738E7D00955730 /* CollectionDTO.swift */; };
 		91EBBFAB2D743D4600955730 /* CollectionsServiceAssembly.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91EBBFAA2D743D4600955730 /* CollectionsServiceAssembly.swift */; };
@@ -193,7 +192,6 @@
 		91B3C3352D6C390500455990 /* TopAlignedImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopAlignedImageView.swift; sourceTree = "<group>"; };
 		91B3C33C2D6C5BFE00455990 /* WebViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewController.swift; sourceTree = "<group>"; };
 		91B3C33E2D6C673C00455990 /* WebViewViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewViewModel.swift; sourceTree = "<group>"; };
-		91E038E12D7C6CE000FF8505 /* UpdateProfileRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateProfileRequest.swift; sourceTree = "<group>"; };
 		91EBBFA62D738C8D00955730 /* CollectionsRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionsRequest.swift; sourceTree = "<group>"; };
 		91EBBFA82D738E7D00955730 /* CollectionDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionDTO.swift; sourceTree = "<group>"; };
 		91EBBFAA2D743D4600955730 /* CollectionsServiceAssembly.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionsServiceAssembly.swift; sourceTree = "<group>"; };
@@ -465,7 +463,6 @@
 				9120408C2D7AF63E007BF93F /* CurrenciesRequest.swift */,
 				9120408E2D7AF671007BF93F /* SetCurrencyRequest.swift */,
 				912040972D7AFBC2007BF93F /* ProfileRequest.swift */,
-				91E038E12D7C6CE000FF8505 /* UpdateProfileRequest.swift */,
 			);
 			path = Requests;
 			sourceTree = "<group>";
@@ -748,7 +745,6 @@
 				9120407B2D7A1E8A007BF93F /* CollectionNftService.swift in Sources */,
 				5CD04EE02D5FE74C0013C751 /* AlertPresenter.swift in Sources */,
 				9174C0522D6D8CD70024C358 /* FilterView.swift in Sources */,
-				91E038E22D7C6CE000FF8505 /* UpdateProfileRequest.swift in Sources */,
 				0C79EE682A76DE0900EE90EA /* NftDetailPresenter.swift in Sources */,
 				913D8B372D6717B6001304A3 /* Nft.swift in Sources */,
 				911201BD2D76CD96002E759C /* CacheService.swift in Sources */,
