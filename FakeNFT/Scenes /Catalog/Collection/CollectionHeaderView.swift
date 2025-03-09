@@ -8,14 +8,15 @@
 import UIKit
 
 protocol CollectionHeaderViewDelegate: AnyObject {
-    func collectionHeaderViewDidTapAuthor(_ headerView: CollectionHeaderView)
+    func collectionHeaderViewDidTapAuthor(_ url: URL?)
 }
 
 final class CollectionHeaderView: UICollectionReusableView, ReuseIdentifying {
     weak var delegate: CollectionHeaderViewDelegate?
+    private var authorURL: URL?
 
     // MARK: - UI
-    lazy var authorButton: UIButton = {
+    private lazy var authorButton: UIButton = {
         let view = UIButton()
         view.setTitleColor(.ypBlueUniversal, for: .normal)
         view.titleLabel?.font = .caption1
@@ -135,6 +136,7 @@ final class CollectionHeaderView: UICollectionReusableView, ReuseIdentifying {
         nameLabel.text = model.name
         authorButton.setTitle(model.author, for: .normal)
         descriptionLabel.text = model.description
+        authorURL = model.authorUrl
     }
 
     // MARK: - Load Image
@@ -170,7 +172,7 @@ final class CollectionHeaderView: UICollectionReusableView, ReuseIdentifying {
     // MARK: - Actions
     @objc
     private func didTapAuthorButton() {
-        delegate?.collectionHeaderViewDidTapAuthor(self)
+        delegate?.collectionHeaderViewDidTapAuthor(authorURL)
     }
 
     // MARK: - Constraints

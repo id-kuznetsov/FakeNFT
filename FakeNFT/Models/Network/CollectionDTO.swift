@@ -19,7 +19,13 @@ struct CollectionDTO: Decodable {
 
 extension CollectionDTO {
     func toDomainModel() -> Collection? {
-        guard let coverImageUrl = URL(string: self.cover) else { return nil }
+        guard
+            let coverImageUrl = URL(string: self.cover),
+            /// API Bug. Add stub
+            let authorUrl = URL(string: "https://nikolaidev.ru")
+        else {
+            return nil
+        }
 
         return Collection(
             name: self.name,
@@ -27,6 +33,7 @@ extension CollectionDTO {
             nfts: self.nfts,
             description: self.description,
             author: self.author,
+            authorUrl: authorUrl,
             id: self.id,
             isPlaceholder: false
         )

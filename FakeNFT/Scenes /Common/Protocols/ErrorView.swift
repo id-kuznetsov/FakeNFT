@@ -25,6 +25,8 @@ extension ErrorView where Self: UIViewController {
             }
         case is NetworkMonitorError:
             message = L10n.Alert.Message.networkError
+        case is WebViewError:
+            message = L10n.Alert.Message.apiBug
         default:
             message = L10n.Alert.Message.unknown
         }

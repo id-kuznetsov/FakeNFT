@@ -180,10 +180,8 @@ final class CollectionViewController: UIViewController, ErrorView, RatingView, L
 //    }
 
     // MARK: - Navigation
-    private func presentWebViewController(with authorName: String) {
-        let viewModel = WebViewViewModel(
-            authorName: authorName
-        )
+    private func presentWebViewController(with url: URL) {
+        let viewModel = WebViewViewModel(url: url)
         let viewController = WebViewController(viewModel: viewModel)
         viewController.delegate = self
 
@@ -291,18 +289,18 @@ extension CollectionViewController: UICollectionViewDelegateFlowLayout {
 
 // MARK: - CollectionHeaderViewDelegate
 extension CollectionViewController: CollectionHeaderViewDelegate {
-    func collectionHeaderViewDidTapAuthor(_ headerView: CollectionHeaderView) {
+    func collectionHeaderViewDidTapAuthor(_ url: URL?) {
         guard
-            let authorName = headerView.authorButton.title(for: .normal)
+            let url = url
         else {
             let error: Error = NSError(
-                domain: "", code: 404, userInfo: [NSLocalizedDescriptionKey: "Author name not found"]
+                domain: "", code: 404, userInfo: [NSLocalizedDescriptionKey: "Author url not found"]
             )
             showError(error: error, buttons: [.close])
             return
         }
 
-        presentWebViewController(with: authorName)
+        presentWebViewController(with: url)
     }
 }
 

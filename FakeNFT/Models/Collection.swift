@@ -13,13 +13,19 @@ struct Collection: Codable, Hashable {
     let nfts: [String]
     let description: String
     let author: String
+    let authorUrl: URL
     let id: String
     let isPlaceholder: Bool
 }
 
 extension Collection {
     static var placeholder: Collection? {
-        guard let coverImageUrl = URL(string: "https://example.com") else { return nil }
+        guard
+            let coverImageUrl = URL(string: "https://example.com"),
+            let authorUrl = URL(string: "https://nikolaidev.ru")
+        else {
+            return nil
+        }
 
         return Collection(
             name: "",
@@ -27,6 +33,7 @@ extension Collection {
             nfts: [],
             description: "",
             author: "",
+            authorUrl: authorUrl,
             id: UUID().uuidString,
             isPlaceholder: true
         )
