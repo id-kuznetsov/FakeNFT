@@ -69,7 +69,6 @@
 		5CDC79362D74EEC600EAA1F0 /* OrderPutRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CDC79352D74EEC600EAA1F0 /* OrderPutRequest.swift */; };
 		5CDC79382D7643B600EAA1F0 /* CurrencyPaymentResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CDC79372D7643B600EAA1F0 /* CurrencyPaymentResponse.swift */; };
 		913D88F42D6481A9001304A3 /* Icons.swift in Sources */ = {isa = PBXBuildFile; fileRef = 913D88F32D6481A9001304A3 /* Icons.swift */; };
-		913D88F42D6481A9001304A3 /* Icons.swift in Sources */ = {isa = PBXBuildFile; fileRef = 913D88F32D6481A9001304A3 /* Icons.swift */; };
 		9174C1D42D6EEC600024C358 /* CustomNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9174C1D32D6EEC600024C358 /* CustomNavigationController.swift */; };
 		E19CD5AB2A98B56600CA39A5 /* NftImageCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E19CD5AA2A98B56600CA39A5 /* NftImageCollectionViewCell.swift */; };
 		E1A1B9DA2AA01CE400C3AFBC /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1A1B9D92AA01CE400C3AFBC /* TabBarController.swift */; };
@@ -83,9 +82,6 @@
 		F756512F2D5EA652009B646C /* StatisticsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F756512E2D5EA652009B646C /* StatisticsViewController.swift */; };
 		F75A12442D7A392F00A47C09 /* OrderService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F75A12432D7A392F00A47C09 /* OrderService.swift */; };
 		F75A12462D7A3E1300A47C09 /* OrderRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = F75A12452D7A3E1300A47C09 /* OrderRequest.swift */; };
-		F75A12482D7A3E7A00A47C09 /* OrderUpdateRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = F75A12472D7A3E7A00A47C09 /* OrderUpdateRequest.swift */; };
-		F75A124A2D7A3EB600A47C09 /* OrderUpdateDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = F75A12492D7A3EB600A47C09 /* OrderUpdateDTO.swift */; };
-		F75A124C2D7A3EE300A47C09 /* OrderResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = F75A124B2D7A3EE300A47C09 /* OrderResponse.swift */; };
 		F76A112F2D6CEA4900FCB398 /* UserCardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F76A112E2D6CEA4900FCB398 /* UserCardViewController.swift */; };
 		F76A11332D6D228200FCB398 /* UserDetailRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = F76A11322D6D228200FCB398 /* UserDetailRequest.swift */; };
 		F76A11362D6D23AD00FCB398 /* UserCardViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F76A11352D6D23AD00FCB398 /* UserCardViewModel.swift */; };
@@ -202,9 +198,6 @@
 		F756512E2D5EA652009B646C /* StatisticsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsViewController.swift; sourceTree = "<group>"; };
 		F75A12432D7A392F00A47C09 /* OrderService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderService.swift; sourceTree = "<group>"; };
 		F75A12452D7A3E1300A47C09 /* OrderRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderRequest.swift; sourceTree = "<group>"; };
-		F75A12472D7A3E7A00A47C09 /* OrderUpdateRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderUpdateRequest.swift; sourceTree = "<group>"; };
-		F75A12492D7A3EB600A47C09 /* OrderUpdateDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderUpdateDTO.swift; sourceTree = "<group>"; };
-		F75A124B2D7A3EE300A47C09 /* OrderResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderResponse.swift; sourceTree = "<group>"; };
 		F76A112E2D6CEA4900FCB398 /* UserCardViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserCardViewController.swift; sourceTree = "<group>"; };
 		F76A11322D6D228200FCB398 /* UserDetailRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDetailRequest.swift; sourceTree = "<group>"; };
 		F76A11352D6D23AD00FCB398 /* UserCardViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserCardViewModel.swift; sourceTree = "<group>"; };
@@ -285,7 +278,6 @@
 			isa = PBXGroup;
 			children = (
 				0CF2C2E02A784C7000FDC837 /* LinePageControl.swift */,
-				5CDAEBAC2D665D5C001BFC28 /* RatingStackView.swift */,
 				9174C1D32D6EEC600024C358 /* CustomNavigationController.swift */,
 				5CDAEBAC2D665D5C001BFC28 /* RatingStackView.swift */,
 			);
@@ -475,9 +467,6 @@
 				F72B5FA02D7908DB00067C4A /* UpdateUserLikesRequest.swift */,
 				F7DBC82C2D79A0EC0040F0B3 /* UpdateUserLikesDTO.swift */,
 				F75A12452D7A3E1300A47C09 /* OrderRequest.swift */,
-				F75A12472D7A3E7A00A47C09 /* OrderUpdateRequest.swift */,
-				F75A12492D7A3EB600A47C09 /* OrderUpdateDTO.swift */,
-				F75A124B2D7A3EE300A47C09 /* OrderResponse.swift */,
 			);
 			path = Requests;
 			sourceTree = "<group>";
@@ -771,7 +760,6 @@
 				F756512F2D5EA652009B646C /* StatisticsViewController.swift in Sources */,
 				5CDAEB942D61ED43001BFC28 /* Order.swift in Sources */,
 				F7C51C0E2D63BE7800CA8D85 /* User.swift in Sources */,
-				F75A12482D7A3E7A00A47C09 /* OrderUpdateRequest.swift in Sources */,
 				F75651292D5EA5B8009B646C /* ProfileViewController.swift in Sources */,
 				F7D165612D7765FD00A9CFBA /* UserNftCollectionCell.swift in Sources */,
 				F7C51C102D63BF0500CA8D85 /* StatisticsViewModel.swift in Sources */,
@@ -793,7 +781,6 @@
 				3F68069B29CBBAF100B4F915 /* ProductDetailsTableViewController.swift in Sources */,
 				5CDC78462D6D1C1300EAA1F0 /* CartTableViewCellDelegate.swift in Sources */,
 				5CDC79342D727AAB00EAA1F0 /* SetCurrencyRequest.swift in Sources */,
-				F75A124C2D7A3EE300A47C09 /* OrderResponse.swift in Sources */,
 				F756512B2D5EA5F2009B646C /* CatalogViewController.swift in Sources */,
 				5CDAEB982D62895B001BFC28 /* CartViewModelProtocol.swift in Sources */,
 				5CDC78402D6BCE9F00EAA1F0 /* DeleteViewController.swift in Sources */,
@@ -802,7 +789,6 @@
 				F76A112F2D6CEA4900FCB398 /* UserCardViewController.swift in Sources */,
 				F7C51C142D63E90500CA8D85 /* UserService.swift in Sources */,
 				F7C51C192D63EA2600CA8D85 /* UsersRequest.swift in Sources */,
-				F75A124A2D7A3EB600A47C09 /* OrderUpdateDTO.swift in Sources */,
 				F7C51C122D63BFA400CA8D85 /* StatisticsCell.swift in Sources */,
 				F76A11362D6D23AD00FCB398 /* UserCardViewModel.swift in Sources */,
 				F7DBC82B2D79A0C20040F0B3 /* UserLikesResponse.swift in Sources */,
