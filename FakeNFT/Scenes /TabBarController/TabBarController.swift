@@ -23,11 +23,12 @@ final class TabBarController: UITabBarController {
     
     private func configure() {
         let profileNavigationController = NavigationController()
-        profileNavigationController.tabBarItem = UITabBarItem(
+        let profileTabBarItem = UITabBarItem(
             title: NSLocalizedString("Tab.profile", comment: ""),
-            image: UIImage(systemName: "person.circle"),
-            selectedImage: UIImage(systemName: "person.circle.fill")
+            image: .icTabProfile,
+            selectedImage: .icTabProfile
         )
+        profileNavigationController.tabBarItem = profileTabBarItem
         let profileCoordinator = ProfileCoordinatorImpl(navigationController: profileNavigationController,
                                                     servicesAssembly: servicesAssembly)
         profileCoordinator.initialScene()
