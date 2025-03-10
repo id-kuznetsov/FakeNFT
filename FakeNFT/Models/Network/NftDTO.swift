@@ -27,7 +27,7 @@ extension NftDTO {
 
         return Nft(
             name: self.name,
-            imagesUrl: self.images.compactMap { URL(string: $0) },
+            images: self.images.compactMap { URL(string: $0) },
             rating: self.rating,
             description: self.description,
             price: self.price,

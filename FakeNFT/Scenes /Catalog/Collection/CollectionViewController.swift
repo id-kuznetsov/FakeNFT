@@ -8,7 +8,7 @@
 import UIKit
 import Combine
 
-final class CollectionViewController: UIViewController, ErrorView, RatingView, LoadingView {
+final class CollectionViewController: UIViewController, CatalogErrorView, RatingView, CatalogLoadingView {
     // MARK: - Properties
     private var subscribers = Set<AnyCancellable>()
     private let viewModel: CollectionViewModelProtocol
@@ -168,17 +168,6 @@ final class CollectionViewController: UIViewController, ErrorView, RatingView, L
         )
     }
 
-//    private func reloadSectionCells(collectionView: UICollectionView, section: Int) {
-//        let itemCount = collectionView.numberOfItems(inSection: section)
-//        guard itemCount > 0 else { return }
-//
-//        let indexPaths = (0..<itemCount).map { IndexPath(item: $0, section: section) }
-//
-//        collectionView.performBatchUpdates({
-//            collectionView.reloadItems(at: indexPaths)
-//        }, completion: nil)
-//    }
-
     // MARK: - Navigation
     private func presentWebViewController(with url: URL) {
         let viewModel = WebViewViewModel(url: url)
@@ -316,12 +305,8 @@ extension CollectionViewController: NftCollectionViewCellDelegate {
         viewModel.updateProfile(with: nftId)
     }
 
-    func nftCollectionViewCellDidTapCart(_ cell: NftCollectionViewCell) {
-        if cell.cartButton.image(for: .normal) == .icCart {
-            cell.cartButton.setImage(.icCartDelete, for: .normal)
-        } else if cell.cartButton.image(for: .normal) == .icCartDelete {
-            cell.cartButton.setImage(.icCart, for: .normal)
-        }
+    func nftCollectionViewCellDidTapCart(_ nftId: String) {
+        viewModel.updateOrder(with: nftId)
     }
 }
 

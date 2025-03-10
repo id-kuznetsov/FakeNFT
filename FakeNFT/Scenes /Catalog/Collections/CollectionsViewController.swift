@@ -8,7 +8,7 @@
 import UIKit
 import Combine
 
-final class CollectionsViewController: UIViewController, FilterView, ErrorView, LoadingView {
+final class CollectionsViewController: UIViewController, FilterView, CatalogErrorView, CatalogLoadingView {
     // MARK: - Properties
     private let viewModel: CollectionsViewModelProtocol
     private var subscribers = Set<AnyCancellable>()

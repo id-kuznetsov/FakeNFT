@@ -9,7 +9,7 @@ import UIKit
 
 protocol NftCollectionViewCellDelegate: AnyObject {
     func nftCollectionViewCellDidTapFavorite(_ nftId: String)
-    func nftCollectionViewCellDidTapCart(_ cell: NftCollectionViewCell)
+    func nftCollectionViewCellDidTapCart(_ nftId: String)
     func nftCollectionViewCellDidTapRating(_ cell: NftCollectionViewCell)
 }
 
@@ -18,7 +18,7 @@ final class NftCollectionViewCell: UICollectionViewCell, ReuseIdentifying {
     private var nftId: String?
 
     // MARK: - UI
-    lazy var favoriteButton: UIButton = {
+    private lazy var favoriteButton: UIButton = {
         let view = UIButton(type: .custom)
         view.setImage(.heart, for: .normal)
         view.tintColor = .ypWhiteUniversal
@@ -27,9 +27,8 @@ final class NftCollectionViewCell: UICollectionViewCell, ReuseIdentifying {
         return view
     }()
 
-    lazy var cartButton: UIButton = {
+    private lazy var cartButton: UIButton = {
         let view = UIButton(type: .custom)
-        view.setImage(.icCart, for: .normal)
         view.tintColor = .ypBlack
         view.addTarget(self, action: #selector(didTapCart), for: .touchUpInside)
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -133,13 +132,14 @@ final class NftCollectionViewCell: UICollectionViewCell, ReuseIdentifying {
 
             ratingButton.configure(rating: model.rating)
             favoriteButton.tintColor = model.isLiked ? .ypRedUniversal : .ypWhiteUniversal
+            cartButton.setImage(model.isInCart ? .icCartDelete : .icCart, for: .normal)
             nameLabel.text = model.name
             priceLabel.text = model.formattedPrice
         }
 
         nftId = model.id
 
-        if let firstImageUrl = model.imagesUrl.first {
+        if let firstImageUrl = model.images.first {
             loadNftImage(
                 from: firstImageUrl,
                 imageLoaderService: imageLoaderService
@@ -187,7 +187,9 @@ final class NftCollectionViewCell: UICollectionViewCell, ReuseIdentifying {
 
     @objc
     private func didTapCart() {
-        delegate?.nftCollectionViewCellDidTapCart(self)
+        guard let nftId = nftId else { return }
+
+        delegate?.nftCollectionViewCellDidTapCart(nftId)
     }
 
     @objc

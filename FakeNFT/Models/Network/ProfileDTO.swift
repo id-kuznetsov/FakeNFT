@@ -18,7 +18,7 @@ struct ProfileDTO: Decodable {
 }
 
 extension ProfileDTO {
-    func toUIModel() -> Profile? {
+    func toDomainModel() -> Profile? {
         guard
             let avatar = URL(string: self.avatar),
             let website = URL(string: self.website)

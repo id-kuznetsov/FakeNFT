@@ -3,7 +3,6 @@ import Kingfisher
 
 protocol NftDetailView: AnyObject, ErrorView, LoadingView {
     func displayCells(_ cellModels: [NftDetailCellModel])
-    func showError(_ error: Error)
 }
 
 final class NftDetailViewController: UIViewController {
@@ -28,7 +27,7 @@ final class NftDetailViewController: UIViewController {
     private lazy var closeButton: UIButton = {
         let button = UIButton()
         button.tintColor = .ypBlack
-        button.setImage(.icClose, for: .normal)
+        button.setImage(UIImage(named: "close"), for: .normal)
         button.addTarget(self, action: #selector(close), for: .touchUpInside)
         return button
     }()
@@ -57,19 +56,6 @@ final class NftDetailViewController: UIViewController {
         view.backgroundColor = .white
         setupLayout()
         presenter.viewDidLoad()
-    }
-
-    func showError(_ error: Error) {
-        showError(
-            error: error,
-            buttons: [
-                .reload(
-                    action: { [weak self] in
-                        self?.presenter.viewDidLoad()
-                    }
-                )
-            ]
-        )
     }
 
     // MARK: - private functions

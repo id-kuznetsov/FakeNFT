@@ -1,10 +1,3 @@
-//
-//  CollectionProfileRequest.swift
-//  FakeNFT
-//
-//  Created by Nikolai Eremenko on 07.03.2025.
-//
-
 import Foundation
 
 struct CollectionProfileRequest: NetworkRequest {
@@ -15,17 +8,13 @@ struct CollectionProfileRequest: NetworkRequest {
     }
 
     var httpMethod: HttpMethod {
-        if profile == nil {
-            return .get
-        } else {
-            return .put
-        }
+        return profile == nil ? .get : .put
     }
 
     var dto: Dto? {
         guard
             let profile,
-            let profileDTO = profile.toResponse()
+            let profileDTO = profile.toDTO()
         else {
             return nil
         }

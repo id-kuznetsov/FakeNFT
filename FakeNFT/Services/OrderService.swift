@@ -1,82 +1,116 @@
-//
-//  OrderService.swift
-//  FakeNFT
-//
-//  Created by Ilya Kuznetsov on 16.02.2025.
-//
-
 import Foundation
-
-typealias OrderCompletion = (Result<Order, Error>) -> Void
-typealias OrderPutCompletion = (Result<Order, Error>) -> Void
-typealias CurrenciesCompletion = (Result<CurrencyValues, Error>) -> Void
-typealias SetCurrencyCompletion = (Result<CurrencyPaymentResponse, Error>) -> Void
+import Combine
 
 protocol OrderService {
-    func getOrder(completion: @escaping OrderCompletion)
-    func getCurrencies(completion: @escaping CurrenciesCompletion)
-    func putOrder(nfts: [String], completion: @escaping OrderPutCompletion)
-    func setCurrencyBeforePayment(id: String, completion: @escaping SetCurrencyCompletion)
+    func fetchOrderCombine(order: Order?, skipCache: Bool) -> AnyPublisher<Order, Error>
 }
 
 final class OrderServiceImpl: OrderService {
-
     private let networkClient: NetworkClient
+    private let cacheService: CacheService
+    private let networkMonitor: NetworkMonitor
+    private let cacheLifetime: TimeInterval = 10 * 60
+    private var cancellables = Set<AnyCancellable>()
 
-    init(networkClient: NetworkClient) {
+    init(
+        networkClient: NetworkClient,
+        cacheService: CacheService,
+        networkMonitor: NetworkMonitor
+    ) {
         self.networkClient = networkClient
+        self.cacheService = cacheService
+        self.networkMonitor = networkMonitor
+
+        self.networkMonitor.connectivityPublisher
+            .sink { isConnected in
+                print("Сеть доступна: \(isConnected)")
+            }
+            .store(in: &cancellables)
     }
 
-    func getOrder(completion: @escaping OrderCompletion) {
-        let request = OrderRequest()
+    // MARK: - Combine
+    func fetchOrderCombine(
+        order: Order?,
+        skipCache: Bool
+    ) -> AnyPublisher<Order, Error> {
+        let networkPublisher = networkPublisher(order: order)
 
-        networkClient.send(request: request, type: Order.self) { result in
-            switch result {
-            case .success(let order):
-                completion(.success(order))
-            case .failure(let error):
-                completion(.failure(error))
-            }
+        if skipCache {
+            return networkPublisher
+                .receive(on: DispatchQueue.main)
+                .eraseToAnyPublisher()
+        } else {
+            return cachePublisher()
+                .flatMap { cached in
+                    Just(cached)
+                        .setFailureType(to: Error.self)
+                        .append(networkPublisher)
+                        .eraseToAnyPublisher()
+                }
+
+                .catch { _ in networkPublisher }
+                .receive(on: DispatchQueue.main)
+                .eraseToAnyPublisher()
         }
     }
 
-    func getCurrencies(completion: @escaping CurrenciesCompletion) {
-        let request = CurrenciesRequest()
+    private func cacheKey() -> String { "order" }
 
-        networkClient.send(request: request, type: CurrencyValues.self) { result in
-            switch result {
-            case .success(let currencyValues):
-                completion(.success(currencyValues))
-            case .failure(let error):
-                completion(.failure(error))
+    private func cachePublisher() -> AnyPublisher<Order, Error> {
+        let key = cacheKey()
+
+        return Future<Order, Error> { [weak self] promise in
+            guard let self = self else {
+                promise(.failure(CacheError.emptyOrStale))
+                return
+            }
+
+            self.cacheService.load(type: Order.self, forKey: key) { result in
+                switch result {
+                case .success(let (cachedProfile, lastUpdated)):
+                    let cacheIsFresh = Date().timeIntervalSince(lastUpdated) < self.cacheLifetime
+                    if cacheIsFresh {
+                        promise(.success(cachedProfile))
+                    } else {
+                        promise(.failure(CacheError.emptyOrStale))
+                    }
+                case .failure:
+                    promise(.failure(CacheError.emptyOrStale))
+                }
             }
         }
+        .eraseToAnyPublisher()
     }
 
-    func putOrder(nfts: [String], completion: @escaping OrderPutCompletion) {
-        let dto = OrderDtoObject(nfts: nfts)
-        let request = OrderPutRequest(dto: dto)
+    private func networkPublisher(order: Order?) -> AnyPublisher<Order, Error> {
+        return Future<Order, Error> { [weak self] promise in
+            guard let self = self else {
+                promise(.failure(NSError(domain: "OrderService", code: -1, userInfo: nil)))
+                return
+            }
 
-        networkClient.send(request: request, type: Order.self) { result in
-            switch result {
-            case .success(let order):
-                completion(.success(order))
-            case .failure(let error):
-                completion(.failure(error))
+            if !self.networkMonitor.isConnected {
+                promise(.failure(NetworkMonitorError.noInternetConnection))
+                return
+            }
+
+            let key = self.cacheKey()
+            let request = CollectionOrderRequest(order: order)
+
+            self.networkClient.send(
+                request: request,
+                type: OrderDTO.self
+            ) { result in
+                switch result {
+                case .success(let response):
+                    let convertedModel = response.toDomainModel()
+                    self.cacheService.save(data: convertedModel, forKey: key)
+                    promise(.success(convertedModel))
+                case .failure(let error):
+                    promise(.failure(error))
+                }
             }
         }
-    }
-
-    func setCurrencyBeforePayment(id: String, completion: @escaping SetCurrencyCompletion) {
-        let request = SetCurrencyRequest(id: id)
-
-        networkClient.send(request: request, type: CurrencyPaymentResponse.self) {  result in
-            switch result {
-            case .success(let data):
-                completion(.success(data))
-            case .failure(let error):
-                completion(.failure(error))
-            }
-        }
+        .eraseToAnyPublisher()
     }
 }

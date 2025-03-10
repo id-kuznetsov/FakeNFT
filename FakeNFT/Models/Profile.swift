@@ -11,7 +11,7 @@ struct Profile: Codable, Hashable {
 }
 
 extension Profile {
-    func toResponse() -> ProfileDTO? {
+    func toDTO() -> ProfileDTO? {
 
         return ProfileDTO(
             name: self.name,

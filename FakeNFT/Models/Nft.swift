@@ -2,7 +2,7 @@ import Foundation
 
 struct Nft: Codable, Hashable {
     let name: String
-    let imagesUrl: [URL]
+    let images: [URL]
     let rating: Int
     let description: String
     let price: Double
@@ -15,6 +15,18 @@ struct Nft: Codable, Hashable {
     var formattedPrice: String {
         String(format: "%.2f", price)
     }
+
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
+        hasher.combine(isLiked)
+        hasher.combine(isInCart)
+    }
+
+    static func == (lhs: Nft, rhs: Nft) -> Bool {
+        return lhs.id == rhs.id &&
+               lhs.isLiked == rhs.isLiked &&
+               lhs.isInCart == rhs.isInCart
+    }
 }
 
 extension Nft {
@@ -23,7 +35,7 @@ extension Nft {
 
         return Nft(
             name: "",
-            imagesUrl: [],
+            images: [],
             rating: 0,
             description: "",
             price: 0,

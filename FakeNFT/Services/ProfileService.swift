@@ -98,7 +98,6 @@ final class ProfileServiceImpl: ProfileService {
 
             if !self.networkMonitor.isConnected {
                 promise(.failure(NetworkMonitorError.noInternetConnection))
-                print("DEBUG: ERROR ProfileService - no internet connection")
                 return
             }
 
@@ -111,9 +110,8 @@ final class ProfileServiceImpl: ProfileService {
             ) { result in
                 switch result {
                 case .success(let response):
-                    guard let convertedModel = response.toUIModel() else {
+                    guard let convertedModel = response.toDomainModel() else {
                         promise(.failure(ProfileServiceError.invalidResponse))
-                        print("DEBUG: ERROR ProfileService - invalid response")
                         return
                     }
 
@@ -121,7 +119,6 @@ final class ProfileServiceImpl: ProfileService {
                     promise(.success(convertedModel))
                 case .failure(let error):
                     promise(.failure(error))
-                    print("DEBUG: ERROR ProfileService - \(error)")
                 }
             }
         }

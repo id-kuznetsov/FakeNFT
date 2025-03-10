@@ -48,7 +48,7 @@ final class CollectionsViewModel: CollectionsViewModelProtocol {
     @Published private var _collections: [Collection] = []
     var collections: AnyPublisher<[Collection], Never> { $_collections.eraseToAnyPublisher() }
 
-    private let catalogSortOptionStorage: CatalogSortOptionStorage
+    private let catalogSortOptionStorage: CollectionsSortOptionStorage
     private var cancellables = Set<AnyCancellable>()
     private var currentPage = 0
     private var sortBy: CollectionSortOptions
@@ -60,7 +60,7 @@ final class CollectionsViewModel: CollectionsViewModelProtocol {
         imageLoaderService: ImageLoaderService,
         collectionsService: CollectionService,
         collectionNftService: CollectionNftService,
-        catalogSortOptionStorage: CatalogSortOptionStorage,
+        catalogSortOptionStorage: CollectionsSortOptionStorage,
         orderService: OrderService,
         profileService: ProfileService
     ) {

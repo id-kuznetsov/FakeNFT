@@ -17,6 +17,7 @@ protocol CollectionViewModelProtocol {
 
     func loadData(skipCache: Bool)
     func updateProfile(with nftId: String)
+    func updateOrder(with nftId: String)
 }
 
 // MARK: - State
@@ -40,6 +41,7 @@ final class CollectionViewModel: CollectionViewModelProtocol {
     private var cancellables = Set<AnyCancellable>()
     private var isLoading = false
     private var profile: Profile?
+    private var order: Order?
 
     // MARK: - Init
     init(
@@ -65,28 +67,30 @@ final class CollectionViewModel: CollectionViewModelProtocol {
         _state = .loading
         _nfts = (0..<3).map { _ in Nft.placeholder ?? nftPlaceholder }
 
-        Publishers.Zip(
+        Publishers.Zip3(
             collectionNftService.fetchNfts(
                 collectionId: collectionUI.id,
                 nftIds: collectionUI.nfts,
                 skipCache: skipCache
             ),
-            profileService.fetchProfileCombine(profile: nil, skipCache: skipCache)
+            profileService.fetchProfileCombine(profile: nil, skipCache: skipCache),
+            orderService.fetchOrderCombine(order: nil, skipCache: skipCache)
         )
-        .map { [weak self] nfts, profile -> CollectionState in
+        .map { [weak self] nfts, profile, order -> CollectionState in
             guard let self = self else {
                 return .failed(NSError(domain: "ViewModel", code: -1, userInfo: nil))
             }
             self.profile = profile
+            self.order = order
 
             let updatedNfts = nfts.map { nft in
-                var nftWithLike = nft
-                nftWithLike.isLiked = profile.likes.contains(nft.id)
-                return nftWithLike
+                var updatedNft = nft
+                updatedNft.isLiked = profile.likes.contains(nft.id)
+                updatedNft.isInCart = order.nfts.contains(nft.id)
+                return updatedNft
             }
-            .sorted { $0.isLiked && !$1.isLiked }
 
-            self._nfts = updatedNfts
+            self._nfts = updatedNfts.sorted { self.priority(for: $0) > self.priority(for: $1) }
             return .success
         }
         .catch { error -> Just<CollectionState> in
@@ -133,9 +137,8 @@ final class CollectionViewModel: CollectionViewModelProtocol {
                     nftWithLike.isLiked = newProfile.likes.contains(nft.id)
                     return nftWithLike
                 }
-                .sorted { $0.isLiked && !$1.isLiked }
 
-                self._nfts = updatedNfts
+                self._nfts = updatedNfts.sorted { self.priority(for: $0) > self.priority(for: $1) }
                 return .success
             }
             .catch { error -> Just<CollectionState> in
@@ -145,5 +148,57 @@ final class CollectionViewModel: CollectionViewModelProtocol {
                 self?._state = newState
             }
             .store(in: &cancellables)
+    }
+
+    func updateOrder(with nftId: String) {
+        guard
+            var currentOrder = order
+        else {
+            _state = .failed(
+                NSError(domain: "ViewModel", code: -1, userInfo: [
+                    NSLocalizedDescriptionKey: "Profile is nil"
+                ])
+            )
+            return
+        }
+
+        _state = .loading
+
+        if currentOrder.nfts.contains(nftId) {
+            currentOrder.nfts.removeAll { $0 == nftId }
+        } else {
+            currentOrder.nfts.append(nftId)
+        }
+
+        self.order = currentOrder
+
+        orderService.fetchOrderCombine(order: currentOrder, skipCache: true)
+            .map { [weak self] newOrder -> CollectionState in
+                guard let self = self else {
+                    return .failed(NSError(domain: "ViewModel", code: -1, userInfo: nil))
+                }
+
+                self.order = newOrder
+
+                let updatedNfts = self._nfts.map { nft -> Nft in
+                    var nftWithCart = nft
+                    nftWithCart.isInCart = newOrder.nfts.contains(nft.id)
+                    return nftWithCart
+                }
+
+                self._nfts = updatedNfts.sorted { self.priority(for: $0) > self.priority(for: $1) }
+                return .success
+            }
+            .catch { error -> Just<CollectionState> in
+                Just(.failed(error))
+            }
+            .sink { [weak self] newState in
+                self?._state = newState
+            }
+            .store(in: &cancellables)
+    }
+
+    private func priority(for nft: Nft) -> Int {
+        return (nft.isLiked ? 1 : 0) + (nft.isInCart ? 1 : 0)
     }
 }

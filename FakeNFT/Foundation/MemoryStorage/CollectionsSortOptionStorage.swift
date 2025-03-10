@@ -41,7 +41,7 @@ struct UserDefault<Value> {
     }
 }
 
-final class CatalogSortOptionStorageImpl: CollectionsSortOptionStorage {
+final class CollectionsSortOptionStorageImpl: CollectionsSortOptionStorage {
     @UserDefault(
         key: "CollectionSortOption",
         defaultValue: CollectionSortOptions.none.rawValue,

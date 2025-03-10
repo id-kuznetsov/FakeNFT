@@ -42,7 +42,9 @@ final class ServicesAssembly {
 
     var orderService: OrderService {
         OrderServiceImpl(
-            networkClient: networkClient
+            networkClient: networkClient,
+            cacheService: cacheService,
+            networkMonitor: networkMonitor
         )
     }
 
@@ -54,8 +56,8 @@ final class ServicesAssembly {
         )
     }
 
-    var collectionsSortOptionService: CatalogSortOptionStorage {
-        CatalogSortOptionStorageImpl()
+    var collectionsSortOptionService: CollectionsSortOptionStorage {
+        CollectionsSortOptionStorageImpl()
     }
 
     var imageLoaderService: ImageLoaderService {
