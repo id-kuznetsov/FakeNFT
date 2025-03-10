@@ -16,7 +16,26 @@
 
 "Tab.statistic" = "Статистика";
 
-"Cart.button.toPay" = "К Оплате";
+"Cart.button.toPay" = "К оплате";
+"Cart.label.price" = "Цена";
+"Cart.label.emptyCart" = "Корзина пуста";
+"Cart.delete.conformText" = "Вы уверены, что хотите удалить объект из корзины?";
+"Cart.delete.buttonDelete" = "Удалить";
+"Cart.delete.buttonReturn" = "Вернуться";
+"Cart.errorAlert.somethingGoesWrong" = "Что-то пошло не так(";
+
+"Payment.title" = "Выберите способ оплаты";
+"Payment.button.pay" = "Оплатить";
+"Payment.agreement.label" = "Совершая покупку, вы соглашаетесь с условиями";
+"Payment.agreement.link" = "Пользовательского соглашения";
+"Payment.alert.title" = "Не выбран способ оплаты";
+"Payment.alert.message" = "Для того чтобы оплатить заказ, выберите валюту";
+"Payment.errorAlert.title" = "Не удалось произвести оплату";
+"Payment.errorAlert.cancelTitle" = "Отмена";
+"Payment.errorAlert.repeatTitle" = "Повторить";
+"Payment.alert.buttonTextOk" = "Ок";
+"Payment.success.title" = "Успех! Оплата прошла, поздравляем с покупкой!";
+"Payment.success.button" = "Вернуться в каталог";
 
 "Sort.title" = "Сортировка";
 "SortOption.nftCount" = "По количеству NFT";

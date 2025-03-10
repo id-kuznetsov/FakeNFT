@@ -112,7 +112,7 @@ final class UserNftCollectionViewModel: UserNftCollectionViewModelProtocol {
             orderedNfts.insert(nftId)
         }
         
-        orderService.updateOrder(nftIds: Array(orderedNfts)) { [weak self] result in
+        orderService.putOrder(nfts: Array(orderedNfts)) { [weak self] result in
             self?.onLoadingStateChanged?(false)
             
             switch result {
@@ -127,11 +127,11 @@ final class UserNftCollectionViewModel: UserNftCollectionViewModelProtocol {
     
     private func loadOrder(using group: DispatchGroup) {
         group.enter()
-        orderService.fetchOrder { [weak self] result in
+        orderService.getOrder { [weak self] result in
             defer { group.leave() }
             switch result {
-            case .success(let nftIds):
-                self?.orderedNfts = Set(nftIds)
+            case .success(let order):
+                self?.orderedNfts = Set(order.nfts)
             case .failure(let error):
                 self?.onErrorOccurred?("Ошибка загрузки заказа: \(error.localizedDescription)")
             }

@@ -28,7 +28,7 @@ final class UIBlockingProgressIndicator {
         overlay.isUserInteractionEnabled = false
         overlay.backgroundColor = .clear
 
-        let indicator = UIActivityIndicatorView(style: .large)
+        let indicator = UIActivityIndicatorView(style: .medium)
         indicator.color = .ypBlack
         indicator.startAnimating()
 

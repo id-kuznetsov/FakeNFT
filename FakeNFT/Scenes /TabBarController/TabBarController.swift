@@ -38,12 +38,16 @@ final class TabBarController: UITabBarController {
             image: .catalogTab,
             tag: 2
         )
-
-        let cartVC = UINavigationController(rootViewController: CartViewController(servicesAssembly: servicesAssembly))
-        cartVC.tabBarItem = UITabBarItem(
-            title: NSLocalizedString("Tab.cart", comment: ""),
-            image: UIImage(systemName: "bag"),
-            selectedImage: UIImage(systemName: "bag.fill")
+        
+        let cartViewModel = CartViewModel(
+            orderService: servicesAssembly.orderService,
+            nftService: servicesAssembly.nftService
+            )
+        let cartViewController = CustomNavigationController(rootViewController: CartViewController(viewModel: cartViewModel))
+        cartViewController.tabBarItem = UITabBarItem(
+            title: L10n.Tab.cart,
+            image: .icCart,
+            selectedImage: .icCartFill
         )
         
         let statisticsViewModel = StatisticsViewModel(
@@ -65,7 +69,7 @@ final class TabBarController: UITabBarController {
             [
                 profileVC,
                 catalogNavigationController,
-                cartVC,
+                cartViewController,
                 statisticsNavigationController
             ],
             animated: false

@@ -2,7 +2,7 @@
 //  OrderRequest.swift
 //  FakeNFT
 //
-//  Created by Aleksei Frolov on 06.03.2025.
+//  Created by Ilya Kuznetsov on 16.02.2025.
 //
 
 import Foundation
@@ -13,5 +13,5 @@ struct OrderRequest: NetworkRequest {
         URL(string: "\(RequestConstants.baseURL)/\(RequestConstants.order)")
     }
     
-    var dto: Dto? { nil }
+    var dto: (any Dto)? = nil
 }
