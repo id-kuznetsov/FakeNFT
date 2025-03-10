@@ -39,11 +39,7 @@ final class MyNFTsViewController: UIViewController, ErrorView {
     
     private lazy var dataSource: DataSource = {
         DataSource(tableView: tableView) { [weak self] tableView, indexPath, nft in
-            let cell = tableView.dequeueReusableCell(withIdentifier: MyNFTCell.defaultReuseIdentifier)
-            guard let myNFTCell = cell as? MyNFTCell else {
-                return UITableViewCell()
-            }
-            
+            let myNFTCell = tableView.dequeueReusableCell() as MyNFTCell
             myNFTCell.delegate = self
             myNFTCell.setupCell(nft: nft)
             myNFTCell.isLiked = self?.viewModel.isLikedNft(at: indexPath) ?? false

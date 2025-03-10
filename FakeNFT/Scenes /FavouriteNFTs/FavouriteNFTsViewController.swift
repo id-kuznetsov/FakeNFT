@@ -37,7 +37,7 @@ final class FavouriteNFTsViewController: UIViewController, ErrorView {
     private lazy var collectionView: UICollectionView = {
         let layout = collectionViewLayout
         let collection = UICollectionView(frame: .zero, collectionViewLayout: collectionViewLayout)
-        collection.register(FavouriteNftCell.self, forCellWithReuseIdentifier: FavouriteNftCell.defaultReuseIdentifier)
+        collection.register(FavouriteNftCell.self)
         
         collection.backgroundColor = .clear
         collection.refreshControl = refreshControl
@@ -59,14 +59,7 @@ final class FavouriteNFTsViewController: UIViewController, ErrorView {
     
     private lazy var dataSource: DataSource = {
         DataSource(collectionView: collectionView) { [weak self] collectionView, indexPath, nft in
-            let cell = collectionView.dequeueReusableCell(
-                withReuseIdentifier: FavouriteNftCell.defaultReuseIdentifier,
-                for: indexPath
-            )
-            guard let favouriteCell = cell as? FavouriteNftCell else {
-                return cell
-            }
-            
+            let favouriteCell = collectionView.dequeueReusableCell(indexPath: indexPath) as FavouriteNftCell
             favouriteCell.delegate = self
             favouriteCell.isLiked = true
             favouriteCell.setupCell(nft: nft)
