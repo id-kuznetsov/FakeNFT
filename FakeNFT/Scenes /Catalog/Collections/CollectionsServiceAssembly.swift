@@ -7,7 +7,7 @@
 
 import UIKit
 
-public final class CollectionsServiceAssembly {
+final class CollectionsServiceAssembly {
 
     private let servicesAssembler: ServicesAssembly
 
@@ -15,7 +15,7 @@ public final class CollectionsServiceAssembly {
         self.servicesAssembler = servicesAssembler
     }
 
-    public func build() -> UIViewController {
+    func build() -> UIViewController {
         let viewModel = CollectionsViewModel(
             imageLoaderService: servicesAssembler.imageLoaderService,
             collectionsService: servicesAssembler.collectionsService,

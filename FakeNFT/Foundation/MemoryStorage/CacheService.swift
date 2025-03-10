@@ -21,7 +21,7 @@ enum CacheError: Error {
     case emptyOrStale
 }
 
-class CacheServiceImpl: CacheService {
+final class CacheServiceImpl: CacheService {
     private let memoryCache = NSCache<NSString, CacheWrapper>()
     private let fileManager = FileManager.default
     private let cacheDirectory: URL?

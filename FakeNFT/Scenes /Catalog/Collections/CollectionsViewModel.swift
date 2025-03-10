@@ -20,7 +20,7 @@ protocol CollectionsViewModelProtocol {
     func loadData(skipCache: Bool)
     func loadNextPage(reset: Bool, skipCache: Bool)
     func sortCollections(by option: CollectionSortOptions)
-    func getCollection(at indexPath: IndexPath) -> Collection
+    func getCollection(at indexPath: IndexPath) throws -> Collection
 }
 
 // MARK: - State
@@ -33,6 +33,12 @@ enum CollectionSortOptions: String {
     case none
     case name
     case nfts
+}
+
+enum CollectionsError: Error {
+    case outOfRange
+    case placeholder
+    case viewModelDeallocated
 }
 
 final class CollectionsViewModel: CollectionsViewModelProtocol {
@@ -73,9 +79,9 @@ final class CollectionsViewModel: CollectionsViewModelProtocol {
         self.profileService = profileService
     }
 
-    func getCollection(at indexPath: IndexPath) -> Collection {
+    func getCollection(at indexPath: IndexPath) throws -> Collection {
         guard _collections.indices.contains(indexPath.row) else {
-            fatalError("🔥 Index out of range: \(indexPath.row)")
+            throw CollectionsError.outOfRange
         }
         return _collections[indexPath.row]
     }
@@ -100,7 +106,7 @@ final class CollectionsViewModel: CollectionsViewModelProtocol {
         _state = .loading
 
         guard let collectionPlaceholder = Collection.placeholder else {
-            _state = .failed(NSError(domain: "ViewModel", code: -1, userInfo: nil))
+            _state = .failed(CollectionsError.placeholder)
             return
         }
 
@@ -121,7 +127,7 @@ final class CollectionsViewModel: CollectionsViewModelProtocol {
             guard
                 let self = self
             else {
-                return .failed(NSError(domain: "ViewModel", code: -1, userInfo: nil))
+                return .failed(CollectionsError.viewModelDeallocated)
             }
 
             if newCollections.isEmpty {

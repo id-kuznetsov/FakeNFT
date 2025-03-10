@@ -7,7 +7,7 @@
 
 import UIKit
 
-public final class CollectionServiceAssembly {
+final class CollectionServiceAssembly {
     private let imageLoaderService: ImageLoaderService
     private let collectionNftService: CollectionNftService
     private let orderService: OrderService
@@ -19,7 +19,7 @@ public final class CollectionServiceAssembly {
         collectionNftService: CollectionNftService,
         orderService: OrderService,
         profileService: ProfileService,
-        collectionUI: Collection,
+        collectionUI: Collection
     ) {
         self.imageLoaderService = imageLoaderService
         self.collectionNftService = collectionNftService
@@ -28,7 +28,7 @@ public final class CollectionServiceAssembly {
         self.collectionUI = collectionUI
     }
 
-    public func build() -> UIViewController {
+    func build() -> UIViewController {
         let viewModel = CollectionViewModel(
             imageLoaderService: imageLoaderService,
             collectionNftService: collectionNftService,

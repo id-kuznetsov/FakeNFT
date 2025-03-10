@@ -37,7 +37,6 @@ final class CollectionsViewController: UIViewController, FilterView, CatalogErro
         let view = UITableView(frame: .zero, style: .plain)
         view.backgroundColor = .ypWhite
         view.register(CollectionsTableViewCell.self)
-        view.rowHeight = LayoutConstants.CollectionsScreen.rowHeight
         view.separatorStyle = .none
         view.refreshControl = refreshControlView
         view.delegate = self
@@ -264,7 +263,11 @@ final class CollectionsViewController: UIViewController, FilterView, CatalogErro
 // MARK: - UITableViewDelegate
 extension CollectionsViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let collection = viewModel.getCollection(at: indexPath)
-        presentCollectionViewController(for: collection)
+        do {
+            let collection = try viewModel.getCollection(at: indexPath)
+            presentCollectionViewController(for: collection)
+        } catch {
+            showError(error)
+        }
     }
 }

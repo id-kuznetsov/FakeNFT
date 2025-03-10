@@ -116,10 +116,11 @@ final class CollectionsTableViewCell: UITableViewCell, ReuseIdentifying {
     private func setupConstraints() {
         NSLayoutConstraint.activate([
             cellVStackView.topAnchor.constraint(equalTo: contentView.topAnchor),
-            cellVStackView.heightAnchor.constraint(
-                equalTo: contentView.heightAnchor,
+            cellVStackView.bottomAnchor.constraint(
+                equalTo: contentView.bottomAnchor,
                 constant: -LayoutConstants.CollectionsScreen.cellMargin
             ),
+
             cellVStackView.leadingAnchor.constraint(
                 equalTo: contentView.leadingAnchor,
                 constant: LayoutConstants.Common.Margin.medium
@@ -130,12 +131,9 @@ final class CollectionsTableViewCell: UITableViewCell, ReuseIdentifying {
             ),
 
             coverImageView.widthAnchor.constraint(equalTo: cellVStackView.widthAnchor),
+            coverImageView.heightAnchor.constraint(equalToConstant: 140),
 
             nameAndCountLabel.widthAnchor.constraint(equalTo: cellVStackView.widthAnchor, multiplier: 0.8)
         ])
-
-        coverImageView.setHeightConstraintFromPx(
-            heightPx: LayoutConstants.CollectionsScreen.coverImageHeight
-        )
     }
 }
