@@ -8,13 +8,14 @@
 import UIKit
 
 protocol NftCollectionViewCellDelegate: AnyObject {
-    func nftCollectionViewCellDidTapFavorite(_ cell: NftCollectionViewCell)
+    func nftCollectionViewCellDidTapFavorite(_ nftId: String)
     func nftCollectionViewCellDidTapCart(_ cell: NftCollectionViewCell)
     func nftCollectionViewCellDidTapRating(_ cell: NftCollectionViewCell)
 }
 
 final class NftCollectionViewCell: UICollectionViewCell, ReuseIdentifying {
     weak var delegate: NftCollectionViewCellDelegate?
+    private var nftId: String?
 
     // MARK: - UI
     lazy var favoriteButton: UIButton = {
@@ -106,6 +107,15 @@ final class NftCollectionViewCell: UICollectionViewCell, ReuseIdentifying {
         fatalError("init(coder:) has not been implemented")
     }
 
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        ratingButton.isHidden = false
+        favoriteButton.isHidden = false
+        cartButton.isHidden = false
+        priceLabel.isHidden = false
+        nftImageView.image = nil
+    }
+
     // MARK: - Config
     func configure(model: Nft, imageLoaderService: ImageLoaderService) {
         if model.isPlaceholder {
@@ -114,12 +124,20 @@ final class NftCollectionViewCell: UICollectionViewCell, ReuseIdentifying {
             favoriteButton.isHidden = true
             cartButton.isHidden = true
             priceLabel.isHidden = true
+        } else {
+            hideLoadingAnimation()
+            ratingButton.isHidden = false
+            favoriteButton.isHidden = false
+            cartButton.isHidden = false
+            priceLabel.isHidden = false
+
+            ratingButton.configure(rating: model.rating)
+            favoriteButton.tintColor = model.isLiked ? .ypRedUniversal : .ypWhiteUniversal
+            nameLabel.text = model.name
+            priceLabel.text = model.formattedPrice
         }
 
-        ratingButton.configure(rating: model.rating)
-        favoriteButton.tintColor = model.isLiked ? .ypRedUniversal : .ypWhiteUniversal
-        nameLabel.text = model.name
-        priceLabel.text = model.formattedPrice
+        nftId = model.id
 
         if let firstImageUrl = model.imagesUrl.first {
             loadNftImage(
@@ -127,7 +145,6 @@ final class NftCollectionViewCell: UICollectionViewCell, ReuseIdentifying {
                 imageLoaderService: imageLoaderService
             )
         }
-
     }
 
     // MARK: - Load Image
@@ -163,7 +180,9 @@ final class NftCollectionViewCell: UICollectionViewCell, ReuseIdentifying {
     // MARK: - Actions
     @objc
     private func didTapFavorite() {
-        delegate?.nftCollectionViewCellDidTapFavorite(self)
+        guard let nftId = nftId else { return }
+
+        delegate?.nftCollectionViewCellDidTapFavorite(nftId)
     }
 
     @objc

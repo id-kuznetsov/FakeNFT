@@ -16,6 +16,7 @@ protocol CollectionViewModelProtocol {
     var nfts: AnyPublisher<[Nft], Never> { get }
 
     func loadData(skipCache: Bool)
+    func updateProfile(with nftId: String)
 }
 
 // MARK: - State
@@ -70,7 +71,7 @@ final class CollectionViewModel: CollectionViewModelProtocol {
                 nftIds: collectionUI.nfts,
                 skipCache: skipCache
             ),
-            profileService.fetchProfileCombine()
+            profileService.fetchProfileCombine(profile: nil, skipCache: skipCache)
         )
         .map { [weak self] nfts, profile -> CollectionState in
             guard let self = self else {
@@ -95,5 +96,54 @@ final class CollectionViewModel: CollectionViewModelProtocol {
             self?._state = newState
         }
         .store(in: &cancellables)
+    }
+
+    func updateProfile(with nftId: String) {
+        guard
+            var currentProfile = profile
+        else {
+            _state = .failed(
+                NSError(domain: "ViewModel", code: -1, userInfo: [
+                    NSLocalizedDescriptionKey: "Profile is nil"
+                ])
+            )
+            return
+        }
+
+        _state = .loading
+
+        if currentProfile.likes.contains(nftId) {
+            currentProfile.likes.removeAll { $0 == nftId }
+        } else {
+            currentProfile.likes.append(nftId)
+        }
+
+        self.profile = currentProfile
+
+        profileService.fetchProfileCombine(profile: currentProfile, skipCache: true)
+            .map { [weak self] newProfile -> CollectionState in
+                guard let self = self else {
+                    return .failed(NSError(domain: "ViewModel", code: -1, userInfo: nil))
+                }
+
+                self.profile = newProfile
+
+                let updatedNfts = self._nfts.map { nft -> Nft in
+                    var nftWithLike = nft
+                    nftWithLike.isLiked = newProfile.likes.contains(nft.id)
+                    return nftWithLike
+                }
+                .sorted { $0.isLiked && !$1.isLiked }
+
+                self._nfts = updatedNfts
+                return .success
+            }
+            .catch { error -> Just<CollectionState> in
+                Just(.failed(error))
+            }
+            .sink { [weak self] newState in
+                self?._state = newState
+            }
+            .store(in: &cancellables)
     }
 }

@@ -57,7 +57,7 @@
 		9120408D2D7AF63E007BF93F /* CurrenciesRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9120408C2D7AF63E007BF93F /* CurrenciesRequest.swift */; };
 		9120408F2D7AF671007BF93F /* SetCurrencyRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9120408E2D7AF671007BF93F /* SetCurrencyRequest.swift */; };
 		912040912D7AFB0D007BF93F /* ProfileService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 912040902D7AFB0D007BF93F /* ProfileService.swift */; };
-		912040982D7AFBC2007BF93F /* ProfileRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 912040972D7AFBC2007BF93F /* ProfileRequest.swift */; };
+		912040982D7AFBC2007BF93F /* CollectionProfileRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 912040972D7AFBC2007BF93F /* CollectionProfileRequest.swift */; };
 		9120409C2D7B07F9007BF93F /* ProfileDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9120409B2D7B07F9007BF93F /* ProfileDTO.swift */; };
 		9120409E2D7B089C007BF93F /* Profile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9120409D2D7B089C007BF93F /* Profile.swift */; };
 		913D882E2D637B08001304A3 /* CollectionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 913D882D2D637B08001304A3 /* CollectionService.swift */; };
@@ -166,7 +166,7 @@
 		9120408C2D7AF63E007BF93F /* CurrenciesRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrenciesRequest.swift; sourceTree = "<group>"; };
 		9120408E2D7AF671007BF93F /* SetCurrencyRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetCurrencyRequest.swift; sourceTree = "<group>"; };
 		912040902D7AFB0D007BF93F /* ProfileService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileService.swift; sourceTree = "<group>"; };
-		912040972D7AFBC2007BF93F /* ProfileRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileRequest.swift; sourceTree = "<group>"; };
+		912040972D7AFBC2007BF93F /* CollectionProfileRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionProfileRequest.swift; sourceTree = "<group>"; };
 		9120409B2D7B07F9007BF93F /* ProfileDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileDTO.swift; sourceTree = "<group>"; };
 		9120409D2D7B089C007BF93F /* Profile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Profile.swift; sourceTree = "<group>"; };
 		913D882D2D637B08001304A3 /* CollectionService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionService.swift; sourceTree = "<group>"; };
@@ -462,7 +462,7 @@
 				912040842D7AEEAB007BF93F /* OrderPutRequest.swift */,
 				9120408C2D7AF63E007BF93F /* CurrenciesRequest.swift */,
 				9120408E2D7AF671007BF93F /* SetCurrencyRequest.swift */,
-				912040972D7AFBC2007BF93F /* ProfileRequest.swift */,
+				912040972D7AFBC2007BF93F /* CollectionProfileRequest.swift */,
 			);
 			path = Requests;
 			sourceTree = "<group>";
@@ -730,7 +730,7 @@
 				912040892D7AF09F007BF93F /* Currency.swift in Sources */,
 				9174C0582D6DA79E0024C358 /* AlertModel.swift in Sources */,
 				0C79EE6A2A76DE1000EE90EA /* NftDetailAssembly.swift in Sources */,
-				912040982D7AFBC2007BF93F /* ProfileRequest.swift in Sources */,
+				912040982D7AFBC2007BF93F /* CollectionProfileRequest.swift in Sources */,
 				F756512F2D5EA652009B646C /* StatisticsViewController.swift in Sources */,
 				913D88302D637DEB001304A3 /* Collection.swift in Sources */,
 				9120408F2D7AF671007BF93F /* SetCurrencyRequest.swift in Sources */,

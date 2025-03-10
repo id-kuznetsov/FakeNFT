@@ -118,7 +118,11 @@ final class CollectionsViewModel: CollectionsViewModelProtocol {
             skipCache: skipCache
         )
         .map { [weak self] newCollections -> CollectionsState in
-            guard let self = self else { return .failed(NSError(domain: "ViewModel", code: -1, userInfo: nil)) }
+            guard
+                let self = self
+            else {
+                return .failed(NSError(domain: "ViewModel", code: -1, userInfo: nil))
+            }
 
             if newCollections.isEmpty {
                 self.hasMorePages = false

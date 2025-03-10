@@ -2,7 +2,10 @@ import Foundation
 import Combine
 
 protocol ProfileService {
-    func fetchProfileCombine() -> AnyPublisher<Profile, Error>
+    func fetchProfileCombine(
+        profile: Profile?,
+        skipCache: Bool
+    ) -> AnyPublisher<Profile, Error>
 }
 
 enum ProfileServiceError: Error {
@@ -33,20 +36,29 @@ final class ProfileServiceImpl: ProfileService {
     }
 
     // MARK: - Combine
-    func fetchProfileCombine() -> AnyPublisher<Profile, Error> {
-        let networkPub = networkPublisher()
+    func fetchProfileCombine(
+        profile: Profile?,
+        skipCache: Bool
+    ) -> AnyPublisher<Profile, Error> {
+        let networkPublisher = networkPublisher(profile: profile)
 
-        return cachePublisher()
-            .flatMap { cached in
-                Just(cached)
-                    .setFailureType(to: Error.self)
-                    .append(networkPub)
-                    .eraseToAnyPublisher()
-            }
+        if skipCache {
+            return networkPublisher
+                .receive(on: DispatchQueue.main)
+                .eraseToAnyPublisher()
+        } else {
+            return cachePublisher()
+                .flatMap { cached in
+                    Just(cached)
+                        .setFailureType(to: Error.self)
+                        .append(networkPublisher)
+                        .eraseToAnyPublisher()
+                }
 
-            .catch { _ in networkPub }
-            .receive(on: DispatchQueue.main)
-            .eraseToAnyPublisher()
+                .catch { _ in networkPublisher }
+                .receive(on: DispatchQueue.main)
+                .eraseToAnyPublisher()
+        }
     }
 
     private func cacheKey() -> String { "profile" }
@@ -77,11 +89,10 @@ final class ProfileServiceImpl: ProfileService {
         .eraseToAnyPublisher()
     }
 
-    private func networkPublisher() -> AnyPublisher<Profile, Error> {
+    private func networkPublisher(profile: Profile?) -> AnyPublisher<Profile, Error> {
         return Future<Profile, Error> { [weak self] promise in
             guard let self = self else {
                 promise(.failure(NSError(domain: "ProfileService", code: -1, userInfo: nil)))
-                print("DEBUG: ERROR ProfileService - no self")
                 return
             }
 
@@ -92,7 +103,7 @@ final class ProfileServiceImpl: ProfileService {
             }
 
             let key = self.cacheKey()
-            let request = ProfileRequest()
+            let request = CollectionProfileRequest(profile: profile)
 
             self.networkClient.send(
                 request: request,

@@ -312,12 +312,8 @@ extension CollectionViewController: NftCollectionViewCellDelegate {
         showChangeRating(image)
     }
 
-    func nftCollectionViewCellDidTapFavorite(_ cell: NftCollectionViewCell) {
-        if cell.favoriteButton.tintColor == .ypWhiteUniversal {
-            cell.favoriteButton.tintColor = .ypRedUniversal
-        } else if cell.favoriteButton.tintColor == .ypRedUniversal {
-            cell.favoriteButton.tintColor = .ypWhiteUniversal
-        }
+    func nftCollectionViewCellDidTapFavorite(_ nftId: String) {
+        viewModel.updateProfile(with: nftId)
     }
 
     func nftCollectionViewCellDidTapCart(_ cell: NftCollectionViewCell) {

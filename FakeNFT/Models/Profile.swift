@@ -6,7 +6,7 @@ struct Profile: Codable, Hashable {
     let description: String
     let website: URL
     let nfts: [String]
-    let likes: [String]
+    var likes: [String]
     let id: String
 }
 
