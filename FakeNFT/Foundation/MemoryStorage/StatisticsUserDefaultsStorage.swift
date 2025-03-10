@@ -39,9 +39,9 @@ final class StatisticsUserDefaultsStorage: StatisticsUserDefaultsStorageProtocol
     var selectedUsersSortOption: SortOption {
         get {
             if let title = storage.string(forKey: Keys.sortOptionInStatistics.rawValue) {
-                return SortOption.allCases.first { $0.title == title } ?? .name
+                return SortOption.allCases.first { $0.title == title } ?? .rating
             }
-            return .name
+            return .rating
         }
         set {
             storage.set(newValue.title, forKey: Keys.sortOptionInStatistics.rawValue)

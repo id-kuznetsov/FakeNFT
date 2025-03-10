@@ -12,27 +12,25 @@ final class StatisticsViewController: UIViewController {
     // MARK: - Private properties
     private var viewModel: StatisticsViewModelProtocol
     
-    private lazy var customNavBar: UINavigationBar = {
-        let navBar = UINavigationBar()
-        navBar.barTintColor = .ypWhite
-        navBar.shadowImage = UIImage()
-        return navBar
-    }()
-    
-    private lazy var filterButton: UIButton = {
-        let button = UIButton(type: .system)
-        button.setImage(UIImage(named: "ic.sort"), for: .normal)
+    private lazy var filterButton: UIBarButtonItem = {
+        let button = UIBarButtonItem(
+            image: .icSort,
+            style: .plain,
+            target: self,
+            action: #selector(filterButtonTapped)
+        )
         button.tintColor = .ypBlack
-        button.addTarget(self, action: #selector(filterButtonTapped), for: .touchUpInside)
         return button
     }()
     
     private lazy var tableView: UITableView = {
         let tableView = UITableView()
-        tableView.register(StatisticsCell.self, forCellReuseIdentifier: StatisticsCell.identifier)
+        tableView.register(StatisticsCell.self)
         tableView.dataSource = self
         tableView.delegate = self
         tableView.separatorStyle = .none
+        tableView.backgroundColor = .ypWhite
+        tableView.translatesAutoresizingMaskIntoConstraints = false
         return tableView
     }()
     
@@ -50,30 +48,25 @@ final class StatisticsViewController: UIViewController {
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        navigationController?.setNavigationBarHidden(true, animated: false)
         
         setupUI()
         setupBindings()
         viewModel.loadInitialData()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        setupNavigationBar()
+    }
+    
     // MARK: - Private methods
     private func setupUI() {
-        view.backgroundColor = .systemBackground
+        view.backgroundColor = .ypWhite
         
-        [customNavBar, tableView].forEach { element in
-            view.addSubview(element)
-            element.translatesAutoresizingMaskIntoConstraints = false
-        }
+        view.addSubview(tableView)
         
         NSLayoutConstraint.activate([
-            // customNavBar constraints
-            customNavBar.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            customNavBar.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            customNavBar.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            
-            // tableView constraints
-            tableView.topAnchor.constraint(equalTo: customNavBar.bottomAnchor, constant: 20),
+            tableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
             tableView.leadingAnchor.constraint(
                 equalTo: view.safeAreaLayoutGuide.leadingAnchor,
                 constant: StatisticsConstants.StatisticsVc.TableViewParams.sideMarginFromEdges
@@ -85,24 +78,16 @@ final class StatisticsViewController: UIViewController {
             tableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
         ])
         tableView.scrollIndicatorInsets = UIEdgeInsets(
-            top: 0,
-            left: 0,
-            bottom: 0,
+            top: StatisticsConstants.StatisticsVc.TableViewParams.containerViewtopInset,
+            left: StatisticsConstants.StatisticsVc.TableViewParams.containerViewleftInset,
+            bottom: StatisticsConstants.StatisticsVc.TableViewParams.containerViewbottomInset,
             right: -StatisticsConstants.StatisticsVc.TableViewParams.containerViewRightInset
         )
-        configureCustomNavBar()
     }
     
-    private func configureCustomNavBar() {
-        let navItem = UINavigationItem()
-        let filterBarButton = UIBarButtonItem(customView: filterButton)
-        navItem.rightBarButtonItem = filterBarButton
-        
-        customNavBar.setItems([navItem], animated: false)
-        
-        let spacer = UIBarButtonItem(barButtonSystemItem: .fixedSpace, target: nil, action: nil)
-        spacer.width = 19.5
-        navItem.rightBarButtonItems = [spacer, filterBarButton]
+    private func setupNavigationBar() {
+        navigationController?.setNavigationBarHidden(false, animated: false)
+        navigationItem.rightBarButtonItem = filterButton
     }
     
     private func setupBindings() {
@@ -169,15 +154,11 @@ extension StatisticsViewController: UITableViewDataSource {
             return UITableViewCell()
         }
         
-        guard let cell = tableView.dequeueReusableCell(
-            withIdentifier: StatisticsCell.identifier,
-            for: indexPath
-        ) as? StatisticsCell else {
-            return UITableViewCell()
-        }
+        let cell: StatisticsCell = tableView.dequeueReusableCell()
         
         let user = viewModel.users[indexPath.row]
         cell.configure(with: user, index: indexPath.row)
+        cell.backgroundColor = .ypWhite
         cell.selectionStyle = .none
         
         return cell

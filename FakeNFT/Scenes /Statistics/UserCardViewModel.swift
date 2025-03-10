@@ -13,8 +13,10 @@ protocol UserCardViewModelProtocol {
     var onLoadingStateChanged: ((Bool) -> Void)? { get set }
     var onErrorOccurred: ((String) -> Void)? { get set }
     var userWebsite: String? { get }
+    var nftIds: [String] { get }
     func loadUserData()
     func checkUserWebsite(completion: @escaping (Bool) -> Void)
+    func createUserCollectionViewModel() -> UserNftCollectionViewModelProtocol
 }
 
 final class UserCardViewModel: UserCardViewModelProtocol {
@@ -24,27 +26,50 @@ final class UserCardViewModel: UserCardViewModelProtocol {
     var onUserLoaded: ((User) -> Void)?
     var onLoadingStateChanged: ((Bool) -> Void)?
     var onErrorOccurred: ((String) -> Void)?
+    var nftIds: [String] = []
     
     // MARK: - Private properties
     private let userService: UserService
+    private let nftService: NftService
+    private let orderService: OrderService
     private let userId: String
     
     private var user: User? {
         didSet {
             guard let user = user else { return }
+            self.nftIds = user.nfts ?? []
             onUserLoaded?(user)
         }
     }
     
     // MARK: - Initializers
-    init(userService: UserService, userId: String) {
+    init(
+        userService: UserService,
+        nftService: NftService,
+        orderService: OrderService,
+        userId: String,
+        nftIds: [String]
+    ) {
         self.userService = userService
+        self.nftService = nftService
+        self.orderService = orderService
         self.userId = userId
+        self.nftIds = nftIds
     }
     
     // MARK: Public methods
     func loadUserData() {
         getUser()
+    }
+    
+    func createUserCollectionViewModel() -> UserNftCollectionViewModelProtocol {
+        return UserNftCollectionViewModel(
+            nftService: nftService,
+            userService: userService,
+            orderService: orderService,
+            userId: userId,
+            nftIds: nftIds
+        )
     }
     
     func checkUserWebsite(completion: @escaping (Bool) -> Void) {
@@ -67,8 +92,7 @@ final class UserCardViewModel: UserCardViewModelProtocol {
             case .success(let user):
                 self.user = user
             case .failure(let error):
-                self.onErrorOccurred?("Не удалось получить данные")
-                print("Ошибка загрузки пользователя: \(error.localizedDescription)")
+                self.onErrorOccurred?("Не удалось получить данные \(error.localizedDescription)")
             }
         }
     }

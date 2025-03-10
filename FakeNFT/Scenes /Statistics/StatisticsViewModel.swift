@@ -32,6 +32,8 @@ final class StatisticsViewModel: StatisticsViewModelProtocol {
     private var userDefaultsStorage: StatisticsUserDefaultsStorageProtocol
     private let cacheStorage: StatisticsCacheStorageProtocol
     private let userService: UserService
+    private let nftService: NftService
+    private let orderService: OrderService
     private(set) var users: [User] = []
     private let pageSize = 15
     private var isLoading = false
@@ -41,10 +43,14 @@ final class StatisticsViewModel: StatisticsViewModelProtocol {
     // MARK: - Initializers
     init(
         userService: UserService,
+        nftService: NftService,
+        orderService: OrderService,
         userDefaultsStorage: StatisticsUserDefaultsStorageProtocol,
         cacheStorage: StatisticsCacheStorageProtocol
     ) {
         self.userService = userService
+        self.nftService = nftService
+        self.orderService = orderService
         self.userDefaultsStorage = userDefaultsStorage
         self.cacheStorage = cacheStorage
     }
@@ -106,10 +112,15 @@ final class StatisticsViewModel: StatisticsViewModelProtocol {
     }
     
     func createUserCardViewModel(for userId: String) -> UserCardViewModelProtocol {
-        UserCardViewModel(userService: userService, userId: userId)
+        UserCardViewModel(
+            userService: userService,
+            nftService: nftService,
+            orderService: orderService,
+            userId: userId,
+            nftIds: []
+        )
     }
     
-    // Calling this method on logout (when the authorization functionality will be implemented)
     func clearAllStatisticsData() {
         cacheStorage.clearStatisticsCache()
         userDefaultsStorage.clearStatisticsUserDefaults()

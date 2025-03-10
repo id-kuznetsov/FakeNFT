@@ -6,18 +6,12 @@
 //
 
 import UIKit
+import SafariServices
 
 final class UserCardViewController: UIViewController {
     
     // MARK: - Private properties
     private var viewModel: UserCardViewModelProtocol
-    
-    private lazy var customNavBar: UINavigationBar = {
-        let navBar = UINavigationBar()
-        navBar.barTintColor = .ypWhite
-        navBar.shadowImage = UIImage()
-        return navBar
-    }()
     
     private lazy var backButton: UIButton = {
         let button = UIButton(type: .system)
@@ -52,7 +46,7 @@ final class UserCardViewController: UIViewController {
     
     private lazy var webViewButton: UIButton = {
         let button = UIButton()
-        button.setTitle(L10n.UserCard.websiteButton, for: .normal)
+        button.setTitle(L10n.User.websiteButton, for: .normal)
         button.setTitleColor(.ypBlack, for: .normal)
         button.titleLabel?.font = .caption1
         button.layer.cornerRadius = StatisticsConstants.Common.cornerRadiusXHight
@@ -64,7 +58,7 @@ final class UserCardViewController: UIViewController {
     
     private lazy var nftLabel: UILabel = {
         let label = UILabel()
-        label.text = L10n.UserCard.nftCollectionLabel
+        label.text = L10n.User.nftCollection
         label.textColor = .ypBlack
         label.font = .bodyBold
         return label
@@ -102,6 +96,7 @@ final class UserCardViewController: UIViewController {
         
         button.addSubview(mainStackView)
         mainStackView.translatesAutoresizingMaskIntoConstraints = false
+        mainStackView.isUserInteractionEnabled = false
         
         NSLayoutConstraint.activate([
             mainStackView.leadingAnchor.constraint(equalTo: button.leadingAnchor),
@@ -118,7 +113,6 @@ final class UserCardViewController: UIViewController {
         super.viewDidLoad()
         
         setupUI()
-        configureCustomNavBar()
         viewModel.loadUserData()
     }
     
@@ -166,27 +160,21 @@ final class UserCardViewController: UIViewController {
         } else {
             avatarImageView.image = placeholderImage
         }
-        // Hide button if user doesn't have website
+        
         webViewButton.isHidden = viewModel.userWebsite == nil
     }
     
     private func setupUI() {
         view.backgroundColor = .ypWhite
         
-        [customNavBar, avatarImageView, nameLabel, descriptionLabel,
+        [avatarImageView, nameLabel, descriptionLabel,
          webViewButton, nftButton].forEach { element in
             view.addSubview(element)
             element.translatesAutoresizingMaskIntoConstraints = false
         }
         
         NSLayoutConstraint.activate([
-            // customNavBar constraints
-            customNavBar.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            customNavBar.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            customNavBar.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            
-            // avatarImageView constraints
-            avatarImageView.topAnchor.constraint(equalTo: customNavBar.bottomAnchor, constant: 20),
+            avatarImageView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
             avatarImageView.leadingAnchor.constraint(
                 equalTo: view.leadingAnchor,
                 constant: StatisticsConstants.UserCardVc.MainScreen.avatarLeftInset
@@ -196,14 +184,12 @@ final class UserCardViewController: UIViewController {
             ),
             avatarImageView.heightAnchor.constraint(equalTo: avatarImageView.widthAnchor),
             
-            // nameLabel constraints
             nameLabel.centerYAnchor.constraint(equalTo: avatarImageView.centerYAnchor),
             nameLabel.leadingAnchor.constraint(
                 equalTo: avatarImageView.trailingAnchor,
                 constant: StatisticsConstants.UserCardVc.MainScreen.nameLabelLeftInset
             ),
             
-            // descriptionLabel constraints
             descriptionLabel.topAnchor.constraint(
                 equalTo: avatarImageView.bottomAnchor,
                 constant: StatisticsConstants.UserCardVc.MainScreen.descriptionTopInset
@@ -214,7 +200,6 @@ final class UserCardViewController: UIViewController {
                 constant: -StatisticsConstants.UserCardVc.MainScreen.descriptionRightInset
             ),
             
-            // webViewButton constraints
             webViewButton.topAnchor.constraint(
                 equalTo: descriptionLabel.bottomAnchor,
                 constant: StatisticsConstants.UserCardVc.MainScreen.webViewButtonTopInset
@@ -226,7 +211,6 @@ final class UserCardViewController: UIViewController {
                 equalToConstant: StatisticsConstants.UserCardVc.MainScreen.webViewButtonHeight
             ),
             
-            // nftButton constraints
             nftButton.topAnchor.constraint(
                 equalTo: webViewButton.bottomAnchor,
                 constant: StatisticsConstants.UserCardVc.MainScreen.nftButtonTopInset),
@@ -239,15 +223,6 @@ final class UserCardViewController: UIViewController {
         setupBindings()
     }
     
-    private func configureCustomNavBar() {
-        let navItem = UINavigationItem()
-        
-        let backBarButton = UIBarButtonItem(customView: backButton)
-        navItem.leftBarButtonItem = backBarButton
-        
-        customNavBar.setItems([navItem], animated: false)
-    }
-    
     private func showNetworkErrorAlert() {
         AlertPresenter.presentNetworkErrorAlert(on: self) { [weak self] in
             self?.viewModel.loadUserData()
@@ -258,7 +233,7 @@ final class UserCardViewController: UIViewController {
         AlertPresenter.presentAlertWithOneSelection(
             on: self,
             title: L10n.Error.title,
-            message: L10n.UserCard.websiteInaccessible,
+            message: L10n.User.websiteInaccessible,
             actionTitle: L10n.Button.ok
         )
     }
@@ -278,8 +253,12 @@ final class UserCardViewController: UIViewController {
             
             if isAccessible {
                 guard let urlString = self.viewModel.userWebsite, let url = URL(string: urlString) else { return }
-                let webVC = WebViewViewController(url: url)
-                self.navigationController?.pushViewController(webVC, animated: true)
+                let safariVC = SFSafariViewController(url: url)
+                safariVC.preferredControlTintColor = .ypBlack
+                safariVC.preferredBarTintColor = .ypWhite
+                safariVC.delegate = self
+                
+                present(safariVC, animated: true)
             } else {
                 showInaccessibleWebsiteAlert()
             }
@@ -287,11 +266,19 @@ final class UserCardViewController: UIViewController {
     }
     
     @objc private func getUserCollection() {
-        // TO DO: Переход на коллекцию NFT пользователя
-        print("Переход на коллекцию NFT пользователя")
+        let collectionViewModel = viewModel.createUserCollectionViewModel()
+        let collectionVC = UserNftCollectionViewController(viewModel: collectionViewModel)
+        
+        navigationController?.pushViewController(collectionVC, animated: true)
     }
     
     @objc private func backButtonTapped() {
         navigationController?.popViewController(animated: true)
+    }
+}
+
+extension UserCardViewController: SFSafariViewControllerDelegate {
+    func safariViewControllerDidFinish(_ controller: SFSafariViewController) {
+        dismiss(animated: true)
     }
 }
