@@ -49,12 +49,20 @@ final class TabBarController: UITabBarController {
             image: .icCart,
             selectedImage: .icCartFill
         )
-
-        let statisticsVC = UINavigationController(rootViewController: StatisticsViewController(servicesAssembly: servicesAssembly))
-        statisticsVC.tabBarItem = UITabBarItem(
-            title: NSLocalizedString("Tab.statistic", comment: ""),
-            image: UIImage(systemName: "chart.bar"),
-            selectedImage: UIImage(systemName: "chart.bar.fill")
+        
+        let statisticsViewModel = StatisticsViewModel(
+            userService: servicesAssembly.userService,
+            nftService: servicesAssembly.nftService,
+            orderService: servicesAssembly.orderService,
+            userDefaultsStorage: StatisticsUserDefaultsStorage(),
+            cacheStorage: StatisticsCacheStorage()
+        )
+        let statisticsVC = StatisticsViewController(viewModel: statisticsViewModel)
+        let statisticsNavigationController = CustomNavigationController(rootViewController: statisticsVC)
+        statisticsNavigationController.tabBarItem = UITabBarItem(
+            title: L10n.Tab.statistic,
+            image: UIImage(named: "ic.statistics.fill"),
+            selectedImage: nil
         )
 
         setViewControllers(
@@ -62,7 +70,7 @@ final class TabBarController: UITabBarController {
                 profileVC,
                 catalogNavigationController,
                 cartViewController,
-                statisticsVC
+                statisticsNavigationController
             ],
             animated: false
         )
