@@ -244,7 +244,7 @@ final class NFTRatingAlertViewController: UIViewController {
 
     @objc
     private func didTapNotNow() {
-        print("Not now button tapped")
+        print("DEBUG: NFTRatingAlertViewController - Did tap Not Now. Not implemented in API yet.")
         dismiss(animated: true)
     }
 

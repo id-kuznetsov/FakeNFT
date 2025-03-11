@@ -10,7 +10,7 @@ import UIKit
 protocol NftCollectionViewCellDelegate: AnyObject {
     func nftCollectionViewCellDidTapFavorite(_ nftId: String)
     func nftCollectionViewCellDidTapCart(_ nftId: String)
-    func nftCollectionViewCellDidTapRating(_ cell: NftCollectionViewCell)
+    func nftCollectionViewCellDidTapRating(_ nftImage: UIImage)
 }
 
 final class NftCollectionViewCell: UICollectionViewCell, ReuseIdentifying {
@@ -35,7 +35,7 @@ final class NftCollectionViewCell: UICollectionViewCell, ReuseIdentifying {
         return view
     }()
 
-    lazy var nftImageView: UIImageView = {
+    private lazy var nftImageView: UIImageView = {
         let view = UIImageView()
         view.contentMode = .scaleAspectFill
         view.clipsToBounds = true
@@ -139,6 +139,12 @@ final class NftCollectionViewCell: UICollectionViewCell, ReuseIdentifying {
 
         nftId = model.id
 
+        let preferredSize = model.isLiked
+            ? UIImage.SymbolConfiguration(pointSize: 21, weight: .regular, scale: .default)
+            : UIImage.SymbolConfiguration(pointSize: 17.64, weight: .regular, scale: .default)
+
+        favoriteButton.setPreferredSymbolConfiguration(preferredSize, forImageIn: .normal)
+
         if let firstImageUrl = model.images.first {
             loadNftImage(
                 from: firstImageUrl,
@@ -177,11 +183,28 @@ final class NftCollectionViewCell: UICollectionViewCell, ReuseIdentifying {
         nftImageView.hideShimmerAnimation()
     }
 
+    private func animateFavoriteButton() {
+        let originalTransform = favoriteButton.transform
+
+        UIView.animate(withDuration: 0.15, animations: {
+            self.favoriteButton.transform = CGAffineTransform(scaleX: 1.4, y: 1.4)
+        }, completion: { _ in
+            UIView.animate(withDuration: 0.15, animations: {
+                self.favoriteButton.transform = CGAffineTransform(scaleX: 1.1, y: 1.1)
+            }, completion: { _ in
+                UIView.animate(withDuration: 0.1, animations: {
+                    self.favoriteButton.transform = originalTransform
+                })
+            })
+        })
+    }
+
     // MARK: - Actions
     @objc
     private func didTapFavorite() {
         guard let nftId = nftId else { return }
 
+        animateFavoriteButton()
         delegate?.nftCollectionViewCellDidTapFavorite(nftId)
     }
 
@@ -194,7 +217,9 @@ final class NftCollectionViewCell: UICollectionViewCell, ReuseIdentifying {
 
     @objc
     private func didTapRating() {
-        delegate?.nftCollectionViewCellDidTapRating(self)
+        guard let image = nftImageView.image else { return }
+
+        delegate?.nftCollectionViewCellDidTapRating(image)
     }
 
     // MARK: - Constraints

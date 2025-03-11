@@ -302,10 +302,8 @@ extension CollectionViewController: CollectionHeaderViewDelegate {
 
 // MARK: - NftCollectionViewCellDelegate
 extension CollectionViewController: NftCollectionViewCellDelegate {
-    func nftCollectionViewCellDidTapRating(_ cell: NftCollectionViewCell) {
-        guard let image = cell.nftImageView.image else { return }
-
-        showChangeRating(image)
+    func nftCollectionViewCellDidTapRating(_ nftImage: UIImage) {
+        showChangeRating(nftImage)
     }
 
     func nftCollectionViewCellDidTapFavorite(_ nftId: String) {
