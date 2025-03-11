@@ -221,7 +221,7 @@ final class CollectionsViewController: UIViewController, FilterView, CatalogErro
         showFilters(
             style: .actionSheet,
             buttons: [
-                .sortByName(action: { [weak self] in
+                .sortByTitle(action: { [weak self] in
                     self?.viewModel.sortCollections(by: .name)
                 }),
                 .sortByNftCount(action: { [weak self] in
