@@ -25,6 +25,10 @@ enum CollectionState {
     case initial, loading, failed(Error), success
 }
 
+enum CollectionError: Error {
+    case updateProfile
+}
+
 final class CollectionViewModel: CollectionViewModelProtocol {
     let imageLoaderService: ImageLoaderService
     let orderService: OrderService
@@ -106,11 +110,8 @@ final class CollectionViewModel: CollectionViewModelProtocol {
         guard
             var currentProfile = profile
         else {
-            _state = .failed(
-                NSError(domain: "ViewModel", code: -1, userInfo: [
-                    NSLocalizedDescriptionKey: "Profile is nil"
-                ])
-            )
+            print("DEBUG: CollectionViewModel - updateProfile - Profile is nil")
+            _state = .failed(CollectionError.updateProfile)
             return
         }
 

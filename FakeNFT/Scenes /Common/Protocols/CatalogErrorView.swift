@@ -27,6 +27,8 @@ extension CatalogErrorView where Self: UIViewController {
             message = L10n.Alert.Message.networkError
         case is WebViewError:
             message = L10n.Alert.Message.apiBug
+        case is CollectionError:
+            message = L10n.Alert.Message.profile
         default:
             message = L10n.Alert.Message.unknown
         }
