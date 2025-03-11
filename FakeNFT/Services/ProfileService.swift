@@ -16,7 +16,6 @@ final class ProfileServiceImpl: ProfileService {
     private let networkClient: NetworkClient
     private let cacheService: CacheService
     private let networkMonitor: NetworkMonitor
-    private let cacheLifetime: TimeInterval = 10 * 60
     private var cancellables = Set<AnyCancellable>()
 
     init(
@@ -74,15 +73,10 @@ final class ProfileServiceImpl: ProfileService {
 
             self.cacheService.load(type: Profile.self, forKey: key) { result in
                 switch result {
-                case .success(let (cachedProfile, lastUpdated)):
-                    let cacheIsFresh = Date().timeIntervalSince(lastUpdated) < self.cacheLifetime
-                    if cacheIsFresh {
-                        promise(.success(cachedProfile))
-                    } else {
-                        promise(.failure(CacheError.emptyOrStale))
-                    }
-                case .failure:
-                    promise(.failure(CacheError.emptyOrStale))
+                case .success(let cacheResult):
+                    promise(.success(cacheResult.data))
+                case .failure(let error):
+                    promise(.failure(error))
                 }
             }
         }
@@ -114,8 +108,9 @@ final class ProfileServiceImpl: ProfileService {
                         promise(.failure(ProfileServiceError.invalidResponse))
                         return
                     }
-
-                    self.cacheService.save(data: convertedModel, forKey: key)
+                    /// API doesn't provide ttl
+                    let ttl: TimeInterval? = nil
+                    self.cacheService.save(data: convertedModel, ttl: ttl, forKey: key)
                     promise(.success(convertedModel))
                 case .failure(let error):
                     promise(.failure(error))

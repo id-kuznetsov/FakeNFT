@@ -111,52 +111,67 @@ final class CollectionsViewModel: CollectionsViewModelProtocol {
         }
 
         isLoadingPage = true
-
         if reset {
             _collections = (0..<4).map { _ in Collection.placeholder ?? collectionPlaceholder }
         } else {
             currentPage += 1
         }
 
-        collectionsService.fetchCollections(
+        let collectionsPublisher = collectionsService.fetchCollections(
             page: currentPage,
             sortBy: sortBy,
             skipCache: skipCache
         )
-        .map { [weak self] newCollections -> CollectionsState in
-            guard
-                let self = self
-            else {
-                return .failed(CollectionsError.viewModelDeallocated)
+        .catch { [weak self] error -> AnyPublisher<[Collection], Error> in
+            guard let self = self else {
+                return Fail(error: error).eraseToAnyPublisher()
             }
-
-            if newCollections.isEmpty {
-                self.hasMorePages = false
-            }
-
-            if reset {
-                self._collections = newCollections
+            if let cacheError = error as? CacheError, cacheError == .emptyOrStale {
+                /// повторяем запрос с параметром skipCache
+                return self.collectionsService.fetchCollections(
+                    page: self.currentPage,
+                    sortBy: self.sortBy,
+                    skipCache: true
+                )
+                .eraseToAnyPublisher()
             } else {
-                let uniqueNew = newCollections.filter { newItem in
-                    !self._collections.contains(where: { $0.id == newItem.id })
-                }
-                self._collections.append(contentsOf: uniqueNew)
-                /// Доп. сортировка
-                /// В API есть баг, неправильно сортирует по nfts
-                if self.sortBy == .nfts {
-                    self._collections.sort { $0.nfts.count > $1.nfts.count }
-                }
+                return Fail(error: error).eraseToAnyPublisher()
             }
-
-            return .success
         }
+        .handleEvents(receiveOutput: { [weak self] newCollections in
+            self?.updateCollections(with: newCollections, reset: reset)
+        })
+        .map { _ in CollectionsState.success }
         .catch { error -> Just<CollectionsState> in
             Just(.failed(error))
         }
-        .sink { [weak self] newState in
-            self?.isLoadingPage = false
-            self?._state = newState
+        .receive(on: DispatchQueue.main)
+
+        collectionsPublisher
+            .sink { [weak self] newState in
+                self?.isLoadingPage = false
+                self?._state = newState
+            }
+            .store(in: &cancellables)
+    }
+
+    private func updateCollections(with newCollections: [Collection], reset: Bool) {
+        if newCollections.isEmpty {
+            hasMorePages = false
         }
-        .store(in: &cancellables)
+
+        if reset {
+            _collections = newCollections
+        } else {
+            let uniqueNew = newCollections.filter { newItem in
+                !_collections.contains(where: { $0.id == newItem.id })
+            }
+            _collections.append(contentsOf: uniqueNew)
+            /// Доп. сортировка
+            /// В API есть баг, неправильно сортирует по nfts
+            if sortBy == .nfts {
+                _collections.sort { $0.nfts.count > $1.nfts.count }
+            }
+        }
     }
 }

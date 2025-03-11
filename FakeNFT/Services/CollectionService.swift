@@ -20,7 +20,6 @@ final class CollectionServiceImpl: CollectionService {
     private let networkClient: NetworkClient
     private let cacheService: CacheService
     private let networkMonitor: NetworkMonitor
-    private let cacheLifetime: TimeInterval = 10 * 60
     private var cancellables = Set<AnyCancellable>()
 
     init(
@@ -84,11 +83,14 @@ final class CollectionServiceImpl: CollectionService {
         return Future<[Collection], Error> { promise in
             self.cacheService.load(type: [Collection].self, forKey: key) { result in
                 switch result {
-                case .success(let (cachedCollections, lastUpdated)):
-                    let cacheIsFresh = (Date().timeIntervalSince(lastUpdated) < self.cacheLifetime)
-                    promise(.success(cacheIsFresh ? cachedCollections : []))
-                case .failure:
-                    promise(.success([]))
+                case .success(let cacheResult):
+                    promise(.success(cacheResult.data))
+                case .failure(let error):
+                    if let cacheError = error as? CacheError, cacheError == .emptyOrStale {
+                        promise(.success([]))
+                    } else {
+                        promise(.failure(error))
+                    }
                 }
             }
         }
@@ -115,7 +117,9 @@ final class CollectionServiceImpl: CollectionService {
                 switch result {
                 case .success(let response):
                     let convertedModels = response.compactMap { $0.toDomainModel() }
-                    self.cacheService.save(data: convertedModels, forKey: key)
+                    /// API doesn't provide ttl
+                    let ttl: TimeInterval? = nil
+                    self.cacheService.save(data: convertedModels, ttl: ttl, forKey: key)
                     promise(.success(convertedModels))
                 case .failure(let error):
                     promise(.failure(error))

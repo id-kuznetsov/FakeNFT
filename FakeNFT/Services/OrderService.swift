@@ -9,7 +9,6 @@ final class OrderServiceImpl: OrderService {
     private let networkClient: NetworkClient
     private let cacheService: CacheService
     private let networkMonitor: NetworkMonitor
-    private let cacheLifetime: TimeInterval = 10 * 60
     private var cancellables = Set<AnyCancellable>()
 
     init(
@@ -41,20 +40,23 @@ final class OrderServiceImpl: OrderService {
                 .eraseToAnyPublisher()
         } else {
             return cachePublisher()
+            /// Если кэш получен, отдаём его сразу, а затем выполняем обновление из сети
                 .flatMap { cached in
                     Just(cached)
                         .setFailureType(to: Error.self)
                         .append(networkPublisher)
                         .eraseToAnyPublisher()
                 }
-
+            /// Если кэш недоступен или устарел, переходим к запросу в сеть
                 .catch { _ in networkPublisher }
                 .receive(on: DispatchQueue.main)
                 .eraseToAnyPublisher()
         }
     }
 
-    private func cacheKey() -> String { "order" }
+    private func cacheKey() -> String {
+        return "order"
+    }
 
     private func cachePublisher() -> AnyPublisher<Order, Error> {
         let key = cacheKey()
@@ -67,15 +69,10 @@ final class OrderServiceImpl: OrderService {
 
             self.cacheService.load(type: Order.self, forKey: key) { result in
                 switch result {
-                case .success(let (cachedProfile, lastUpdated)):
-                    let cacheIsFresh = Date().timeIntervalSince(lastUpdated) < self.cacheLifetime
-                    if cacheIsFresh {
-                        promise(.success(cachedProfile))
-                    } else {
-                        promise(.failure(CacheError.emptyOrStale))
-                    }
-                case .failure:
-                    promise(.failure(CacheError.emptyOrStale))
+                case .success(let cacheResult):
+                    promise(.success(cacheResult.data))
+                case .failure(let error):
+                    promise(.failure(error))
                 }
             }
         }
@@ -104,7 +101,9 @@ final class OrderServiceImpl: OrderService {
                 switch result {
                 case .success(let response):
                     let convertedModel = response.toDomainModel()
-                    self.cacheService.save(data: convertedModel, forKey: key)
+                    /// API doesn't provide ttl
+                    let ttl: TimeInterval? = nil
+                    self.cacheService.save(data: convertedModel, ttl: ttl, forKey: key)
                     promise(.success(convertedModel))
                 case .failure(let error):
                     promise(.failure(error))

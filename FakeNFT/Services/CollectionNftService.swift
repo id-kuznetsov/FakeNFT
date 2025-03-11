@@ -20,7 +20,6 @@ final class CollectionNftServiceImpl: CollectionNftService {
     private let networkClient: NetworkClient
     private let cacheService: CacheService
     private let networkMonitor: NetworkMonitor
-    private let cacheLifetime: TimeInterval = 10 * 60
     private var cancellables = Set<AnyCancellable>()
 
     init(
@@ -80,11 +79,14 @@ final class CollectionNftServiceImpl: CollectionNftService {
         return Future<[Nft], Error> { promise in
             self.cacheService.load(type: [Nft].self, forKey: key) { result in
                 switch result {
-                case .success(let (cachedNfts, lastUpdated)):
-                    let cacheIsFresh = (Date().timeIntervalSince(lastUpdated) < self.cacheLifetime)
-                    promise(.success(cacheIsFresh ? cachedNfts : []))
-                case .failure:
-                    promise(.success([]))
+                case .success(let cacheResult):
+                    promise(.success(cacheResult.data))
+                case .failure(let error):
+                    if let cacheError = error as? CacheError, cacheError == .emptyOrStale {
+                        promise(.success([]))
+                    } else {
+                        promise(.failure(error))
+                    }
                 }
             }
         }
@@ -120,7 +122,9 @@ final class CollectionNftServiceImpl: CollectionNftService {
                         }
 
                         if convertedModels.count == uniqueNftIds.count {
-                            self.cacheService.save(data: convertedModels, forKey: key)
+                            /// API doesn't provide ttl
+                            let ttl: TimeInterval? = nil
+                            self.cacheService.save(data: convertedModels, ttl: ttl, forKey: key)
                             promise(.success(convertedModels))
                         }
                     case .failure(let error):
