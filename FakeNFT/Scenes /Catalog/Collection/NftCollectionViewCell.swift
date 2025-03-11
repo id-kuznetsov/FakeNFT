@@ -174,7 +174,7 @@ final class NftCollectionViewCell: UICollectionViewCell, ReuseIdentifying {
         }
     }
 
-    // MARK: - Loading Animation
+    // MARK: - Animations
     private func showLoadingAnimation() {
         nftImageView.showShimmerAnimation()
     }
@@ -199,6 +199,20 @@ final class NftCollectionViewCell: UICollectionViewCell, ReuseIdentifying {
         })
     }
 
+    private func animateCartButton() {
+        let newImage: UIImage = cartButton.image(for: .normal) == .icCart ? .icCartDelete : .icCart
+
+        UIView.transition(
+            with: cartButton,
+            duration: 0.3,
+            options: .transitionFlipFromLeft,
+            animations: {
+                self.cartButton.setImage(newImage, for: .normal)
+            },
+            completion: nil
+        )
+    }
+
     // MARK: - Actions
     @objc
     private func didTapFavorite() {
@@ -212,6 +226,7 @@ final class NftCollectionViewCell: UICollectionViewCell, ReuseIdentifying {
     private func didTapCart() {
         guard let nftId = nftId else { return }
 
+        animateCartButton()
         delegate?.nftCollectionViewCellDidTapCart(nftId)
     }
 
