@@ -112,7 +112,7 @@ final class FavouriteNFTsViewController: UIViewController, ErrorView {
     
     private func setupView() {
         view.backgroundColor = .ypWhite
-        view.addSubviews(collectionView, placeholderLabel, activityIndicator)
+        view.addSubviews([collectionView, placeholderLabel, activityIndicator])
     }
     
     private func setupLayout() {

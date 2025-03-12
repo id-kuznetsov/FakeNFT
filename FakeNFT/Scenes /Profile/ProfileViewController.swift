@@ -139,7 +139,7 @@ final class ProfileViewController: UIViewController, ErrorView {
     
     private func setupView() {
         view.backgroundColor = .ypWhite
-        view.addSubviews(activityIndicatorView, profileCardView, linkButton, profileRoutingTableView)
+        view.addSubviews([activityIndicatorView, profileCardView, linkButton, profileRoutingTableView])
     }
     
     private func setupLayout() {

@@ -3,7 +3,7 @@ import Foundation
 struct Nft: Decodable, Hashable {
     let id: NftID
     let name: String
-    let images: [String]
+    let images: [URL]
     let rating: Int
     let description: String
     let price: Double
@@ -23,7 +23,7 @@ extension Nft {
     }
     
     var previewImage: String? {
-        images.first
+        images.first?.absoluteString
     }
 }
 

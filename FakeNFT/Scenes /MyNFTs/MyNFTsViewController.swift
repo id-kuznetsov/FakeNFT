@@ -103,7 +103,7 @@ final class MyNFTsViewController: UIViewController, ErrorView {
     
     private func setupView() {
         view.backgroundColor = .ypWhite
-        view.addSubviews(tableView, placeholderLabel, activityIndicator)
+        view.addSubviews([tableView, placeholderLabel, activityIndicator])
         navigationItem.rightBarButtonItem = sortBarButtonItem
     }
     

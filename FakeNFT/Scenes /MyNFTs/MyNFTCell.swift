@@ -137,7 +137,7 @@ final class MyNFTCell: UITableViewCell, ReuseIdentifying {
     
     private func setupContentView() {
         backgroundColor = .clear
-        containerView.addSubviews(nftCardView, infoStackView, priceStackView)
+        containerView.addSubviews([nftCardView, infoStackView, priceStackView])
         contentView.addSubview(containerView)
     }
     

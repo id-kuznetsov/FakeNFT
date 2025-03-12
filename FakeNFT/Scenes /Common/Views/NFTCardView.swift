@@ -74,7 +74,7 @@ final class NFTCardView: UIView {
     
     private func setupView() {
         backgroundColor = .clear
-        addSubviews(nftImageView, favouriteButton)
+        addSubviews([nftImageView, favouriteButton])
     }
     
     private func setupLayout() {

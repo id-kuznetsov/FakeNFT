@@ -49,8 +49,7 @@ final class NftDetailPresenterImpl: NftDetailPresenter {
             view?.hideLoading()
             
             let cellModels: [NftDetailCellModel] = nft.images.compactMap { image in
-                guard let url = URL(string: image) else { return nil }
-                return NftDetailCellModel(url: url)
+                return NftDetailCellModel(url: image)
             }
             
             view?.displayCells(cellModels)

@@ -95,7 +95,7 @@ final class FavouriteNftCell: UICollectionViewCell, ReuseIdentifying {
     
     private func setupContentView() {
         backgroundColor = .clear
-        contentView.addSubviews(nftCardView, descriptionStackView)
+        contentView.addSubviews([nftCardView, descriptionStackView])
     }
     
     private func setupLayout() {
