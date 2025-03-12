@@ -21,7 +21,7 @@ extension Nft {
             return ""
         }
     }
-    
+
     var previewImage: String? {
         images.first?.absoluteString
     }

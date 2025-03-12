@@ -208,7 +208,7 @@ final class NFTRatingAlertViewController: UIViewController {
 
     private func addActionButtons() {
         var tag = 0
-        for button in buttons  {
+        for button in buttons {
             if button.tag > 0 {
                 addLeftBorder(for: button)
             }

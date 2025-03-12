@@ -8,18 +8,18 @@
 import UIKit
 
 final class DeleteViewController: UIViewController {
-    
+
     private let viewModel: DeleteViewModelProtocol
-    
+
     // MARK: - Private Properties
-    
+
     private lazy var blurView: UIVisualEffectView = {
         let blurView = UIVisualEffectView(effect: UIBlurEffect(style: .light))
         blurView.frame = view.bounds
         blurView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         return blurView
     }()
-    
+
     private lazy var nftImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFit
@@ -27,7 +27,7 @@ final class DeleteViewController: UIViewController {
         imageView.layer.masksToBounds = true
         return imageView
     }()
-    
+
     private lazy var conformationLabel: UILabel = {
         let label = UILabel()
         label.textColor = .ypBlack
@@ -37,7 +37,7 @@ final class DeleteViewController: UIViewController {
         label.text = L10n.Cart.Delete.conformText
         return label
     }()
-    
+
     private lazy var deleteButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle(L10n.Cart.Delete.buttonDelete, for: .normal)
@@ -49,7 +49,7 @@ final class DeleteViewController: UIViewController {
         button.addTarget(self, action: #selector(didTapDeleteButton), for: .touchUpInside)
         return button
     }()
-    
+
     private lazy var returnButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle(L10n.Cart.Delete.buttonReturn, for: .normal)
@@ -61,7 +61,7 @@ final class DeleteViewController: UIViewController {
         button.addTarget(self, action: #selector(didTapReturnButton), for: .touchUpInside)
         return button
     }()
-    
+
     private lazy var buttonsStackView: UIStackView = {
         let stackView = UIStackView(arrangedSubviews: [deleteButton, returnButton])
         stackView.axis = .horizontal
@@ -69,52 +69,52 @@ final class DeleteViewController: UIViewController {
         stackView.spacing = 8
         return stackView
     }()
-    
+
     private lazy var contentView: UIView = {
         let view = UIView(frame: view.frame)
         return view
     }()
-    
+
     // MARK: - Initialisers
-    
+
     init(viewModel: DeleteViewModelProtocol) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
-    
+
     @available(*, unavailable)
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     // MARK: - Lifecycle
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
         bindViewModel()
     }
-    
+
     // MARK: - Action
-    
+
     @objc
     private func didTapDeleteButton() {
         dismiss(animated: true) { [weak self] in
             self?.viewModel.deleteNFT()
         }
     }
-    
+
     @objc
     private func didTapReturnButton() {
         dismiss(animated: true)
     }
-    
+
     // MARK: - Private Methods
-    
+
     private func bindViewModel() {
         nftImageView.image = viewModel.image
     }
-    
+
     private func setupUI() {
         view.addSubviews(
             [
@@ -125,10 +125,10 @@ final class DeleteViewController: UIViewController {
                 buttonsStackView
             ]
         )
-        
+
         setupConstraints()
     }
-    
+
     private func setupConstraints() {
         NSLayoutConstraint.activate(
             contentViewConstraints() +
@@ -152,7 +152,7 @@ final class DeleteViewController: UIViewController {
             nftImageView.heightAnchor.constraint(equalToConstant: 108)
         ]
     }
-    
+
     private func conformationLabelConstraints() -> [NSLayoutConstraint] {
         [
             conformationLabel.topAnchor.constraint(equalTo: nftImageView.bottomAnchor, constant: 12),

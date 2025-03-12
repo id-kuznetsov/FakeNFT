@@ -9,18 +9,18 @@ protocol ProfileEditingViewModel {
     var descriptionWarning: Observable<ProfileEditingWarning?> { get }
     var websiteWarning: Observable<ProfileEditingWarning?> { get }
     var errorModel: Observable<ErrorModel?> { get }
-    
+
     func viewWillDisappear()
     func avatarUpdateAction(updatedAvatar: String)
     func avatarRemoveAction()
     func didFailImageLoading()
-    
+
     @discardableResult
     func shouldChangeName(updatedName: String) -> Bool
-    
+
     @discardableResult
     func shouldChangeDescription(updatedDescription: String) -> Bool
-    
+
     @discardableResult
     func shouldChangeWebsite(updatedWebsite: String) -> Bool
 }

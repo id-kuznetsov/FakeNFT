@@ -22,7 +22,7 @@ final class AlertPresenter {
         alertController.addAction(action)
         viewController.present(alertController, animated: true)
     }
-    
+
     static func presentAlertWithTwoSelections(on viewController: UIViewController,
                                               title: String,
                                               message: String? = nil,
@@ -40,17 +40,17 @@ final class AlertPresenter {
         }
         alertController.addAction(firstAction)
         alertController.addAction(secondAction)
-        
+
         viewController.present(alertController, animated: true)
     }
-    
+
     static func presentSortAlert(on viewController: UIViewController,
                                  title: String = L10n.Sort.title,
                                  sortOptions: [SortOption],
                                  preferredStyle: UIAlertController.Style = .actionSheet,
                                  sortHandler: @escaping (SortOption) -> Void) {
         let alertController = UIAlertController(title: title, message: nil, preferredStyle: preferredStyle)
-        
+
         for sortOption in sortOptions {
             let action = UIAlertAction(title: sortOption.title, style: .default) { _ in
                 sortHandler(sortOption)
@@ -59,10 +59,10 @@ final class AlertPresenter {
         }
         let cancelAction = UIAlertAction(title: L10n.Button.close, style: .cancel)
         alertController.addAction(cancelAction)
-        
+
         viewController.present(alertController, animated: true)
     }
-    
+
     static func presentNetworkErrorAlert(
         on viewController: UIViewController,
         retryAction: @escaping () -> Void
@@ -72,16 +72,16 @@ final class AlertPresenter {
             message: L10n.Error.fetchingData,
             preferredStyle: .alert
         )
-        
+
         let retryAction = UIAlertAction(title: L10n.Error.repeat, style: .default) { _ in
             retryAction()
         }
         let cancelAction = UIAlertAction(title: L10n.Button.cancel, style: .cancel)
-        
+
         alertController.addAction(cancelAction)
         alertController.addAction(retryAction)
         alertController.preferredAction = retryAction
-        
+
         viewController.present(alertController, animated: true)
     }
 }

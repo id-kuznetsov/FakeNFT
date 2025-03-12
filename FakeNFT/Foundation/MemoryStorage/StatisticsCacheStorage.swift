@@ -14,14 +14,14 @@ protocol StatisticsCacheStorageProtocol {
 }
 
 final class StatisticsCacheStorage: StatisticsCacheStorageProtocol {
-    
+
     private let cacheFileName = "usersCache.json"
     private let cacheTime: TimeInterval = 600 // 10 мин. - срок хранения кэша
-    
+
     func saveUsersToCache(_ users: [User]) {
         let cachedData = CachedUsers(users: users, timestamp: Date().timeIntervalSince1970)
         guard let fileURL = getCacheFileURL(caller: "[saveUsersToCache]") else { return }
-        
+
         do {
             let data = try JSONEncoder().encode(cachedData)
             try data.write(to: fileURL, options: .atomic)
@@ -29,14 +29,14 @@ final class StatisticsCacheStorage: StatisticsCacheStorageProtocol {
             print("Ошибка сохранения данных в кэш: \(error.localizedDescription)")
         }
     }
-    
+
     func loadUsersFromCache() -> [User]? {
         guard let fileURL = getCacheFileURL(caller: "[loadUsersFromCache]") else { return nil }
-        
+
         do {
             let data = try Data(contentsOf: fileURL)
             let cachedData = try JSONDecoder().decode(CachedUsers.self, from: data)
-            
+
             let currentTime = Date().timeIntervalSince1970
             let cacheAge = currentTime - cachedData.timestamp
 
@@ -51,17 +51,17 @@ final class StatisticsCacheStorage: StatisticsCacheStorageProtocol {
             return nil
         }
     }
-    
+
     func clearStatisticsCache() {
         guard let fileURL = getCacheFileURL(caller: "[clearStatisticsCache]") else { return }
-        
+
         do {
             try FileManager.default.removeItem(at: fileURL)
         } catch {
             print("Ошибка при очистке кэша: \(error.localizedDescription)")
         }
     }
-    
+
     private func getCacheFileURL(caller: String) -> URL? {
         guard let cachesDirectory = FileManager.default.urls(
             for: .cachesDirectory,

@@ -29,29 +29,28 @@ final class TabBarController: UITabBarController {
             image: .icTabProfile,
             selectedImage: .icTabProfile
         )
-        let profileCoordinator = ProfileCoordinatorImpl(navigationController: profileNavigationController, servicesAssembly: servicesAssembly)
+        let profileCoordinator = ProfileCoordinatorImpl(navigationController: profileNavigationController,
+                                                        servicesAssembly: servicesAssembly)
         profileCoordinator.initialScene()
 
         let collectionsServiceAssembly = CollectionsServiceAssembly(servicesAssembler: servicesAssembly)
         let catalogViewController = collectionsServiceAssembly.build()
         let catalogNavigationController = CustomNavigationController(rootViewController: catalogViewController)
-        catalogNavigationController.tabBarItem = UITabBarItem(
-            title: L10n.Tab.catalog,
-            image: .catalogTab,
-            tag: 2
+        catalogNavigationController.tabBarItem = UITabBarItem(title: L10n.Tab.catalog,
+                                                              image: .catalogTab,
+                                                              tag: 2)
+
+        let cartViewModel = CartViewModel(orderService: servicesAssembly.orderService,
+                                          nftService: servicesAssembly.nftService)
+        let cartViewController = CustomNavigationController(
+            rootViewController: CartViewController(viewModel: cartViewModel)
         )
-        
-        let cartViewModel = CartViewModel(
-            orderService: servicesAssembly.orderService,
-            nftService: servicesAssembly.nftService
-            )
-        let cartViewController = CustomNavigationController(rootViewController: CartViewController(viewModel: cartViewModel))
         cartViewController.tabBarItem = UITabBarItem(
             title: L10n.Tab.cart,
             image: .icCart,
             selectedImage: .icCartFill
         )
-        
+
         let statisticsViewModel = StatisticsViewModel(
             userService: servicesAssembly.userService,
             nftService: servicesAssembly.nftService,

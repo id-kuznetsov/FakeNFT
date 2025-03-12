@@ -16,13 +16,13 @@ protocol UserService {
 }
 
 final class UserServiceImpl: UserService {
-    
+
     private let networkClient: NetworkClient
-    
+
     init(networkClient: NetworkClient) {
         self.networkClient = networkClient
     }
-    
+
     func fetchUsers(
         page: Int,
         size: Int,
@@ -30,7 +30,7 @@ final class UserServiceImpl: UserService {
         ) -> Void
     ) {
         let request = UsersRequest(page: page, size: size)
-        
+
         networkClient.send(request: request, type: [User].self) { result in
             switch result {
             case .success(let users):
@@ -40,14 +40,14 @@ final class UserServiceImpl: UserService {
             }
         }
     }
-    
+
     func fetchUser(
         by id: String,
         completion: @escaping (Result<User, Error>
         ) -> Void
     ) {
         let request = UserDetailRequest(id: id)
-        
+
         networkClient.send(request: request, type: User.self) { result in
             switch result {
             case .success(let user):
@@ -57,10 +57,10 @@ final class UserServiceImpl: UserService {
             }
         }
     }
-    
+
     func checkUserWebsite(url: URL, completion: @escaping (Bool) -> Void) {
         let request = WebsiteAccessRequest(url: url)
-        
+
         networkClient.send(request: request) { result in
             switch result {
             case .success:
@@ -70,12 +70,12 @@ final class UserServiceImpl: UserService {
             }
         }
     }
-    
+
     func fetchUserLikes(
         completion: @escaping (Result<[String], Error>
         ) -> Void) {
         let request = UserLikesRequest()
-        
+
         networkClient.send(request: request, type: UserLikesResponse.self) { result in
             switch result {
             case .success(let response):
@@ -85,13 +85,13 @@ final class UserServiceImpl: UserService {
             }
         }
     }
-    
+
     func updateUserLikes(
         likes: [String],
         completion: @escaping (Result<Void, Error>
         ) -> Void) {
         let request = UpdateUserLikesRequest(likes: likes)
-        
+
         networkClient.send(request: request) { result in
             switch result {
             case .success:

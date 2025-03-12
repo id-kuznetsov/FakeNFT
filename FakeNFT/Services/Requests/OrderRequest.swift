@@ -8,10 +8,10 @@
 import Foundation
 
 struct OrderRequest: NetworkRequest {
-    
+
     var endpoint: URL? {
         URL(string: "\(RequestConstants.baseURL)/\(RequestConstants.order)")
     }
-    
-    var dto: (any Dto)? = nil
+
+    var dto: (any Dto)?
 }

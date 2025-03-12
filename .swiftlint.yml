@@ -3,6 +3,7 @@ nesting:
 
 disabled_rules:
   - blanket_disable_command
+  - void_function_in_ternary
 
 force_cast:
   severity: warning

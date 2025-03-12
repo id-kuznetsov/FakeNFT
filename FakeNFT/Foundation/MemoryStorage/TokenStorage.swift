@@ -13,7 +13,7 @@ enum TokenKeychainStorageError: Error {
     case storeError
     case retrieveError
     case deleteError
-    
+
     var localizedDescription: String {
         switch self {
         case .storeError:
@@ -57,10 +57,14 @@ final class TokenKeychainStorage: TokenStorage {
         var item: CFTypeRef?
         let status = SecItemCopyMatching(getQuery as CFDictionary, &item)
 
-        guard status == errSecSuccess, let tokenData = item as? Data, let token = String(data: tokenData, encoding: .utf8) else {
+        guard
+            status == errSecSuccess,
+                let tokenData = item as? Data,
+                let token = String(data: tokenData, encoding: .utf8)
+        else {
             throw TokenKeychainStorageError.retrieveError
         }
-        
+
         return token
     }
 
@@ -77,5 +81,3 @@ final class TokenKeychainStorage: TokenStorage {
         }
     }
 }
-
-
