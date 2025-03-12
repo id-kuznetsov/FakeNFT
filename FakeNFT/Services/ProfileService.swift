@@ -5,6 +5,7 @@ typealias ProfileCompletion = (Result<Profile, ProfileServiceError>) -> Void
 protocol ProfileService {
     func fetchProfile(_ completion: @escaping ProfileCompletion)
     func updateProfile(with dto: ProfileEditingDto, _ completion: @escaping ProfileCompletion)
+    func updateFavouritesNft(favourites: [String], _ completion: @escaping ProfileCompletion)
 }
 
 enum ProfileServiceError: Error {
@@ -16,6 +17,7 @@ final class ProfileServiceImpl: ProfileService {
     private let networkClient: NetworkClient
     private var fetchProfileTask: NetworkTask?
     private var updateProfileTask: NetworkTask?
+    private var updateFavouritesTask: NetworkTask?
     
     init(networkClient: NetworkClient) {
         self.networkClient = networkClient
@@ -42,6 +44,22 @@ final class ProfileServiceImpl: ProfileService {
         
         updateProfileTask = networkClient.send(request: request, type: Profile.self) { [weak self] result in
             self?.updateProfileTask = nil
+            switch result {
+            case .success(let profile):
+                completion(.success(profile))
+            case .failure(_):
+                completion(.failure(.profileUpdatingFail))
+            }
+        }
+    }
+    
+    func updateFavouritesNft(favourites: [String], _ completion: @escaping ProfileCompletion) {
+        updateFavouritesTask?.cancel()
+        let dto = ProfileFavouritesDto(likes: favourites)
+        let request = FavouritesPutRequest(dto: dto)
+        
+        updateFavouritesTask = networkClient.send(request: request, type: Profile.self) { [weak self] result in
+            self?.updateFavouritesTask = nil
             switch result {
             case .success(let profile):
                 completion(.success(profile))

@@ -5,6 +5,9 @@ final class NavigationController: UINavigationController, UINavigationController
         super.viewDidLoad()
         self.delegate = self
         navigationBar.tintColor = .ypBlack
+        navigationBar.setBackgroundImage(UIImage(), for: .default)
+        navigationBar.shadowImage = UIImage()
+        navigationBar.isTranslucent = true
     }
     
     func navigationController(_ navigationController: UINavigationController, willShow viewController: UIViewController, animated: Bool) {

@@ -5,6 +5,7 @@ enum NetworkClientError: Error {
     case urlRequestError(Error)
     case urlSessionError
     case parsingError
+    case taskCancelingError
 }
 
 protocol NetworkClient {
@@ -65,6 +66,7 @@ struct DefaultNetworkClient: NetworkClient {
         let task = session.dataTask(with: urlRequest) { data, response, error in
             if let error = error {
                 if (error as NSError).code == NSURLErrorCancelled {
+                    onResponse(.failure(NetworkClientError.taskCancelingError))
                     return
                 }
                 onResponse(.failure(NetworkClientError.urlRequestError(error)))

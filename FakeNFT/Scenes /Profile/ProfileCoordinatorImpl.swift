@@ -27,17 +27,31 @@ final class ProfileCoordinatorImpl: ProfileCoordinator {
         profileViewController.present(profileEditingViewController, animated: true)
     }
     
-    func myNftsScene(nfts: [String]) {
-        let vc = UIViewController()
-        vc.view.backgroundColor = .ypWhite
-        vc.hidesBottomBarWhenPushed = true
-        navigationController.pushViewController(vc, animated: true)
+    func myNFTsScene(nfts: [String], favourites: [String]) {
+        let nftService = servicesAssembly.nftService
+        let profileService = servicesAssembly.profileService
+        
+        let viewModel = MyNFTsViewModelImpl(
+            nftIds: nfts, 
+            favourites: favourites,
+            nftService: nftService,
+            profileService: profileService
+        )
+        
+        let myNFTsViewController = MyNFTsViewController(viewModel: viewModel)
+        navigationController.pushViewController(myNFTsViewController, animated: true)
     }
     
     func favouritesScene(likes: [String]) {
-        let vc = UIViewController()
-        vc.view.backgroundColor = .ypWhite
-        vc.hidesBottomBarWhenPushed = true
+        let nftService = servicesAssembly.nftService
+        let profileService = servicesAssembly.profileService
+        
+        let viewModel = FavouritesNFTsViewModelImpl(
+            nftService: nftService,
+            profileService: profileService,
+            favourites: likes
+        )
+        let vc = FavouriteNFTsViewController(viewModel: viewModel)
         navigationController.pushViewController(vc, animated: true)
     }
     
