@@ -22,6 +22,6 @@ extension FilterView where Self: UIViewController {
             buttons: buttons,
             style: .filter
         )
-        AlertPresenter.showAlert(on: self, model: model)
+        CatalogAlertPresenter.showAlert(on: self, model: model)
     }
 }

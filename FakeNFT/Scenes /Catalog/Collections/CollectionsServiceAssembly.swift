@@ -7,7 +7,7 @@
 
 import UIKit
 
-public final class CollectionsServiceAssembly {
+final class CollectionsServiceAssembly {
 
     private let servicesAssembler: ServicesAssembly
 
@@ -15,16 +15,17 @@ public final class CollectionsServiceAssembly {
         self.servicesAssembler = servicesAssembler
     }
 
-    public func build() -> UIViewController {
+    func build() -> UIViewController {
         let viewModel = CollectionsViewModel(
             imageLoaderService: servicesAssembler.imageLoaderService,
             collectionsService: servicesAssembler.collectionsService,
-            nftsService: servicesAssembler.nftsService,
-            userService: servicesAssembler.userService,
-            collectionsSortOptionStorageService: servicesAssembler.collectionsSortOptionService
+            collectionNftService: servicesAssembler.collectionNftService,
+            catalogSortOptionStorage: servicesAssembler.collectionsSortOptionService,
+            orderService: servicesAssembler.orderService,
+            profileService: servicesAssembler.profileService
         )
         let viewController = CollectionsViewController(viewModel: viewModel)
-        
+
         return viewController
     }
 }

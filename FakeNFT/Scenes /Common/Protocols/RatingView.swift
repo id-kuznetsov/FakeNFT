@@ -17,6 +17,6 @@ extension RatingView where Self: UIViewController {
             buttons: [],
             style: .nftRating
         )
-        AlertPresenter.showChangeNftRatingView(on: self, model: model, image: image)
+        CatalogAlertPresenter.showChangeNftRatingView(on: self, model: model, image: image)
     }
 }

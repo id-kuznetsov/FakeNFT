@@ -8,16 +8,17 @@
 import UIKit
 import Combine
 
-final class CollectionsViewController: UIViewController, FilterView, ErrorView, LoadingView {
+final class CollectionsViewController: UIViewController, FilterView, CatalogErrorView, CatalogLoadingView {
     // MARK: - Properties
     private let viewModel: CollectionsViewModelProtocol
     private var subscribers = Set<AnyCancellable>()
+    private var pendingCollections: [Collection]?
 
     // MARK: - DataSource
-    private lazy var dataSource: UITableViewDiffableDataSource<Int, CollectionUI> = {
-        let dataSource = UITableViewDiffableDataSource<Int, CollectionUI>(
+    private lazy var dataSource: UITableViewDiffableDataSource<Int, Collection> = {
+        let dataSource = UITableViewDiffableDataSource<Int, Collection>(
             tableView: tableView,
-            cellProvider: { [weak self] tableView, indexPath, collection in
+            cellProvider: { [weak self] tableView, _, collection in
                 guard let self = self else { return UITableViewCell() }
                 let cell: CollectionsTableViewCell = tableView.dequeueReusableCell()
                 cell.selectionStyle = .none
@@ -36,7 +37,6 @@ final class CollectionsViewController: UIViewController, FilterView, ErrorView, 
         let view = UITableView(frame: .zero, style: .plain)
         view.backgroundColor = .ypWhite
         view.register(CollectionsTableViewCell.self)
-        view.rowHeight = LayoutConstants.CollectionsScreen.rowHeight
         view.separatorStyle = .none
         view.refreshControl = refreshControlView
         view.delegate = self
@@ -77,66 +77,102 @@ final class CollectionsViewController: UIViewController, FilterView, ErrorView, 
 
         setupLayout()
         bindViewModel()
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+
         viewModel.loadData(skipCache: false)
+    }
+
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+
+        applyPendingSnapshot()
     }
 
     // MARK: - Binding
     private func bindViewModel() {
+        bindCollections()
+        bindState()
+        bindTableViewContentOffset()
+    }
+
+    private func bindCollections() {
         viewModel.collections
             .receive(on: DispatchQueue.main)
             .sink( receiveValue: { [weak self] collections in
-                self?.applySnapshot(collections)
+                guard let self = self else { return }
+
+                self.pendingCollections = collections
+                if self.tableView.window != nil {
+                    self.applyPendingSnapshot()
+                }
             })
             .store(in: &subscribers)
+    }
 
+    private func bindState() {
         viewModel.state
             .receive(on: DispatchQueue.main)
             .dropFirst()
-            .sink( receiveValue: { [weak self] state in
-                guard let self = self else { return }
-
-                switch state {
-                case .loading:
-                    self.tableView.bounces = false
-                    self.tableView.isUserInteractionEnabled = false
-                    self.filterButton.isEnabled = false
-                    self.showLoading()
-                case .success:
-                    self.tableView.bounces = true
-                    self.tableView.isUserInteractionEnabled = true
-                    self.filterButton.isEnabled = true
-                    self.hideLoading()
-                case .failed(let error):
-                    self.hideLoading()
-                    self.showError(error)
-                    self.tableView.bounces = true
-                    self.tableView.isUserInteractionEnabled = true
-                    self.filterButton.isEnabled = true
-                default:
-                    break
-                }
-            })
-            .store(in: &subscribers)
-
-        tableView.publisher(for: \.contentOffset, options: [.new])
-            .sink { [weak self] contentOffset in
-                guard let self = self else { return }
-
-                let offsetY = contentOffset.y
-                let contentHeight = self.tableView.contentSize.height
-                let frameHeight = self.tableView.frame.size.height
-                let threshold: CGFloat = 10
-
-                guard contentHeight > frameHeight else { return }
-
-                if offsetY > contentHeight - frameHeight - threshold {
-                    self.viewModel.loadNextPage(reset: false, skipCache: false)
-                }
+            .sink { [weak self] state in
+                self?.handleState(state)
             }
             .store(in: &subscribers)
     }
 
-    private func applySnapshot(_ collections: [CollectionUI], animating: Bool = true) {
+    private func bindTableViewContentOffset() {
+        tableView.publisher(for: \.contentOffset, options: [.new])
+            .sink { [weak self] contentOffset in
+                self?.handleContentOffset(contentOffset)
+            }
+            .store(in: &subscribers)
+    }
+
+    private func handleState(_ state: CollectionsState) {
+        switch state {
+        case .loading:
+            tableView.bounces = false
+            tableView.isUserInteractionEnabled = false
+            filterButton.isEnabled = false
+            showLoading()
+        case .success:
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1) { [weak self] in
+                guard let self = self else { return }
+
+                self.tableView.bounces = true
+                self.tableView.isUserInteractionEnabled = true
+                self.filterButton.isEnabled = true
+                self.hideLoading()
+            }
+        case .failed(let error):
+            hideLoading()
+            showError(error)
+            tableView.bounces = true
+            tableView.isUserInteractionEnabled = true
+            filterButton.isEnabled = true
+        default:
+            break
+        }
+    }
+
+    private func handleContentOffset(_ contentOffset: CGPoint) {
+        let offsetY = contentOffset.y
+        let contentHeight = tableView.contentSize.height
+        let frameHeight = tableView.frame.size.height
+        let threshold: CGFloat = 10
+
+        guard contentHeight > frameHeight else { return }
+
+        if offsetY > contentHeight - frameHeight - threshold {
+            viewModel.loadNextPage(reset: false, skipCache: false)
+        }
+    }
+
+    private func applyPendingSnapshot(animating: Bool = true) {
+        guard let collections = pendingCollections else { return }
+        pendingCollections = nil
         var snapshot = dataSource.snapshot()
         snapshot.deleteAllItems()
         snapshot.appendSections([0])
@@ -146,18 +182,20 @@ final class CollectionsViewController: UIViewController, FilterView, ErrorView, 
 
     // MARK: - Navigation
     private func presentCollectionViewController(
-        for collection: CollectionUI
+        for collection: Collection
     ) {
-        let viewModel = CollectionViewModel(
+        let collectionServiceAssembler = CollectionServiceAssembly(
             imageLoaderService: viewModel.imageLoaderService,
-            nftsService: viewModel.nftsService,
-            collection: collection,
-            userService: viewModel.userService
+            collectionNftService: viewModel.collectionNftService,
+            orderService: viewModel.orderService,
+            profileService: viewModel.profileService,
+            collectionUI: collection
         )
-        let viewController = CollectionViewController(viewModel: viewModel)
-        viewController.hidesBottomBarWhenPushed = true
 
-        navigationController?.pushViewController(viewController, animated: true)
+        let collectionViewController = collectionServiceAssembler.build()
+        collectionViewController.hidesBottomBarWhenPushed = true
+
+        navigationController?.pushViewController(collectionViewController, animated: true)
     }
 
     // MARK: - Alert
@@ -183,7 +221,7 @@ final class CollectionsViewController: UIViewController, FilterView, ErrorView, 
         showFilters(
             style: .actionSheet,
             buttons: [
-                .sortByName(action: { [weak self] in
+                .sortByTitle(action: { [weak self] in
                     self?.viewModel.sortCollections(by: .name)
                 }),
                 .sortByNftCount(action: { [weak self] in
@@ -225,7 +263,11 @@ final class CollectionsViewController: UIViewController, FilterView, ErrorView, 
 // MARK: - UITableViewDelegate
 extension CollectionsViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let collectionUI = viewModel.getCollection(at: indexPath)
-        presentCollectionViewController(for: collectionUI)
+        do {
+            let collection = try viewModel.getCollection(at: indexPath)
+            presentCollectionViewController(for: collection)
+        } catch {
+            showError(error)
+        }
     }
 }

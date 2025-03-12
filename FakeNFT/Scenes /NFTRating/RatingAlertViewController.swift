@@ -146,7 +146,6 @@ final class NFTRatingAlertViewController: UIViewController {
         return view
     }()
 
-
     // MARK: - Init
     init(image: UIImage?) {
         super.init(nibName: nil, bundle: nil)
@@ -186,9 +185,9 @@ final class NFTRatingAlertViewController: UIViewController {
     }
 
     private func setupRatingButtons() {
-        for i in 0..<5 {
+        for value in 0..<5 {
             let starButton = UIButton()
-            starButton.tag = i + 1
+            starButton.tag = value + 1
             starButton.setImage(.star, for: .normal)
             starButton.tintColor = .systemBlue
             starButton.addTarget(self, action: #selector(starTapped(_:)), for: .touchUpInside)

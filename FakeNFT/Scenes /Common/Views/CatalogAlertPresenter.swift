@@ -1,6 +1,6 @@
 import UIKit
 
-struct AlertPresenter {
+struct CatalogAlertPresenter {
     static func showAlert(
         on viewController: UIViewController,
         model: AlertModel
@@ -41,7 +41,7 @@ struct AlertPresenter {
         switch style {
         case .alert, .filter:
             guard !buttons.isEmpty else {
-                print("⚠️ AlertPresenter: передан пустой массив кнопок – алерт не будет показан.")
+                print("⚠️ CatalogAlertPresenter: передан пустой массив кнопок – алерт не будет показан.")
                 return
             }
 

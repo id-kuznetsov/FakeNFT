@@ -8,10 +8,50 @@
 import UIKit
 import Combine
 
-final class CollectionViewController: UIViewController, ErrorView, RatingView {
+final class CollectionViewController: UIViewController, CatalogErrorView, RatingView, CatalogLoadingView {
     // MARK: - Properties
     private var subscribers = Set<AnyCancellable>()
     private let viewModel: CollectionViewModelProtocol
+
+    // MARK: - DataSource
+    private lazy var dataSource: UICollectionViewDiffableDataSource<Int, Nft> = {
+        let dataSource = UICollectionViewDiffableDataSource<Int, Nft>(
+            collectionView: collectionView,
+            cellProvider: { [weak self] collectionView, indexPath, nftUI in
+                guard let self = self else { return UICollectionViewCell() }
+
+                let cell: NftCollectionViewCell = collectionView.dequeueReusableCell(indexPath: indexPath)
+                cell.backgroundColor = .clear
+                cell.delegate = self
+                cell.configure(
+                    model: nftUI,
+                    imageLoaderService: viewModel.imageLoaderService
+                )
+                return cell
+            }
+        )
+
+        dataSource
+            .supplementaryViewProvider = { [weak self] (collectionView, kind, indexPath) -> UICollectionReusableView? in
+                guard let self = self else { return nil }
+
+                if kind == UICollectionView.elementKindSectionHeader {
+                    let header: CollectionHeaderView = collectionView.dequeueReusableSupplementaryView(
+                        ofKind: kind,
+                        indexPath: indexPath
+                    )
+                    header.configure(
+                        with: self.viewModel.collectionUI,
+                        imageLoaderService: self.viewModel.imageLoaderService
+                    )
+                    header.delegate = self
+                    return header
+                }
+                return nil
+            }
+
+        return dataSource
+    }()
 
     // MARK: - UI
     private lazy var collectionView: UICollectionView = {
@@ -24,17 +64,25 @@ final class CollectionViewController: UIViewController, ErrorView, RatingView {
             CollectionHeaderView.self,
             forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader
         )
+        view.backgroundColor = .ypWhite
         view.contentInsetAdjustmentBehavior = .never
         view.alwaysBounceVertical = true
         view.allowsMultipleSelection = false
-        view.dataSource = self
         view.delegate = self
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
 
+    private lazy var refreshControlView: UIRefreshControl = {
+        let view = UIRefreshControl()
+        view.addTarget(self, action: #selector(didPullToRefresh), for: .valueChanged)
+        return view
+    }()
+
     // MARK: - Init
-    init(viewModel: CollectionViewModelProtocol) {
+    init(
+        viewModel: CollectionViewModelProtocol
+    ) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
@@ -48,104 +96,116 @@ final class CollectionViewController: UIViewController, ErrorView, RatingView {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        view.backgroundColor = .ypWhite
-        view.addSubview(collectionView)
-
-        setupConstraints()
+        setupLayout()
+        bindViewModel()
     }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
-        viewModel.nftsPublisher
+        viewModel.loadData(skipCache: false)
+    }
+
+    // MARK: - Binding
+    private func bindViewModel() {
+        viewModel.nfts
             .receive(on: DispatchQueue.main)
-            .sink(
-                receiveValue: { [weak self] _ in
-                    guard let self = self else { return }
-                    self.reloadSectionCells(collectionView: self.collectionView, section: 0)
+            .sink( receiveValue: { [weak self] nfts in
+                self?.applySnapshot(nfts)
+            })
+            .store(in: &subscribers)
+
+        viewModel.state
+            .receive(on: DispatchQueue.main)
+            .dropFirst()
+            .sink( receiveValue: { [weak self] state in
+                guard let self = self else { return }
+
+                switch state {
+                case .loading:
+                    self.collectionView.bounces = false
+                    self.collectionView.isUserInteractionEnabled = false
+                    self.showLoading()
+                case .success:
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 1) { [weak self] in
+                        self?.collectionView.bounces = true
+                        self?.collectionView.isUserInteractionEnabled = true
+                        self?.hideLoading()
+                    }
+                case .failed(let error):
+                    self.hideLoading()
+                    self.showError(error)
+                    self.collectionView.bounces = true
+                    self.collectionView.isUserInteractionEnabled = true
+                default:
+                    break
                 }
-            )
+            })
             .store(in: &subscribers)
     }
 
-    private func reloadSectionCells(collectionView: UICollectionView, section: Int) {
-        let itemCount = collectionView.numberOfItems(inSection: section)
-        guard itemCount > 0 else { return }
+    private func applySnapshot(_ nfts: [Nft], animating: Bool = true) {
+        var snapshot = dataSource.snapshot()
+        snapshot.deleteAllItems()
+        snapshot.appendSections([0])
+        snapshot.appendItems(nfts, toSection: 0)
+        dataSource.apply(snapshot, animatingDifferences: animating)
+    }
 
-        let indexPaths = (0..<itemCount).map { IndexPath(item: $0, section: section) }
+    // MARK: - Alert
+    func showError(_ error: Error) {
+        showError(
+            error: error,
+            buttons: [
+                .cancel,
+                .reload(
+                    action: { [weak self] in
+                        guard let self else { return }
 
-        collectionView.performBatchUpdates({
-            collectionView.reloadItems(at: indexPaths)
-        }, completion: nil)
+                        self.viewModel.loadData(skipCache: false)
+                    }
+                )
+            ]
+        )
     }
 
     // MARK: - Navigation
-    private func presentWebViewController(with authorName: String) {
-        let viewModel = WebViewViewModel(
-            userService: viewModel.userService,
-            authorName: authorName
-        )
+    private func presentWebViewController(with url: URL) {
+        let viewModel = WebViewViewModel(url: url)
         let viewController = WebViewController(viewModel: viewModel)
         viewController.delegate = self
-
         navigationController?.pushViewController(viewController, animated: true)
     }
 
+//    private func presentNftDetailViewController(with nft: Nft) {
+//        let assembly = NftDetailAssembly(servicesAssembler: servicesAssembly)
+//        let nftInput = NftDetailInput(id: Constants.testNftId)
+//        let nftViewController = assembly.build(with: nftInput)
+//        present(nftViewController, animated: true)
+//    }
+
+    // MARK: - Actions
+    @objc
+    private func didPullToRefresh() {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2) { [weak self] in
+            guard let self = self else { return }
+
+            self.refreshControlView.endRefreshing()
+            self.viewModel.loadData(skipCache: true)
+        }
+    }
+
     // MARK: - Constraints
-    private func setupConstraints() {
+    private func setupLayout() {
+        view.backgroundColor = .ypWhite
+        view.addSubview(collectionView)
+
         NSLayoutConstraint.activate([
             collectionView.topAnchor.constraint(equalTo: view.topAnchor),
             collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
-    }
-}
-
-// MARK: - UICollectionViewDataSource
-extension CollectionViewController: UICollectionViewDataSource {
-    func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return LayoutConstants.CollectionScreen.numberOfSections
-    }
-
-    func collectionView(
-        _ collectionView: UICollectionView,
-        numberOfItemsInSection section: Int
-    ) -> Int {
-        viewModel.nfts.count
-    }
-
-    func collectionView(
-        _ collectionView: UICollectionView,
-        cellForItemAt indexPath: IndexPath
-    ) -> UICollectionViewCell {
-        let cell: NftCollectionViewCell = collectionView.dequeueReusableCell(indexPath: indexPath)
-        let nftUI = viewModel.nfts[indexPath.item]
-
-        cell.backgroundColor = .clear
-        cell.delegate = self
-        cell.configure(
-            nftUI: nftUI,
-            imageLoaderService: viewModel.imageLoaderService
-        )
-        return cell
-    }
-
-    func collectionView(
-        _ collectionView: UICollectionView,
-        viewForSupplementaryElementOfKind kind: String,
-        at indexPath: IndexPath
-    ) -> UICollectionReusableView {
-        if kind == UICollectionView.elementKindSectionHeader {
-            let header: CollectionHeaderView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, indexPath: indexPath)
-            header.configure(
-                with: viewModel.collection,
-                imageLoaderService: viewModel.imageLoaderService
-            )
-            header.delegate = self
-            return header
-        }
-        return UICollectionReusableView()
     }
 }
 
@@ -203,7 +263,7 @@ extension CollectionViewController: UICollectionViewDelegateFlowLayout {
     ) -> CGSize {
         let headerView = CollectionHeaderView(frame: .zero)
         headerView.configure(
-            with: viewModel.collection,
+            with: viewModel.collectionUI,
             imageLoaderService: viewModel.imageLoaderService
         )
 
@@ -219,50 +279,39 @@ extension CollectionViewController: UICollectionViewDelegateFlowLayout {
         _ collectionView: UICollectionView,
         didSelectItemAt indexPath: IndexPath
     ) {
-        let nftUI = viewModel.nfts[indexPath.item]
-        print("nft cell tapped - \(nftUI.name)")
+        print("nft cell tapped")
     }
 }
 
 // MARK: - CollectionHeaderViewDelegate
 extension CollectionViewController: CollectionHeaderViewDelegate {
-    func collectionHeaderViewDidTapAuthor(_ headerView: CollectionHeaderView) {
+    func collectionHeaderViewDidTapAuthor(_ url: URL?) {
         guard
-            let authorName = headerView.authorButton.title(for: .normal)
+            let url = url
         else {
             let error: Error = NSError(
-                domain: "", code: 404, userInfo: [NSLocalizedDescriptionKey: "Author name not found"]
+                domain: "", code: 404, userInfo: [NSLocalizedDescriptionKey: "Author url not found"]
             )
             showError(error: error, buttons: [.close])
             return
         }
 
-        presentWebViewController(with: authorName)
+        presentWebViewController(with: url)
     }
 }
 
 // MARK: - NftCollectionViewCellDelegate
 extension CollectionViewController: NftCollectionViewCellDelegate {
-    func nftCollectionViewCellDidTapRating(_ cell: NftCollectionViewCell) {
-        guard let image = cell.nftImageView.image else { return }
+    func nftCollectionViewCellDidTapRating(_ nftImage: UIImage) {
+        showChangeRating(nftImage)
+    }
 
-        showChangeRating(image)
+    func nftCollectionViewCellDidTapFavorite(_ nftId: String) {
+        viewModel.updateProfile(with: nftId)
     }
-    
-    func nftCollectionViewCellDidTapFavorite(_ cell: NftCollectionViewCell) {
-        if cell.favoriteButton.tintColor == .ypWhiteUniversal {
-            cell.favoriteButton.tintColor = .ypRedUniversal
-        } else if cell.favoriteButton.tintColor == .ypRedUniversal {
-            cell.favoriteButton.tintColor = .ypWhiteUniversal
-        }
-    }
-    
-    func nftCollectionViewCellDidTapCart(_ cell: NftCollectionViewCell) {
-        if cell.cartButton.image(for: .normal) == .icCart {
-            cell.cartButton.setImage(.icCartDelete, for: .normal)
-        } else if cell.cartButton.image(for: .normal) == .icCartDelete {
-            cell.cartButton.setImage(.icCart, for: .normal)
-        }
+
+    func nftCollectionViewCellDidTapCart(_ nftId: String) {
+        viewModel.updateOrder(with: nftId)
     }
 }
 

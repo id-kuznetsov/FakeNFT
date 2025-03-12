@@ -1,5 +1,5 @@
 //
-//  CollectionsSortOptionStorageService.swift
+//  CollectionsSortOptionStorage.swift
 //  FakeNFT
 //
 //  Created by Nikolai Eremenko on 03.03.2025.
@@ -7,7 +7,7 @@
 
 import Foundation
 
-protocol CollectionsSortOptionStorageService {
+protocol CollectionsSortOptionStorage {
     func saveSortOption(_ option: CollectionSortOptions)
     func loadSortOption() -> CollectionSortOptions
 }
@@ -41,7 +41,7 @@ struct UserDefault<Value> {
     }
 }
 
-final class CollectionsSortOptionStorageServiceImpl: CollectionsSortOptionStorageService {
+final class CatalogSortOptionStorageImpl: CollectionsSortOptionStorage {
     @UserDefault(
         key: "CollectionSortOption",
         defaultValue: CollectionSortOptions.none.rawValue,

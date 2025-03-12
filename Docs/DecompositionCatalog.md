@@ -57,11 +57,15 @@
 ## Part 3:
 #### Работа с сетью и кэш
 ##### Collection Screen
-- CollectionRequest (est: 2 часа; fact: x часа)
-- NftsRequest (est: 2 часа; fact: 2 часа)
-- CollectionViewController State (est: 3 часа; fact: x часа)
-- Collection Errors (est: 2 часа; fact: x часа)
-- Collection Nfts paging (est: 2 часа; fact: 4 часа)
-- Nft placeholder cell (est: 2 часа; fact: 2 часа)
-- PUT favorite NFT (est: 3 часа; fact: x часа)
-- PUT cart (est: 3 часа; fact: x часа)
+- CollectionServiceAssembly (est: 2 часа; fact: 2 часа)
+- CollectionNftService (est: 3 часа; fact: 3 часа)
+- Refactor CollectionViewModel State (est: 3 часа; fact: 3 часа)
+- Refactor CollectionViewController (est: 4 часа; fact: 4 часа)
+- CollectionViewController State (est: 3 часа; fact: 3 часа)
+- Collections Errors (est: 1 часа; fact: 1 часа)
+- Fix: filter duplicate nft ids (est: 3 часа; fact: 3 часа)
+- CollectionProfileRequest (est: 3 часа; fact: 3 часа)
+- Refactor(WebViewController): handle api author url bug (est: 2 часа; fact: 2 часа)
+- NFT Like / Dislike (est: 3 часа; fact: 3 часа)
+- Sort NFTs by Cart (est: 3 часа; fact: 3 часа)
+- NFT add/delete from Cart (est: 3 часа; fact: 4 часа)

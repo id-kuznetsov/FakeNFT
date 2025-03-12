@@ -22,15 +22,15 @@ final class NetworkMonitorImpl: NetworkMonitor {
     private let monitor = NWPathMonitor()
     private let queue = DispatchQueue.global(qos: .background)
     private let subject: CurrentValueSubject<Bool, Never>
-    
+
     var isConnected: Bool {
         return subject.value
     }
-    
+
     var connectivityPublisher: AnyPublisher<Bool, Never> {
         return subject.eraseToAnyPublisher()
     }
-    
+
     init() {
         subject = CurrentValueSubject<Bool, Never>(false)
         monitor.pathUpdateHandler = { [weak self] path in

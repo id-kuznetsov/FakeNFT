@@ -56,13 +56,20 @@ final class CollectionsTableViewCell: UITableViewCell, ReuseIdentifying {
         fatalError("init(coder:) has not been implemented")
     }
 
+    override func didMoveToWindow() {
+        super.didMoveToWindow()
+        if window != nil {
+            coverImageView.showShimmerAnimation()
+        }
+    }
+
     // MARK: - Config
-    func configure(with model: CollectionUI, imageLoaderService: ImageLoaderService) {
+    func configure(with model: Collection, imageLoaderService: ImageLoaderService) {
         if model.isPlaceholder {
             showLoadingAnimation()
             nameAndCountLabel.text = model.name
         } else {
-            loadCoverImage(from: model.cover, imageLoaderService: imageLoaderService)
+            loadCoverImage(from: model.coverImageUrl, imageLoaderService: imageLoaderService)
             nameAndCountLabel.text = formatCollectionName(model.name, model.nfts.count)
         }
     }
@@ -109,10 +116,11 @@ final class CollectionsTableViewCell: UITableViewCell, ReuseIdentifying {
     private func setupConstraints() {
         NSLayoutConstraint.activate([
             cellVStackView.topAnchor.constraint(equalTo: contentView.topAnchor),
-            cellVStackView.heightAnchor.constraint(
-                equalTo: contentView.heightAnchor,
+            cellVStackView.bottomAnchor.constraint(
+                equalTo: contentView.bottomAnchor,
                 constant: -LayoutConstants.CollectionsScreen.cellMargin
             ),
+
             cellVStackView.leadingAnchor.constraint(
                 equalTo: contentView.leadingAnchor,
                 constant: LayoutConstants.Common.Margin.medium
@@ -123,12 +131,9 @@ final class CollectionsTableViewCell: UITableViewCell, ReuseIdentifying {
             ),
 
             coverImageView.widthAnchor.constraint(equalTo: cellVStackView.widthAnchor),
+            coverImageView.heightAnchor.constraint(equalToConstant: 140),
 
             nameAndCountLabel.widthAnchor.constraint(equalTo: cellVStackView.widthAnchor, multiplier: 0.8)
         ])
-
-        coverImageView.setHeightConstraintFromPx(
-            heightPx: LayoutConstants.CollectionsScreen.coverImageHeight
-        )
     }
 }

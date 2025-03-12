@@ -8,16 +8,17 @@
 import UIKit
 
 protocol NftCollectionViewCellDelegate: AnyObject {
-    func nftCollectionViewCellDidTapFavorite(_ cell: NftCollectionViewCell)
-    func nftCollectionViewCellDidTapCart(_ cell: NftCollectionViewCell)
-    func nftCollectionViewCellDidTapRating(_ cell: NftCollectionViewCell)
+    func nftCollectionViewCellDidTapFavorite(_ nftId: String)
+    func nftCollectionViewCellDidTapCart(_ nftId: String)
+    func nftCollectionViewCellDidTapRating(_ nftImage: UIImage)
 }
 
 final class NftCollectionViewCell: UICollectionViewCell, ReuseIdentifying {
     weak var delegate: NftCollectionViewCellDelegate?
+    private var nftId: String?
 
     // MARK: - UI
-    lazy var favoriteButton: UIButton = {
+    private lazy var favoriteButton: UIButton = {
         let view = UIButton(type: .custom)
         view.setImage(.heart, for: .normal)
         view.tintColor = .ypWhiteUniversal
@@ -26,16 +27,15 @@ final class NftCollectionViewCell: UICollectionViewCell, ReuseIdentifying {
         return view
     }()
 
-    lazy var cartButton: UIButton = {
+    private lazy var cartButton: UIButton = {
         let view = UIButton(type: .custom)
-        view.setImage(.icCart, for: .normal)
         view.tintColor = .ypBlack
         view.addTarget(self, action: #selector(didTapCart), for: .touchUpInside)
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
 
-    lazy var nftImageView: UIImageView = {
+    private lazy var nftImageView: UIImageView = {
         let view = UIImageView()
         view.contentMode = .scaleAspectFill
         view.clipsToBounds = true
@@ -106,16 +106,51 @@ final class NftCollectionViewCell: UICollectionViewCell, ReuseIdentifying {
         fatalError("init(coder:) has not been implemented")
     }
 
-    // MARK: - Config
-    func configure(nftUI: NftUI, imageLoaderService: ImageLoaderService) {
-        ratingButton.configure(rating: nftUI.rating)
-        nameLabel.text = nftUI.name
-        priceLabel.text = nftUI.formattedPrice
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        ratingButton.isHidden = false
+        favoriteButton.isHidden = false
+        cartButton.isHidden = false
+        priceLabel.isHidden = false
+        nftImageView.image = nil
+    }
 
-        loadNftImage(
-            from: nftUI.images.first,
-            imageLoaderService: imageLoaderService
-        )
+    // MARK: - Config
+    func configure(model: Nft, imageLoaderService: ImageLoaderService) {
+        if model.isPlaceholder {
+            showLoadingAnimation()
+            ratingButton.isHidden = true
+            favoriteButton.isHidden = true
+            cartButton.isHidden = true
+            priceLabel.isHidden = true
+        } else {
+            hideLoadingAnimation()
+            ratingButton.isHidden = false
+            favoriteButton.isHidden = false
+            cartButton.isHidden = false
+            priceLabel.isHidden = false
+
+            ratingButton.configure(rating: model.rating)
+            favoriteButton.tintColor = model.isLiked ? .ypRedUniversal : .ypWhiteUniversal
+            cartButton.setImage(model.isInCart ? .icCartDelete : .icCart, for: .normal)
+            nameLabel.text = model.name
+            priceLabel.text = model.formattedPrice
+        }
+
+        nftId = model.id
+
+        let preferredSize = model.isLiked
+            ? UIImage.SymbolConfiguration(pointSize: 21, weight: .regular, scale: .default)
+            : UIImage.SymbolConfiguration(pointSize: 17.64, weight: .regular, scale: .default)
+
+        favoriteButton.setPreferredSymbolConfiguration(preferredSize, forImageIn: .normal)
+
+        if let firstImageUrl = model.images.first {
+            loadNftImage(
+                from: firstImageUrl,
+                imageLoaderService: imageLoaderService
+            )
+        }
     }
 
     // MARK: - Load Image
@@ -125,8 +160,7 @@ final class NftCollectionViewCell: UICollectionViewCell, ReuseIdentifying {
         imageLoaderService.loadImage(
             into: nftImageView,
             from: url
-        )
-        { [weak self] result in
+        ) { [weak self] result in
             guard let self else { return }
 
             self.hideLoadingAnimation()
@@ -140,7 +174,7 @@ final class NftCollectionViewCell: UICollectionViewCell, ReuseIdentifying {
         }
     }
 
-    // MARK: - Loading Animation
+    // MARK: - Animations
     private func showLoadingAnimation() {
         nftImageView.showShimmerAnimation()
     }
@@ -149,20 +183,58 @@ final class NftCollectionViewCell: UICollectionViewCell, ReuseIdentifying {
         nftImageView.hideShimmerAnimation()
     }
 
+    private func animateFavoriteButton() {
+        let originalTransform = favoriteButton.transform
+
+        UIView.animate(withDuration: 0.15, animations: {
+            self.favoriteButton.transform = CGAffineTransform(scaleX: 1.4, y: 1.4)
+        }, completion: { _ in
+            UIView.animate(withDuration: 0.15, animations: {
+                self.favoriteButton.transform = CGAffineTransform(scaleX: 1.1, y: 1.1)
+            }, completion: { _ in
+                UIView.animate(withDuration: 0.1, animations: {
+                    self.favoriteButton.transform = originalTransform
+                })
+            })
+        })
+    }
+
+    private func animateCartButton() {
+        let newImage: UIImage = cartButton.image(for: .normal) == .icCart ? .icCartDelete : .icCart
+
+        UIView.transition(
+            with: cartButton,
+            duration: 0.3,
+            options: .transitionFlipFromLeft,
+            animations: {
+                self.cartButton.setImage(newImage, for: .normal)
+            },
+            completion: nil
+        )
+    }
+
     // MARK: - Actions
     @objc
     private func didTapFavorite() {
-        delegate?.nftCollectionViewCellDidTapFavorite(self)
+        guard let nftId = nftId else { return }
+
+        animateFavoriteButton()
+        delegate?.nftCollectionViewCellDidTapFavorite(nftId)
     }
 
     @objc
     private func didTapCart() {
-        delegate?.nftCollectionViewCellDidTapCart(self)
+        guard let nftId = nftId else { return }
+
+        animateCartButton()
+        delegate?.nftCollectionViewCellDidTapCart(nftId)
     }
 
     @objc
     private func didTapRating() {
-        delegate?.nftCollectionViewCellDidTapRating(self)
+        guard let image = nftImageView.image else { return }
+
+        delegate?.nftCollectionViewCellDidTapRating(image)
     }
 
     // MARK: - Constraints

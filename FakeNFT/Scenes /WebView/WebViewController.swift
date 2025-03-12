@@ -12,10 +12,11 @@ protocol WebViewControllerDelegate: AnyObject {
     func webViewControllerDidBack(_ controller: WebViewController)
 }
 
-final class WebViewController: UIViewController, ErrorView {
+final class WebViewController: UIViewController, CatalogErrorView {
     // MARK: - Properties
     weak var delegate: WebViewControllerDelegate?
     private let viewModel: WebViewViewModel
+    private let request: URLRequest
     private var estimatedProgressObservation: NSKeyValueObservation?
 
     // MARK: - UI
@@ -38,6 +39,8 @@ final class WebViewController: UIViewController, ErrorView {
     // MARK: - Init
     init(viewModel: WebViewViewModel) {
         self.viewModel = viewModel
+        self.request = viewModel.getRequest()
+
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -50,37 +53,39 @@ final class WebViewController: UIViewController, ErrorView {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        view.addSubview(webView)
-        view.addSubview(progressView)
-
-        setupConstraints()
+        setupLayouts()
         addObserver()
         setupPullToRefresh()
+        checkForBug()
+    }
 
-        Task {
-            await loadWebView()
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+
+        webView.load(request)
+        updateProgress()
+    }
+
+    private func checkForBug() {
+        if request.url?.absoluteString == "https://nikolaidev.ru" {
+            showError(
+                error: WebViewError.apiBug,
+                buttons: [
+                    .close,
+                    .back(action: { [weak self] in
+                        guard let self = self else { return }
+
+                        self.delegate?.webViewControllerDidBack(self)
+                    })
+                ]
+            )
         }
     }
 
-    private func loadWebView() async {
-        do {
-            let request = try await viewModel.authorRequest()
-            webView.load(request)
-            updateProgress()
-        } catch {
-            showWKWebViewError(error)
-        }
-    }
-
-    private func reloadWebView() async {
-        do {
-            let request =  try await viewModel.authorRequest()
-            webView.load(request)
-            webView.reload()
-            webView.scrollView.refreshControl?.endRefreshing()
-        } catch {
-            showWKWebViewError(error)
-        }
+    private func reloadWebView() {
+        webView.load(request)
+        webView.reload()
+        webView.scrollView.refreshControl?.endRefreshing()
     }
 
     private func updateProgress() {
@@ -113,16 +118,12 @@ final class WebViewController: UIViewController, ErrorView {
             error: error,
             buttons: [
                 .back(action: { [weak self] in
-                    guard let self else { return }
+                    guard let self = self else { return }
 
                     self.delegate?.webViewControllerDidBack(self)
                 }),
                 .reload(action: { [weak self] in
-                    guard let self else { return }
-
-                    Task {
-                        await self.reloadWebView()
-                    }
+                    self?.reloadWebView()
                 })
             ]
         )
@@ -131,13 +132,14 @@ final class WebViewController: UIViewController, ErrorView {
     // MARK: - Actions
     @objc
     private func didPullToRefresh() {
-        Task {
-            await reloadWebView()
-        }
+        reloadWebView()
     }
 
     // MARK: - Constraints
-    private func setupConstraints() {
+    private func setupLayouts() {
+        view.addSubview(webView)
+        view.addSubview(progressView)
+
         NSLayoutConstraint.activate([
             progressView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             progressView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
