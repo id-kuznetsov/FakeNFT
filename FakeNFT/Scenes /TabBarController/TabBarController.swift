@@ -24,12 +24,14 @@ final class TabBarController: UITabBarController {
 
     // MARK: - Tabs
     private func setupTabs() {
-        let profileVC = UINavigationController(rootViewController: ProfileViewController(servicesAssembly: servicesAssembly))
-        profileVC.tabBarItem = UITabBarItem(
+        let profileNavigationController = CustomNavigationController()
+        profileNavigationController.tabBarItem = UITabBarItem(
             title: NSLocalizedString("Tab.profile", comment: ""),
-            image: UIImage(systemName: "person.circle"),
-            selectedImage: UIImage(systemName: "person.circle.fill")
+            image: .icTabProfile,
+            selectedImage: .icTabProfile
         )
+        let profileCoordinator = ProfileCoordinatorImpl(navigationController: profileNavigationController, servicesAssembly: servicesAssembly)
+        profileCoordinator.initialScene()
 
         let catalogViewController = TestCatalogViewController(servicesAssembly: servicesAssembly)
         let catalogNavigationController = CustomNavigationController(rootViewController: catalogViewController)
@@ -67,7 +69,7 @@ final class TabBarController: UITabBarController {
 
         setViewControllers(
             [
-                profileVC,
+                profileNavigationController,
                 catalogNavigationController,
                 cartViewController,
                 statisticsNavigationController

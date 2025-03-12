@@ -3,6 +3,8 @@
 "Error.fetchingData" = "Не удалось получить данные";
 "Error.unknown" = "Произошла неизвестная ошибка";
 "Error.repeat" = "Повторить";
+"Error.update" = "Не удалось обновить";
+
 "Error.title" = "Ошибка";
 "Button.cancel" = "Отмена";
 "Button.close" = "Закрыть";
@@ -44,6 +46,40 @@
 "SortOption.title" = "По названию";
 "SortOption.name" = "По имени";
 
+"Profile.myNftsRoute" = "Мои NFT";
+"Profile.favouritesNftsRoute" = "Избранные NFT";
+"Profile.aboutRoute" = "О разработчике";
+"Profile.fetchingError" = "Не удалось загрузить профиль";
+"Profile.updatingError" = "Не удалось изменить профиль. Пожалуйста, попробуйте еще раз";
+"Profile.unknownError" = "Произошла неизвестная ошибка";
+
+"ProfileEditing.changePhoto" = "Сменить фото";
+"ProfileEditing.uploadPhoto" = "Загрузить фото";
+"ProfileEditing.name" = "Имя";
+"ProfileEditing.namePlaceholder" = "Введите имя";
+"ProfileEditing.description" = "Описание";
+"ProfileEditing.descriptionPlaceholder" = "Введите описание";
+"ProfileEditing.website" = "Сайт";
+"ProfileEditing.websitePlaceholder" = "Введите сайт";
+"ProfileEditing.emptyNameWarning" = "Необходимо ввести имя";
+"ProfileEditing.limitWarning" = "Максимальная длина %d символов";
+"ProfileEditing.incorrectWebsiteWarning" = "Некорректная ссылка";
+
+"ProfileEditingAlert.changePhoto" = "Изменить изобаражение";
+"ProfileEditingAlert.urlPlaceholder" = "Введите URL изображения";
+"ProfileEditingAlert.okAction" = "OK";
+"ProfileEditingAlert.removeAction" = "Удалить";
+"ProfileEditingAlert.cancelAction" = "Отмена";
+"ProfileEditingAlert.imageLoadingError" = "Невозможно изменить изображение";
+
+"MyNFTs.title" = "Мои NFT";
+"MyNFTs.placeholder" = "У Вас еще нет NFT";
+"MyNFTs.price" = "Цена";
+"MyNFTs.from" = "от";
+
+
+"FavouritesNFTs.title" = "Избранные NFT";
+"FavouritesNFTs.placeholder" = "У Вас ещё нет избранных NFT";
 "User.websiteButton" = "Перейти на сайт пользователя";
 "User.nftCollection" = "Коллекция NFT";
 "User.websiteInaccessible" = "Не удалось открыть сайт";

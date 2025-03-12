@@ -18,6 +18,11 @@ final class ServicesAssembly {
         )
     }
     
+
+    var profileService: ProfileService {
+        ProfileServiceImpl(networkClient: networkClient)
+    }
+
     var userService: UserService {
         UserServiceImpl(
             networkClient: networkClient
