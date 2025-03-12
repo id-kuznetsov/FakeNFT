@@ -1,7 +1,12 @@
 import Foundation
+
+typealias ProfileCompletion = (Result<Profile, ProfileServiceError>) -> Void
 import Combine
 
 protocol ProfileService {
+    func fetchProfile(_ completion: @escaping ProfileCompletion)
+    func updateProfile(with dto: ProfileEditingDto, _ completion: @escaping ProfileCompletion)
+    func updateFavouritesNft(favourites: [String], _ completion: @escaping ProfileCompletion)
     func fetchProfileCombine(
         profile: CatalogProfile?,
         skipCache: Bool
@@ -9,11 +14,18 @@ protocol ProfileService {
 }
 
 enum ProfileServiceError: Error {
+    case profileFetchingFail
+    case profileUpdatingFail
     case invalidResponse
 }
 
 final class ProfileServiceImpl: ProfileService {
     private let networkClient: NetworkClient
+    private var fetchProfileTask: NetworkTask?
+    private var updateProfileTask: NetworkTask?
+    private var updateFavouritesTask: NetworkTask?
+    
+    init(networkClient: NetworkClient) {
     private let cacheService: CacheService
     private let networkMonitor: NetworkMonitor
     private var cancellables = Set<AnyCancellable>()
@@ -24,6 +36,52 @@ final class ProfileServiceImpl: ProfileService {
         networkMonitor: NetworkMonitor
     ) {
         self.networkClient = networkClient
+    }
+    
+    func fetchProfile(_ completion: @escaping ProfileCompletion) {
+        fetchProfileTask?.cancel()
+        let request = ProfileRequest()
+        
+        fetchProfileTask = networkClient.send(request: request, type: Profile.self) { [weak self] result in
+            self?.fetchProfileTask = nil
+            switch result {
+            case .success(let profile):
+                completion(.success(profile))
+            case .failure(_):
+                completion(.failure(.profileFetchingFail))
+            }
+        }
+    }
+    
+    func updateProfile(with dto: ProfileEditingDto, _ completion: @escaping ProfileCompletion) {
+        updateProfileTask?.cancel()
+        let request = ProfileEditingRequest(dto: dto)
+        
+        updateProfileTask = networkClient.send(request: request, type: Profile.self) { [weak self] result in
+            self?.updateProfileTask = nil
+            switch result {
+            case .success(let profile):
+                completion(.success(profile))
+            case .failure(_):
+                completion(.failure(.profileUpdatingFail))
+            }
+        }
+    }
+    
+    func updateFavouritesNft(favourites: [String], _ completion: @escaping ProfileCompletion) {
+        updateFavouritesTask?.cancel()
+        let dto = ProfileFavouritesDto(likes: favourites)
+        let request = FavouritesPutRequest(dto: dto)
+        
+        updateFavouritesTask = networkClient.send(request: request, type: Profile.self) { [weak self] result in
+            self?.updateFavouritesTask = nil
+            switch result {
+            case .success(let profile):
+                completion(.success(profile))
+            case .failure(_):
+                completion(.failure(.profileUpdatingFail))
+            }
+        }
         self.cacheService = cacheService
         self.networkMonitor = networkMonitor
 

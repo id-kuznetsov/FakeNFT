@@ -14,6 +14,7 @@ extension UIImage {
     static var heart = UIImage.init(systemName: "heart.fill")
     static var plus = UIImage.init(systemName: "plus.circle.fill")
     static var chevronLeft = UIImage.init(systemName: "chevron.left")
+    static var chevronRight = UIImage.init(systemName: "chevron.right")
     static var squareAndPencil = UIImage.init(systemName: "square.and.pencil")
     static var star = UIImage.init(systemName: "star")
     static var starFill = UIImage.init(systemName: "star.fill")

@@ -1,10 +1,14 @@
 "Catalog.openNft" = "Открыть Nft";
 "Error.network" = "Произошла ошибка сети";
+"Error.fetchingData" = "Не удалось получить данные";
 "Error.unknown" = "Произошла неизвестная ошибка";
 "Error.repeat" = "Повторить";
+"Error.update" = "Не удалось обновить";
+
 "Error.title" = "Ошибка";
 "Button.cancel" = "Отмена";
 "Button.close" = "Закрыть";
+"Button.ok" = "ОК";
 
 "Alert.Title.networkError" = "Ошибка";
 "Alert.Title.sort" = "Сортировка";
@@ -40,7 +44,26 @@
 
 "Tab.statistic" = "Статистика";
 
-"Cart.button.toPay" = "К Оплате";
+"Cart.button.toPay" = "К оплате";
+"Cart.label.price" = "Цена";
+"Cart.label.emptyCart" = "Корзина пуста";
+"Cart.delete.conformText" = "Вы уверены, что хотите удалить объект из корзины?";
+"Cart.delete.buttonDelete" = "Удалить";
+"Cart.delete.buttonReturn" = "Вернуться";
+"Cart.errorAlert.somethingGoesWrong" = "Что-то пошло не так(";
+
+"Payment.title" = "Выберите способ оплаты";
+"Payment.button.pay" = "Оплатить";
+"Payment.agreement.label" = "Совершая покупку, вы соглашаетесь с условиями";
+"Payment.agreement.link" = "Пользовательского соглашения";
+"Payment.alert.title" = "Не выбран способ оплаты";
+"Payment.alert.message" = "Для того чтобы оплатить заказ, выберите валюту";
+"Payment.errorAlert.title" = "Не удалось произвести оплату";
+"Payment.errorAlert.cancelTitle" = "Отмена";
+"Payment.errorAlert.repeatTitle" = "Повторить";
+"Payment.alert.buttonTextOk" = "Ок";
+"Payment.success.title" = "Успех! Оплата прошла, поздравляем с покупкой!";
+"Payment.success.button" = "Вернуться в каталог";
 
 "Collection.author" = "Автор коллекции: ";
 
@@ -50,3 +73,43 @@
 "SortOption.rating" = "По рейтингу";
 "SortOption.title" = "По названию";
 "SortOption.name" = "По имени";
+
+"Profile.myNftsRoute" = "Мои NFT";
+"Profile.favouritesNftsRoute" = "Избранные NFT";
+"Profile.aboutRoute" = "О разработчике";
+"Profile.fetchingError" = "Не удалось загрузить профиль";
+"Profile.updatingError" = "Не удалось изменить профиль. Пожалуйста, попробуйте еще раз";
+"Profile.unknownError" = "Произошла неизвестная ошибка";
+
+"ProfileEditing.changePhoto" = "Сменить фото";
+"ProfileEditing.uploadPhoto" = "Загрузить фото";
+"ProfileEditing.name" = "Имя";
+"ProfileEditing.namePlaceholder" = "Введите имя";
+"ProfileEditing.description" = "Описание";
+"ProfileEditing.descriptionPlaceholder" = "Введите описание";
+"ProfileEditing.website" = "Сайт";
+"ProfileEditing.websitePlaceholder" = "Введите сайт";
+"ProfileEditing.emptyNameWarning" = "Необходимо ввести имя";
+"ProfileEditing.limitWarning" = "Максимальная длина %d символов";
+"ProfileEditing.incorrectWebsiteWarning" = "Некорректная ссылка";
+
+"ProfileEditingAlert.changePhoto" = "Изменить изобаражение";
+"ProfileEditingAlert.urlPlaceholder" = "Введите URL изображения";
+"ProfileEditingAlert.okAction" = "OK";
+"ProfileEditingAlert.removeAction" = "Удалить";
+"ProfileEditingAlert.cancelAction" = "Отмена";
+"ProfileEditingAlert.imageLoadingError" = "Невозможно изменить изображение";
+
+"MyNFTs.title" = "Мои NFT";
+"MyNFTs.placeholder" = "У Вас еще нет NFT";
+"MyNFTs.price" = "Цена";
+"MyNFTs.from" = "от";
+
+
+"FavouritesNFTs.title" = "Избранные NFT";
+"FavouritesNFTs.placeholder" = "У Вас ещё нет избранных NFT";
+"User.websiteButton" = "Перейти на сайт пользователя";
+"User.nftCollection" = "Коллекция NFT";
+"User.websiteInaccessible" = "Не удалось открыть сайт";
+"User.emptyCollection" = "Коллекция пуста";
+"User.noNft" = "Пользователь ещё не добавил NFT";

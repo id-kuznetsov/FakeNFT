@@ -23,14 +23,14 @@ final class TabBarController: UITabBarController {
 
     // MARK: - Tabs
     private func setupTabs() {
-        let profileVC = UINavigationController(
-            rootViewController: ProfileViewController(servicesAssembly: servicesAssembly)
-        )
-        profileVC.tabBarItem = UITabBarItem(
+        let profileNavigationController = CustomNavigationController()
+        profileNavigationController.tabBarItem = UITabBarItem(
             title: NSLocalizedString("Tab.profile", comment: ""),
-            image: UIImage(systemName: "person.circle"),
-            selectedImage: UIImage(systemName: "person.circle.fill")
+            image: .icTabProfile,
+            selectedImage: .icTabProfile
         )
+        let profileCoordinator = ProfileCoordinatorImpl(navigationController: profileNavigationController, servicesAssembly: servicesAssembly)
+        profileCoordinator.initialScene()
 
         let collectionsServiceAssembly = CollectionsServiceAssembly(servicesAssembler: servicesAssembly)
         let catalogViewController = collectionsServiceAssembly.build()
@@ -40,29 +40,39 @@ final class TabBarController: UITabBarController {
             image: .catalogTab,
             tag: 2
         )
-
-        let cartVC = UINavigationController(rootViewController: CartViewController(servicesAssembly: servicesAssembly))
-        cartVC.tabBarItem = UITabBarItem(
-            title: NSLocalizedString("Tab.cart", comment: ""),
-            image: UIImage(systemName: "bag"),
-            selectedImage: UIImage(systemName: "bag.fill")
+        
+        let cartViewModel = CartViewModel(
+            orderService: servicesAssembly.orderService,
+            nftService: servicesAssembly.nftService
+            )
+        let cartViewController = CustomNavigationController(rootViewController: CartViewController(viewModel: cartViewModel))
+        cartViewController.tabBarItem = UITabBarItem(
+            title: L10n.Tab.cart,
+            image: .icCart,
+            selectedImage: .icCartFill
         )
-
-        let statisticsVC = UINavigationController(
-            rootViewController: StatisticsViewController(servicesAssembly: servicesAssembly)
+        
+        let statisticsViewModel = StatisticsViewModel(
+            userService: servicesAssembly.userService,
+            nftService: servicesAssembly.nftService,
+            orderService: servicesAssembly.orderService,
+            userDefaultsStorage: StatisticsUserDefaultsStorage(),
+            cacheStorage: StatisticsCacheStorage()
         )
-        statisticsVC.tabBarItem = UITabBarItem(
-            title: NSLocalizedString("Tab.statistic", comment: ""),
-            image: UIImage(systemName: "chart.bar"),
-            selectedImage: UIImage(systemName: "chart.bar.fill")
+        let statisticsVC = StatisticsViewController(viewModel: statisticsViewModel)
+        let statisticsNavigationController = CustomNavigationController(rootViewController: statisticsVC)
+        statisticsNavigationController.tabBarItem = UITabBarItem(
+            title: L10n.Tab.statistic,
+            image: UIImage(named: "ic.statistics.fill"),
+            selectedImage: nil
         )
 
         setViewControllers(
             [
-                profileVC,
+                profileNavigationController,
                 catalogNavigationController,
-                cartVC,
-                statisticsVC
+                cartViewController,
+                statisticsNavigationController
             ],
             animated: false
         )

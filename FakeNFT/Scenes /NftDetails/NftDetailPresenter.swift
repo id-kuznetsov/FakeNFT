@@ -13,9 +13,9 @@ enum NftDetailState {
 }
 
 final class NftDetailPresenterImpl: NftDetailPresenter {
-
+    
     // MARK: - Properties
-
+    
     weak var view: NftDetailView?
     private let input: NftDetailInput
     private let service: NftService
@@ -24,20 +24,20 @@ final class NftDetailPresenterImpl: NftDetailPresenter {
             stateDidChanged()
         }
     }
-
+    
     // MARK: - Init
-
+    
     init(input: NftDetailInput, service: NftService) {
         self.input = input
         self.service = service
     }
-
+    
     // MARK: - Functions
-
+    
     func viewDidLoad() {
         state = .loading
     }
-
+    
     private func stateDidChanged() {
         switch state {
         case .initial:
@@ -47,7 +47,11 @@ final class NftDetailPresenterImpl: NftDetailPresenter {
             loadNft()
         case .data(let nft):
             view?.hideLoading()
-            let cellModels = nft.images.map { NftDetailCellModel(url: $0) }
+            
+            let cellModels: [NftDetailCellModel] = nft.images.compactMap { image in
+                return NftDetailCellModel(url: image)
+            }
+            
             view?.displayCells(cellModels)
         case .failed(let error):
             let errorModel = makeErrorModel(error)
@@ -55,7 +59,7 @@ final class NftDetailPresenterImpl: NftDetailPresenter {
             view?.showError(errorModel)
         }
     }
-
+    
     private func loadNft() {
         service.loadNft(id: input.id) { [weak self] result in
             switch result {
@@ -66,7 +70,7 @@ final class NftDetailPresenterImpl: NftDetailPresenter {
             }
         }
     }
-
+    
     private func makeErrorModel(_ error: Error) -> ErrorModel {
         let message: String
         switch error {
@@ -75,7 +79,7 @@ final class NftDetailPresenterImpl: NftDetailPresenter {
         default:
             message = NSLocalizedString("Error.unknown", comment: "")
         }
-
+        
         let actionText = NSLocalizedString("Error.repeat", comment: "")
         return ErrorModel(message: message, actionText: actionText) { [weak self] in
             self?.state = .loading

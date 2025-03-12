@@ -2,8 +2,8 @@ import UIKit
 
 final class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     var window: UIWindow?
-
-    let servicesAssembly = ServicesAssembly(
+    
+    lazy var servicesAssembly = ServicesAssembly(
         networkClient: DefaultNetworkClient(),
         nftStorage: NftStorageImpl(),
         cacheService: CacheServiceImpl(),
