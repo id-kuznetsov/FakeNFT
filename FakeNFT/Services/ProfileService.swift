@@ -3,9 +3,9 @@ import Combine
 
 protocol ProfileService {
     func fetchProfileCombine(
-        profile: Profile?,
+        profile: CatalogProfile?,
         skipCache: Bool
-    ) -> AnyPublisher<Profile, Error>
+    ) -> AnyPublisher<CatalogProfile, Error>
 }
 
 enum ProfileServiceError: Error {
@@ -34,9 +34,9 @@ final class ProfileServiceImpl: ProfileService {
 
     // MARK: - Combine
     func fetchProfileCombine(
-        profile: Profile?,
+        profile: CatalogProfile?,
         skipCache: Bool
-    ) -> AnyPublisher<Profile, Error> {
+    ) -> AnyPublisher<CatalogProfile, Error> {
         let networkPublisher = networkPublisher(profile: profile)
 
         if skipCache {
@@ -60,16 +60,16 @@ final class ProfileServiceImpl: ProfileService {
 
     private func cacheKey() -> String { "profile" }
 
-    private func cachePublisher() -> AnyPublisher<Profile, Error> {
+    private func cachePublisher() -> AnyPublisher<CatalogProfile, Error> {
         let key = cacheKey()
 
-        return Future<Profile, Error> { [weak self] promise in
+        return Future<CatalogProfile, Error> { [weak self] promise in
             guard let self = self else {
                 promise(.failure(CacheError.emptyOrStale))
                 return
             }
 
-            self.cacheService.load(type: Profile.self, forKey: key) { result in
+            self.cacheService.load(type: CatalogProfile.self, forKey: key) { result in
                 switch result {
                 case .success(let cacheResult):
                     promise(.success(cacheResult.data))
@@ -81,8 +81,8 @@ final class ProfileServiceImpl: ProfileService {
         .eraseToAnyPublisher()
     }
 
-    private func networkPublisher(profile: Profile?) -> AnyPublisher<Profile, Error> {
-        return Future<Profile, Error> { [weak self] promise in
+    private func networkPublisher(profile: CatalogProfile?) -> AnyPublisher<CatalogProfile, Error> {
+        return Future<CatalogProfile, Error> { [weak self] promise in
             guard let self = self else {
                 promise(.failure(NSError(domain: "ProfileService", code: -1, userInfo: nil)))
                 return
@@ -98,7 +98,7 @@ final class ProfileServiceImpl: ProfileService {
 
             self.networkClient.send(
                 request: request,
-                type: ProfileDTO.self
+                type: CatalogProfileDTO.self
             ) { result in
                 switch result {
                 case .success(let response):

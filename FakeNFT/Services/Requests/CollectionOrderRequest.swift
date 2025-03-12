@@ -24,7 +24,7 @@ struct CollectionOrderRequest: NetworkRequest {
 }
 
 struct UpdateCollectionOrderDto: Dto {
-    let order: OrderDTO
+    let order: CatalogOrderDTO
 
     enum CodingKeys: String, CodingKey {
         case nfts

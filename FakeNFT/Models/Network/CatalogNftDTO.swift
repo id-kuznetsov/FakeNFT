@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct NftDTO: Decodable {
+struct CatalogNftDTO: Decodable {
     let createdAt: String
     let name: String
     let images: [String]
@@ -18,7 +18,7 @@ struct NftDTO: Decodable {
     let id: String
 }
 
-extension NftDTO {
+extension CatalogNftDTO {
     func toDomainModel() -> CatalogNft? {
         guard let authorURL = URL(string: self.author) else { return nil }
 

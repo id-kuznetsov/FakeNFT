@@ -44,7 +44,7 @@ final class CollectionViewModel: CollectionViewModelProtocol {
     private let collectionNftService: CollectionNftService
     private var cancellables = Set<AnyCancellable>()
     private var isLoading = false
-    private var profile: Profile?
+    private var profile: CatalogProfile?
     private var order: CatalogOrder?
 
     // MARK: - Init

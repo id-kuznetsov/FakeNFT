@@ -94,7 +94,7 @@ final class OrderServiceImpl: OrderService {
 
             self.networkClient.send(
                 request: request,
-                type: OrderDTO.self
+                type: CatalogOrderDTO.self
             ) { result in
                 switch result {
                 case .success(let response):

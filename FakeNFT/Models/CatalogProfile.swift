@@ -1,6 +1,6 @@
 import Foundation
 
-struct Profile: Codable, Hashable {
+struct CatalogProfile: Codable, Hashable {
     let name: String
     let avatar: URL
     let description: String
@@ -10,10 +10,10 @@ struct Profile: Codable, Hashable {
     let id: String
 }
 
-extension Profile {
-    func toDTO() -> ProfileDTO? {
+extension CatalogProfile {
+    func toDTO() -> CatalogProfileDTO? {
 
-        return ProfileDTO(
+        return CatalogProfileDTO(
             name: self.name,
             avatar: self.avatar.absoluteString,
             description: self.description,

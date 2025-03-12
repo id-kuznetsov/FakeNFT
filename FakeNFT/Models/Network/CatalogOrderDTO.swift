@@ -1,9 +1,9 @@
-struct OrderDTO: Decodable {
+struct CatalogOrderDTO: Decodable {
     let nfts: [String]
     let id: String
 }
 
-extension OrderDTO {
+extension CatalogOrderDTO {
     func toDomainModel() -> CatalogOrder {
 
         return CatalogOrder(

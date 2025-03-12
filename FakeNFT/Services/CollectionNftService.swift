@@ -111,7 +111,7 @@ final class CollectionNftServiceImpl: CollectionNftService {
 
                 self.networkClient.send(
                     request: request,
-                    type: NftDTO.self
+                    type: CatalogNftDTO.self
                 ) { result in
                     switch result {
                     case .success(let response):

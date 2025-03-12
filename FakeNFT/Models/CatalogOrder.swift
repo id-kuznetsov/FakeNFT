@@ -4,8 +4,8 @@ struct CatalogOrder: Codable, Hashable {
 }
 
 extension CatalogOrder {
-    func toDTO() -> OrderDTO? {
-        return OrderDTO(
+    func toDTO() -> CatalogOrderDTO? {
+        return CatalogOrderDTO(
             nfts: self.nfts,
             id: self.id
         )
