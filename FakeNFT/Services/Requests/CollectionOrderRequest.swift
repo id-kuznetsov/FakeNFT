@@ -1,7 +1,7 @@
 import Foundation
 
 struct CollectionOrderRequest: NetworkRequest {
-    var order: Order?
+    var order: CatalogOrder?
 
     var endpoint: URL? {
         URL(string: "\(RequestConstants.baseURL)/api/v1/orders/1")

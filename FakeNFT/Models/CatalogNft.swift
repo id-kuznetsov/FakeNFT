@@ -1,6 +1,13 @@
+//
+//  CatalogNft.swift
+//  FakeNFT
+//
+//  Created by Nikolai Eremenko on 12.03.2025.
+//
+
 import Foundation
 
-struct Nft: Codable, Hashable {
+struct CatalogNft: Codable, Hashable {
     let name: String
     let images: [URL]
     let rating: Int
@@ -22,18 +29,18 @@ struct Nft: Codable, Hashable {
         hasher.combine(isInCart)
     }
 
-    static func == (lhs: Nft, rhs: Nft) -> Bool {
+    static func == (lhs: CatalogNft, rhs: CatalogNft) -> Bool {
         return lhs.id == rhs.id &&
                lhs.isLiked == rhs.isLiked &&
                lhs.isInCart == rhs.isInCart
     }
 }
 
-extension Nft {
-    static var placeholder: Nft? {
+extension CatalogNft {
+    static var placeholder: CatalogNft? {
         guard let authorURL = URL(string: "https://example.com") else { return nil }
 
-        return Nft(
+        return CatalogNft(
             name: "",
             images: [],
             rating: 0,

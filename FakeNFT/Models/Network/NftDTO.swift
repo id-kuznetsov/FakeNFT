@@ -19,13 +19,13 @@ struct NftDTO: Decodable {
 }
 
 extension NftDTO {
-    func toDomainModel() -> Nft? {
+    func toDomainModel() -> CatalogNft? {
         guard let authorURL = URL(string: self.author) else { return nil }
 
         let imageUrls = self.images.compactMap { URL(string: $0) }
         guard imageUrls.count == self.images.count else { return nil }
 
-        return Nft(
+        return CatalogNft(
             name: self.name,
             images: self.images.compactMap { URL(string: $0) },
             rating: self.rating,

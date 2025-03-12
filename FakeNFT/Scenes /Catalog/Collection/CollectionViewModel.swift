@@ -13,7 +13,7 @@ protocol CollectionViewModelProtocol {
     var imageLoaderService: ImageLoaderService { get }
 
     var state: AnyPublisher<CollectionState, Never> { get }
-    var nfts: AnyPublisher<[Nft], Never> { get }
+    var nfts: AnyPublisher<[CatalogNft], Never> { get }
 
     func loadData(skipCache: Bool)
     func updateProfile(with nftId: String)
@@ -38,14 +38,14 @@ final class CollectionViewModel: CollectionViewModelProtocol {
     @Published private var _state: CollectionState = .initial
     var state: AnyPublisher<CollectionState, Never> { $_state.eraseToAnyPublisher() }
 
-    @Published private var _nfts: [Nft] = []
-    var nfts: AnyPublisher<[Nft], Never> { $_nfts.eraseToAnyPublisher() }
+    @Published private var _nfts: [CatalogNft] = []
+    var nfts: AnyPublisher<[CatalogNft], Never> { $_nfts.eraseToAnyPublisher() }
 
     private let collectionNftService: CollectionNftService
     private var cancellables = Set<AnyCancellable>()
     private var isLoading = false
     private var profile: Profile?
-    private var order: Order?
+    private var order: CatalogOrder?
 
     // MARK: - Init
     init(
@@ -63,13 +63,13 @@ final class CollectionViewModel: CollectionViewModelProtocol {
     }
 
     func loadData(skipCache: Bool = false) {
-        guard let nftPlaceholder = Nft.placeholder else {
+        guard let nftPlaceholder = CatalogNft.placeholder else {
             _state = .failed(NSError(domain: "ViewModel", code: -1, userInfo: nil))
             return
         }
 
         _state = .loading
-        _nfts = (0..<3).map { _ in Nft.placeholder ?? nftPlaceholder }
+        _nfts = (0..<3).map { _ in CatalogNft.placeholder ?? nftPlaceholder }
 
         Publishers.Zip3(
             collectionNftService.fetchNfts(
@@ -133,7 +133,7 @@ final class CollectionViewModel: CollectionViewModelProtocol {
 
                 self.profile = newProfile
 
-                let updatedNfts = self._nfts.map { nft -> Nft in
+                let updatedNfts = self._nfts.map { nft -> CatalogNft in
                     var nftWithLike = nft
                     nftWithLike.isLiked = newProfile.likes.contains(nft.id)
                     return nftWithLike
@@ -181,7 +181,7 @@ final class CollectionViewModel: CollectionViewModelProtocol {
 
                 self.order = newOrder
 
-                let updatedNfts = self._nfts.map { nft -> Nft in
+                let updatedNfts = self._nfts.map { nft -> CatalogNft in
                     var nftWithCart = nft
                     nftWithCart.isInCart = newOrder.nfts.contains(nft.id)
                     return nftWithCart
@@ -199,7 +199,7 @@ final class CollectionViewModel: CollectionViewModelProtocol {
             .store(in: &cancellables)
     }
 
-    private func priority(for nft: Nft) -> Int {
+    private func priority(for nft: CatalogNft) -> Int {
         return (nft.isLiked ? 1 : 0) + (nft.isInCart ? 1 : 0)
     }
 }

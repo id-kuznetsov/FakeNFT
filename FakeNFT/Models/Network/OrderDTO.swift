@@ -4,9 +4,9 @@ struct OrderDTO: Decodable {
 }
 
 extension OrderDTO {
-    func toDomainModel() -> Order {
+    func toDomainModel() -> CatalogOrder {
 
-        return Order(
+        return CatalogOrder(
             nfts: self.nfts,
             id: self.id
         )

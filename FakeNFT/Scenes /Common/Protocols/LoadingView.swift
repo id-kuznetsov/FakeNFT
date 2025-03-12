@@ -1,4 +1,3 @@
-import ProgressHUD
 import UIKit
 
 protocol LoadingView {

@@ -32,9 +32,7 @@ final class CollectionServiceImpl: CollectionService {
         self.networkMonitor = networkMonitor
 
         self.networkMonitor.connectivityPublisher
-            .sink { isConnected in
-                print("Сеть доступна: \(isConnected)")
-            }
+            .sink { _ in }
             .store(in: &cancellables)
     }
 

@@ -28,9 +28,7 @@ final class ProfileServiceImpl: ProfileService {
         self.networkMonitor = networkMonitor
 
         self.networkMonitor.connectivityPublisher
-            .sink { isConnected in
-                print("Сеть доступна: \(isConnected)")
-            }
+            .sink { _ in }
             .store(in: &cancellables)
     }
 

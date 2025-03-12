@@ -116,7 +116,7 @@ final class NftCollectionViewCell: UICollectionViewCell, ReuseIdentifying {
     }
 
     // MARK: - Config
-    func configure(model: Nft, imageLoaderService: ImageLoaderService) {
+    func configure(model: CatalogNft, imageLoaderService: ImageLoaderService) {
         if model.isPlaceholder {
             showLoadingAnimation()
             ratingButton.isHidden = true

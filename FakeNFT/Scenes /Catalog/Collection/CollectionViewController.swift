@@ -14,17 +14,17 @@ final class CollectionViewController: UIViewController, CatalogErrorView, Rating
     private let viewModel: CollectionViewModelProtocol
 
     // MARK: - DataSource
-    private lazy var dataSource: UICollectionViewDiffableDataSource<Int, Nft> = {
-        let dataSource = UICollectionViewDiffableDataSource<Int, Nft>(
+    private lazy var dataSource: UICollectionViewDiffableDataSource<Int, CatalogNft> = {
+        let dataSource = UICollectionViewDiffableDataSource<Int, CatalogNft>(
             collectionView: collectionView,
-            cellProvider: { [weak self] collectionView, indexPath, nftUI in
+            cellProvider: { [weak self] collectionView, indexPath, nft in
                 guard let self = self else { return UICollectionViewCell() }
 
                 let cell: NftCollectionViewCell = collectionView.dequeueReusableCell(indexPath: indexPath)
                 cell.backgroundColor = .clear
                 cell.delegate = self
                 cell.configure(
-                    model: nftUI,
+                    model: nft,
                     imageLoaderService: viewModel.imageLoaderService
                 )
                 return cell
@@ -144,7 +144,7 @@ final class CollectionViewController: UIViewController, CatalogErrorView, Rating
             .store(in: &subscribers)
     }
 
-    private func applySnapshot(_ nfts: [Nft], animating: Bool = true) {
+    private func applySnapshot(_ nfts: [CatalogNft], animating: Bool = true) {
         var snapshot = dataSource.snapshot()
         snapshot.deleteAllItems()
         snapshot.appendSections([0])

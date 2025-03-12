@@ -2,7 +2,7 @@ import Foundation
 import Combine
 
 protocol OrderService {
-    func fetchOrderCombine(order: Order?, skipCache: Bool) -> AnyPublisher<Order, Error>
+    func fetchOrderCombine(order: CatalogOrder?, skipCache: Bool) -> AnyPublisher<CatalogOrder, Error>
 }
 
 final class OrderServiceImpl: OrderService {
@@ -21,17 +21,15 @@ final class OrderServiceImpl: OrderService {
         self.networkMonitor = networkMonitor
 
         self.networkMonitor.connectivityPublisher
-            .sink { isConnected in
-                print("Сеть доступна: \(isConnected)")
-            }
+            .sink { _ in }
             .store(in: &cancellables)
     }
 
     // MARK: - Combine
     func fetchOrderCombine(
-        order: Order?,
+        order: CatalogOrder?,
         skipCache: Bool
-    ) -> AnyPublisher<Order, Error> {
+    ) -> AnyPublisher<CatalogOrder, Error> {
         let networkPublisher = networkPublisher(order: order)
 
         if skipCache {
@@ -58,16 +56,16 @@ final class OrderServiceImpl: OrderService {
         return "order"
     }
 
-    private func cachePublisher() -> AnyPublisher<Order, Error> {
+    private func cachePublisher() -> AnyPublisher<CatalogOrder, Error> {
         let key = cacheKey()
 
-        return Future<Order, Error> { [weak self] promise in
+        return Future<CatalogOrder, Error> { [weak self] promise in
             guard let self = self else {
                 promise(.failure(CacheError.emptyOrStale))
                 return
             }
 
-            self.cacheService.load(type: Order.self, forKey: key) { result in
+            self.cacheService.load(type: CatalogOrder.self, forKey: key) { result in
                 switch result {
                 case .success(let cacheResult):
                     promise(.success(cacheResult.data))
@@ -79,8 +77,8 @@ final class OrderServiceImpl: OrderService {
         .eraseToAnyPublisher()
     }
 
-    private func networkPublisher(order: Order?) -> AnyPublisher<Order, Error> {
-        return Future<Order, Error> { [weak self] promise in
+    private func networkPublisher(order: CatalogOrder?) -> AnyPublisher<CatalogOrder, Error> {
+        return Future<CatalogOrder, Error> { [weak self] promise in
             guard let self = self else {
                 promise(.failure(NSError(domain: "OrderService", code: -1, userInfo: nil)))
                 return
