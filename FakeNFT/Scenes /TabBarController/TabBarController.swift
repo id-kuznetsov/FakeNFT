@@ -24,7 +24,7 @@ final class TabBarController: UITabBarController {
 
     // MARK: - Tabs
     private func setupTabs() {
-        let profileNavigationController = UINavigationController()
+        let profileNavigationController = CustomNavigationController()
         profileNavigationController.tabBarItem = UITabBarItem(
             title: NSLocalizedString("Tab.profile", comment: ""),
             image: .icTabProfile,

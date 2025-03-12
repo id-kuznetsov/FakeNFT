@@ -63,7 +63,7 @@ final class AvatarView: UIView {
         let button = UIButton()
         button.addTarget(self, action: #selector(actionButtonDidTap), for: .touchUpInside)
         button.setTitleColor(.ypWhiteUniversal, for: .normal)
-        button.titleLabel?.font = .caption3
+        button.titleLabel?.font = .caption4
         button.titleLabel?.textAlignment = .center
         button.titleLabel?.numberOfLines = 2
         button.titleLabel?.lineBreakMode = .byWordWrapping
