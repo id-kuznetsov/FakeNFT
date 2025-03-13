@@ -15,3 +15,10 @@ function_parameter_count:
   warning: 6
   error: 8
 
+type_body_length:
+  warning: 300
+  error: 350
+
+file_length:
+  warning: 450
+  error: 470

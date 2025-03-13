@@ -108,12 +108,27 @@ final class ProfileEditingViewController: UIViewController, ErrorView {
     }
 
     private func setupLayout() {
+        setupDismissButtonConstraints()
+        setupScrollViewConstraints()
+        setupAvatarViewConstraints()
+        setupNameSectionConstraints()
+        setupDescriptionSectionConstraints()
+        setupWebsiteSectionConstraints()
+        setupWarningConstraints()
+    }
+
+    // MARK: - Constraints
+    private func setupDismissButtonConstraints() {
         NSLayoutConstraint.activate([
             dismissButton.heightAnchor.constraint(equalToConstant: 42),
             dismissButton.widthAnchor.constraint(equalToConstant: 42),
             dismissButton.topAnchor.constraint(equalTo: view.topAnchor, constant: 16),
-            dismissButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            dismissButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16)
+        ])
+    }
 
+    private func setupScrollViewConstraints() {
+        NSLayoutConstraint.activate([
             scrollView.topAnchor.constraint(equalTo: view.topAnchor),
             scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
@@ -123,13 +138,21 @@ final class ProfileEditingViewController: UIViewController, ErrorView {
             contentView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
             contentView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
             contentView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor, constant: -40),
-            contentView.widthAnchor.constraint(equalTo: scrollView.widthAnchor),
+            contentView.widthAnchor.constraint(equalTo: scrollView.widthAnchor)
+        ])
+    }
 
+    private func setupAvatarViewConstraints() {
+        NSLayoutConstraint.activate([
             avatarView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 16),
             avatarView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
             avatarView.widthAnchor.constraint(equalToConstant: 70),
-            avatarView.heightAnchor.constraint(equalToConstant: 70),
+            avatarView.heightAnchor.constraint(equalToConstant: 70)
+        ])
+    }
 
+    private func setupNameSectionConstraints() {
+        NSLayoutConstraint.activate([
             nameLabel.topAnchor.constraint(equalTo: avatarView.bottomAnchor, constant: 24),
             nameLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
             nameLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
@@ -137,11 +160,12 @@ final class ProfileEditingViewController: UIViewController, ErrorView {
             nameTextField.topAnchor.constraint(equalTo: nameLabel.bottomAnchor, constant: 8),
             nameTextField.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
             nameTextField.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
-            nameTextField.heightAnchor.constraint(equalToConstant: 44),
+            nameTextField.heightAnchor.constraint(equalToConstant: 44)
+        ])
+    }
 
-            nameWarningLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
-            nameWarningLabel.topAnchor.constraint(equalTo: nameTextField.bottomAnchor),
-
+    private func setupDescriptionSectionConstraints() {
+        NSLayoutConstraint.activate([
             descriptionLabel.topAnchor.constraint(equalTo: nameWarningLabel.bottomAnchor, constant: 24),
             descriptionLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
             descriptionLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
@@ -149,11 +173,12 @@ final class ProfileEditingViewController: UIViewController, ErrorView {
             descriptionTextView.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: 8),
             descriptionTextView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
             descriptionTextView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
-            descriptionTextView.heightAnchor.constraint(greaterThanOrEqualToConstant: 44),
+            descriptionTextView.heightAnchor.constraint(greaterThanOrEqualToConstant: 44)
+        ])
+    }
 
-            descriptionWarningLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
-            descriptionWarningLabel.topAnchor.constraint(equalTo: descriptionTextView.bottomAnchor),
-
+    private func setupWebsiteSectionConstraints() {
+        NSLayoutConstraint.activate([
             websiteLabel.topAnchor.constraint(equalTo: descriptionWarningLabel.bottomAnchor, constant: 24),
             websiteLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
             websiteLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
@@ -161,7 +186,17 @@ final class ProfileEditingViewController: UIViewController, ErrorView {
             websiteTextField.topAnchor.constraint(equalTo: websiteLabel.bottomAnchor, constant: 8),
             websiteTextField.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
             websiteTextField.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
-            websiteTextField.heightAnchor.constraint(equalToConstant: 44),
+            websiteTextField.heightAnchor.constraint(equalToConstant: 44)
+        ])
+    }
+
+    private func setupWarningConstraints() {
+        NSLayoutConstraint.activate([
+            nameWarningLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+            nameWarningLabel.topAnchor.constraint(equalTo: nameTextField.bottomAnchor),
+
+            descriptionWarningLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+            descriptionWarningLabel.topAnchor.constraint(equalTo: descriptionTextView.bottomAnchor),
 
             websiteWarningLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
             websiteWarningLabel.topAnchor.constraint(equalTo: websiteTextField.bottomAnchor),
@@ -282,10 +317,7 @@ final class ProfileEditingViewController: UIViewController, ErrorView {
     }
 
     private func findFirstResponder() -> UIView? {
-        for view in contentView.subviews {
-            if view.isFirstResponder { return view }
-        }
-        return nil
+        return contentView.subviews.first(where: { $0.isFirstResponder })
     }
 
     // MARK: - Actions
