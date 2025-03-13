@@ -14,9 +14,6 @@ extension CatalogLoadingView where Self: UIViewController {
 
         let customLoadingView = CustomLoadingView()
         customLoadingView.tag = tag
-        customLoadingView.layer.cornerRadius = 10
-        customLoadingView.clipsToBounds = true
-        customLoadingView.backgroundColor = .ypWhite
         customLoadingView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(customLoadingView)
 
