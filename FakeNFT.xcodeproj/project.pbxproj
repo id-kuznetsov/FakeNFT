@@ -564,7 +564,6 @@
 		3F68069529CBBAF100B4F915 /* FakeNFT */ = {
 			isa = PBXGroup;
 			children = (
-				5CD04EDF2D5FE74C0013C751 /* Helpers */,
 				3F68069629CBBAF100B4F915 /* AppDelegate.swift */,
 				3F68069829CBBAF100B4F915 /* SceneDelegate.swift */,
 				5CD04EEE2D5FE7510013C751 /* Resources */,
@@ -573,7 +572,7 @@
 				3F6806C929CBBCAF00B4F915 /* Models */,
 				3F6806C729CBBC5B00B4F915 /* Scenes  */,
 				3F6806C629CBBC4E00B4F915 /* Services */,
-				3F6806A429CBBAF200B4F915 /* Info.plist */,
+				5CD04EDF2D5FE74C0013C751 /* Helpers */,
 			);
 			path = FakeNFT;
 			sourceTree = "<group>";
@@ -739,6 +738,7 @@
 		5CD04EEE2D5FE7510013C751 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				3F6806A429CBBAF200B4F915 /* Info.plist */,
 				5CD04EE22D5FE7510013C751 /* Assets.xcassets */,
 				5CD04EE82D5FE7510013C751 /* Localizable.strings */,
 				5CD04EED2D5FE7510013C751 /* Strings+Generated.swift */,
@@ -1306,6 +1306,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_FILE = Resources/Info.plist;
 				INFOPLIST_KEY_UILaunchScreen_Generation = NO;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
@@ -1364,6 +1365,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_FILE = Resources/Info.plist;
 				INFOPLIST_KEY_UILaunchScreen_Generation = NO;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
@@ -1384,7 +1386,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 3Q3DN5CV3K;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = FakeNFT/Info.plist;
+				INFOPLIST_FILE = FakeNFT/Resources/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen.storyboard;
 				INFOPLIST_KEY_UIRequiresFullScreen = YES;
@@ -1417,7 +1419,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 3Q3DN5CV3K;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = FakeNFT/Info.plist;
+				INFOPLIST_FILE = FakeNFT/Resources/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen.storyboard;
 				INFOPLIST_KEY_UIRequiresFullScreen = YES;
