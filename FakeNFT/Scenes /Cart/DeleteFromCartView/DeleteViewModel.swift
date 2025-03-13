@@ -13,14 +13,14 @@ protocol DeleteViewModelProtocol {
 }
 
 final class DeleteViewModel: DeleteViewModelProtocol {
-    
+
     // MARK: - Public Properties
-    
+
     let image: UIImage
     let deleteNFT: () -> Void
-    
+
     // MARK: - Initialisers
-    
+
     init(image: UIImage, deleteNFT: @escaping () -> Void) {
         self.image = image
         self.deleteNFT = deleteNFT

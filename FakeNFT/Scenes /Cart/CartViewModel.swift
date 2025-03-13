@@ -8,9 +8,9 @@
 import Foundation
 
 final class CartViewModel: CartViewModelProtocol {
-    
+
     // MARK: - Public Properties
-    
+
     let orderService: OrderService
     var onItemsUpdate: (() -> Void)?
     var onError: ((String) -> Void)?
@@ -20,43 +20,43 @@ final class CartViewModel: CartViewModelProtocol {
     var isCartEmpty: Bool {
         nftsInCart.isEmpty
     }
-    
+
     // MARK: - Private Properties
-    
+
     private let nftService: NftService
     private var nftsInCart: [OrderCard] = []
     private let sortStorage = SortStateStorage.shared
-    
+
     // MARK: - Initialisers
-    
+
     init(orderService: OrderService, nftService: NftService ) {
         self.orderService = orderService
         self.nftService = nftService
     }
-    
+
     // MARK: - Public Methods
-    
+
     func getItem(at index: Int) -> OrderCard {
         nftsInCart[index]
     }
-    
+
     func getTotalCost() -> Double {
         nftsInCart.reduce(0, { $0 + $1.price})
     }
-    
+
     func loadData() {
         orderService.getOrder(completion: { [weak self] result in
             switch result {
             case .success(let order):
                 self?.loadNFTs(by: order.nfts)
-                
+
             case .failure(let error):
                 print("Error: \(error) in \(#function) \(#file)")
                 self?.onError?(error.localizedDescription)
             }
         })
     }
-    
+
     func sortItems(by sortOption: SortOption) {
         sortStorage.sortOptionInCart = sortOption.title
         switch sortOption {
@@ -71,13 +71,12 @@ final class CartViewModel: CartViewModelProtocol {
         }
         onItemsUpdate?()
     }
-    
+
     func deleteItem(with nftId: String) {
         let updatedNftIds = nftsInCart
             .map { $0.id }
-            .filter{ $0 != nftId }
-        
-        
+            .filter { $0 != nftId }
+
         orderService.putOrder(nfts: updatedNftIds) { [weak self] result in
             switch result {
             case .success(let order):
@@ -86,10 +85,10 @@ final class CartViewModel: CartViewModelProtocol {
                 assertionFailure("Error: \(error) in \(#function) \(#file)")
                 self?.onError?(error.localizedDescription)
             }
-            
+
         }
     }
-    
+
     func clearCart() {
         orderService.putOrder(nfts: []) { [weak self] result in
             switch result {
@@ -101,19 +100,19 @@ final class CartViewModel: CartViewModelProtocol {
             }
         }
     }
-    
+
     // MARK: - Private Methods
-    
+
     private func loadNFTs(by ids: [String]) {
         let group = DispatchGroup()
         var loadedNFTs: [OrderCard] = []
-        
+
         for id in ids {
             group.enter()
             nftService.loadNft(id: id) { [weak self] result in
                 DispatchQueue.main.async {
                     defer { group.leave() }
-                    
+
                     switch result {
                     case .success(let nft):
                         guard let url = nft.images.first else {
@@ -135,17 +134,17 @@ final class CartViewModel: CartViewModelProtocol {
                 }
             }
         }
-        
+
         group.notify(queue: .main) { [weak self] in
             self?.nftsInCart = loadedNFTs
             self?.onItemsUpdate?()
             self?.applyLastSortOption()
         }
     }
-    
+
     private func applyLastSortOption() {
         guard let lastSortOptionTitle = sortStorage.sortOptionInCart,
-              let lastSortOption = SortOption.allCases.first (where: { $0.title == lastSortOptionTitle }) else {
+              let lastSortOption = SortOption.allCases.first(where: { $0.title == lastSortOptionTitle }) else {
             return
         }
         sortItems(by: lastSortOption)

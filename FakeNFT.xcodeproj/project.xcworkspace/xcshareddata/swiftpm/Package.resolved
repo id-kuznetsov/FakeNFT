@@ -1,5 +1,4 @@
 {
-  "originHash" : "6577d1efd10193e37882c2375d72d60147984d595634f9f934df8bdab2235299",
   "pins" : [
     {
       "identity" : "kingfisher",
@@ -15,8 +14,17 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/relatedcode/ProgressHUD",
       "state" : {
-        "revision" : "2b80c6f5a091c76a01f080545723f9b0bcf928cd",
-        "version" : "13.6.2"
+        "revision" : "46792db49f80454879a939f9b2be31bb61c37b0c",
+        "version" : "13.8.6"
+      }
+    },
+    {
+      "identity" : "swiftlintplugins",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/SimplyDanny/SwiftLintPlugins",
+      "state" : {
+        "revision" : "7a3d77f3dd9f91d5cea138e52c20cfceabf352de",
+        "version" : "0.58.2"
       }
     }
   ],

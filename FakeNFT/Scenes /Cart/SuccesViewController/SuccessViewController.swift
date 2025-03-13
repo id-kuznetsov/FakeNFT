@@ -8,9 +8,9 @@
 import UIKit
 
 final class SuccessViewController: UIViewController {
-    
+
     // MARK: - Private Properties
-    
+
     private lazy var successImageView: UIImageView = {
         let imageView = UIImageView(image: .success)
         imageView.contentMode = .scaleAspectFit
@@ -25,7 +25,7 @@ final class SuccessViewController: UIViewController {
         label.text = L10n.Payment.Success.title
         return label
     }()
-    
+
     private lazy var returnToCatalogButton: UIButton = {
         let button = UIButton()
         button.setTitle(L10n.Payment.Success.button, for: .normal)
@@ -37,19 +37,19 @@ final class SuccessViewController: UIViewController {
         button.addTarget(self, action: #selector(didTapBackToCatalog), for: .touchUpInside)
         return button
     }()
-    
+
     // MARK: - Lifecycle
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
         setupUI()
     }
-    
+
     // MARK: - Action
-    
+
     @objc
-    private func didTapBackToCatalog() { 
+    private func didTapBackToCatalog() {
         dismiss(animated: true, completion: nil)
         guard let tabBarController = presentingViewController as? UITabBarController else {
             return
@@ -57,12 +57,12 @@ final class SuccessViewController: UIViewController {
 
         tabBarController.selectedIndex = 1
     }
-    
+
     // MARK: - Private Methods
-    
+
     private func setupUI() {
         view.backgroundColor = .ypWhite
-        
+
         view.addSubviews(
             [
                 successImageView,
@@ -70,10 +70,10 @@ final class SuccessViewController: UIViewController {
                 returnToCatalogButton
             ]
         )
-        
+
         setupConstraints()
     }
-    
+
     private func setupConstraints() {
         NSLayoutConstraint.activate(
             successImageViewConstraints() +
@@ -81,7 +81,7 @@ final class SuccessViewController: UIViewController {
             returnToCartButtonConstraints()
         )
     }
-    
+
     private func successImageViewConstraints() -> [NSLayoutConstraint] {
         [
             successImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
@@ -90,7 +90,7 @@ final class SuccessViewController: UIViewController {
             successImageView.heightAnchor.constraint(equalToConstant: 278)
         ]
     }
-    
+
     private func successLabelConstraints() -> [NSLayoutConstraint] {
         [
             successLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
@@ -99,13 +99,16 @@ final class SuccessViewController: UIViewController {
             successLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -36)
         ]
     }
-    
+
     private func returnToCartButtonConstraints() -> [NSLayoutConstraint] {
         [
             returnToCatalogButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
             returnToCatalogButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -12),
-            returnToCatalogButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -16),
+            returnToCatalogButton.bottomAnchor.constraint(
+                equalTo: view.safeAreaLayoutGuide.bottomAnchor,
+                constant: -16
+            ),
             returnToCatalogButton.heightAnchor.constraint(equalToConstant: 60)
         ]
-    } 
+    }
 }

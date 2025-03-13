@@ -9,5 +9,5 @@ import Foundation
 
 struct CurrencyPaymentResponse: Decodable {
     let success: Bool
-    let orderId, id : String
+    let orderId, id: String
 }

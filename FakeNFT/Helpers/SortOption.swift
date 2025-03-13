@@ -13,7 +13,7 @@ enum SortOption: CaseIterable {
     case price
     case rating
     case title
-    
+
     var title: String {
         switch self {
         case .name: return L10n.SortOption.name
@@ -24,4 +24,3 @@ enum SortOption: CaseIterable {
         }
     }
 }
-

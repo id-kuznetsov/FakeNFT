@@ -9,7 +9,7 @@ import Foundation
 
 struct UpdateUserLikesDTO: Dto {
     let likes: [String]
-    
+
     func asDictionary() -> [String: String] {
         [
             "likes": likes.joined(separator: ",")

@@ -8,12 +8,12 @@
 import Foundation
 
 protocol CartViewModelProtocol {
-    var orderService: OrderService { get } 
+    var orderService: OrderService { get }
     var onItemsUpdate: (() -> Void)? { get set }
     var onError: ((String) -> Void)? { get set }
     var itemsCount: Int { get }
     var isCartEmpty: Bool { get }
-    
+
     func getItem(at index: Int) -> OrderCard
     func getTotalCost() -> Double
     func loadData()

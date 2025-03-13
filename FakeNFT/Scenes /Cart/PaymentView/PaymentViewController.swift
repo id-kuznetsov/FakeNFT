@@ -8,12 +8,12 @@
 import UIKit
 
 final class PaymentViewController: UIViewController {
-    
+
     // MARK: - Private Properties
-    
+
     private var viewModel: PaymentViewModelProtocol
     private var cartViewModel: CartViewModelProtocol
-    
+
     private lazy var leftBarButtonItem: UIBarButtonItem = {
         let button = UIBarButtonItem(
             image: .chevronLeft,
@@ -24,7 +24,7 @@ final class PaymentViewController: UIViewController {
         button.tintColor = .ypBlack
         return button
     }()
-    
+
     private lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
@@ -36,7 +36,7 @@ final class PaymentViewController: UIViewController {
         collectionView.isScrollEnabled = false
         return collectionView
     }()
-    
+
     private lazy var paymentView: UIView = {
         let view = UIView()
         view.layer.cornerRadius = 16
@@ -45,7 +45,7 @@ final class PaymentViewController: UIViewController {
         view.backgroundColor = .ypLightGrey
         return view
     }()
-    
+
     private lazy var userAgreementLabel: UILabel = {
         let label = UILabel()
         label.text = L10n.Payment.Agreement.label
@@ -54,7 +54,7 @@ final class PaymentViewController: UIViewController {
         label.textColor = .ypBlack
         return label
     }()
-    
+
     private lazy var agreementLinkButton: UIButton = {
         let button = UIButton()
         button.setTitle(L10n.Payment.Agreement.link, for: .normal)
@@ -64,7 +64,7 @@ final class PaymentViewController: UIViewController {
         button.addTarget(self, action: #selector(didTapAgreementButton), for: .touchUpInside)
         return button
     }()
-    
+
     private lazy var payButton: UIButton = {
         let button = UIButton()
         button.setTitle(L10n.Payment.Button.pay, for: .normal)
@@ -76,16 +76,16 @@ final class PaymentViewController: UIViewController {
         button.addTarget(self, action: #selector(didTapPayButton), for: .touchUpInside)
         return button
     }()
-    
+
     private lazy var activityIndicator: UIActivityIndicatorView = {
         let activityIndicator = UIActivityIndicatorView(style: .medium)
         activityIndicator.color = .ypBlack
         activityIndicator.hidesWhenStopped = true
         return activityIndicator
     }()
-    
+
     // MARK: - Initialisers
-    
+
     init(viewModel: PaymentViewModelProtocol, cartViewModel: CartViewModelProtocol) {
         self.viewModel = viewModel
         self.cartViewModel = cartViewModel
@@ -94,44 +94,44 @@ final class PaymentViewController: UIViewController {
         setupBindings()
         viewModel.loadData()
     }
-    
+
     @available(*, unavailable)
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     // MARK: - Lifecycle
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
         setupUI()
         setupNavigationBar()
     }
-    
+
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.tabBarController?.tabBar.isHidden = true
     }
-    
+
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         self.tabBarController?.tabBar.isHidden = false
     }
-    
+
     // MARK: - Actions
-    
+
     @objc
     private func didTapBackButton() {
         navigationController?.popViewController(animated: true)
     }
-    
+
     @objc
     private func didTapAgreementButton() {
         let agreementVC = AgreementWebViewController()
         navigationController?.pushViewController(agreementVC, animated: true)
     }
-    
+
     @objc
     private func didTapPayButton() {
         if !viewModel.isCurrencySelected() {
@@ -141,31 +141,31 @@ final class PaymentViewController: UIViewController {
             viewModel.paymentProcessing()
         }
     }
-    
+
     // MARK: - Private Methods
-    
+
     private func setupBindings() {
         viewModel.onItemsUpdate = { [weak self] in
             self?.collectionView.reloadData()
             self?.setLoadingState(isLoading: false)
         }
-        
+
         viewModel.onPaymentProcessingStart = { [weak self] in
             self?.cartViewModel.clearCart()
             self?.setLoadingStateForPayment(isLoading: false)
             self?.showSuccessScreen()
-            
+
         }
-        
+
         viewModel.onPaymentError = { [weak self] in
             self?.showPaymentErrorAlert()
         }
     }
-    
+
     private func setupUI() {
         view.backgroundColor = .ypWhite
         title = L10n.Payment.title
-        
+
         view.addSubviews(
             [
                 collectionView,
@@ -176,17 +176,17 @@ final class PaymentViewController: UIViewController {
                 activityIndicator
             ]
         )
-        
+
         setupConstraints()
     }
-    
+
     private func setupNavigationBar() {
         navigationItem.leftBarButtonItem = leftBarButtonItem
     }
-    
+
     private func setLoadingState(isLoading: Bool) {
         isLoading ? activityIndicator.startAnimating() : activityIndicator.stopAnimating()
-        
+
         let viewsToHide = [
             collectionView,
             paymentView,
@@ -196,25 +196,25 @@ final class PaymentViewController: UIViewController {
         ]
         viewsToHide.forEach { $0.isHidden = isLoading }
     }
-    
+
     private func setLoadingStateForPayment(isLoading: Bool) {
         isLoading ? activityIndicator.startAnimating() : activityIndicator.stopAnimating()
-        
+
         setInteractionEnabled(!isLoading)
     }
-    
+
     private func setInteractionEnabled(_ isEnabled: Bool) {
         UIApplication.shared.windows.first?.isUserInteractionEnabled = isEnabled
     }
-    
+
     private func showSuccessScreen() {
-        let vc = SuccessViewController()
-        vc.modalPresentationStyle = .fullScreen
-        present(vc, animated: true) { [weak self] in
+        let viewController = SuccessViewController()
+        viewController.modalPresentationStyle = .fullScreen
+        present(viewController, animated: true) { [weak self] in
             self?.navigationController?.popViewController(animated: false)
         }
     }
-    
+
     private func showPaymentErrorAlert() {
         setInteractionEnabled(true)
         let cancelPaymentAction: () -> Void = { [weak self] in
@@ -229,7 +229,7 @@ final class PaymentViewController: UIViewController {
                 self?.viewModel.paymentProcessing()
             }
     }
-    
+
     private func showAlertForNotChoosePaymentMethod() {
         AlertPresenter.presentAlertWithOneSelection(
             on: self,
@@ -238,7 +238,7 @@ final class PaymentViewController: UIViewController {
             actionTitle: L10n.Payment.Alert.buttonTextOk
         )
     }
-    
+
     private func setupConstraints() {
         NSLayoutConstraint.activate(
             collectionViewConstraints() +
@@ -249,16 +249,19 @@ final class PaymentViewController: UIViewController {
         )
         activityIndicator.constraintCenters(to: view)
     }
-    
+
     private func collectionViewConstraints() -> [NSLayoutConstraint] {
         [
-            collectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: Constants.topInset),
+            collectionView.topAnchor.constraint(
+                equalTo: view.safeAreaLayoutGuide.topAnchor,
+                constant: Constants.topInset
+            ),
             collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: Constants.leftInset),
             collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -Constants.rightInset),
             collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ]
     }
-    
+
     private func paymentViewConstraints() -> [NSLayoutConstraint] {
         [
             paymentView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
@@ -267,7 +270,7 @@ final class PaymentViewController: UIViewController {
             paymentView.heightAnchor.constraint(equalToConstant: 186)
         ]
     }
-    
+
     private func userAgreementLabelConstraint() -> [NSLayoutConstraint] {
         [
             userAgreementLabel.topAnchor.constraint(equalTo: paymentView.topAnchor, constant: 16),
@@ -276,7 +279,7 @@ final class PaymentViewController: UIViewController {
             userAgreementLabel.bottomAnchor.constraint(equalTo: payButton.topAnchor, constant: -42)
         ]
     }
-    
+
     private func agreementButtonConstraints() -> [NSLayoutConstraint] {
         [
             agreementLinkButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
@@ -285,7 +288,7 @@ final class PaymentViewController: UIViewController {
             agreementLinkButton.bottomAnchor.constraint(equalTo: payButton.topAnchor, constant: -16)
         ]
     }
-    
+
     private func payButtonConstraints() -> [NSLayoutConstraint] {
         [
             payButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
@@ -303,8 +306,11 @@ extension PaymentViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         viewModel.paymentMethodCount
     }
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+
+    func collectionView(
+        _ collectionView: UICollectionView,
+        cellForItemAt indexPath: IndexPath
+    ) -> UICollectionViewCell {
         let item: PaymentCollectionViewCell = collectionView.dequeueReusableCell(indexPath: indexPath)
         let card = viewModel.getItem(at: indexPath.item)
         item.configureCell(card: card)
@@ -317,9 +323,11 @@ extension PaymentViewController: UICollectionViewDataSource {
 extension PaymentViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         guard let item = collectionView.cellForItem(at: indexPath) as? PaymentCollectionViewCell else { return }
-        
+
         if let prevIndex = viewModel.getSelectedCurrencyIndex(),
-           let prevCell = collectionView.cellForItem(at: IndexPath(row: prevIndex, section: 0)) as? PaymentCollectionViewCell {
+           let prevCell = collectionView.cellForItem(
+            at: IndexPath(row: prevIndex, section: 0)
+           ) as? PaymentCollectionViewCell {
             prevCell.makeCellSelected(isSelected: false)
         }
         viewModel.setSelectedCurrencyIndex(indexPath.item)
@@ -330,18 +338,33 @@ extension PaymentViewController: UICollectionViewDelegate {
 // MARK: UICollectionViewDelegateFlowLayout
 
 extension PaymentViewController: UICollectionViewDelegateFlowLayout {
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let totalWidth = view.frame.width - Constants.leftInset - Constants.rightInset - Constants.cellSpacing * (CGFloat(Constants.cellCountForRow) - 1)
+    func collectionView(
+        _ collectionView: UICollectionView,
+        layout collectionViewLayout: UICollectionViewLayout,
+        sizeForItemAt indexPath: IndexPath
+    ) -> CGSize {
+        let totalWidth = view.frame.width
+        - Constants.leftInset
+        - Constants.rightInset
+        - Constants.cellSpacing
+        * (CGFloat(Constants.cellCountForRow) - 1)
         let cellWidth = totalWidth / CGFloat(Constants.cellCountForRow)
         return CGSize(width: cellWidth, height: Constants.cellHeight)
     }
-    
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
+
+    func collectionView(
+        _ collectionView: UICollectionView,
+        layout collectionViewLayout: UICollectionViewLayout,
+        minimumInteritemSpacingForSectionAt section: Int
+    ) -> CGFloat {
         return Constants.cellSpacing
     }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+
+    func collectionView(
+        _ collectionView: UICollectionView,
+        layout collectionViewLayout: UICollectionViewLayout,
+        minimumLineSpacingForSectionAt section: Int
+    ) -> CGFloat {
         return Constants.cellSpacing
     }
 }

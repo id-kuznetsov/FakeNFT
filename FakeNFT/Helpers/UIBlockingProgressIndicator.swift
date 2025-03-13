@@ -8,7 +8,7 @@
 import UIKit
 
 final class UIBlockingProgressIndicator {
-    
+
     private static var overlayView: UIView?
     private static var activityIndicator: UIActivityIndicatorView?
 
@@ -18,7 +18,7 @@ final class UIBlockingProgressIndicator {
             .flatMap { $0.windows }
             .first { $0.isKeyWindow }
     }
-    
+
     static func show() {
         guard let window = window else { return }
         window.isUserInteractionEnabled = false
@@ -40,11 +40,11 @@ final class UIBlockingProgressIndicator {
         ])
 
         window.addSubview(overlay)
-        
+
         overlayView = overlay
         activityIndicator = indicator
     }
-    
+
     static func dismiss() {
         guard let window = window else { return }
         window.isUserInteractionEnabled = true

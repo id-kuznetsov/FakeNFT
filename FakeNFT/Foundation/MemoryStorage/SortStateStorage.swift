@@ -8,7 +8,7 @@
 import Foundation
 
 final class SortStateStorage {
-    
+
     static let shared = SortStateStorage()
 
     var sortOptionInCart: String? {
@@ -19,11 +19,11 @@ final class SortStateStorage {
             storage.set(newValue, forKey: Keys.sortOptionInCart.rawValue)
         }
     }
-    
+
     private enum Keys: String {
         case sortOptionInCart
     }
     private let storage = UserDefaults.standard
-    
+
     private init() {}
 }

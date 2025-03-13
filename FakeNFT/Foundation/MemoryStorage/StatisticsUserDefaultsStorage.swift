@@ -15,9 +15,9 @@ protocol StatisticsUserDefaultsStorageProtocol {
 }
 
 final class StatisticsUserDefaultsStorage: StatisticsUserDefaultsStorageProtocol {
-    
+
     private let storage = UserDefaults.standard
-    
+
     var currentPage: Int {
         get {
             return storage.integer(forKey: Keys.currentPage.rawValue)
@@ -26,7 +26,7 @@ final class StatisticsUserDefaultsStorage: StatisticsUserDefaultsStorageProtocol
             storage.set(newValue, forKey: Keys.currentPage.rawValue)
         }
     }
-    
+
     var previousPageSize: Int {
         get {
             return storage.integer(forKey: Keys.previousPageSize.rawValue)
@@ -35,7 +35,7 @@ final class StatisticsUserDefaultsStorage: StatisticsUserDefaultsStorageProtocol
             storage.set(newValue, forKey: Keys.previousPageSize.rawValue)
         }
     }
-    
+
     var selectedUsersSortOption: SortOption {
         get {
             if let title = storage.string(forKey: Keys.sortOptionInStatistics.rawValue) {
@@ -47,13 +47,13 @@ final class StatisticsUserDefaultsStorage: StatisticsUserDefaultsStorageProtocol
             storage.set(newValue.title, forKey: Keys.sortOptionInStatistics.rawValue)
         }
     }
-    
+
     func clearStatisticsUserDefaults() {
         storage.removeObject(forKey: Keys.currentPage.rawValue)
         storage.removeObject(forKey: Keys.sortOptionInStatistics.rawValue)
         storage.removeObject(forKey: Keys.previousPageSize.rawValue)
     }
-    
+
     private enum Keys: String {
         case sortOptionInStatistics
         case currentPage

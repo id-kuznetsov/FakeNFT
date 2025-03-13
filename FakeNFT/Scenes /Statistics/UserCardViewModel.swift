@@ -20,20 +20,20 @@ protocol UserCardViewModelProtocol {
 }
 
 final class UserCardViewModel: UserCardViewModelProtocol {
-    
+
     // MARK: - Public properties
     var userWebsite: String? { user?.website }
     var onUserLoaded: ((User) -> Void)?
     var onLoadingStateChanged: ((Bool) -> Void)?
     var onErrorOccurred: ((String) -> Void)?
     var nftIds: [String] = []
-    
+
     // MARK: - Private properties
     private let userService: UserService
     private let nftService: NftService
     private let orderService: OrderService
     private let userId: String
-    
+
     private var user: User? {
         didSet {
             guard let user = user else { return }
@@ -41,7 +41,7 @@ final class UserCardViewModel: UserCardViewModelProtocol {
             onUserLoaded?(user)
         }
     }
-    
+
     // MARK: - Initializers
     init(
         userService: UserService,
@@ -56,12 +56,12 @@ final class UserCardViewModel: UserCardViewModelProtocol {
         self.userId = userId
         self.nftIds = nftIds
     }
-    
+
     // MARK: Public methods
     func loadUserData() {
         getUser()
     }
-    
+
     func createUserCollectionViewModel() -> UserNftCollectionViewModelProtocol {
         return UserNftCollectionViewModel(
             nftService: nftService,
@@ -71,23 +71,23 @@ final class UserCardViewModel: UserCardViewModelProtocol {
             nftIds: nftIds
         )
     }
-    
+
     func checkUserWebsite(completion: @escaping (Bool) -> Void) {
         guard let urlString = userWebsite, let url = URL(string: urlString) else {
             completion(false)
             return
         }
-        
+
         userService.checkUserWebsite(url: url, completion: completion)
     }
-    
+
     // MARK: Private methods
     private func getUser() {
         onLoadingStateChanged?(true)
         userService.fetchUser(by: userId) { [weak self] result in
             guard let self = self else { return }
             self.onLoadingStateChanged?(false)
-            
+
             switch result {
             case .success(let user):
                 self.user = user

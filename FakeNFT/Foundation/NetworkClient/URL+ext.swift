@@ -1,7 +1,7 @@
 import Foundation
 
 extension URL {
-    func isReachable(completion: @escaping (Bool) -> ()) {
+    func isReachable(completion: @escaping (Bool) -> Void) {
         var request = URLRequest(url: self)
         request.httpMethod = "HEAD"
         URLSession.shared.dataTask(with: request) { _, response, _ in

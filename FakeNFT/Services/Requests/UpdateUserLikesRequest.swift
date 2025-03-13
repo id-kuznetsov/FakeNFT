@@ -9,13 +9,13 @@ import Foundation
 
 struct UpdateUserLikesRequest: NetworkRequest {
     let likes: [String]
-    
+
     var endpoint: URL? {
         URL(string: "\(RequestConstants.baseURL)/\(RequestConstants.profile)")
     }
-    
+
     var httpMethod: HttpMethod { .put }
-    
+
     var dto: Dto? {
         return UpdateUserLikesDTO(likes: likes)
     }

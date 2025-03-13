@@ -10,10 +10,10 @@ import Foundation
 struct UsersRequest: NetworkRequest {
     let page: Int
     let size: Int
-    
+
     var endpoint: URL? {
         URL(string: "\(RequestConstants.baseURL)/\(RequestConstants.users)?page=\(page)&size=\(size)")
     }
-    
+
     var dto: Dto? { nil }
 }

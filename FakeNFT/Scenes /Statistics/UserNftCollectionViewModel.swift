@@ -21,37 +21,37 @@ protocol UserNftCollectionViewModelProtocol {
 }
 
 final class UserNftCollectionViewModel: UserNftCollectionViewModelProtocol {
-    
+
     // MARK: - Private properties
     private let nftService: NftService
     private let userService: UserService
     private let orderService: OrderService
     private let userId: String
     private let nftIds: [String]
-    
+
     private(set) var nftCollection: [Nft] = [] {
         didSet {
             onNftCollectionUpdated?()
         }
     }
-    
+
     private(set) var likedNfts: Set<String> = [] {
         didSet {
             onNftCollectionUpdated?()
         }
     }
-    
+
     private(set) var orderedNfts: Set<String> = [] {
         didSet {
             onNftCollectionUpdated?()
         }
     }
-    
+
     var onNftCollectionUpdated: (() -> Void)?
     var onLoadingStateChanged: ((Bool) -> Void)?
     var onErrorOccurred: ((String) -> Void)?
     var onNoNftAvailable: (() -> Void)?
-    
+
     // MARK: - Initializers
     init(
         nftService: NftService,
@@ -66,34 +66,34 @@ final class UserNftCollectionViewModel: UserNftCollectionViewModelProtocol {
         self.userId = userId
         self.nftIds = nftIds
     }
-    
+
     // MARK: - Public methods
     func loadNftCollection() {
         onLoadingStateChanged?(true)
-        
+
         let group = DispatchGroup()
-        
+
         loadUserLikes(using: group)
         loadNfts(using: group)
         loadOrder(using: group)
-        
+
         group.notify(queue: .main) {
             self.onLoadingStateChanged?(false)
         }
     }
-    
+
     func toggleLike(for nftId: String) {
         onLoadingStateChanged?(true)
-        
+
         if likedNfts.contains(nftId) {
             likedNfts.remove(nftId)
         } else {
             likedNfts.insert(nftId)
         }
-        
+
         userService.updateUserLikes(likes: Array(likedNfts)) { [weak self] result in
             self?.onLoadingStateChanged?(false)
-            
+
             switch result {
             case .success:
                 self?.onNftCollectionUpdated?()
@@ -102,19 +102,19 @@ final class UserNftCollectionViewModel: UserNftCollectionViewModelProtocol {
             }
         }
     }
-    
+
     func toggleCart(for nftId: String) {
         onLoadingStateChanged?(true)
-        
+
         if orderedNfts.contains(nftId) {
             orderedNfts.remove(nftId)
         } else {
             orderedNfts.insert(nftId)
         }
-        
+
         orderService.putOrder(nfts: Array(orderedNfts)) { [weak self] result in
             self?.onLoadingStateChanged?(false)
-            
+
             switch result {
             case .success:
                 self?.onNftCollectionUpdated?()
@@ -123,8 +123,7 @@ final class UserNftCollectionViewModel: UserNftCollectionViewModelProtocol {
             }
         }
     }
-    
-    
+
     private func loadOrder(using group: DispatchGroup) {
         group.enter()
         orderService.getOrder { [weak self] result in
@@ -137,10 +136,10 @@ final class UserNftCollectionViewModel: UserNftCollectionViewModelProtocol {
             }
         }
     }
-    
+
     private func loadUserLikes(using group: DispatchGroup) {
         group.enter()
-        userService.fetchUserLikes() { [weak self] result in
+        userService.fetchUserLikes { [weak self] result in
             defer { group.leave() }
             switch result {
             case .success(let likes):
@@ -150,10 +149,10 @@ final class UserNftCollectionViewModel: UserNftCollectionViewModelProtocol {
             }
         }
     }
-    
+
     private func loadNfts(using group: DispatchGroup) {
         var loadedNfts: [Nft] = []
-        
+
         for nftId in nftIds {
             group.enter()
             nftService.loadNft(id: nftId) { [weak self] result in
@@ -166,19 +165,19 @@ final class UserNftCollectionViewModel: UserNftCollectionViewModelProtocol {
                 }
             }
         }
-        
+
         group.notify(queue: .main) { [weak self] in
             guard let self else { return }
             self.nftCollection = self.sortNftCollection(loadedNfts)
-            
+
             if self.nftCollection.isEmpty {
                 self.onNoNftAvailable?()
             }
-            
+
             self.onLoadingStateChanged?(false)
         }
     }
-    
+
     private func sortNftCollection(_ nfts: [Nft]) -> [Nft] {
         nfts.sorted { $0.name.lowercased() < $1.name.lowercased() }
     }

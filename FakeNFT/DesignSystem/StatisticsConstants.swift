@@ -17,7 +17,7 @@ enum StatisticsConstants {
         static let cornerRadiusHight: CGFloat = 14
         static let cornerRadiusXHight: CGFloat = 16
         static let cornerRadiusBig: CGFloat = 34
-        
+
         enum Margin {
             static let xxSmall: CGFloat = 2
             static let xSmall: CGFloat = 4
@@ -27,12 +27,12 @@ enum StatisticsConstants {
             static let medium: CGFloat = 16
             static let large: CGFloat = 24
         }
-        
+
         enum Spacing {
             static let regular: CGFloat = 8
         }
     }
-    
+
     enum StatisticsVc {
         enum TableViewParams {
             static let heightForRow: CGFloat = 88
@@ -49,7 +49,7 @@ enum StatisticsConstants {
             static let containerViewbottomInset = Common.zeroConstant
         }
     }
-    
+
     enum UserCardVc {
         enum MainScreen {
             static let nftButtonSpacing = Common.Spacing.regular
@@ -63,7 +63,7 @@ enum StatisticsConstants {
             static let nftButtonTopInset: CGFloat = 56
         }
     }
-    
+
     enum UserNftVc {
         enum MainScreen {
             static let cellHeight: CGFloat = 172
@@ -90,4 +90,3 @@ enum StatisticsConstants {
         }
     }
 }
-

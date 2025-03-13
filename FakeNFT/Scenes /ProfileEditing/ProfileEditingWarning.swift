@@ -5,7 +5,7 @@ enum ProfileEditingWarning {
     case nameLimit(Int)
     case descriptionLimit(Int)
     case incorrectWebsite
-    
+
     var title: String {
         switch self {
         case .emptyName:

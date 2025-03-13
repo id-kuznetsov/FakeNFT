@@ -39,7 +39,8 @@ final class CustomNavigationController: UINavigationController {
         navigationBar.scrollEdgeAppearance = transparentAppearance
     }
 
-    @objc private func goBack() {
+    @objc
+    private func goBack() {
         popViewController(animated: true)
     }
 }
