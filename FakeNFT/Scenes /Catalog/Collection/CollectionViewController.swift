@@ -177,13 +177,6 @@ final class CollectionViewController: UIViewController, CatalogErrorView, Rating
         navigationController?.pushViewController(viewController, animated: true)
     }
 
-//    private func presentNftDetailViewController(with nft: Nft) {
-//        let assembly = NftDetailAssembly(servicesAssembler: servicesAssembly)
-//        let nftInput = NftDetailInput(id: Constants.testNftId)
-//        let nftViewController = assembly.build(with: nftInput)
-//        present(nftViewController, animated: true)
-//    }
-
     // MARK: - Actions
     @objc
     private func didPullToRefresh() {

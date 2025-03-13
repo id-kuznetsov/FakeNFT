@@ -56,8 +56,16 @@ final class ProfileCoordinatorImpl: ProfileCoordinator {
     }
 
     func webViewScene(url: URL) {
-        let webViewViewController = WebViewViewController(url: url)
-        webViewViewController.hidesBottomBarWhenPushed = true
-        navigationController.pushViewController(webViewViewController, animated: true)
+        let viewModel = WebViewViewModel(url: url)
+        let webViewController = WebViewController(viewModel: viewModel)
+        webViewController.delegate = self
+        webViewController.hidesBottomBarWhenPushed = true
+        navigationController.pushViewController(webViewController, animated: true)
+    }
+}
+
+extension ProfileCoordinatorImpl: WebViewControllerDelegate {
+    func webViewControllerDidBack(_ controller: WebViewController) {
+        navigationController.popViewController(animated: true)
     }
 }
