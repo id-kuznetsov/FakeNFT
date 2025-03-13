@@ -16,7 +16,7 @@ final class ProfileCoordinatorImpl: ProfileCoordinator {
         navigationController.setViewControllers([viewController], animated: false)
     }
 
-    func profileEditingScene(profile: Profile, delegate: ProfileEditingDelegate) {
+    func profileEditingScene(profile: ProfileDTO, delegate: ProfileEditingDelegate) {
         guard let profileViewController = navigationController.topViewController as? ProfileViewController else {
             return
         }

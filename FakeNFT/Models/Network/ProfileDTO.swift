@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct CatalogProfileDTO: Decodable {
+struct ProfileDTO: Decodable {
     let name: String
     let avatar: String
     let description: String
@@ -17,8 +17,8 @@ struct CatalogProfileDTO: Decodable {
     let id: String
 }
 
-extension CatalogProfileDTO {
-    func toDomainModel() -> CatalogProfile? {
+extension ProfileDTO {
+    func toDomainModel() -> Profile? {
         guard
             let avatar = URL(string: self.avatar),
             let website = URL(string: self.website)
@@ -26,7 +26,7 @@ extension CatalogProfileDTO {
             return nil
         }
 
-        return CatalogProfile(
+        return Profile(
             name: self.name,
             avatar: avatar,
             description: self.description,

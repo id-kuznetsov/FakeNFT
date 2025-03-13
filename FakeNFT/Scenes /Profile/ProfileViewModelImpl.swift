@@ -1,7 +1,7 @@
 import Foundation
 
 final class ProfileViewModelImpl: ProfileViewModel {
-    var profile = Observable<Profile?>(value: nil)
+    var profile = Observable<ProfileDTO?>(value: nil)
     var isLoading = Observable<Bool>(value: true)
     var errorModel = Observable<ErrorModel?>(value: nil)
 

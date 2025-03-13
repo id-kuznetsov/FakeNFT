@@ -29,11 +29,11 @@ final class ProfileEditingViewModelImpl: ProfileEditingViewModel {
     // MARK: - Private Properties
 
     private let coordinator: ProfileCoordinator
-    private let profile: Profile
+    private let profile: ProfileDTO
 
     // MARK: - Init
 
-    init(profile: Profile, coordinator: ProfileCoordinator) {
+    init(profile: ProfileDTO, coordinator: ProfileCoordinator) {
         self.coordinator = coordinator
         self.profile = profile
         avatar = Observable(value: profile.avatar)

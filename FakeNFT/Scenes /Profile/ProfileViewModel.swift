@@ -1,7 +1,7 @@
 import Foundation
 
 protocol ProfileViewModel {
-    var profile: Observable<Profile?> { get }
+    var profile: Observable<ProfileDTO?> { get }
     var isLoading: Observable<Bool> { get }
     var errorModel: Observable<ErrorModel?> { get }
 

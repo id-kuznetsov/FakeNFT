@@ -1,16 +1,16 @@
 import Foundation
 import Combine
 
-typealias ProfileCompletion = (Result<Profile, ProfileServiceError>) -> Void
+typealias ProfileCompletion = (Result<ProfileDTO, ProfileServiceError>) -> Void
 
 protocol ProfileService {
     func fetchProfile(_ completion: @escaping ProfileCompletion)
     func updateProfile(with dto: ProfileEditingDto, _ completion: @escaping ProfileCompletion)
     func updateFavouritesNft(favourites: [String], _ completion: @escaping ProfileCompletion)
     func fetchProfileCombine(
-        profile: CatalogProfile?,
+        profile: Profile?,
         skipCache: Bool
-    ) -> AnyPublisher<CatalogProfile, Error>
+    ) -> AnyPublisher<Profile, Error>
 }
 
 enum ProfileServiceError: Error {
@@ -47,7 +47,7 @@ final class ProfileServiceImpl: ProfileService {
         fetchProfileTask?.cancel()
         let request = ProfileRequest()
 
-        fetchProfileTask = networkClient.send(request: request, type: Profile.self) { [weak self] result in
+        fetchProfileTask = networkClient.send(request: request, type: ProfileDTO.self) { [weak self] result in
             self?.fetchProfileTask = nil
             switch result {
             case .success(let profile):
@@ -62,7 +62,7 @@ final class ProfileServiceImpl: ProfileService {
         updateProfileTask?.cancel()
         let request = ProfileEditingRequest(dto: dto)
 
-        updateProfileTask = networkClient.send(request: request, type: Profile.self) { [weak self] result in
+        updateProfileTask = networkClient.send(request: request, type: ProfileDTO.self) { [weak self] result in
             self?.updateProfileTask = nil
             switch result {
             case .success(let profile):
@@ -78,7 +78,7 @@ final class ProfileServiceImpl: ProfileService {
         let dto = ProfileFavouritesDto(likes: favourites)
         let request = FavouritesPutRequest(dto: dto)
 
-        updateFavouritesTask = networkClient.send(request: request, type: Profile.self) { [weak self] result in
+        updateFavouritesTask = networkClient.send(request: request, type: ProfileDTO.self) { [weak self] result in
             self?.updateFavouritesTask = nil
             switch result {
             case .success(let profile):
@@ -91,9 +91,9 @@ final class ProfileServiceImpl: ProfileService {
 
     // MARK: - Combine
     func fetchProfileCombine(
-        profile: CatalogProfile?,
+        profile: Profile?,
         skipCache: Bool
-    ) -> AnyPublisher<CatalogProfile, Error> {
+    ) -> AnyPublisher<Profile, Error> {
         let networkPublisher = networkPublisher(profile: profile)
 
         if skipCache {
@@ -117,16 +117,16 @@ final class ProfileServiceImpl: ProfileService {
 
     private func cacheKey() -> String { "profile" }
 
-    private func cachePublisher() -> AnyPublisher<CatalogProfile, Error> {
+    private func cachePublisher() -> AnyPublisher<Profile, Error> {
         let key = cacheKey()
 
-        return Future<CatalogProfile, Error> { [weak self] promise in
+        return Future<Profile, Error> { [weak self] promise in
             guard let self = self else {
                 promise(.failure(CacheError.emptyOrStale))
                 return
             }
 
-            self.cacheService.load(type: CatalogProfile.self, forKey: key) { result in
+            self.cacheService.load(type: Profile.self, forKey: key) { result in
                 switch result {
                 case .success(let cacheResult):
                     promise(.success(cacheResult.data))
@@ -138,8 +138,8 @@ final class ProfileServiceImpl: ProfileService {
         .eraseToAnyPublisher()
     }
 
-    private func networkPublisher(profile: CatalogProfile?) -> AnyPublisher<CatalogProfile, Error> {
-        return Future<CatalogProfile, Error> { [weak self] promise in
+    private func networkPublisher(profile: Profile?) -> AnyPublisher<Profile, Error> {
+        return Future<Profile, Error> { [weak self] promise in
             guard let self = self else {
                 promise(.failure(NSError(domain: "ProfileService", code: -1, userInfo: nil)))
                 return
@@ -155,7 +155,7 @@ final class ProfileServiceImpl: ProfileService {
 
             self.networkClient.send(
                 request: request,
-                type: CatalogProfileDTO.self
+                type: ProfileDTO.self
             ) { result in
                 switch result {
                 case .success(let response):

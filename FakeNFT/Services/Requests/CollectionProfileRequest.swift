@@ -1,7 +1,7 @@
 import Foundation
 
 struct CollectionProfileRequest: NetworkRequest {
-    var profile: CatalogProfile?
+    var profile: Profile?
 
     var endpoint: URL? {
         URL(string: "\(RequestConstants.baseURL)/api/v1/profile/1")
@@ -24,7 +24,7 @@ struct CollectionProfileRequest: NetworkRequest {
 }
 
 struct UpdateProfileDto: Dto {
-    let profile: CatalogProfileDTO
+    let profile: ProfileDTO
 
     enum CodingKeys: String, CodingKey {
         case likes

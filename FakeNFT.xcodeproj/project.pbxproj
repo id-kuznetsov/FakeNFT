@@ -37,7 +37,6 @@
 		18800AD92D6CA0B6004B5BAE /* ProfileEditingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18800AD82D6CA0B6004B5BAE /* ProfileEditingViewController.swift */; };
 		18800ADB2D6CAA31004B5BAE /* ProfileEditingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18800ADA2D6CAA31004B5BAE /* ProfileEditingViewModel.swift */; };
 		18800B002D6CC9B0004B5BAE /* AvatarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18800AFF2D6CC9B0004B5BAE /* AvatarView.swift */; };
-		188B590B2D68C066005D960A /* Profile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 188B590A2D68C066005D960A /* Profile.swift */; };
 		188B590D2D68C158005D960A /* ProfileViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 188B590C2D68C158005D960A /* ProfileViewModel.swift */; };
 		188B590F2D68C40F005D960A /* ProfileService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 188B590E2D68C40F005D960A /* ProfileService.swift */; };
 		188B59112D68C9AC005D960A /* ProfileCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 188B59102D68C9AC005D960A /* ProfileCardView.swift */; };
@@ -103,8 +102,8 @@
 		9120407D2D7A23C2007BF93F /* CatalogNftDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9120407C2D7A23C2007BF93F /* CatalogNftDTO.swift */; };
 		912040872D7AF06A007BF93F /* CatalogOrderDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 912040862D7AF06A007BF93F /* CatalogOrderDTO.swift */; };
 		912040982D7AFBC2007BF93F /* CollectionProfileRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 912040972D7AFBC2007BF93F /* CollectionProfileRequest.swift */; };
-		9120409C2D7B07F9007BF93F /* CatalogProfileDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9120409B2D7B07F9007BF93F /* CatalogProfileDTO.swift */; };
-		9120409E2D7B089C007BF93F /* CatalogProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9120409D2D7B089C007BF93F /* CatalogProfile.swift */; };
+		9120409C2D7B07F9007BF93F /* ProfileDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9120409B2D7B07F9007BF93F /* ProfileDTO.swift */; };
+		9120409E2D7B089C007BF93F /* Profile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9120409D2D7B089C007BF93F /* Profile.swift */; };
 		913D882E2D637B08001304A3 /* CollectionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 913D882D2D637B08001304A3 /* CollectionService.swift */; };
 		913D88302D637DEB001304A3 /* Collection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 913D882F2D637DEB001304A3 /* Collection.swift */; };
 		913D88352D644D3C001304A3 /* CollectionsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 913D88342D644D3C001304A3 /* CollectionsViewModel.swift */; };
@@ -219,7 +218,6 @@
 		18800AD82D6CA0B6004B5BAE /* ProfileEditingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileEditingViewController.swift; sourceTree = "<group>"; };
 		18800ADA2D6CAA31004B5BAE /* ProfileEditingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileEditingViewModel.swift; sourceTree = "<group>"; };
 		18800AFF2D6CC9B0004B5BAE /* AvatarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AvatarView.swift; sourceTree = "<group>"; };
-		188B590A2D68C066005D960A /* Profile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Profile.swift; sourceTree = "<group>"; };
 		188B590C2D68C158005D960A /* ProfileViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewModel.swift; sourceTree = "<group>"; };
 		188B590E2D68C40F005D960A /* ProfileService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileService.swift; sourceTree = "<group>"; };
 		188B59102D68C9AC005D960A /* ProfileCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileCardView.swift; sourceTree = "<group>"; };
@@ -289,8 +287,8 @@
 		9120407C2D7A23C2007BF93F /* CatalogNftDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatalogNftDTO.swift; sourceTree = "<group>"; };
 		912040862D7AF06A007BF93F /* CatalogOrderDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatalogOrderDTO.swift; sourceTree = "<group>"; };
 		912040972D7AFBC2007BF93F /* CollectionProfileRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionProfileRequest.swift; sourceTree = "<group>"; };
-		9120409B2D7B07F9007BF93F /* CatalogProfileDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatalogProfileDTO.swift; sourceTree = "<group>"; };
-		9120409D2D7B089C007BF93F /* CatalogProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatalogProfile.swift; sourceTree = "<group>"; };
+		9120409B2D7B07F9007BF93F /* ProfileDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileDTO.swift; sourceTree = "<group>"; };
+		9120409D2D7B089C007BF93F /* Profile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Profile.swift; sourceTree = "<group>"; };
 		913D882D2D637B08001304A3 /* CollectionService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionService.swift; sourceTree = "<group>"; };
 		913D882F2D637DEB001304A3 /* Collection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Collection.swift; sourceTree = "<group>"; };
 		913D88342D644D3C001304A3 /* CollectionsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionsViewModel.swift; sourceTree = "<group>"; };
@@ -649,7 +647,7 @@
 				5CDAEBA02D63E329001BFC28 /* CurrencyCard.swift */,
 				9174C0572D6DA79E0024C358 /* AlertModel.swift */,
 				9174C0552D6DA6150024C358 /* AlertButton.swift */,
-				9120409D2D7B089C007BF93F /* CatalogProfile.swift */,
+				9120409D2D7B089C007BF93F /* Profile.swift */,
 				913D882F2D637DEB001304A3 /* Collection.swift */,
 				91E038E52D7EC3E500FF8505 /* CatalogOrder.swift */,
 				919DFA0D2D81B2B200C2A8E4 /* CatalogNft.swift */,
@@ -684,7 +682,6 @@
 		3F6806D829CC979D00B4F915 /* Network */ = {
 			isa = PBXGroup;
 			children = (
-				188B590A2D68C066005D960A /* Profile.swift */,
 				5CDAEB932D61ED43001BFC28 /* Order.swift */,
 				5CDC77612D68946D00EAA1F0 /* Currency.swift */,
 				5CDC79372D7643B600EAA1F0 /* CurrencyPaymentResponse.swift */,
@@ -692,7 +689,7 @@
 				91EBBFA82D738E7D00955730 /* CollectionDTO.swift */,
 				9120407C2D7A23C2007BF93F /* CatalogNftDTO.swift */,
 				912040862D7AF06A007BF93F /* CatalogOrderDTO.swift */,
-				9120409B2D7B07F9007BF93F /* CatalogProfileDTO.swift */,
+				9120409B2D7B07F9007BF93F /* ProfileDTO.swift */,
 			);
 			path = Network;
 			sourceTree = "<group>";
@@ -1051,9 +1048,8 @@
 				1874E2972D788BD50036D8B6 /* MyNFTsViewModel.swift in Sources */,
 				1874E2A22D79AD790036D8B6 /* FavouriteNFTsViewController.swift in Sources */,
 				188B59262D691482005D960A /* TokenStorage.swift in Sources */,
-				9120409E2D7B089C007BF93F /* CatalogProfile.swift in Sources */,
+				9120409E2D7B089C007BF93F /* Profile.swift in Sources */,
 				3FC8C38B29D242E90081F015 /* ProductDetailsTableViewCell.swift in Sources */,
-				188B590B2D68C066005D960A /* Profile.swift in Sources */,
 				188B59282D69255E005D960A /* ProfileRequest.swift in Sources */,
 				188B592C2D69A42A005D960A /* ProfileCoordinator.swift in Sources */,
 				18800AD92D6CA0B6004B5BAE /* ProfileEditingViewController.swift in Sources */,
@@ -1103,7 +1099,7 @@
 				9120407D2D7A23C2007BF93F /* CatalogNftDTO.swift in Sources */,
 				913D8A712D66203A001304A3 /* ShimmerView.swift in Sources */,
 				911201BF2D782DDC002E759C /* NetworkMonitor.swift in Sources */,
-				9120409C2D7B07F9007BF93F /* CatalogProfileDTO.swift in Sources */,
+				9120409C2D7B07F9007BF93F /* ProfileDTO.swift in Sources */,
 				9174C1D72D6F3F450024C358 /* NFTRatingAlertViewController.swift in Sources */,
 				3F68069B29CBBAF100B4F915 /* ProductDetailsTableViewController.swift in Sources */,
 				5CDC78462D6D1C1300EAA1F0 /* CartTableViewCellDelegate.swift in Sources */,
