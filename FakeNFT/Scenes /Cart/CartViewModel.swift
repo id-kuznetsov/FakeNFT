@@ -32,6 +32,16 @@ final class CartViewModel: CartViewModelProtocol {
     init(orderService: OrderService, nftService: NftService ) {
         self.orderService = orderService
         self.nftService = nftService
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(cartUpdated),
+            name: .cartUpdated,
+            object: nil
+        )
+    }
+
+    deinit {
+        NotificationCenter.default.removeObserver(self, name: .cartUpdated, object: nil)
     }
 
     // MARK: - Public Methods
@@ -102,6 +112,11 @@ final class CartViewModel: CartViewModelProtocol {
     }
 
     // MARK: - Private Methods
+    @objc
+    private func cartUpdated() {
+        loadData()
+        onItemsUpdate?()
+    }
 
     private func loadNFTs(by ids: [String]) {
         let group = DispatchGroup()
