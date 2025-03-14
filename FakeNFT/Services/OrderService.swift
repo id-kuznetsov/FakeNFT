@@ -14,6 +14,10 @@ protocol OrderService {
     func fetchOrderCombine(order: CatalogOrder?, skipCache: Bool) -> AnyPublisher<CatalogOrder, Error>
 }
 
+extension Notification.Name {
+    static let cartUpdated = Notification.Name("cartUpdated")
+}
+
 final class OrderServiceImpl: OrderService {
     private let networkClient: NetworkClient
     private let cacheService: CacheService
@@ -67,6 +71,7 @@ final class OrderServiceImpl: OrderService {
         networkClient.send(request: request, type: Order.self) { result in
             switch result {
             case .success(let order):
+                NotificationCenter.default.post(name: .cartUpdated, object: nil)
                 completion(.success(order))
             case .failure(let error):
                 completion(.failure(error))
@@ -164,6 +169,7 @@ final class OrderServiceImpl: OrderService {
                     /// API doesn't provide ttl
                     let ttl: TimeInterval? = nil
                     self.cacheService.save(data: convertedModel, ttl: ttl, forKey: key)
+                    NotificationCenter.default.post(name: .cartUpdated, object: nil)
                     promise(.success(convertedModel))
                 case .failure(let error):
                     promise(.failure(error))
