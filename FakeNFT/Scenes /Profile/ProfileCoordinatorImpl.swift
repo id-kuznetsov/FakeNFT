@@ -56,9 +56,7 @@ final class ProfileCoordinatorImpl: ProfileCoordinator {
     }
 
     func webViewScene(url: URL) {
-        let viewModel = WebViewViewModel(url: url)
-        let webViewController = WebViewController(viewModel: viewModel)
-        webViewController.delegate = self
+        let webViewController = ProfileWebViewViewController(url: url)
         webViewController.hidesBottomBarWhenPushed = true
         navigationController.pushViewController(webViewController, animated: true)
     }
