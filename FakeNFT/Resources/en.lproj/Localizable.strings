@@ -1,0 +1,111 @@
+"Catalog.openNft" = "Open NFT";
+"Error.network" = "A network error occurred";
+"Error.fetchingData" = "Failed to fetch data";
+"Error.unknown" = "An unknown error occurred";
+"Error.repeat" = "Retry";
+"Error.update" = "Failed to update";
+
+"Error.title" = "Error";
+"Button.cancel" = "Cancel";
+"Button.close" = "Close";
+"Button.ok" = "OK";
+
+"Alert.Title.networkError" = "Error";
+"Alert.Title.sort" = "Sorting";
+"Alert.Title.rateNft" = "Rate?";
+
+"Alert.Message.network" = "A network error occurred";
+"Alert.Message.unknown" = "An unknown error occurred";
+"Alert.Message.networkError" = "Internet connection issues. Please check your connection.";
+"Alert.Message.timeoutError" = "The request timed out.";
+"Alert.Message.sslError" = "Could not establish a secure connection. Please try again later.";
+"Alert.Message.serverNotFound" = "Server not found.";
+"Alert.Message.rateNft" = "Tap a star to rate.";
+"Alert.Message.apiBug" = "There is a bug in the API, only the author's name can be retrieved. A placeholder has been loaded. By the way, this is my site, and it’s built with Swift and Vapor 😎.";
+"Alert.Message.profile" = "Failed to update profile";
+
+"Alert.Button.cancel" = "Cancel";
+"Alert.Button.close" = "Close";
+"Alert.Button.repeat" = "Retry";
+"Alert.Button.notNow" = "Not now";
+"Alert.Button.rate" = "Rate";
+"Alert.Button.back" = "Back";
+"Alert.Button.sortByNftCount" = "By number of NFTs";
+"Alert.Button.sortByPrice" = "By price";
+"Alert.Button.sortByRating" = "By rating";
+"Alert.Button.sortByCollectionName" = "By name";
+"Alert.Button.sortByUserName" = "By username";
+
+"Tab.profile" = "Profile";
+"Tab.catalog" = "Catalog";
+"Tab.cart" = "Cart";
+"Tab.statistic" = "Statistics";
+
+"Cart.button.toPay" = "Proceed to payment";
+"Cart.label.price" = "Price";
+"Cart.label.emptyCart" = "Cart is empty";
+"Cart.delete.conformText" = "Are you sure you want to remove this item from the cart?";
+"Cart.delete.buttonDelete" = "Delete";
+"Cart.delete.buttonReturn" = "Return";
+"Cart.errorAlert.somethingGoesWrong" = "Something went wrong(";
+
+"Payment.title" = "Select a payment method";
+"Payment.button.pay" = "Pay";
+"Payment.agreement.label" = "By making a purchase, you agree to the";
+"Payment.agreement.link" = "User Agreement";
+"Payment.alert.title" = "No payment method selected";
+"Payment.alert.message" = "To complete the payment, please select a currency";
+"Payment.errorAlert.title" = "Payment failed";
+"Payment.errorAlert.cancelTitle" = "Cancel";
+"Payment.errorAlert.repeatTitle" = "Retry";
+"Payment.alert.buttonTextOk" = "OK";
+"Payment.success.title" = "Success! Payment completed, congratulations on your purchase!";
+"Payment.success.button" = "Return to catalog";
+
+"Collection.author" = "Collection author: ";
+
+"Sort.title" = "Sorting";
+"SortOption.nftCount" = "By number of NFTs";
+"SortOption.price" = "By price";
+"SortOption.rating" = "By rating";
+"SortOption.title" = "By name";
+"SortOption.name" = "By username";
+
+"Profile.myNftsRoute" = "My NFTs";
+"Profile.favouritesNftsRoute" = "Favorite NFTs";
+"Profile.aboutRoute" = "About the developer";
+"Profile.fetchingError" = "Failed to load profile";
+"Profile.updatingError" = "Failed to update profile. Please try again";
+"Profile.unknownError" = "An unknown error occurred";
+
+"ProfileEditing.changePhoto" = "Change photo";
+"ProfileEditing.uploadPhoto" = "Upload photo";
+"ProfileEditing.name" = "Name";
+"ProfileEditing.namePlaceholder" = "Enter name";
+"ProfileEditing.description" = "Description";
+"ProfileEditing.descriptionPlaceholder" = "Enter description";
+"ProfileEditing.website" = "Website";
+"ProfileEditing.websitePlaceholder" = "Enter website";
+"ProfileEditing.emptyNameWarning" = "Name is required";
+"ProfileEditing.limitWarning" = "Maximum length is %d characters";
+"ProfileEditing.incorrectWebsiteWarning" = "Invalid link";
+
+"ProfileEditingAlert.changePhoto" = "Change image";
+"ProfileEditingAlert.urlPlaceholder" = "Enter image URL";
+"ProfileEditingAlert.okAction" = "OK";
+"ProfileEditingAlert.removeAction" = "Remove";
+"ProfileEditingAlert.cancelAction" = "Cancel";
+"ProfileEditingAlert.imageLoadingError" = "Unable to change image";
+
+"MyNFTs.title" = "My NFTs";
+"MyNFTs.placeholder" = "You don’t have any NFTs yet";
+"MyNFTs.price" = "Price";
+"MyNFTs.from" = "from";
+
+"FavouritesNFTs.title" = "Favorite NFTs";
+"FavouritesNFTs.placeholder" = "You don’t have any favorite NFTs yet";
+"User.websiteButton" = "Go to user’s website";
+"User.nftCollection" = "NFT Collection";
+"User.websiteInaccessible" = "Could not open website";
+"User.emptyCollection" = "Collection is empty";
+"User.noNft" = "User has not added any NFTs yet";

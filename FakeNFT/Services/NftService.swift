@@ -1,9 +1,11 @@
 import Foundation
 
 typealias NftCompletion = (Result<Nft, Error>) -> Void
+typealias NftsCompletion = (Result<[Nft], Error>) -> Void
 
 protocol NftService {
-    func loadNft(id: String, completion: @escaping NftCompletion)
+    func loadNft(id: NftID, completion: @escaping NftCompletion)
+    func loadNfts(ids: [NftID], completion: @escaping NftsCompletion)
 }
 
 final class NftServiceImpl: NftService {
@@ -16,7 +18,7 @@ final class NftServiceImpl: NftService {
         self.networkClient = networkClient
     }
 
-    func loadNft(id: String, completion: @escaping NftCompletion) {
+    func loadNft(id: NftID, completion: @escaping NftCompletion) {
         if let nft = storage.getNft(with: id) {
             completion(.success(nft))
             return
@@ -30,6 +32,33 @@ final class NftServiceImpl: NftService {
                 completion(.success(nft))
             case .failure(let error):
                 completion(.failure(error))
+            }
+        }
+    }
+
+    func loadNfts(ids: [NftID], completion: @escaping NftsCompletion) {
+        var loadedNfts: [Nft] = []
+        var errors: [Error] = []
+        let dispatchGroup = DispatchGroup()
+
+        for id in ids {
+            dispatchGroup.enter()
+            loadNft(id: id) { result in
+                switch result {
+                case .success(let nft):
+                    loadedNfts.append(nft)
+                case .failure(let error):
+                    errors.append(error)
+                }
+                dispatchGroup.leave()
+            }
+        }
+
+        dispatchGroup.notify(queue: .main) {
+            if errors.isEmpty {
+                completion(.success(loadedNfts))
+            } else {
+                completion(.failure(errors.first!))
             }
         }
     }

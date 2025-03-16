@@ -1,0 +1,24 @@
+nesting:
+  type_level: 3
+
+disabled_rules:
+  - blanket_disable_command
+  - void_function_in_ternary
+
+force_cast:
+  severity: warning
+
+force_try:
+  severity: warning
+
+function_parameter_count:
+  warning: 6
+  error: 8
+
+type_body_length:
+  warning: 300
+  error: 350
+
+file_length:
+  warning: 450
+  error: 470

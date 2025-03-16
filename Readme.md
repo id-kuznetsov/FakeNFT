@@ -2,7 +2,11 @@
 
 # Ссылки
 
-[Дизайн Figma](https://www.figma.com/file/k1LcgXHGTHIeiCv4XuPbND/FakeNFT-(YP)?node-id=96-5542&t=YdNbOI8EcqdYmDeg-0)
+- [Дизайн Figma](https://www.figma.com/file/k1LcgXHGTHIeiCv4XuPbND/FakeNFT-(YP)?node-id=96-5542&t=YdNbOI8EcqdYmDeg-0)
+- [ScreenCast Профиль](https://github.com/user-attachments/assets/0332fdd9-2d2a-40c3-9dea-76456a53200c)
+- [ScreenCast Каталог](https://github.com/user-attachments/assets/30b9b345-3ceb-4a1e-91cb-68443ffaf8fa)
+- [ScreenCast Корзина](https://github.com/user-attachments/assets/e99c9973-bbd8-4006-a9e0-b1dbb9bd4849)
+- [ScreenCast Статистика](https://github.com/user-attachments/assets/0fee0f47-5d81-4eb0-92c6-60aa26b6393f)
 
 # Назначение и цели приложения
 

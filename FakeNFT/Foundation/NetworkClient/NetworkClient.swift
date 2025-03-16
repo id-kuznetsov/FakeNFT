@@ -5,6 +5,7 @@ enum NetworkClientError: Error {
     case urlRequestError(Error)
     case urlSessionError
     case parsingError
+    case taskCancelingError
 }
 
 protocol NetworkClient {
@@ -63,6 +64,15 @@ struct DefaultNetworkClient: NetworkClient {
         guard let urlRequest = create(request: request) else { return nil }
 
         let task = session.dataTask(with: urlRequest) { data, response, error in
+            if let error = error {
+                if (error as NSError).code == NSURLErrorCancelled {
+                    onResponse(.failure(NetworkClientError.taskCancelingError))
+                    return
+                }
+                onResponse(.failure(NetworkClientError.urlRequestError(error)))
+                return
+            }
+
             guard let response = response as? HTTPURLResponse else {
                 onResponse(.failure(NetworkClientError.urlSessionError))
                 return
@@ -75,12 +85,6 @@ struct DefaultNetworkClient: NetworkClient {
 
             if let data = data {
                 onResponse(.success(data))
-                return
-            } else if let error = error {
-                onResponse(.failure(NetworkClientError.urlRequestError(error)))
-                return
-            } else {
-                assertionFailure("Unexpected condition!")
                 return
             }
         }
